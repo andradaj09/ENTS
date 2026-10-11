@@ -123,15 +123,26 @@ export async function subirAvatar(usuarioId, archivo) {
 // ---------- Google ----------
 // Redirige a Google y vuelve a la página ya con la sesión iniciada.
 // Requiere el proveedor Google habilitado en Supabase (Authentication → Providers).
-export async function loginConGoogle(destino = '/') {
-  // Si Google no está habilitado, Supabase mostraría una página de error técnica:
-  // se consulta antes la configuración pública de Auth para avisar con un mensaje claro.
-  const respuesta = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/auth/v1/settings`, {
-    headers: { apikey: import.meta.env.VITE_SUPABASE_ANON_KEY },
-  })
-  const configuracion = respuesta.ok ? await respuesta.json() : null
+// ¿Está habilitado el proveedor Google en Supabase? (configuración pública de Auth)
+// La pantalla de acceso solo muestra el botón cuando lo está.
+export async function googleHabilitado() {
+  try {
+    const respuesta = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/auth/v1/settings`, {
+      headers: { apikey: import.meta.env.VITE_SUPABASE_ANON_KEY },
+    })
 
-  if (configuracion && !configuracion.external?.google) {
+    if (!respuesta.ok) return false
+
+    const configuracion = await respuesta.json()
+    return Boolean(configuracion.external?.google)
+  } catch {
+    return false
+  }
+}
+
+export async function loginConGoogle(destino = '/') {
+  // Si Google no está habilitado, Supabase mostraría una página de error técnica
+  if (!(await googleHabilitado())) {
     throw Object.assign(new Error('Google no está habilitado'), { code: 'provider_disabled' })
   }
 

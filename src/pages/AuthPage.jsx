@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import {
   enviarRecuperacion,
+  googleHabilitado,
   loginConGoogle,
   loginUser,
   mensajeErrorAuth,
@@ -64,6 +65,20 @@ function AuthPage() {
   // Después de registrarse o pedir el enlace, el formulario se reemplaza por un cartel
   const [cuentaCreada, setCuentaCreada] = useState(null)
   const [enlaceEnviado, setEnlaceEnviado] = useState(null)
+  // El botón de Google solo aparece si el proveedor está habilitado en Supabase
+  const [hayGoogle, setHayGoogle] = useState(false)
+
+  useEffect(() => {
+    let activo = true
+
+    googleHabilitado().then((habilitado) => {
+      if (activo) setHayGoogle(habilitado)
+    })
+
+    return () => {
+      activo = false
+    }
+  }, [])
 
   if (!authLoading && user) {
     return <Navigate to={destino} replace />
@@ -148,7 +163,8 @@ function AuthPage() {
 
   // Google no sirve para pedir cuenta de funcionario (no pasa por el formulario)
   const mostrarGoogle =
-    modo === 'login' || (modo === 'registro' && form.tipoCuenta === 'vecino')
+    hayGoogle &&
+    (modo === 'login' || (modo === 'registro' && form.tipoCuenta === 'vecino'))
 
   const cartel = cuentaCreada
     ? {
