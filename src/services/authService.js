@@ -1,14 +1,26 @@
 import { supabase } from '../supabase/client'
 
-export async function registerUser(nombre, apellido, email, password) {
+// tipoCuenta: 'vecino' | 'funcionario'. Si es funcionario, la base guarda la
+// solicitud y la cuenta queda como vecino hasta que un admin la apruebe.
+export async function registerUser(
+  nombre,
+  apellido,
+  email,
+  password,
+  { tipoCuenta = 'vecino', cargo = '', organizacion = '' } = {}
+) {
+  const datos = { nombre, apellido, tipo_cuenta: tipoCuenta }
+
+  if (tipoCuenta === 'funcionario') {
+    datos.cargo = cargo
+    datos.organizacion = organizacion
+  }
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: {
-        nombre,
-        apellido,
-      },
+      data: datos,
     },
   })
 

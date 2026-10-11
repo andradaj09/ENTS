@@ -14,6 +14,7 @@ import Mapa from './pages/Mapa'
 import Comunidad from './pages/Comunidad'
 import Eventos from './pages/Eventos'
 import Perfil from './pages/Perfil'
+import Usuarios from './pages/Usuarios'
 
 function App() {
   const { profile } = useAuth()
@@ -59,6 +60,15 @@ function App() {
               element={
                 <RoleRoute allowedRoles={['admin']}>
                   <AdminPetitions />
+                </RoleRoute>
+              }
+            />
+
+            <Route
+              path="/admin/usuarios"
+              element={
+                <RoleRoute allowedRoles={['admin']}>
+                  <Usuarios />
                 </RoleRoute>
               }
             />

@@ -5,7 +5,8 @@
 -- Ya está aplicado en el proyecto de Supabase (migraciones:
 -- esquema_inicial_ents, funciones_auxiliares_privadas,
 -- optimizar_politicas_e_indices, fotos_en_peticiones,
--- admins_borran_fotos_de_peticiones). Este archivo es la versión final
+-- admins_borran_fotos_de_peticiones, roles_y_anonimato,
+-- anonimato_total_y_vista_admin). Este archivo es la versión final
 -- consolidada, para recrear la base en otro proyecto:
 -- Supabase → SQL Editor → New query → pegar todo → Run.
 -- ==========================================================
@@ -434,3 +435,335 @@ insert into public.zonas (nombre, lat, lng) values
   ('Argüello', -31.3470, -64.2600),
   ('Barrio Jardín', -31.4530, -64.1890)
 on conflict (nombre) do nothing;
+
+
+-- ==========================================================
+-- 9. Roles y anonimato
+--    Todas las personas son anónimas entre sí: la API no expone quién
+--    crea una petición, quién la firma ni quién publica en el feed.
+--    - Funcionarios aprobados: ven autor y firmantes de cada petición.
+--    - Administradores: ven toda la información (incluido el correo).
+--    Esta sección reemplaza las políticas de lectura de perfiles,
+--    firmas y publicaciones definidas más arriba.
+-- ==========================================================
+
+-- Roles: ciudadano (vecino), funcionario (lo aprueba un admin) y admin
+alter table public.profiles drop constraint if exists profiles_rol_check;
+alter table public.profiles add constraint profiles_rol_check
+  check (rol in ('ciudadano', 'funcionario', 'admin'));
+
+alter table public.profiles
+  add column if not exists rol_solicitado text check (rol_solicitado in ('funcionario')),
+  add column if not exists cargo text check (char_length(cargo) <= 120),
+  add column if not exists organizacion text check (char_length(organizacion) <= 120);
+
+-- El registro guarda la solicitud de funcionario; el rol sigue siendo
+-- "ciudadano" hasta que un admin la apruebe
+create or replace function public.crear_perfil_nuevo_usuario()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  insert into public.profiles (id, nombre, apellido, rol_solicitado, cargo, organizacion)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data ->> 'nombre', ''),
+    coalesce(new.raw_user_meta_data ->> 'apellido', ''),
+    case when new.raw_user_meta_data ->> 'tipo_cuenta' = 'funcionario' then 'funcionario' end,
+    left(nullif(trim(new.raw_user_meta_data ->> 'cargo'), ''), 120),
+    left(nullif(trim(new.raw_user_meta_data ->> 'organizacion'), ''), 120)
+  );
+  return new;
+end;
+$$;
+
+create or replace function privado.puede_ver_identidades()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and rol in ('funcionario', 'admin')
+  );
+$$;
+
+revoke execute on function privado.puede_ver_identidades() from public, anon;
+grant execute on function privado.puede_ver_identidades() to authenticated;
+
+-- Perfiles: cada uno ve el suyo; los admins ven todos
+drop policy if exists "Perfiles visibles para usuarios registrados" on public.profiles;
+drop policy if exists "Ver perfiles" on public.profiles;
+create policy "Ver perfiles"
+  on public.profiles for select to authenticated
+  using (id = (select auth.uid()) or (select privado.es_admin()));
+
+-- Conteo público de firmas (las firmas individuales son privadas)
+alter table public.peticiones
+  add column if not exists firmas_count integer not null default 0 check (firmas_count >= 0);
+
+create or replace function privado.actualizar_conteo_firmas()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if tg_op = 'INSERT' then
+    update public.peticiones set firmas_count = firmas_count + 1 where id = new.peticion_id;
+    return new;
+  end if;
+
+  update public.peticiones set firmas_count = greatest(firmas_count - 1, 0) where id = old.peticion_id;
+  return old;
+end;
+$$;
+
+revoke execute on function privado.actualizar_conteo_firmas() from public, anon, authenticated;
+
+drop trigger if exists contar_firmas on public.firmas;
+create trigger contar_firmas
+  after insert or delete on public.firmas
+  for each row execute function privado.actualizar_conteo_firmas();
+
+drop policy if exists "Ver firmas" on public.firmas;
+create policy "Ver firmas"
+  on public.firmas for select to authenticated
+  using (usuario_id = (select auth.uid()) or (select privado.puede_ver_identidades()));
+
+-- La columna del autor (usuario_id) no se expone en peticiones ni publicaciones
+revoke select on public.peticiones from anon, authenticated;
+grant select (
+  id, titulo, descripcion, categoria_id, zona_id, estado, score_urgencia,
+  lat, lng, fotos, firmas_count, created_at, updated_at
+) on public.peticiones to authenticated;
+
+revoke select on public.publicaciones from anon, authenticated;
+grant select (id, tipo, contenido, zona_id, created_at) on public.publicaciones to authenticated;
+
+drop policy if exists "Crear peticiones propias" on public.peticiones;
+create policy "Crear peticiones propias"
+  on public.peticiones for insert to authenticated
+  with check (
+    usuario_id = (select auth.uid())
+    and estado = 'pendiente'
+    and score_urgencia = 0
+    and firmas_count = 0
+    and not exists (
+      select 1 from unnest(fotos) as foto
+      where foto not like (select auth.uid())::text || '/%'
+    )
+  );
+
+-- ---------- Funciones de lectura (cada una verifica quién llama) ----------
+-- El asesor de Supabase las marca como "security definer ejecutables por
+-- usuarios": es intencional, porque reemplazan a las columnas ocultas y
+-- cada una filtra por el usuario de la sesión o exige el rol necesario.
+
+create or replace function public.mis_peticiones()
+returns setof public.peticiones
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select * from public.peticiones
+  where usuario_id = auth.uid()
+  order by created_at desc;
+$$;
+
+create or replace function public.peticiones_pendientes()
+returns setof public.peticiones
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select * from public.peticiones
+  where estado = 'pendiente' and privado.es_admin()
+  order by created_at desc;
+$$;
+
+create or replace function public.mis_notificaciones()
+returns table (id text, tipo text, peticion_id bigint, titulo text, fecha timestamptz)
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select * from (
+    select 'estado-' || p.id, p.estado, p.id, p.titulo, coalesce(p.updated_at, p.created_at)
+    from public.peticiones p
+    where p.usuario_id = auth.uid() and p.estado in ('publicada', 'rechazada')
+    union all
+    select 'firma-' || f.id, 'firma', p.id, p.titulo, f.created_at
+    from public.firmas f
+    join public.peticiones p on p.id = f.peticion_id
+    where p.usuario_id = auth.uid() and f.usuario_id <> auth.uid()
+  ) as n (id, tipo, peticion_id, titulo, fecha)
+  order by fecha desc
+  limit 60;
+$$;
+
+create or replace function public.mis_publicaciones_ids()
+returns setof bigint
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select id from public.publicaciones where usuario_id = auth.uid();
+$$;
+
+-- Autor y firmantes de una petición: funcionarios y admins; el correo, solo admins
+create or replace function public.identidades_peticion(p_peticion bigint)
+returns json
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+declare
+  ver_correo boolean := privado.es_admin();
+begin
+  if not privado.puede_ver_identidades() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  return json_build_object(
+    'autor', (
+      select json_build_object(
+        'nombre', pr.nombre,
+        'apellido', pr.apellido,
+        'avatar_url', pr.avatar_url,
+        'email', case when ver_correo then u.email end
+      )
+      from public.peticiones p
+      join public.profiles pr on pr.id = p.usuario_id
+      join auth.users u on u.id = p.usuario_id
+      where p.id = p_peticion
+    ),
+    'firmantes', coalesce((
+      select json_agg(
+        json_build_object(
+          'nombre', pr.nombre,
+          'apellido', pr.apellido,
+          'avatar_url', pr.avatar_url,
+          'email', case when ver_correo then u.email end,
+          'fecha', f.created_at
+        )
+        order by f.created_at desc
+      )
+      from public.firmas f
+      join public.profiles pr on pr.id = f.usuario_id
+      join auth.users u on u.id = f.usuario_id
+      where f.peticion_id = p_peticion
+    ), '[]'::json)
+  );
+end;
+$$;
+
+-- Autores del feed con su correo (solo admins)
+create or replace function public.autores_publicaciones()
+returns table (publicacion_id bigint, nombre text, apellido text, avatar_url text, email text)
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_admin() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  return query
+    select pu.id, pr.nombre, pr.apellido, pr.avatar_url, u.email::text
+    from public.publicaciones pu
+    join public.profiles pr on pr.id = pu.usuario_id
+    join auth.users u on u.id = pu.usuario_id;
+end;
+$$;
+
+-- Directorio completo de usuarios (solo admins)
+create or replace function public.usuarios_admin()
+returns table (
+  id uuid,
+  nombre text,
+  apellido text,
+  email text,
+  rol text,
+  rol_solicitado text,
+  cargo text,
+  organizacion text,
+  avatar_url text,
+  registrado timestamptz,
+  ultimo_ingreso timestamptz,
+  correo_confirmado boolean,
+  peticiones bigint,
+  firmas bigint,
+  publicaciones bigint
+)
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_admin() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  return query
+    select
+      pr.id, pr.nombre, pr.apellido, u.email::text, pr.rol, pr.rol_solicitado,
+      pr.cargo, pr.organizacion, pr.avatar_url, u.created_at, u.last_sign_in_at,
+      u.email_confirmed_at is not null,
+      (select count(*) from public.peticiones p where p.usuario_id = pr.id),
+      (select count(*) from public.firmas f where f.usuario_id = pr.id),
+      (select count(*) from public.publicaciones pu where pu.usuario_id = pr.id)
+    from public.profiles pr
+    join auth.users u on u.id = pr.id
+    order by u.created_at desc;
+end;
+$$;
+
+-- Aprobar o rechazar la solicitud de funcionario (solo admins)
+create or replace function public.resolver_solicitud_funcionario(p_usuario uuid, p_aprobar boolean)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_admin() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  update public.profiles
+  set rol = case when p_aprobar then 'funcionario' else rol end,
+      rol_solicitado = null
+  where id = p_usuario and rol <> 'admin';
+end;
+$$;
+
+revoke execute on function public.mis_peticiones() from public, anon;
+revoke execute on function public.peticiones_pendientes() from public, anon;
+revoke execute on function public.mis_notificaciones() from public, anon;
+revoke execute on function public.mis_publicaciones_ids() from public, anon;
+revoke execute on function public.identidades_peticion(bigint) from public, anon;
+revoke execute on function public.autores_publicaciones() from public, anon;
+revoke execute on function public.usuarios_admin() from public, anon;
+revoke execute on function public.resolver_solicitud_funcionario(uuid, boolean) from public, anon;
+
+grant execute on function public.mis_peticiones() to authenticated;
+grant execute on function public.peticiones_pendientes() to authenticated;
+grant execute on function public.mis_notificaciones() to authenticated;
+grant execute on function public.mis_publicaciones_ids() to authenticated;
+grant execute on function public.identidades_peticion(bigint) to authenticated;
+grant execute on function public.autores_publicaciones() to authenticated;
+grant execute on function public.usuarios_admin() to authenticated;
+grant execute on function public.resolver_solicitud_funcionario(uuid, boolean) to authenticated;

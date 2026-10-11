@@ -9,6 +9,7 @@ import {
   getZonas,
 } from '../services/petitionService'
 import { claseUrgencia, tiempoRelativo } from '../utils/format'
+import { esAdmin } from '../utils/roles'
 import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
 import '../styles/comunidad.css'
@@ -49,11 +50,14 @@ function Comunidad() {
   // La búsqueda filtra con el valor diferido: escribir nunca se traba
   const busquedaDiferida = normalizar(useDeferredValue(busqueda).trim())
 
+  // Los autores del feed son anónimos; solo los admins los ven
+  const verAutores = esAdmin(profile)
+
   useEffect(() => {
     const cargar = async () => {
       const [peticionesRes, publicacionesRes, zonasRes] = await Promise.allSettled([
         getPeticionesPublicadas(),
-        getPublicaciones(),
+        getPublicaciones({ conAutores: verAutores }),
         getZonas(),
       ])
 
@@ -71,7 +75,7 @@ function Comunidad() {
     }
 
     cargar()
-  }, [])
+  }, [verAutores])
 
   const barrioElegido = zonas.find((z) => z.id === barrioFiltro) ?? null
   const esDelBarrio = (item) => !barrioFiltro || item.zonas?.id === barrioFiltro
@@ -83,7 +87,7 @@ function Comunidad() {
       busquedaDiferida,
       p.contenido,
       p.zonas?.nombre,
-      `${p.profiles?.nombre} ${p.profiles?.apellido}`
+      p.autor && `${p.autor.nombre} ${p.autor.apellido} ${p.autor.email}`
     )
   ), [publicaciones, filtroTipo, busquedaDiferida, barrioFiltro])
 
@@ -97,7 +101,7 @@ function Comunidad() {
     if (!busquedaDiferida) {
       return [...peticionesDelBarrio]
         .sort((a, b) =>
-          (b.firmas?.length ?? 0) - (a.firmas?.length ?? 0) ||
+          (b.firmas_count ?? 0) - (a.firmas_count ?? 0) ||
           (Number(b.score_urgencia) || 0) - (Number(a.score_urgencia) || 0)
         )
         .slice(0, 5)
@@ -177,8 +181,7 @@ function Comunidad() {
     }
   }
 
-  const puedeEliminar = (publicacion) =>
-    publicacion.usuario_id === user?.id || profile?.rol === 'admin'
+  const puedeEliminar = (publicacion) => publicacion.propia || verAutores
 
   return (
     <div className="container py-5">
@@ -351,13 +354,27 @@ function Comunidad() {
                   style={{ '--i': Math.min(indice, 6) }}
                 >
                   <header className="post-head">
-                    <Avatar perfil={publicacion.profiles} size={40} />
+                    {/* Anónimo para todos; los admins ven el autor; la propia dice "Vos" */}
+                    {publicacion.autor ? (
+                      <Avatar perfil={publicacion.autor} size={40} />
+                    ) : publicacion.propia ? (
+                      <Avatar perfil={profile} size={40} />
+                    ) : (
+                      <span className="avatar avatar-anonimo" style={{ width: 40, height: 40 }}>
+                        <Icon name="user" size={20} />
+                      </span>
+                    )}
 
                     <div className="post-autor">
                       <strong>
-                        {publicacion.profiles?.nombre} {publicacion.profiles?.apellido}
+                        {publicacion.autor
+                          ? `${publicacion.autor.nombre} ${publicacion.autor.apellido}`
+                          : publicacion.propia
+                            ? 'Vos'
+                            : 'Vecino/a anónimo/a'}
                       </strong>
                       <span>
+                        {publicacion.autor && `${publicacion.autor.email} · `}
                         {publicacion.zonas?.nombre && `${publicacion.zonas.nombre} · `}
                         {tiempoRelativo(publicacion.created_at)}
                       </span>
@@ -414,7 +431,7 @@ function Comunidad() {
                   <div>
                     <strong>{peticion.titulo}</strong>
                     <span>
-                      {peticion.zonas?.nombre} · {peticion.firmas?.length ?? 0} firmas
+                      {peticion.zonas?.nombre} · {peticion.firmas_count ?? 0} firmas
                     </span>
                   </div>
                 </Link>

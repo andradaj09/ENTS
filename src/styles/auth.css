@@ -141,6 +141,60 @@
   gap: 12px;
 }
 
+/* Tipo de cuenta al registrarse */
+.auth-tipo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.auth-tipo button {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  padding: 12px 14px;
+  border: 1px solid rgba(18, 18, 18, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--ents-muted);
+  text-align: left;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.auth-tipo button:hover {
+  transform: translateY(-1px);
+}
+
+.auth-tipo button .icon {
+  margin-bottom: 4px;
+}
+
+.auth-tipo button strong {
+  color: var(--ents-ink);
+  font-size: 0.9rem;
+}
+
+.auth-tipo button span {
+  font-size: 0.74rem;
+}
+
+.auth-tipo button.active {
+  border-color: var(--ents-ink);
+  background: var(--ents-ink);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.auth-tipo button.active strong {
+  color: #fff;
+}
+
+.auth-nota {
+  margin: 0;
+  color: var(--ents-muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
 .auth-row > .auth-field {
   min-width: 0;
 }

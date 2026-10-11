@@ -13,6 +13,9 @@ const formVacio = {
   apellido: '',
   email: '',
   password: '',
+  tipoCuenta: 'vecino',
+  cargo: '',
+  organizacion: '',
 }
 
 function AuthPage() {
@@ -63,14 +66,25 @@ function AuthPage() {
         await loginUser(form.email, form.password)
         navigate(destino, { replace: true })
       } else {
+        const esFuncionario = form.tipoCuenta === 'funcionario'
+
         await registerUser(
           form.nombre.trim(),
           form.apellido.trim(),
           form.email,
-          form.password
+          form.password,
+          {
+            tipoCuenta: form.tipoCuenta,
+            cargo: form.cargo.trim(),
+            organizacion: form.organizacion.trim(),
+          }
         )
 
-        setMensaje('Cuenta creada. Revisá tu correo para confirmarla y después iniciá sesión.')
+        setMensaje(
+          esFuncionario
+            ? 'Cuenta creada. Revisá tu correo para confirmarla. Un administrador va a verificar tu cargo; mientras tanto vas a usar la plataforma como vecino/a.'
+            : 'Cuenta creada. Revisá tu correo para confirmarla y después iniciá sesión.'
+        )
         setForm({ ...formVacio, email: form.email })
       }
     } catch (err) {
@@ -133,30 +147,91 @@ function AuthPage() {
           {mensaje && <div className="auth-alert auth-alert-ok">{mensaje}</div>}
 
           {modo === 'registro' && (
-            <div className="auth-row auth-field-anim" style={{ '--i': 0 }}>
-              <label className="auth-field">
-                <Icon name="user" size={18} />
-                <input
-                  name="nombre"
-                  placeholder="Nombre"
-                  value={form.nombre}
-                  onChange={handleChange}
-                  autoComplete="given-name"
-                  required
-                />
-              </label>
+            <>
+              {/* Tipo de cuenta: define qué datos puede ver cada usuario */}
+              <div
+                className="auth-tipo auth-field-anim"
+                style={{ '--i': 0 }}
+                role="radiogroup"
+                aria-label="Tipo de cuenta"
+              >
+                {[
+                  ['vecino', 'users', 'Vecino/a', 'Creo y firmo peticiones'],
+                  ['funcionario', 'shield', 'Funcionario/a', 'Respondo peticiones'],
+                ].map(([valor, icono, titulo, detalle]) => (
+                  <button
+                    key={valor}
+                    type="button"
+                    role="radio"
+                    aria-checked={form.tipoCuenta === valor}
+                    className={form.tipoCuenta === valor ? 'active' : ''}
+                    onClick={() => setForm({ ...form, tipoCuenta: valor })}
+                  >
+                    <Icon name={icono} size={20} />
+                    <strong>{titulo}</strong>
+                    <span>{detalle}</span>
+                  </button>
+                ))}
+              </div>
 
-              <label className="auth-field">
-                <input
-                  name="apellido"
-                  placeholder="Apellido"
-                  value={form.apellido}
-                  onChange={handleChange}
-                  autoComplete="family-name"
-                  required
-                />
-              </label>
-            </div>
+              <div className="auth-row auth-field-anim" style={{ '--i': 0 }}>
+                <label className="auth-field">
+                  <Icon name="user" size={18} />
+                  <input
+                    name="nombre"
+                    placeholder="Nombre"
+                    value={form.nombre}
+                    onChange={handleChange}
+                    autoComplete="given-name"
+                    required
+                  />
+                </label>
+
+                <label className="auth-field">
+                  <input
+                    name="apellido"
+                    placeholder="Apellido"
+                    value={form.apellido}
+                    onChange={handleChange}
+                    autoComplete="family-name"
+                    required
+                  />
+                </label>
+              </div>
+
+              {form.tipoCuenta === 'funcionario' && (
+                <>
+                  <label className="auth-field auth-field-anim">
+                    <Icon name="flag" size={18} />
+                    <input
+                      name="cargo"
+                      placeholder="Cargo (ej: Director de Espacios Verdes)"
+                      value={form.cargo}
+                      onChange={handleChange}
+                      maxLength={120}
+                      required
+                    />
+                  </label>
+
+                  <label className="auth-field auth-field-anim">
+                    <Icon name="home" size={18} />
+                    <input
+                      name="organizacion"
+                      placeholder="Organismo u organización"
+                      value={form.organizacion}
+                      onChange={handleChange}
+                      maxLength={120}
+                      required
+                    />
+                  </label>
+
+                  <p className="auth-nota">
+                    Un administrador verifica tu cargo antes de habilitarte a ver
+                    quién crea y firma cada petición.
+                  </p>
+                </>
+              )}
+            </>
           )}
 
           <label className="auth-field auth-field-anim" style={{ '--i': 1 }}>

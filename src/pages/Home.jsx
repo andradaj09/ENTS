@@ -52,7 +52,7 @@ function Home() {
 
   const stats = useMemo(() => ({
     activas: peticiones.length,
-    firmas: peticiones.reduce((total, p) => total + (p.firmas?.length ?? 0), 0),
+    firmas: peticiones.reduce((total, p) => total + (p.firmas_count ?? 0), 0),
     urgentes: peticiones.filter(
       (p) => Number(p.score_urgencia) >= UMBRAL_URGENTE
     ).length,
@@ -69,7 +69,7 @@ function Home() {
   // La petición con más firmas se destaca
   const idDestacada = filtradas.length > 1
     ? filtradas.reduce((max, p) =>
-        (p.firmas?.length ?? 0) > (max.firmas?.length ?? 0) ? p : max
+        (p.firmas_count ?? 0) > (max.firmas_count ?? 0) ? p : max
       ).id
     : null
 

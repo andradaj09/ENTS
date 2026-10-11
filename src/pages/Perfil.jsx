@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { subirAvatar, updatePerfil } from '../services/authService'
 import Avatar from '../components/Avatar'
 import { AVATARES_PREDEFINIDOS } from '../components/avatares'
+import { nombreRol } from '../utils/roles'
 import Icon from '../components/Icon'
 
 function Perfil() {
@@ -170,9 +171,28 @@ function Perfil() {
               </div>
 
               <div className="info-row">
-                <span>Rol</span>
-                <span className="text-capitalize">{profile?.rol}</span>
+                <span>Tipo de cuenta</span>
+                <span>{nombreRol(profile?.rol)}</span>
               </div>
+
+              {(profile?.cargo || profile?.organizacion) && (
+                <div className="info-row">
+                  <span>Cargo</span>
+                  <span>{[profile.cargo, profile.organizacion].filter(Boolean).join(' · ')}</span>
+                </div>
+              )}
+
+              {profile?.rol_solicitado === 'funcionario' && (
+                <div className="alert alert-info small mt-3 mb-0">
+                  Tu solicitud para ser funcionario/a está en revisión. Un
+                  administrador va a verificar tu cargo.
+                </div>
+              )}
+
+              <p className="text-muted small mt-3 mb-0">
+                Tu nombre no se muestra a otros vecinos: las peticiones, firmas
+                y publicaciones son anónimas.
+              </p>
 
               <div className="info-row">
                 <span>Miembro desde</span>

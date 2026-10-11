@@ -1,32 +1,58 @@
 import { supabase } from '../supabase/client'
 
+// ---------- Anonimato ----------
+// Entre vecinos, el autor y los firmantes de una petición son anónimos:
+// la base no expone la columna usuario_id de las peticiones ni las firmas
+// ajenas. Por eso las consultas listan las columnas visibles (no `*`) y el
+// total de firmas sale del contador `firmas_count`. Las identidades solo las
+// devuelve identidades_peticion(), y solo a funcionarios y admins.
+
+const COLUMNAS_PETICION = `
+  id,
+  titulo,
+  descripcion,
+  estado,
+  score_urgencia,
+  lat,
+  lng,
+  fotos,
+  firmas_count,
+  created_at,
+  updated_at
+`
+
+const CATEGORIA_Y_BARRIO = `
+  categorias (
+    id,
+    nombre
+  ),
+  zonas (
+    id,
+    nombre,
+    lat,
+    lng
+  )
+`
+
 export async function getPeticionById(id) {
   const { data, error } = await supabase
     .from('peticiones')
-    .select(`
-      id,
-      titulo,
-      descripcion,
-      estado,
-      score_urgencia,
-      fotos,
-      created_at,
-      usuario_id,
-      categorias (
-        id,
-        nombre
-      ),
-      zonas (
-        id,
-        nombre
-      ),
-      profiles (
-        nombre,
-        apellido
-      )
-    `)
+    .select(`${COLUMNAS_PETICION}, ${CATEGORIA_Y_BARRIO}`)
     .eq('id', id)
     .single()
+
+  if (error) {
+    throw error
+  }
+
+  return data
+}
+
+// Autor y firmantes de una petición: solo funcionarios y admins (lo verifica la base)
+export async function getIdentidadesPeticion(peticionId) {
+  const { data, error } = await supabase.rpc('identidades_peticion', {
+    p_peticion: Number(peticionId),
+  })
 
   if (error) {
     throw error
@@ -131,10 +157,11 @@ export async function createPeticion({
     fila.lng = ubicacion.lng
   }
 
+  // Se devuelve solo el id: el autor no es una columna visible
   const { data, error } = await supabase
     .from('peticiones')
     .insert(fila)
-    .select()
+    .select('id')
     .single()
 
   if (error) {
@@ -164,7 +191,7 @@ export async function updatePeticion(peticionId, cambios) {
     throw error
   }
 
-  // Se vuelve a leer completa (con categoría, barrio y autor actualizados)
+  // Se vuelve a leer completa (con categoría y barrio actualizados)
   return getPeticionById(peticionId)
 }
 
@@ -182,11 +209,17 @@ export async function deletePeticion(peticion) {
   await borrarFotosPeticion(peticion.fotos ?? [])
 }
 
-export async function getFirmasPeticion(peticionId) {
+export async function getPeticionesPendientes() {
   const { data, error } = await supabase
-    .from('firmas')
-    .select('id, usuario_id, created_at')
-    .eq('peticion_id', peticionId)
+    .rpc('peticiones_pendientes')
+    .select(`
+      ${COLUMNAS_PETICION},
+      ${CATEGORIA_Y_BARRIO},
+      profiles (
+        nombre,
+        apellido
+      )
+    `)
 
   if (error) {
     throw error
@@ -195,14 +228,15 @@ export async function getFirmasPeticion(peticionId) {
   return data
 }
 
-export async function firmarPeticion(peticionId, usuarioId) {
+export async function cambiarEstadoPeticion(peticionId, nuevoEstado) {
   const { data, error } = await supabase
-    .from('firmas')
-    .insert({
-      peticion_id: peticionId,
-      usuario_id: usuarioId,
+    .from('peticiones')
+    .update({
+      estado: nuevoEstado,
+      updated_at: new Date().toISOString(),
     })
-    .select()
+    .eq('id', peticionId)
+    .select('id, estado')
     .single()
 
   if (error) {
@@ -210,6 +244,37 @@ export async function firmarPeticion(peticionId, usuarioId) {
   }
 
   return data
+}
+
+// ---------- Firmas ----------
+
+// ¿El usuario ya firmó? (cada vecino solo puede ver su propia firma)
+export async function usuarioFirmo(peticionId, usuarioId) {
+  const { data, error } = await supabase
+    .from('firmas')
+    .select('id')
+    .eq('peticion_id', peticionId)
+    .eq('usuario_id', usuarioId)
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  return Boolean(data)
+}
+
+export async function firmarPeticion(peticionId, usuarioId) {
+  const { error } = await supabase
+    .from('firmas')
+    .insert({
+      peticion_id: peticionId,
+      usuario_id: usuarioId,
+    })
+
+  if (error) {
+    throw error
+  }
 }
 
 export async function retirarFirma(peticionId, usuarioId) {
@@ -224,31 +289,13 @@ export async function retirarFirma(peticionId, usuarioId) {
   }
 }
 
-export async function getMisPeticiones(usuarioId) {
+// ---------- Listados ----------
+
+// Peticiones propias en cualquier estado (función de la base: la columna del autor no es visible)
+export async function getMisPeticiones() {
   const { data, error } = await supabase
-    .from('peticiones')
-    .select(`
-      id,
-      titulo,
-      descripcion,
-      estado,
-      score_urgencia,
-      fotos,
-      created_at,
-      categorias (
-        id,
-        nombre
-      ),
-      zonas (
-        id,
-        nombre
-      ),
-      firmas (
-        id
-      )
-    `)
-    .eq('usuario_id', usuarioId)
-    .order('created_at', { ascending: false })
+    .rpc('mis_peticiones')
+    .select(`${COLUMNAS_PETICION}, ${CATEGORIA_Y_BARRIO}`)
 
   if (error) {
     throw error
@@ -257,21 +304,10 @@ export async function getMisPeticiones(usuarioId) {
   return data
 }
 
-// `*` incluye lat/lng cuando existen esas columnas, sin fallar si todavía no se crearon
 export async function getPeticionesPublicadas() {
   const { data, error } = await supabase
     .from('peticiones')
-    .select(`
-      *,
-      categorias (
-        id,
-        nombre
-      ),
-      zonas (*),
-      firmas (
-        id
-      )
-    `)
+    .select(`${COLUMNAS_PETICION}, ${CATEGORIA_Y_BARRIO}`)
     .eq('estado', 'publicada')
     .order('created_at', { ascending: false })
 
@@ -282,54 +318,26 @@ export async function getPeticionesPublicadas() {
   return data
 }
 
-// Notificaciones derivadas de la actividad sobre las peticiones del usuario:
-// cambios de estado (publicada / rechazada) y firmas recibidas.
-export async function getNotificaciones(usuarioId) {
-  const [peticionesRes, firmasRes] = await Promise.all([
-    supabase
-      .from('peticiones')
-      .select('id, titulo, estado, created_at, updated_at')
-      .eq('usuario_id', usuarioId)
-      .in('estado', ['publicada', 'rechazada']),
-    supabase
-      .from('firmas')
-      .select('id, created_at, peticion_id, peticiones!inner ( titulo, usuario_id )')
-      .eq('peticiones.usuario_id', usuarioId)
-      .neq('usuario_id', usuarioId)
-      .order('created_at', { ascending: false })
-      .limit(50),
-  ])
+// Cambios de estado y firmas recibidas en las peticiones propias
+// (la base no revela quién firmó)
+export async function getNotificaciones() {
+  const { data, error } = await supabase.rpc('mis_notificaciones')
 
-  if (peticionesRes.error) {
-    throw peticionesRes.error
+  if (error) {
+    throw error
   }
 
-  if (firmasRes.error) {
-    throw firmasRes.error
-  }
-
-  const cambiosEstado = peticionesRes.data.map((peticion) => ({
-    id: `estado-${peticion.id}`,
-    tipo: peticion.estado,
-    peticionId: peticion.id,
-    titulo: peticion.titulo,
-    fecha: peticion.updated_at ?? peticion.created_at,
+  return data.map((notificacion) => ({
+    id: notificacion.id,
+    tipo: notificacion.tipo,
+    peticionId: notificacion.peticion_id,
+    titulo: notificacion.titulo,
+    fecha: notificacion.fecha,
   }))
-
-  const firmas = firmasRes.data.map((firma) => ({
-    id: `firma-${firma.id}`,
-    tipo: 'firma',
-    peticionId: firma.peticion_id,
-    titulo: firma.peticiones?.titulo,
-    fecha: firma.created_at,
-  }))
-
-  return [...cambiosEstado, ...firmas].sort(
-    (a, b) => new Date(b.fecha) - new Date(a.fecha)
-  )
 }
 
-// Los eventos requieren la tabla `eventos` (ver supabase/schema.sql).
+// ---------- Eventos ----------
+
 export async function getProximosEventos(limite = 50) {
   const { data, error } = await supabase
     .from('eventos')
@@ -394,35 +402,47 @@ export async function deleteEvento(eventoId) {
   }
 }
 
-// Feed de la comunidad. Requiere la tabla `publicaciones`
-// (ver supabase/schema.sql).
-export async function getPublicaciones() {
-  const { data, error } = await supabase
-    .from('publicaciones')
-    .select(`
-      id,
-      tipo,
-      contenido,
-      created_at,
-      usuario_id,
-      profiles (
-        nombre,
-        apellido,
-        avatar_url
-      ),
-      zonas (
-        id,
-        nombre
-      )
-    `)
-    .order('created_at', { ascending: false })
-    .limit(100)
+// ---------- Feed de la comunidad ----------
+// También es anónimo: la base no expone el autor. Cada publicación llega con
+// `propia` (para mostrar "Vos" y permitir borrarla) y, solo para admins, con
+// `autor` (nombre y correo).
+
+const COLUMNAS_PUBLICACION = `
+  id,
+  tipo,
+  contenido,
+  created_at,
+  zonas (
+    id,
+    nombre
+  )
+`
+
+export async function getPublicaciones({ conAutores = false } = {}) {
+  const [publicacionesRes, propiasRes, autoresRes] = await Promise.all([
+    supabase
+      .from('publicaciones')
+      .select(COLUMNAS_PUBLICACION)
+      .order('created_at', { ascending: false })
+      .limit(100),
+    supabase.rpc('mis_publicaciones_ids'),
+    conAutores ? supabase.rpc('autores_publicaciones') : Promise.resolve({ data: [] }),
+  ])
+
+  const error = publicacionesRes.error ?? propiasRes.error ?? autoresRes.error
 
   if (error) {
     throw error
   }
 
-  return data
+  const propias = new Set(propiasRes.data)
+  const autores = new Map(autoresRes.data.map((autor) => [autor.publicacion_id, autor]))
+
+  return publicacionesRes.data.map((publicacion) => ({
+    ...publicacion,
+    propia: propias.has(publicacion.id),
+    autor: autores.get(publicacion.id) ?? null,
+  }))
 }
 
 export async function createPublicacion({
@@ -439,23 +459,20 @@ export async function createPublicacion({
       contenido,
       zona_id: zonaId || null,
     })
-    .select(`
-      id,
-      tipo,
-      contenido,
-      created_at,
-      usuario_id,
-      profiles (
-        nombre,
-        apellido,
-        avatar_url
-      ),
-      zonas (
-        id,
-        nombre
-      )
-    `)
+    .select(COLUMNAS_PUBLICACION)
     .single()
+
+  if (error) {
+    throw error
+  }
+
+  return { ...data, propia: true, autor: null }
+}
+
+// ---------- Directorio de usuarios (solo admins; lo verifica la base) ----------
+
+export async function getUsuariosAdmin() {
+  const { data, error } = await supabase.rpc('usuarios_admin')
 
   if (error) {
     throw error
@@ -475,35 +492,14 @@ export async function deletePublicacion(publicacionId) {
   }
 }
 
-export async function getPeticionesPendientes() {
+// ---------- Solicitudes de funcionario (solo admins) ----------
+
+export async function getSolicitudesFuncionario() {
   const { data, error } = await supabase
-    .from('peticiones')
-    .select(`
-      id,
-      titulo,
-      descripcion,
-      estado,
-      score_urgencia,
-      fotos,
-      created_at,
-      profiles (
-        nombre,
-        apellido
-      ),
-      categorias (
-        id,
-        nombre
-      ),
-      zonas (
-        id,
-        nombre
-      ),
-      firmas (
-        id
-      )
-    `)
-    .eq('estado', 'pendiente')
-    .order('created_at', { ascending: false })
+    .from('profiles')
+    .select('id, nombre, apellido, cargo, organizacion, created_at')
+    .eq('rol_solicitado', 'funcionario')
+    .order('created_at')
 
   if (error) {
     throw error
@@ -512,20 +508,13 @@ export async function getPeticionesPendientes() {
   return data
 }
 
-export async function cambiarEstadoPeticion(peticionId, nuevoEstado) {
-  const { data, error } = await supabase
-    .from('peticiones')
-    .update({
-      estado: nuevoEstado,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', peticionId)
-    .select()
-    .single()
+export async function resolverSolicitudFuncionario(usuarioId, aprobar) {
+  const { error } = await supabase.rpc('resolver_solicitud_funcionario', {
+    p_usuario: usuarioId,
+    p_aprobar: aprobar,
+  })
 
   if (error) {
     throw error
   }
-
-  return data
 }

@@ -26,7 +26,7 @@ function NotificacionesMenu({ usuarioId }) {
   useEffect(() => {
     let activo = true
 
-    getNotificaciones(usuarioId)
+    getNotificaciones()
       .then((datos) => {
         if (activo) setNotificaciones(datos)
       })

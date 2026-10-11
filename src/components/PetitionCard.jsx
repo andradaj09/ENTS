@@ -14,7 +14,7 @@ function PetitionCard({ peticion, destacada = false }) {
     .replaceAll('_', ' ')
     .replace(/\b\w/g, (letra) => letra.toUpperCase())
 
-  const cantidadFirmas = peticion.firmas?.length ?? 0
+  const cantidadFirmas = peticion.firmas_count ?? 0
 
   return (
     <div className={`card h-100${destacada ? ' card-featured' : ''}`}>

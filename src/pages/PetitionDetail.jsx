@@ -5,23 +5,31 @@ import { useAuth } from '../contexts/AuthContext'
 
 import {
   deletePeticion,
+  getIdentidadesPeticion,
   getPeticionById,
-  getFirmasPeticion,
+  usuarioFirmo,
   firmarPeticion,
   retirarFirma,
 } from '../services/petitionService'
+import { esAdmin, puedeVerIdentidades } from '../utils/roles'
+import { tiempoRelativo } from '../utils/format'
 import GaleriaFotos from '../components/GaleriaFotos'
 import EditarPeticion from '../components/EditarPeticion'
+import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
 
 function PetitionDetail() {
   const { id } = useParams()
   const { user, profile } = useAuth()
   const navigate = useNavigate()
-  const esModerador = profile?.rol === 'admin'
+  const esModerador = esAdmin(profile)
+  const veIdentidades = puedeVerIdentidades(profile)
 
   const [peticion, setPeticion] = useState(null)
-  const [firmas, setFirmas] = useState([])
+  const [yaFirmo, setYaFirmo] = useState(false)
+  const [cantidadFirmas, setCantidadFirmas] = useState(0)
+  // Autor y firmantes: solo se cargan para funcionarios y admins
+  const [identidades, setIdentidades] = useState(null)
 
   const [loading, setLoading] = useState(true)
   const [procesandoFirma, setProcesandoFirma] = useState(false)
@@ -60,6 +68,9 @@ function PetitionDetail() {
     }
   }
 
+  // Cambia al firmar o retirar la firma, para recargar la lista de firmantes
+  const [versionFirmas, setVersionFirmas] = useState(0)
+
   useEffect(() => {
     const loadPeticion = async () => {
       try {
@@ -69,10 +80,10 @@ function PetitionDetail() {
         const peticionData = await getPeticionById(id)
 
         setPeticion(peticionData)
+        setCantidadFirmas(peticionData.firmas_count ?? 0)
 
         if (user) {
-          const firmasData = await getFirmasPeticion(id)
-          setFirmas(firmasData)
+          setYaFirmo(await usuarioFirmo(id, user.id))
         }
       } catch (err) {
         console.error('Error cargando petición:', err)
@@ -85,9 +96,21 @@ function PetitionDetail() {
     loadPeticion()
   }, [id, user])
 
-  const usuarioYaFirmo = user
-    ? firmas.some((firma) => firma.usuario_id === user.id)
-    : false
+  useEffect(() => {
+    if (!veIdentidades) return
+
+    let activo = true
+
+    getIdentidadesPeticion(id)
+      .then((datos) => {
+        if (activo) setIdentidades(datos)
+      })
+      .catch((err) => console.error('Error cargando identidades:', err))
+
+    return () => {
+      activo = false
+    }
+  }, [veIdentidades, id, versionFirmas])
 
   const handleFirmar = async () => {
     if (!user) {
@@ -98,15 +121,11 @@ function PetitionDetail() {
       setProcesandoFirma(true)
       setErrorFirma('')
 
-      const nuevaFirma = await firmarPeticion(
-        peticion.id,
-        user.id
-      )
+      await firmarPeticion(peticion.id, user.id)
 
-      setFirmas((firmasActuales) => [
-        ...firmasActuales,
-        nuevaFirma,
-      ])
+      setYaFirmo(true)
+      setCantidadFirmas((total) => total + 1)
+      setVersionFirmas((version) => version + 1)
     } catch (err) {
       console.error('Error firmando petición:', err)
       setErrorFirma('No se pudo registrar tu firma.')
@@ -124,16 +143,11 @@ function PetitionDetail() {
       setProcesandoFirma(true)
       setErrorFirma('')
 
-      await retirarFirma(
-        peticion.id,
-        user.id
-      )
+      await retirarFirma(peticion.id, user.id)
 
-      setFirmas((firmasActuales) =>
-        firmasActuales.filter(
-          (firma) => firma.usuario_id !== user.id
-        )
-      )
+      setYaFirmo(false)
+      setCantidadFirmas((total) => Math.max(total - 1, 0))
+      setVersionFirmas((version) => version + 1)
     } catch (err) {
       console.error('Error retirando firma:', err)
       setErrorFirma('No se pudo retirar tu firma.')
@@ -288,16 +302,34 @@ function PetitionDetail() {
 
                   <div className="info-row">
                     <span>Creada por</span>
-                    <span>
-                      {peticion.profiles?.nombre}{' '}
-                      {peticion.profiles?.apellido}
-                    </span>
+                    {veIdentidades ? (
+                      <span className="text-end">
+                        {identidades?.autor
+                          ? `${identidades.autor.nombre} ${identidades.autor.apellido}`
+                          : '...'}
+                        {/* El correo solo lo devuelve la base a los admins */}
+                        {identidades?.autor?.email && (
+                          <small className="d-block text-muted">{identidades.autor.email}</small>
+                        )}
+                      </span>
+                    ) : (
+                      <span className="identidad-anonima">
+                        <Icon name="lock" size={14} />
+                        Vecino/a anónimo/a
+                      </span>
+                    )}
                   </div>
 
                   <div className="info-row">
                     <span>Fecha</span>
                     <span>{fecha}</span>
                   </div>
+
+                  <p className="text-muted small mt-3 mb-0">
+                    {veIdentidades
+                      ? 'Ves la identidad del autor y de quienes firman porque tu cuenta es de funcionario o administrador.'
+                      : 'Para proteger a los vecinos, quién crea y quién firma una petición solo lo ven los administradores y los funcionarios que la responden.'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -332,8 +364,8 @@ function PetitionDetail() {
               <p className="card-kicker">Apoyos</p>
 
               <div className="stat-big">
-                {firmas.length}
-                <small> {firmas.length === 1 ? 'firma' : 'firmas'}</small>
+                {cantidadFirmas}
+                <small> {cantidadFirmas === 1 ? 'firma' : 'firmas'}</small>
               </div>
 
               <ul className="check-list">
@@ -372,7 +404,7 @@ function PetitionDetail() {
                 </div>
               )}
 
-              {user && peticion.estado === 'publicada' && !usuarioYaFirmo && (
+              {user && peticion.estado === 'publicada' && !yaFirmo && (
                 <button
                   className="btn btn-dark w-100"
                   onClick={handleFirmar}
@@ -384,7 +416,7 @@ function PetitionDetail() {
                 </button>
               )}
 
-              {user && usuarioYaFirmo && (
+              {user && yaFirmo && (
                 <>
                   <div className="alert alert-success">
                     ✓ Ya firmaste esta petición.
@@ -404,6 +436,36 @@ function PetitionDetail() {
 
             </div>
           </div>
+
+          {/* Solo funcionarios y admins: quiénes firmaron */}
+          {veIdentidades && (
+            <div className="card mt-4">
+              <div className="card-body">
+                <p className="line-label">Firmantes</p>
+
+                {!identidades && <p className="text-muted small mb-0">Cargando...</p>}
+
+                {identidades?.firmantes.length === 0 && (
+                  <p className="text-muted small mb-0">Todavía nadie firmó esta petición.</p>
+                )}
+
+                <div className="firmantes-lista">
+                  {identidades?.firmantes.map((firmante, indice) => (
+                    <div className="firmante" key={`${firmante.fecha}-${indice}`}>
+                      <Avatar perfil={firmante} size={34} />
+                      <div>
+                        <strong>{firmante.nombre} {firmante.apellido}</strong>
+                        <span>
+                          {firmante.email && `${firmante.email} · `}
+                          {tiempoRelativo(firmante.fecha)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
       </div>

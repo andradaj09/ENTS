@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { getMisPeticiones } from '../services/petitionService'
 import PetitionCard from '../components/PetitionCard'
+import { nombreRol } from '../utils/roles'
 
 function Dashboard() {
   const { user, profile } = useAuth()
@@ -22,7 +23,7 @@ function Dashboard() {
         setLoadingPeticiones(true)
         setError('')
 
-        const data = await getMisPeticiones(user.id)
+        const data = await getMisPeticiones()
 
         setPeticiones(data)
       } catch (err) {
@@ -60,7 +61,7 @@ function Dashboard() {
 
               <div className="info-row">
                 <span>Rol</span>
-                <span className="text-capitalize">{profile?.rol}</span>
+                <span>{nombreRol(profile?.rol)}</span>
               </div>
             </div>
           </div>

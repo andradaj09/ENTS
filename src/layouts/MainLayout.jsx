@@ -126,6 +126,11 @@ function MainLayout() {
                 <Icon name="shield" size={22} />
                 Moderación
               </NavLink>
+
+              <NavLink className={sideLinkClass} to="/admin/usuarios">
+                <Icon name="users" size={22} />
+                Usuarios
+              </NavLink>
             </>
           )}
 

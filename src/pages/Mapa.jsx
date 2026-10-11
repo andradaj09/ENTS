@@ -229,7 +229,7 @@ function Mapa() {
 
               <div className="mapa-tarjeta-meta">
                 <span>{NOMBRE_NIVEL[punto.nivel]} · {punto.score_urgencia ?? 0}/100</span>
-                <span>{punto.firmas?.length ?? 0} firmas</span>
+                <span>{punto.firmas_count ?? 0} firmas</span>
               </div>
 
               {punto.aproximada && (
