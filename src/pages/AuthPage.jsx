@@ -1,7 +1,13 @@
 import { useState } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { loginUser, mensajeErrorAuth, registerUser } from '../services/authService'
+import {
+  enviarRecuperacion,
+  loginConGoogle,
+  loginUser,
+  mensajeErrorAuth,
+  registerUser,
+} from '../services/authService'
 import Icon from '../components/Icon'
 import Logo from '../components/Logo'
 import FondoAnimado from '../components/FondoAnimado'
@@ -18,20 +24,46 @@ const formVacio = {
   organizacion: '',
 }
 
+const RUTAS = {
+  login: '/login',
+  registro: '/registro',
+  recuperar: '/recuperar',
+}
+
+function modoSegunRuta(ruta) {
+  if (ruta === RUTAS.registro) return 'registro'
+  if (ruta === RUTAS.recuperar) return 'recuperar'
+  return 'login'
+}
+
+// "G" de Google con sus colores oficiales (requerido por sus pautas de marca)
+function LogoGoogle() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+    </svg>
+  )
+}
+
 function AuthPage() {
   const { user, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
-  const modo = location.pathname === '/registro' ? 'registro' : 'login'
+  const modo = modoSegunRuta(location.pathname)
   const destino = location.state?.from?.pathname ?? '/'
 
   const [form, setForm] = useState(formVacio)
   const [verPassword, setVerPassword] = useState(false)
   const [enviando, setEnviando] = useState(false)
+  const [conGoogle, setConGoogle] = useState(false)
   const [error, setError] = useState('')
-  // Después de registrarse se reemplaza el formulario por el cartel de confirmación
+  // Después de registrarse o pedir el enlace, el formulario se reemplaza por un cartel
   const [cuentaCreada, setCuentaCreada] = useState(null)
+  const [enlaceEnviado, setEnlaceEnviado] = useState(null)
 
   if (!authLoading && user) {
     return <Navigate to={destino} replace />
@@ -42,7 +74,8 @@ function AuthPage() {
 
     setError('')
     setCuentaCreada(null)
-    navigate(nuevoModo === 'registro' ? '/registro' : '/login', {
+    setEnlaceEnviado(null)
+    navigate(RUTAS[nuevoModo], {
       replace: true,
       state: location.state,
     })
@@ -55,6 +88,19 @@ function AuthPage() {
     })
   }
 
+  const handleGoogle = async () => {
+    setError('')
+    setConGoogle(true)
+
+    try {
+      // Redirige a Google; al volver, la sesión ya está iniciada
+      await loginConGoogle(destino)
+    } catch (err) {
+      setError(mensajeErrorAuth(err))
+      setConGoogle(false)
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -65,6 +111,9 @@ function AuthPage() {
       if (modo === 'login') {
         await loginUser(form.email, form.password)
         navigate(destino, { replace: true })
+      } else if (modo === 'recuperar') {
+        await enviarRecuperacion(form.email.trim())
+        setEnlaceEnviado(form.email.trim())
       } else {
         const esFuncionario = form.tipoCuenta === 'funcionario'
 
@@ -97,6 +146,35 @@ function AuthPage() {
     }
   }
 
+  // Google no sirve para pedir cuenta de funcionario (no pasa por el formulario)
+  const mostrarGoogle =
+    modo === 'login' || (modo === 'registro' && form.tipoCuenta === 'vecino')
+
+  const cartel = cuentaCreada
+    ? {
+        titulo: '¡Cuenta creada!',
+        texto: (
+          <>
+            Te enviamos un correo a <strong>{cuentaCreada.email}</strong>.
+            Abrilo y confirmá tu cuenta para poder iniciar sesión.
+          </>
+        ),
+        nota: cuentaCreada.esFuncionario &&
+          'Un administrador va a verificar tu cargo. Mientras tanto vas a usar la plataforma como vecino/a.',
+      }
+    : enlaceEnviado
+      ? {
+          titulo: 'Revisá tu correo',
+          texto: (
+            <>
+              Si existe una cuenta con <strong>{enlaceEnviado}</strong>, te
+              enviamos un enlace para elegir una contraseña nueva.
+            </>
+          ),
+          nota: '¿No llegó? Revisá la carpeta de spam o esperá unos minutos antes de pedirlo de nuevo.',
+        }
+      : null
+
   return (
     <div className="auth-page">
       <FondoAnimado />
@@ -111,32 +189,26 @@ function AuthPage() {
         </span>
 
         <h1 className="auth-title auth-reveal" style={{ '--i': 2 }}>
-          Tu barrio, <PalabraRotativa />
+          {modo === 'recuperar' ? 'Recuperar contraseña' : (
+            <>Tu barrio, <PalabraRotativa /></>
+          )}
         </h1>
 
         <p className="auth-sub auth-reveal" style={{ '--i': 3 }}>
-          Peticiones vecinales con impacto real.
+          {modo === 'recuperar'
+            ? 'Te enviamos un enlace para elegir una contraseña nueva.'
+            : 'Peticiones vecinales con impacto real.'}
         </p>
 
-        {cuentaCreada ? (
+        {cartel ? (
           <div className="auth-exito" role="status">
             <span className="auth-exito-icono">
-              <Icon name="check" size={30} />
+              <Icon name={enlaceEnviado ? 'mail' : 'check'} size={30} />
             </span>
 
-            <h2>¡Cuenta creada!</h2>
-
-            <p>
-              Te enviamos un correo a <strong>{cuentaCreada.email}</strong>.
-              Abrilo y confirmá tu cuenta para poder iniciar sesión.
-            </p>
-
-            {cuentaCreada.esFuncionario && (
-              <p className="auth-exito-nota">
-                Un administrador va a verificar tu cargo. Mientras tanto vas a
-                usar la plataforma como vecino/a.
-              </p>
-            )}
+            <h2>{cartel.titulo}</h2>
+            <p>{cartel.texto}</p>
+            {cartel.nota && <p className="auth-exito-nota">{cartel.nota}</p>}
 
             <button
               type="button"
@@ -149,31 +221,42 @@ function AuthPage() {
           </div>
         ) : (
         <>
-        <div
-          className={`auth-tabs auth-reveal${modo === 'registro' ? ' is-registro' : ''}`}
-          style={{ '--i': 4 }}
-          role="tablist"
-        >
-          <span className="auth-tab-indicator" />
+        {modo === 'recuperar' ? (
           <button
             type="button"
-            role="tab"
-            aria-selected={modo === 'login'}
-            className={modo === 'login' ? 'active' : ''}
+            className="auth-volver auth-reveal"
+            style={{ '--i': 4 }}
             onClick={() => cambiarModo('login')}
           >
-            Iniciar sesión
+            ← Volver a iniciar sesión
           </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={modo === 'registro'}
-            className={modo === 'registro' ? 'active' : ''}
-            onClick={() => cambiarModo('registro')}
+        ) : (
+          <div
+            className={`auth-tabs auth-reveal${modo === 'registro' ? ' is-registro' : ''}`}
+            style={{ '--i': 4 }}
+            role="tablist"
           >
-            Registrarse
-          </button>
-        </div>
+            <span className="auth-tab-indicator" />
+            <button
+              type="button"
+              role="tab"
+              aria-selected={modo === 'login'}
+              className={modo === 'login' ? 'active' : ''}
+              onClick={() => cambiarModo('login')}
+            >
+              Iniciar sesión
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={modo === 'registro'}
+              className={modo === 'registro' ? 'active' : ''}
+              onClick={() => cambiarModo('registro')}
+            >
+              Registrarse
+            </button>
+          </div>
+        )}
 
         <form className="auth-form" onSubmit={handleSubmit} key={modo}>
 
@@ -206,7 +289,30 @@ function AuthPage() {
                   </button>
                 ))}
               </div>
+            </>
+          )}
 
+          {mostrarGoogle && (
+            <>
+              <button
+                type="button"
+                className="auth-google auth-field-anim"
+                style={{ '--i': 0 }}
+                onClick={handleGoogle}
+                disabled={conGoogle}
+              >
+                {conGoogle ? <span className="auth-spinner auth-spinner-oscuro" /> : <LogoGoogle />}
+                {modo === 'registro' ? 'Registrarme con Google' : 'Continuar con Google'}
+              </button>
+
+              <div className="auth-separador auth-field-anim" style={{ '--i': 0 }}>
+                <span>o con tu correo</span>
+              </div>
+            </>
+          )}
+
+          {modo === 'registro' && (
+            <>
               <div className="auth-row auth-field-anim" style={{ '--i': 0 }}>
                 <label className="auth-field">
                   <Icon name="user" size={18} />
@@ -280,27 +386,40 @@ function AuthPage() {
             />
           </label>
 
-          <label className="auth-field auth-field-anim" style={{ '--i': 2 }}>
-            <Icon name="lock" size={18} />
-            <input
-              type={verPassword ? 'text' : 'password'}
-              name="password"
-              placeholder="Contraseña"
-              value={form.password}
-              onChange={handleChange}
-              minLength={modo === 'registro' ? 6 : undefined}
-              autoComplete={modo === 'login' ? 'current-password' : 'new-password'}
-              required
-            />
+          {modo !== 'recuperar' && (
+            <label className="auth-field auth-field-anim" style={{ '--i': 2 }}>
+              <Icon name="lock" size={18} />
+              <input
+                type={verPassword ? 'text' : 'password'}
+                name="password"
+                placeholder="Contraseña"
+                value={form.password}
+                onChange={handleChange}
+                minLength={modo === 'registro' ? 6 : undefined}
+                autoComplete={modo === 'login' ? 'current-password' : 'new-password'}
+                required
+              />
+              <button
+                type="button"
+                className="auth-eye"
+                onClick={() => setVerPassword((v) => !v)}
+                aria-label={verPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              >
+                <Icon name={verPassword ? 'eyeOff' : 'eye'} size={18} />
+              </button>
+            </label>
+          )}
+
+          {modo === 'login' && (
             <button
               type="button"
-              className="auth-eye"
-              onClick={() => setVerPassword((v) => !v)}
-              aria-label={verPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              className="auth-olvide auth-field-anim"
+              style={{ '--i': 2 }}
+              onClick={() => cambiarModo('recuperar')}
             >
-              <Icon name={verPassword ? 'eyeOff' : 'eye'} size={18} />
+              ¿Olvidaste tu contraseña?
             </button>
-          </label>
+          )}
 
           <button
             className="auth-submit auth-field-anim"
@@ -311,21 +430,25 @@ function AuthPage() {
               <span className="auth-spinner" />
             ) : (
               <>
-                {modo === 'login' ? 'Entrar' : 'Crear cuenta'}
+                {modo === 'login' && 'Entrar'}
+                {modo === 'registro' && 'Crear cuenta'}
+                {modo === 'recuperar' && 'Enviar enlace'}
                 <Icon name="arrow" size={18} />
               </>
             )}
           </button>
 
-          <p className="auth-switch auth-field-anim" style={{ '--i': 4 }}>
-            {modo === 'login' ? '¿Primera vez acá?' : '¿Ya tenés cuenta?'}{' '}
-            <button
-              type="button"
-              onClick={() => cambiarModo(modo === 'login' ? 'registro' : 'login')}
-            >
-              {modo === 'login' ? 'Creá tu cuenta' : 'Iniciá sesión'}
-            </button>
-          </p>
+          {modo !== 'recuperar' && (
+            <p className="auth-switch auth-field-anim" style={{ '--i': 4 }}>
+              {modo === 'login' ? '¿Primera vez acá?' : '¿Ya tenés cuenta?'}{' '}
+              <button
+                type="button"
+                onClick={() => cambiarModo(modo === 'login' ? 'registro' : 'login')}
+              >
+                {modo === 'login' ? 'Creá tu cuenta' : 'Iniciá sesión'}
+              </button>
+            </p>
+          )}
         </form>
         </>
         )}

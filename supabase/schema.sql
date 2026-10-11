@@ -6,7 +6,7 @@
 -- esquema_inicial_ents, funciones_auxiliares_privadas,
 -- optimizar_politicas_e_indices, fotos_en_peticiones,
 -- admins_borran_fotos_de_peticiones, roles_y_anonimato,
--- anonimato_total_y_vista_admin). Este archivo es la versión final
+-- anonimato_total_y_vista_admin, perfil_desde_google). Este archivo es la versión final
 -- consolidada, para recrear la base en otro proyecto:
 -- Supabase → SQL Editor → New query → pegar todo → Run.
 -- ==========================================================
@@ -767,3 +767,45 @@ grant execute on function public.identidades_peticion(bigint) to authenticated;
 grant execute on function public.autores_publicaciones() to authenticated;
 grant execute on function public.usuarios_admin() to authenticated;
 grant execute on function public.resolver_solicitud_funcionario(uuid, boolean) to authenticated;
+
+
+-- ==========================================================
+-- 10. Ingreso con Google
+--     El perfil se completa con los datos del formulario de registro o,
+--     si la cuenta entra con Google, con su nombre y su foto.
+--     (Reemplaza la función de la sección 9.)
+-- ==========================================================
+
+create or replace function public.crear_perfil_nuevo_usuario()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  datos jsonb := coalesce(new.raw_user_meta_data, '{}'::jsonb);
+  nombre_completo text := trim(coalesce(datos ->> 'full_name', datos ->> 'name', ''));
+begin
+  insert into public.profiles (id, nombre, apellido, avatar_url, rol_solicitado, cargo, organizacion)
+  values (
+    new.id,
+    coalesce(
+      nullif(trim(datos ->> 'nombre'), ''),
+      nullif(trim(datos ->> 'given_name'), ''),
+      nullif(split_part(nombre_completo, ' ', 1), ''),
+      ''
+    ),
+    coalesce(
+      nullif(trim(datos ->> 'apellido'), ''),
+      nullif(trim(datos ->> 'family_name'), ''),
+      nullif(trim(substr(nombre_completo, length(split_part(nombre_completo, ' ', 1)) + 1)), ''),
+      ''
+    ),
+    nullif(coalesce(datos ->> 'avatar_url', datos ->> 'picture'), ''),
+    case when datos ->> 'tipo_cuenta' = 'funcionario' then 'funcionario' end,
+    left(nullif(trim(datos ->> 'cargo'), ''), 120),
+    left(nullif(trim(datos ->> 'organizacion'), ''), 120)
+  );
+  return new;
+end;
+$$;

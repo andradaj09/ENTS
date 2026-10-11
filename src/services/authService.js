@@ -13,6 +13,11 @@ const MENSAJES_ERROR = {
   email_exists: 'Ya existe una cuenta con ese correo. Iniciá sesión.',
   email_address_invalid: 'El correo no es válido. Revisá que esté bien escrito.',
   weak_password: 'La contraseña es muy débil: usá al menos 6 caracteres.',
+  same_password: 'La nueva contraseña tiene que ser distinta de la anterior.',
+  validation_failed:
+    'Ese método de ingreso no está habilitado todavía. Probá con correo y contraseña.',
+  provider_disabled:
+    'El ingreso con Google todavía no está habilitado. Probá con correo y contraseña.',
 }
 
 export function mensajeErrorAuth(error) {
@@ -113,6 +118,55 @@ export async function subirAvatar(usuarioId, archivo) {
   const { data } = supabase.storage.from('avatares').getPublicUrl(ruta)
 
   return data.publicUrl
+}
+
+// ---------- Google ----------
+// Redirige a Google y vuelve a la página ya con la sesión iniciada.
+// Requiere el proveedor Google habilitado en Supabase (Authentication → Providers).
+export async function loginConGoogle(destino = '/') {
+  // Si Google no está habilitado, Supabase mostraría una página de error técnica:
+  // se consulta antes la configuración pública de Auth para avisar con un mensaje claro.
+  const respuesta = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/auth/v1/settings`, {
+    headers: { apikey: import.meta.env.VITE_SUPABASE_ANON_KEY },
+  })
+  const configuracion = respuesta.ok ? await respuesta.json() : null
+
+  if (configuracion && !configuracion.external?.google) {
+    throw Object.assign(new Error('Google no está habilitado'), { code: 'provider_disabled' })
+  }
+
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${window.location.origin}${destino}`,
+    },
+  })
+
+  if (error) {
+    throw error
+  }
+}
+
+// ---------- Recuperar contraseña ----------
+export const RUTA_RESTABLECER = '/restablecer'
+
+// Envía un correo con un enlace que lleva a /restablecer con una sesión temporal
+export async function enviarRecuperacion(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}${RUTA_RESTABLECER}`,
+  })
+
+  if (error) {
+    throw error
+  }
+}
+
+export async function actualizarPassword(password) {
+  const { error } = await supabase.auth.updateUser({ password })
+
+  if (error) {
+    throw error
+  }
 }
 
 export async function logoutUser() {

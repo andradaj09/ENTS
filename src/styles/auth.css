@@ -141,6 +141,82 @@
   gap: 12px;
 }
 
+/* ---------- Google, separador y enlaces ---------- */
+
+.auth-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 50px;
+  border: 1px solid rgba(18, 18, 18, 0.14);
+  border-radius: 999px;
+  background: #fff;
+  color: #121212;
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba(18, 18, 18, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.auth-google:hover:not(:disabled) {
+  border-color: rgba(18, 18, 18, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(18, 18, 18, 0.12);
+}
+
+.auth-google:disabled {
+  opacity: 0.8;
+}
+
+.auth-separador {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ents-muted-2);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.auth-separador::before,
+.auth-separador::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(18, 18, 18, 0.12);
+}
+
+.auth-olvide,
+.auth-volver {
+  justify-self: end;
+  margin-top: -4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ents-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.auth-olvide:hover,
+.auth-volver:hover {
+  color: #121212;
+}
+
+.auth-volver {
+  justify-self: start;
+  display: block;
+  margin: 0 0 18px;
+  text-decoration: none;
+}
+
+.auth-spinner-oscuro {
+  border-color: rgba(18, 18, 18, 0.15);
+  border-top-color: #121212;
+}
+
 /* Cartel que reemplaza al formulario después de registrarse */
 .auth-exito {
   display: grid;
@@ -159,6 +235,11 @@
   color: #fff;
   box-shadow: 0 12px 30px rgba(93, 187, 138, 0.4);
   animation: logo-in 0.7s var(--ease-rebote) both;
+}
+
+.auth-exito-alerta {
+  background: var(--ents-red);
+  box-shadow: 0 12px 30px rgba(212, 87, 63, 0.35);
 }
 
 .auth-exito h2 {

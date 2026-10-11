@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { logoutUser } from '../services/authService'
 import Icon from '../components/Icon'
 import Logo from '../components/Logo'
-import Avatar from '../components/Avatar'
+import MenuUsuario from '../components/MenuUsuario'
 import FondoAnimado from '../components/FondoAnimado'
 import NotificacionesMenu from '../components/NotificacionesMenu'
 
@@ -73,9 +73,7 @@ function MainLayout() {
           <div className="topbar-burbujas">
             {user && <NotificacionesMenu usuarioId={user.id} />}
 
-            <Link className="topbar-burbuja topbar-avatar" to="/perfil" aria-label="Ir a mi perfil">
-              <Avatar perfil={profile} size={44} />
-            </Link>
+            <MenuUsuario user={user} profile={profile} />
           </div>
         </div>
       </header>

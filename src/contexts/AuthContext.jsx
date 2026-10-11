@@ -43,7 +43,13 @@ export function AuthProvider({ children }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      // Si el enlace de recuperación cayó en otra página, se lleva a /restablecer
+      if (event === 'PASSWORD_RECOVERY' && window.location.pathname !== '/restablecer') {
+        window.location.replace('/restablecer')
+        return
+      }
+
       const currentUser = session?.user ?? null
 
       setUser(currentUser)

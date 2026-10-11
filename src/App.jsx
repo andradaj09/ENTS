@@ -6,6 +6,7 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import RoleRoute from './routes/RoleRoute'
 import Home from './pages/Home'
 import AuthPage from './pages/AuthPage'
+import RestablecerPassword from './pages/RestablecerPassword'
 import Dashboard from './pages/Dashboard'
 import CreatePetition from './pages/CreatePetition'
 import PetitionDetail from './pages/PetitionDetail'
@@ -25,6 +26,8 @@ function App() {
         {/* Acceso: pantalla completa, fuera del dashboard */}
         <Route path="/login" element={<AuthPage />} />
         <Route path="/registro" element={<AuthPage />} />
+        <Route path="/recuperar" element={<AuthPage />} />
+        <Route path="/restablecer" element={<RestablecerPassword />} />
 
         {/* Todo el dashboard requiere sesión iniciada */}
         <Route element={<ProtectedRoute />}>
