@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import {
   enviarRecuperacion,
@@ -466,6 +466,11 @@ function AuthPage() {
             </p>
           )}
         </form>
+
+        <p className="auth-legal">
+          Al usar ENTS aceptás nuestra{' '}
+          <Link to="/privacidad">política de privacidad</Link>.
+        </p>
         </>
         )}
       </main>

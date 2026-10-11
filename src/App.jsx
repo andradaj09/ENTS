@@ -7,6 +7,7 @@ import RoleRoute from './routes/RoleRoute'
 import Home from './pages/Home'
 import AuthPage from './pages/AuthPage'
 import RestablecerPassword from './pages/RestablecerPassword'
+import Privacidad from './pages/Privacidad'
 import Dashboard from './pages/Dashboard'
 import CreatePetition from './pages/CreatePetition'
 import PetitionDetail from './pages/PetitionDetail'
@@ -28,6 +29,7 @@ function App() {
         <Route path="/registro" element={<AuthPage />} />
         <Route path="/recuperar" element={<AuthPage />} />
         <Route path="/restablecer" element={<RestablecerPassword />} />
+        <Route path="/privacidad" element={<Privacidad />} />
 
         {/* Todo el dashboard requiere sesión iniciada */}
         <Route element={<ProtectedRoute />}>

@@ -141,6 +141,86 @@
   gap: 12px;
 }
 
+/* ---------- Páginas legales (política de privacidad) ---------- */
+
+.legal-page {
+  justify-content: flex-start;
+}
+
+.legal-card {
+  width: min(760px, 100%);
+  text-align: left;
+}
+
+.legal-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: #121212;
+  font-weight: 800;
+}
+
+.legal-card h1 {
+  margin: 0 0 4px;
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.legal-fecha {
+  margin-bottom: 24px;
+  color: var(--ents-muted);
+  font-size: 0.85rem;
+}
+
+.legal-card section {
+  margin-bottom: 22px;
+}
+
+.legal-card h2 {
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.legal-card p,
+.legal-card li {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.legal-card ul {
+  padding-left: 20px;
+}
+
+.legal-card li + li {
+  margin-top: 6px;
+}
+
+.legal-volver {
+  width: fit-content;
+  padding: 0 24px;
+  text-decoration: none;
+}
+
+.legal-volver:hover {
+  color: #fff;
+}
+
+.auth-legal {
+  margin: 14px 0 0;
+  color: var(--ents-muted);
+  font-size: 0.75rem;
+}
+
+.auth-legal a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* ---------- Google, separador y enlaces ---------- */
 
 .auth-google {
