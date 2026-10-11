@@ -3,12 +3,12 @@ import {
     cambiarEstadoPeticion,
     getPeticionesPendientes,
 } from '../services/petitionService'
-import { supabase } from '../supabase/client'
+import GaleriaFotos from '../components/GaleriaFotos'
+
 function AdminPetitions() {
     const [peticiones, setPeticiones] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
-    const [procesando, setProcesando] = useState(null)
 
     const cargarPeticiones = async () => {
         try {
@@ -32,15 +32,7 @@ function AdminPetitions() {
 
     const cambiarEstado = async (peticionId, nuevoEstado) => {
         try {
-            const { error } = await supabase
-                .from('peticiones')
-                .update({
-                    estado: nuevoEstado,
-                    updated_at: new Date().toISOString(),
-                })
-                .eq('id', peticionId)
-
-            if (error) throw error
+            await cambiarEstadoPeticion(peticionId, nuevoEstado)
 
             // La sacamos de la lista porque ya no está pendiente
             setPeticiones((actuales) =>
@@ -55,7 +47,7 @@ function AdminPetitions() {
     if (loading) {
         return (
             <div className="container py-5">
-                <p>Cargando peticiones pendientes...</p>
+                <p className="text-muted">Cargando peticiones pendientes...</p>
             </div>
         )
     }
@@ -64,7 +56,8 @@ function AdminPetitions() {
         <div className="container py-5">
 
             <div className="mb-5">
-                <h1>Moderación de peticiones</h1>
+                <span className="eyebrow">Panel de administración</span>
+                <h1 className="page-title mt-3">Moderación de peticiones</h1>
 
                 <p className="text-muted">
                     Revisá las peticiones creadas por los ciudadanos antes
@@ -101,15 +94,21 @@ function AdminPetitions() {
                             </span>
                         </div>
 
-                        <h3 className="card-title">
+                        <h3 className="card-big mb-3">
                             {peticion.titulo}
                         </h3>
 
-                        <p className="card-text">
+                        <p className="card-text text-muted">
                             {peticion.descripcion}
                         </p>
 
-                        <p className="text-muted">
+                        {peticion.fotos?.length > 0 && (
+                            <div className="mb-3">
+                                <GaleriaFotos rutas={peticion.fotos} />
+                            </div>
+                        )}
+
+                        <p className="text-muted small">
                             Creada por:{' '}
                             <strong>
                                 {peticion.profiles?.nombre}{' '}

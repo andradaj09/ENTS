@@ -67,6 +67,7 @@ export function AuthProvider({ children }) {
       value={{
         user,
         profile,
+        setProfile,
         loading,
       }}
     >

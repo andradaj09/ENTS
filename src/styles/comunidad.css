@@ -1,0 +1,416 @@
+/* ==========================================================
+   Comunidad — buscador + feed vecinal
+   ========================================================== */
+
+/* Buscador + selector de barrio en la misma fila */
+.comunidad-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.comunidad-filtros .comunidad-buscador {
+  flex: 1 1 320px;
+  margin-bottom: 0;
+}
+
+.comunidad-barrio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 1 260px;
+  padding: 0 18px;
+  border: 1px solid rgba(18, 18, 18, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--ents-muted);
+  box-shadow: 0 10px 26px rgba(40, 32, 10, 0.06);
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.comunidad-barrio:focus-within {
+  border-color: var(--ents-ink);
+  background: #fff;
+}
+
+/* Con un barrio elegido el selector se marca en negro, como un filtro activo */
+.comunidad-barrio.activo {
+  border-color: var(--ents-ink);
+  background: var(--ents-ink);
+  color: #fff;
+}
+
+.comunidad-barrio select {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.comunidad-barrio.activo select option {
+  color: var(--ents-ink);
+}
+
+.comunidad-resumen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  margin: -8px 0 24px;
+  color: var(--ents-muted);
+  font-size: 0.88rem;
+  animation: revelar 0.35s var(--ease-out) both;
+}
+
+.comunidad-resumen strong {
+  color: var(--ents-ink);
+}
+
+.comunidad-resumen button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ents-ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Filas del ranking que filtran al tocarlas */
+.bar-row-boton {
+  width: 100%;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.bar-row-boton:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.comunidad-buscador {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 0 18px;
+  border: 1px solid rgba(18, 18, 18, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--ents-muted);
+  box-shadow: 0 10px 26px rgba(40, 32, 10, 0.06);
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.comunidad-buscador:focus-within {
+  border-color: var(--ents-ink);
+  background: #fff;
+  color: var(--ents-ink);
+  box-shadow: 0 0 0 4px rgba(18, 18, 18, 0.07);
+}
+
+.comunidad-buscador input {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ents-ink);
+  font-size: 1rem;
+}
+
+.comunidad-buscador input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.comunidad-buscador button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(18, 18, 18, 0.08);
+  color: var(--ents-ink);
+}
+
+.comunidad-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 24px;
+  align-items: start;
+}
+
+.comunidad-feed {
+  display: grid;
+  gap: 16px;
+}
+
+.comunidad-lateral {
+  position: sticky;
+  top: 110px;
+  display: grid;
+  gap: 16px;
+}
+
+/* ---------- Publicar ---------- */
+
+.publicar .card-body {
+  padding: 18px;
+}
+
+.publicar-top {
+  display: flex;
+  gap: 14px;
+}
+
+.publicar-texto {
+  flex: 1;
+  min-height: 72px;
+  padding: 10px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ents-ink);
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.publicar-texto::placeholder {
+  color: var(--ents-muted-2);
+}
+
+.publicar-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ents-line);
+}
+
+.publicar-zona {
+  width: auto;
+  padding: 0.45rem 2.2rem 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+}
+
+.publicar-contador {
+  margin-left: auto;
+  color: var(--ents-muted-2);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Selector de dos opciones con indicador deslizante (como el login) */
+.segmento {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border: 1px solid rgba(18, 18, 18, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.segmento-indicador {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: 999px;
+  background: var(--ents-green);
+  box-shadow: 0 4px 12px rgba(93, 187, 138, 0.35);
+  transition: transform 0.4s var(--ease-rebote), background-color 0.3s, box-shadow 0.3s;
+}
+
+.segmento.es-segundo .segmento-indicador {
+  transform: translateX(100%);
+  background: var(--ents-red);
+  box-shadow: 0 4px 12px rgba(212, 87, 63, 0.35);
+}
+
+.segmento button {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--ents-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+
+.segmento button.active {
+  color: #fff;
+}
+
+/* ---------- Feed ---------- */
+
+.feed-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.feed-lista {
+  display: grid;
+  gap: 12px;
+}
+
+.post {
+  --color: var(--ents-green);
+  position: relative;
+  padding: 18px 20px 18px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--ents-radius);
+  background: var(--glass-inner);
+  box-shadow: 0 8px 22px rgba(40, 32, 10, 0.05);
+  animation: revelar 0.5s var(--ease-out) both;
+  animation-delay: calc(0.1s + var(--i, 0) * 0.05s);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.post:hover {
+  background: var(--glass-inner-hover);
+}
+
+.post::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  bottom: 18px;
+  left: 0;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--color);
+}
+
+.post-negativo {
+  --color: var(--ents-red);
+}
+
+.post-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.post-autor {
+  display: grid;
+  min-width: 0;
+}
+
+.post-autor strong {
+  font-size: 0.92rem;
+}
+
+.post-autor span {
+  color: var(--ents-muted);
+  font-size: 0.76rem;
+}
+
+.post-tipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color) 16%, white);
+  color: color-mix(in srgb, var(--color) 70%, black);
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.post-borrar {
+  width: 32px;
+  height: 32px;
+  color: var(--ents-muted);
+}
+
+.post-texto {
+  margin: 12px 0 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Lateral ---------- */
+
+.resultado {
+  display: flex;
+  gap: 12px;
+  padding: 10px 8px;
+  border-radius: 12px;
+  color: var(--ents-ink);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.resultado:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ents-ink);
+  transform: translateX(3px);
+}
+
+.resultado .dot {
+  margin-top: 7px;
+}
+
+.resultado strong {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.resultado span {
+  color: var(--ents-muted);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 1199.98px) {
+  .comunidad-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .comunidad-lateral {
+    position: static;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .publicar-contador {
+    margin-left: 0;
+  }
+
+  .publicar-acciones .btn {
+    width: 100%;
+  }
+}

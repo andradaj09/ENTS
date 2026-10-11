@@ -1,0 +1,14 @@
+# Configuración de despliegue en Netlify
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# La app usa rutas del lado del cliente (React Router): cualquier ruta
+# (/mapa, /perfil, /peticiones/12...) tiene que servir index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

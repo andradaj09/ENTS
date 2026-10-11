@@ -39,49 +39,59 @@ function Dashboard() {
   return (
     <div className="container py-5">
 
-      <h1>Mi cuenta</h1>
+      <span className="eyebrow">Panel personal</span>
+      <h1 className="page-title">Mis solicitudes</h1>
 
-      <div className="card mt-4 mb-5">
-        <div className="card-body">
+      <div className="row g-4 mt-2 mb-5">
+        <div className="col-lg-7">
+          <div className="card h-100">
+            <div className="card-body">
+              <p className="line-label">Perfil</p>
 
-          <p>
-            <strong>Nombre:</strong>{' '}
-            {profile?.nombre} {profile?.apellido}
-          </p>
+              <div className="info-row">
+                <span>Nombre</span>
+                <span>{profile?.nombre} {profile?.apellido}</span>
+              </div>
 
-          <p>
-            <strong>Correo:</strong>{' '}
-            {user?.email}
-          </p>
+              <div className="info-row">
+                <span>Correo</span>
+                <span>{user?.email}</span>
+              </div>
 
-          <p className="mb-0">
-            <strong>Rol:</strong>{' '}
-            {profile?.rol}
-          </p>
+              <div className="info-row">
+                <span>Rol</span>
+                <span className="text-capitalize">{profile?.rol}</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <div className="col-lg-5">
+          <div className="card card-featured h-100">
+            <div className="card-body d-flex flex-column">
+              <p className="line-label">Tu impacto</p>
+
+              <div className="stat-big">
+                {peticiones.length}
+                <small> {peticiones.length === 1 ? 'petición' : 'peticiones'}</small>
+              </div>
+
+              <p className="text-muted small mt-3">
+                Creá nuevas peticiones para visibilizar problemáticas de tu barrio.
+              </p>
+
+              <Link
+                to="/peticiones/nueva"
+                className="btn btn-dark w-100 mt-auto"
+              >
+                Crear petición
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center mb-4">
-
-        <div>
-          <h2 className="mb-1">
-            Mis peticiones
-          </h2>
-
-          <p className="text-muted mb-0">
-            Peticiones que creaste en la plataforma.
-          </p>
-        </div>
-
-        <Link
-          to="/peticiones/nueva"
-          className="btn btn-primary"
-        >
-          Crear petición
-        </Link>
-
-      </div>
+      <p className="line-label">Mis peticiones</p>
 
       {error && (
         <div className="alert alert-danger">
@@ -90,7 +100,7 @@ function Dashboard() {
       )}
 
       {loadingPeticiones && (
-        <p>Cargando peticiones...</p>
+        <p className="text-muted">Cargando peticiones...</p>
       )}
 
       {!loadingPeticiones &&
@@ -99,18 +109,18 @@ function Dashboard() {
           <div className="card">
             <div className="card-body text-center py-5">
 
-              <h4>
+              <p className="card-big mb-2">
                 Todavía no creaste ninguna petición
-              </h4>
+              </p>
 
-              <p className="text-muted">
+              <p className="text-muted mb-4">
                 Creá tu primera petición para visibilizar
                 una problemática de tu barrio.
               </p>
 
               <Link
                 to="/peticiones/nueva"
-                className="btn btn-primary"
+                className="btn btn-dark"
               >
                 Crear mi primera petición
               </Link>
@@ -119,13 +129,15 @@ function Dashboard() {
           </div>
         )}
 
-      {!loadingPeticiones &&
-        peticiones.map((peticion) => (
-          <PetitionCard
-            key={peticion.id}
-            peticion={peticion}
-          />
-        ))}
+      {!loadingPeticiones && (
+        <div className="row g-4">
+          {peticiones.map((peticion) => (
+            <div className="col-12 col-md-6 col-lg-4" key={peticion.id}>
+              <PetitionCard peticion={peticion} />
+            </div>
+          ))}
+        </div>
+      )}
 
     </div>
   )

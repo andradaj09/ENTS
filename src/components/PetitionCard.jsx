@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
+import { urlFotoPeticion } from '../services/petitionService'
 
-function PetitionCard({ peticion }) {
+function PetitionCard({ peticion, destacada = false }) {
   const fecha = new Date(
     peticion.created_at
   ).toLocaleDateString('es-AR', {
@@ -16,56 +17,58 @@ function PetitionCard({ peticion }) {
   const cantidadFirmas = peticion.firmas?.length ?? 0
 
   return (
-    <div className="card mb-3">
-      <div className="card-body">
+    <div className={`card h-100${destacada ? ' card-featured' : ''}`}>
+      {peticion.fotos?.length > 0 && (
+        <div className="card-portada">
+          <img src={urlFotoPeticion(peticion.fotos[0])} alt="" loading="lazy" />
+        </div>
+      )}
 
-        <div className="d-flex justify-content-between align-items-start mb-2">
-          <div>
-            <span className="badge text-bg-primary me-2">
-              {peticion.categorias?.nombre}
-            </span>
+      <div className="card-body d-flex flex-column">
 
-            <span className="badge text-bg-secondary">
-              {peticion.zonas?.nombre}
-            </span>
-          </div>
+        <div className="d-flex justify-content-between align-items-start gap-2">
+          <p className="card-kicker">
+            {peticion.categorias?.nombre || 'Sin categoría'}
+            {' · '}
+            {peticion.zonas?.nombre || 'Sin zona'}
+          </p>
 
-          <span className="badge text-bg-light border text-dark">
+          <span className="badge text-bg-light">
             {estado}
           </span>
         </div>
 
-        <h4 className="card-title mt-3">
+        <h3 className="card-big mt-2">
           {peticion.titulo}
-        </h4>
+        </h3>
 
-        <p className="card-text text-muted">
-          {peticion.descripcion.length > 180
-            ? `${peticion.descripcion.substring(0, 180)}...`
+        <ul className="check-list">
+          <li>
+            {cantidadFirmas}{' '}
+            {cantidadFirmas === 1 ? 'firma' : 'firmas'}
+          </li>
+
+          <li>
+            Urgencia {peticion.score_urgencia ?? 0}/100
+          </li>
+
+          <li>
+            Publicada el {fecha}
+          </li>
+        </ul>
+
+        <p className="text-muted small mb-4">
+          {peticion.descripcion.length > 140
+            ? `${peticion.descripcion.substring(0, 140)}...`
             : peticion.descripcion}
         </p>
 
-        <div className="d-flex justify-content-between align-items-center mt-4">
-
-          <div className="text-muted">
-            <span className="me-3">
-              {cantidadFirmas}{' '}
-              {cantidadFirmas === 1 ? 'firma' : 'firmas'}
-            </span>
-
-            <span>
-              {fecha}
-            </span>
-          </div>
-
-          <Link
-            to={`/peticiones/${peticion.id}`}
-            className="btn btn-outline-primary"
-          >
-            Ver petición
-          </Link>
-
-        </div>
+        <Link
+          to={`/peticiones/${peticion.id}`}
+          className={`btn w-100 mt-auto ${destacada ? 'btn-dark' : 'btn-ghost'}`}
+        >
+          Ver petición
+        </Link>
 
       </div>
     </div>

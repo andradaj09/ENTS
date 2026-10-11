@@ -1,18 +1,24 @@
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useCallback, useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { useAuth } from '../contexts/AuthContext'
 
 import {
+  deletePeticion,
   getPeticionById,
   getFirmasPeticion,
   firmarPeticion,
   retirarFirma,
 } from '../services/petitionService'
+import GaleriaFotos from '../components/GaleriaFotos'
+import EditarPeticion from '../components/EditarPeticion'
+import Icon from '../components/Icon'
 
 function PetitionDetail() {
   const { id } = useParams()
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
+  const navigate = useNavigate()
+  const esModerador = profile?.rol === 'admin'
 
   const [peticion, setPeticion] = useState(null)
   const [firmas, setFirmas] = useState([])
@@ -22,6 +28,37 @@ function PetitionDetail() {
 
   const [error, setError] = useState('')
   const [errorFirma, setErrorFirma] = useState('')
+
+  const [editando, setEditando] = useState(false)
+  const [eliminando, setEliminando] = useState(false)
+  const [errorModeracion, setErrorModeracion] = useState('')
+
+  const cerrarEdicion = useCallback(() => setEditando(false), [])
+
+  const handleGuardado = (actualizada) => {
+    setPeticion(actualizada)
+    setEditando(false)
+  }
+
+  const handleEliminar = async () => {
+    const confirmado = window.confirm(
+      `¿Eliminar "${peticion.titulo}"?\n\nSe borran también sus firmas y fotos. No se puede deshacer.`
+    )
+
+    if (!confirmado) return
+
+    setEliminando(true)
+    setErrorModeracion('')
+
+    try {
+      await deletePeticion(peticion)
+      navigate('/', { replace: true })
+    } catch (err) {
+      console.error('Error eliminando petición:', err)
+      setErrorModeracion('No se pudo eliminar la petición.')
+      setEliminando(false)
+    }
+  }
 
   useEffect(() => {
     const loadPeticion = async () => {
@@ -152,176 +189,223 @@ function PetitionDetail() {
 
   return (
     <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-lg-9">
 
-          <Link
-            to="/"
-            className="text-decoration-none"
-          >
-            ← Volver
-          </Link>
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <Link to="/" className="back-link">
+          ← Volver
+        </Link>
 
-          <div className="mt-4 mb-3">
-            <span className="badge text-bg-primary me-2">
-              {peticion.categorias?.nombre}
+        {/* Solo visible para moderadores */}
+        {esModerador && (
+          <div className="moderador-barra">
+            <span>
+              <Icon name="shield" size={16} />
+              Moderador
             </span>
 
-            <span className="badge text-bg-secondary">
-              {peticion.zonas?.nombre}
-            </span>
-          </div>
-
-          <h1 className="mb-3">
-            {peticion.titulo}
-          </h1>
-
-          <div className="mb-4">
-            <span className="text-muted">
-              Estado:
-            </span>{' '}
-
-            <strong>
-              {estadoFormateado}
-            </strong>
-          </div>
-
-          <hr />
-
-          <div className="py-3">
-            <h5>Descripción</h5>
-
-            <p
-              className="mt-3"
-              style={{ whiteSpace: 'pre-line' }}
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm"
+              onClick={() => setEditando(true)}
+              disabled={eliminando}
             >
-              {peticion.descripcion}
-            </p>
+              <Icon name="pen" size={15} className="me-2" />
+              Editar
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-outline-danger btn-sm"
+              onClick={handleEliminar}
+              disabled={eliminando}
+            >
+              <Icon name="trash" size={15} className="me-2" />
+              {eliminando ? 'Eliminando...' : 'Eliminar'}
+            </button>
           </div>
+        )}
+      </div>
 
-          <hr />
+      {errorModeracion && (
+        <div className="alert alert-danger mt-3 mb-0">{errorModeracion}</div>
+      )}
 
-          {/* FIRMAS */}
+      {editando && (
+        <EditarPeticion
+          peticion={peticion}
+          onGuardado={handleGuardado}
+          onCerrar={cerrarEdicion}
+        />
+      )}
 
-          <div className="py-4">
+      <div className="mt-4 mb-3 d-flex flex-wrap gap-2">
+        <span className="badge text-bg-primary">
+          {peticion.categorias?.nombre}
+        </span>
 
-            <h4>
-              {firmas.length}{' '}
-              {firmas.length === 1 ? 'firma' : 'firmas'}
-            </h4>
+        <span className="badge text-bg-secondary">
+          {peticion.zonas?.nombre}
+        </span>
 
-            <p className="text-muted">
-              Personas que apoyan esta petición.
-            </p>
+        <span className="badge text-bg-light">
+          {estadoFormateado}
+        </span>
+      </div>
 
-            {errorFirma && (
-              <div className="alert alert-danger">
-                {errorFirma}
-              </div>
-            )}
+      <h1 className="page-title mb-4">
+        {peticion.titulo}
+      </h1>
 
-            {!user && (
-              <div>
-                <p>
-                  Iniciá sesión para apoyar esta petición.
-                </p>
+      <div className="row g-4">
 
-                <Link
-                  to="/login"
-                  className="btn btn-primary"
-                >
-                  Iniciar sesión
-                </Link>
-              </div>
-            )}
+        <div className="col-lg-8">
 
-            {user && !usuarioYaFirmo && (
-              <button
-                className="btn btn-primary"
-                onClick={handleFirmar}
-                disabled={procesandoFirma}
+          <div className="card mb-4">
+            <div className="card-body">
+              <p className="line-label">Descripción</p>
+
+              <p
+                className="mb-0"
+                style={{ whiteSpace: 'pre-line' }}
               >
-                {procesandoFirma
-                  ? 'Registrando firma...'
-                  : 'Firmar petición'}
-              </button>
-            )}
+                {peticion.descripcion}
+              </p>
 
-            {user && usuarioYaFirmo && (
-              <div>
-                <div className="alert alert-success">
-                  ✓ Ya firmaste esta petición.
+              {peticion.fotos?.length > 0 && (
+                <div className="mt-4">
+                  <GaleriaFotos rutas={peticion.fotos} />
                 </div>
-
-                <button
-                  className="btn btn-outline-danger"
-                  onClick={handleRetirarFirma}
-                  disabled={procesandoFirma}
-                >
-                  {procesandoFirma
-                    ? 'Retirando firma...'
-                    : 'Retirar firma'}
-                </button>
-              </div>
-            )}
-
+              )}
+            </div>
           </div>
 
-          <hr />
+          <div className="row g-4">
 
-          <div className="row mt-4">
-
-            <div className="col-md-6 mb-3">
+            <div className="col-md-6">
               <div className="card h-100">
                 <div className="card-body">
+                  <p className="line-label">Información</p>
 
-                  <h5 className="card-title">
-                    Información
-                  </h5>
+                  <div className="info-row">
+                    <span>Creada por</span>
+                    <span>
+                      {peticion.profiles?.nombre}{' '}
+                      {peticion.profiles?.apellido}
+                    </span>
+                  </div>
 
-                  <p className="mb-2">
-                    <strong>Creada por:</strong>{' '}
-                    {peticion.profiles?.nombre}{' '}
-                    {peticion.profiles?.apellido}
-                  </p>
-
-                  <p className="mb-0">
-                    <strong>Fecha:</strong>{' '}
-                    {fecha}
-                  </p>
-
+                  <div className="info-row">
+                    <span>Fecha</span>
+                    <span>{fecha}</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="col-md-6 mb-3">
+            <div className="col-md-6">
               <div className="card h-100">
                 <div className="card-body">
+                  <p className="line-label">Score de urgencia</p>
 
-                  <h5 className="card-title">
-                    Score de urgencia
-                  </h5>
-
-                  <div className="display-6">
+                  <div className="stat-big">
                     {Number(peticion.score_urgencia)}
-
-                    <small className="fs-5 text-muted">
-                      {' '}/ 100
-                    </small>
+                    <small> / 100</small>
                   </div>
 
-                  <p className="text-muted mb-0">
+                  <p className="text-muted small mt-3 mb-0">
                     El score será calculado automáticamente
                     según la actividad de la petición.
                   </p>
-
                 </div>
               </div>
             </div>
 
           </div>
-
         </div>
+
+        {/* FIRMAS */}
+
+        <div className="col-lg-4">
+          <div className="card card-featured">
+            <div className="card-body">
+
+              <p className="card-kicker">Apoyos</p>
+
+              <div className="stat-big">
+                {firmas.length}
+                <small> {firmas.length === 1 ? 'firma' : 'firmas'}</small>
+              </div>
+
+              <ul className="check-list">
+                <li>Visibiliza la problemática</li>
+                <li>Suma urgencia a la petición</li>
+                <li>Podés retirar tu firma cuando quieras</li>
+              </ul>
+
+              {errorFirma && (
+                <div className="alert alert-danger">
+                  {errorFirma}
+                </div>
+              )}
+
+              {!user && (
+                <>
+                  <p className="text-muted small">
+                    Iniciá sesión para apoyar esta petición.
+                  </p>
+
+                  <Link
+                    to="/login"
+                    className="btn btn-dark w-100"
+                  >
+                    Iniciar sesión
+                  </Link>
+                </>
+              )}
+
+              {/* Solo se pueden firmar las peticiones publicadas */}
+              {peticion.estado !== 'publicada' && (
+                <div className="alert alert-info mb-0">
+                  {peticion.estado === 'pendiente'
+                    ? 'Esta petición está en revisión: se podrá firmar cuando se publique.'
+                    : 'Esta petición fue rechazada y no admite firmas.'}
+                </div>
+              )}
+
+              {user && peticion.estado === 'publicada' && !usuarioYaFirmo && (
+                <button
+                  className="btn btn-dark w-100"
+                  onClick={handleFirmar}
+                  disabled={procesandoFirma}
+                >
+                  {procesandoFirma
+                    ? 'Registrando firma...'
+                    : 'Firmar petición'}
+                </button>
+              )}
+
+              {user && usuarioYaFirmo && (
+                <>
+                  <div className="alert alert-success">
+                    ✓ Ya firmaste esta petición.
+                  </div>
+
+                  <button
+                    className="btn btn-outline-danger w-100"
+                    onClick={handleRetirarFirma}
+                    disabled={procesandoFirma}
+                  >
+                    {procesandoFirma
+                      ? 'Retirando firma...'
+                      : 'Retirar firma'}
+                  </button>
+                </>
+              )}
+
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   )
