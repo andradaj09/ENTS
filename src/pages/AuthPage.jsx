@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { loginUser, registerUser } from '../services/authService'
+import { loginUser, mensajeErrorAuth, registerUser } from '../services/authService'
 import Icon from '../components/Icon'
 import Logo from '../components/Logo'
 import FondoAnimado from '../components/FondoAnimado'
@@ -30,7 +30,8 @@ function AuthPage() {
   const [verPassword, setVerPassword] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState('')
-  const [mensaje, setMensaje] = useState('')
+  // Después de registrarse se reemplaza el formulario por el cartel de confirmación
+  const [cuentaCreada, setCuentaCreada] = useState(null)
 
   if (!authLoading && user) {
     return <Navigate to={destino} replace />
@@ -40,7 +41,7 @@ function AuthPage() {
     if (nuevoModo === modo) return
 
     setError('')
-    setMensaje('')
+    setCuentaCreada(null)
     navigate(nuevoModo === 'registro' ? '/registro' : '/login', {
       replace: true,
       state: location.state,
@@ -58,7 +59,6 @@ function AuthPage() {
     e.preventDefault()
 
     setError('')
-    setMensaje('')
     setEnviando(true)
 
     try {
@@ -68,7 +68,7 @@ function AuthPage() {
       } else {
         const esFuncionario = form.tipoCuenta === 'funcionario'
 
-        await registerUser(
+        const { session } = await registerUser(
           form.nombre.trim(),
           form.apellido.trim(),
           form.email,
@@ -80,15 +80,18 @@ function AuthPage() {
           }
         )
 
-        setMensaje(
-          esFuncionario
-            ? 'Cuenta creada. Revisá tu correo para confirmarla. Un administrador va a verificar tu cargo; mientras tanto vas a usar la plataforma como vecino/a.'
-            : 'Cuenta creada. Revisá tu correo para confirmarla y después iniciá sesión.'
-        )
+        // Si Supabase no pide confirmar el correo, la sesión ya está iniciada
+        if (session) {
+          navigate(destino, { replace: true })
+          return
+        }
+
+        setCuentaCreada({ email: form.email, esFuncionario })
+        // Al volver a "Iniciar sesión" el correo ya queda escrito
         setForm({ ...formVacio, email: form.email })
       }
     } catch (err) {
-      setError(err.message)
+      setError(mensajeErrorAuth(err))
     } finally {
       setEnviando(false)
     }
@@ -115,6 +118,37 @@ function AuthPage() {
           Peticiones vecinales con impacto real.
         </p>
 
+        {cuentaCreada ? (
+          <div className="auth-exito" role="status">
+            <span className="auth-exito-icono">
+              <Icon name="check" size={30} />
+            </span>
+
+            <h2>¡Cuenta creada!</h2>
+
+            <p>
+              Te enviamos un correo a <strong>{cuentaCreada.email}</strong>.
+              Abrilo y confirmá tu cuenta para poder iniciar sesión.
+            </p>
+
+            {cuentaCreada.esFuncionario && (
+              <p className="auth-exito-nota">
+                Un administrador va a verificar tu cargo. Mientras tanto vas a
+                usar la plataforma como vecino/a.
+              </p>
+            )}
+
+            <button
+              type="button"
+              className="auth-submit"
+              onClick={() => cambiarModo('login')}
+            >
+              Ir a iniciar sesión
+              <Icon name="arrow" size={18} />
+            </button>
+          </div>
+        ) : (
+        <>
         <div
           className={`auth-tabs auth-reveal${modo === 'registro' ? ' is-registro' : ''}`}
           style={{ '--i': 4 }}
@@ -144,7 +178,6 @@ function AuthPage() {
         <form className="auth-form" onSubmit={handleSubmit} key={modo}>
 
           {error && <div className="auth-alert auth-alert-error">{error}</div>}
-          {mensaje && <div className="auth-alert auth-alert-ok">{mensaje}</div>}
 
           {modo === 'registro' && (
             <>
@@ -294,6 +327,8 @@ function AuthPage() {
             </button>
           </p>
         </form>
+        </>
+        )}
       </main>
 
       <p className="auth-footer">Córdoba · Peticiones ciudadanas</p>

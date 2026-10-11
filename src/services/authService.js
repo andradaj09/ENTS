@@ -1,5 +1,24 @@
 import { supabase } from '../supabase/client'
 
+// Mensajes de Supabase Auth traducidos y explicados para el usuario
+const MENSAJES_ERROR = {
+  over_email_send_rate_limit:
+    'Se alcanzó el límite de correos de confirmación por hora. Esperá unos minutos y volvé a intentar.',
+  over_request_rate_limit:
+    'Demasiados intentos seguidos. Esperá un momento y volvé a intentar.',
+  invalid_credentials: 'El correo o la contraseña no son correctos.',
+  email_not_confirmed:
+    'Todavía no confirmaste tu correo. Revisá tu bandeja de entrada (y la de spam).',
+  user_already_exists: 'Ya existe una cuenta con ese correo. Iniciá sesión.',
+  email_exists: 'Ya existe una cuenta con ese correo. Iniciá sesión.',
+  email_address_invalid: 'El correo no es válido. Revisá que esté bien escrito.',
+  weak_password: 'La contraseña es muy débil: usá al menos 6 caracteres.',
+}
+
+export function mensajeErrorAuth(error) {
+  return MENSAJES_ERROR[error?.code] ?? error?.message ?? 'Ocurrió un error. Probá de nuevo.'
+}
+
 // tipoCuenta: 'vecino' | 'funcionario'. Si es funcionario, la base guarda la
 // solicitud y la cuenta queda como vecino hasta que un admin la apruebe.
 export async function registerUser(

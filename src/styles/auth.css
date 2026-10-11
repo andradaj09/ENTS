@@ -141,6 +141,57 @@
   gap: 12px;
 }
 
+/* Cartel que reemplaza al formulario después de registrarse */
+.auth-exito {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  animation: revelar 0.5s var(--ease-out) both;
+}
+
+.auth-exito-icono {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--ents-green);
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(93, 187, 138, 0.4);
+  animation: logo-in 0.7s var(--ease-rebote) both;
+}
+
+.auth-exito h2 {
+  margin: 4px 0 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.auth-exito p {
+  margin: 0;
+  color: var(--ents-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.auth-exito p strong {
+  color: var(--ents-ink);
+  overflow-wrap: anywhere;
+}
+
+.auth-exito-nota {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 0.82rem !important;
+}
+
+.auth-exito .auth-submit {
+  width: 100%;
+  margin-top: 8px;
+}
+
 /* Tipo de cuenta al registrarse */
 .auth-tipo {
   display: grid;
