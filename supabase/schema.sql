@@ -9,7 +9,7 @@
 -- anonimato_total_y_vista_admin, perfil_desde_google,
 -- estadisticas_y_categorias, mas_barrios_cordoba_y_villa_allende,
 -- seguimiento_notificaciones_comentarios_areas y sus correcciones, score_urgencia_automatico,
--- dueno_cambia_roles, documentos_privados_dueno, cinco_roles_moderador_y_area).
+-- dueno_cambia_roles, documentos_privados_dueno, cinco_roles_moderador_y_area, permisos_por_panel).
 -- Este archivo es la versión final
 -- consolidada, para recrear la base en otro proyecto:
 -- Supabase → SQL Editor → New query → pegar todo → Run.
@@ -2420,3 +2420,306 @@ $$;
 
 revoke execute on function public.estadisticas_area(bigint), public.autores_publicaciones(), public.usuarios_admin() from public, anon;
 grant execute on function public.estadisticas_area(bigint), public.autores_publicaciones(), public.usuarios_admin() to authenticated;
+
+-- =====================================================================
+-- 18. Permisos por panel (los define el dueño)
+-- =====================================================================
+-- Para cada rol y cada panel: si lo ve y si puede modificar.
+-- El dueño siempre tiene todo. La base aplica estas reglas en las
+-- políticas y funciones de cada panel, no solo la pantalla.
+
+create table if not exists public.permisos_panel (
+  rol text not null check (rol in ('ciudadano', 'funcionario', 'moderador', 'admin')),
+  panel text not null check (panel in (
+    'dashboard', 'mapa', 'comunidad', 'estadisticas', 'eventos', 'perfil',
+    'bandeja', 'moderacion', 'usuarios', 'panel', 'documentos'
+  )),
+  ver boolean not null default false,
+  modificar boolean not null default false,
+  primary key (rol, panel),
+  -- modificar implica ver; los paneles de solo lectura no se modifican
+  check (not modificar or ver),
+  check (not modificar or panel not in ('mapa', 'estadisticas', 'panel'))
+);
+
+alter table public.permisos_panel enable row level security;
+
+drop policy if exists "Ver permisos" on public.permisos_panel;
+create policy "Ver permisos" on public.permisos_panel
+  for select to authenticated using (true);
+
+-- Valores iniciales = cómo funcionaba cada rol hasta ahora
+insert into public.permisos_panel (rol, panel, ver, modificar)
+select r.rol, p.panel,
+  case
+    when p.panel in ('dashboard', 'mapa', 'comunidad', 'estadisticas', 'eventos', 'perfil') then true
+    when p.panel = 'bandeja' then r.rol in ('funcionario', 'admin')
+    when p.panel = 'moderacion' then r.rol in ('moderador', 'admin')
+    when p.panel in ('usuarios', 'panel') then r.rol = 'admin'
+    else false
+  end,
+  case
+    when p.panel in ('dashboard', 'comunidad', 'perfil') then true
+    when p.panel = 'eventos' then r.rol = 'admin'
+    when p.panel = 'bandeja' then r.rol in ('funcionario', 'admin')
+    when p.panel = 'moderacion' then r.rol in ('moderador', 'admin')
+    when p.panel = 'usuarios' then r.rol = 'admin'
+    else false
+  end
+from (values ('ciudadano'), ('funcionario'), ('moderador'), ('admin')) as r(rol)
+cross join (values ('dashboard'), ('mapa'), ('comunidad'), ('estadisticas'), ('eventos'), ('perfil'),
+                   ('bandeja'), ('moderacion'), ('usuarios'), ('panel'), ('documentos')) as p(panel)
+on conflict (rol, panel) do nothing;
+
+create or replace function privado.tiene_permiso(p_panel text, p_accion text default 'ver')
+returns boolean
+language sql stable security definer set search_path = ''
+as $$
+  select privado.es_dueno() or exists (
+    select 1
+    from public.permisos_panel pp
+    join public.profiles pr on pr.rol = pp.rol
+    where pr.id = auth.uid()
+      and pp.panel = p_panel
+      and case when p_accion = 'modificar' then pp.modificar else pp.ver end
+  );
+$$;
+
+revoke execute on function privado.tiene_permiso(text, text) from public, anon;
+grant execute on function privado.tiene_permiso(text, text) to authenticated;
+
+-- Lo que puede hacer quien consulta (el menú y las rutas lo usan)
+create or replace function public.mis_permisos()
+returns json
+language sql stable security definer set search_path = ''
+as $$
+  select json_build_object(
+    'es_dueno', privado.es_dueno(),
+    'permisos', coalesce((
+      select json_object_agg(p.panel, json_build_object(
+        'ver', privado.es_dueno() or coalesce(pp.ver, false),
+        'modificar', (privado.es_dueno() and p.panel not in ('mapa', 'estadisticas', 'panel'))
+                     or coalesce(pp.modificar, false)
+      ))
+      from (values ('dashboard'), ('mapa'), ('comunidad'), ('estadisticas'), ('eventos'), ('perfil'),
+                   ('bandeja'), ('moderacion'), ('usuarios'), ('panel'), ('documentos')) as p(panel)
+      left join public.profiles pr on pr.id = auth.uid()
+      left join public.permisos_panel pp on pp.rol = pr.rol and pp.panel = p.panel
+    ), '{}'::json)
+  );
+$$;
+
+-- Solo el dueño cambia un permiso
+create or replace function public.guardar_permiso(p_rol text, p_panel text, p_ver boolean, p_modificar boolean)
+returns void
+language plpgsql security definer set search_path = ''
+as $$
+begin
+  if not privado.es_dueno() then
+    raise exception 'Solo el dueño del proyecto puede cambiar permisos' using errcode = '42501';
+  end if;
+
+  insert into public.permisos_panel (rol, panel, ver, modificar)
+  values (p_rol, p_panel, p_ver, p_ver and p_modificar and p_panel not in ('mapa', 'estadisticas', 'panel'))
+  on conflict (rol, panel) do update set ver = excluded.ver, modificar = excluded.modificar;
+end;
+$$;
+
+revoke execute on function public.mis_permisos(), public.guardar_permiso(text, text, boolean, boolean) from public, anon;
+grant execute on function public.mis_permisos(), public.guardar_permiso(text, text, boolean, boolean) to authenticated;
+
+-- ---------------------------------------------------------------------
+-- Moderación: ver = revisar pendientes y denuncias; modificar = actuar
+-- ---------------------------------------------------------------------
+create or replace function privado.es_moderador()
+returns boolean
+language sql stable security definer set search_path = ''
+as $$ select privado.tiene_permiso('moderacion', 'ver'); $$;
+
+create or replace function privado.puede_moderar()
+returns boolean
+language sql stable security definer set search_path = ''
+as $$ select privado.tiene_permiso('moderacion', 'modificar'); $$;
+
+revoke execute on function privado.puede_moderar() from public, anon;
+grant execute on function privado.puede_moderar() to authenticated;
+
+drop policy if exists "Moderadores moderan peticiones" on public.peticiones;
+create policy "Moderadores moderan peticiones" on public.peticiones
+  for update to authenticated
+  using ((select privado.puede_moderar())) with check ((select privado.puede_moderar()));
+
+drop policy if exists "Moderadores borran peticiones" on public.peticiones;
+create policy "Moderadores borran peticiones" on public.peticiones
+  for delete to authenticated
+  using ((select privado.puede_moderar()));
+
+drop policy if exists "Autor o moderador borran comentarios" on public.comentarios;
+create policy "Autor o moderador borran comentarios" on public.comentarios
+  for delete to authenticated
+  using (usuario_id = (select auth.uid()) or (select privado.puede_moderar()));
+
+drop policy if exists "Autor o moderador borran publicaciones" on public.publicaciones;
+create policy "Autor o moderador borran publicaciones" on public.publicaciones
+  for delete to authenticated
+  using (usuario_id = (select auth.uid()) or (select privado.puede_moderar()));
+
+drop policy if exists "Autor o moderador borran fotos de peticiones" on storage.objects;
+create policy "Autor o moderador borran fotos de peticiones" on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'peticiones' and (
+    (storage.foldername(name))[1] = (select auth.uid())::text or (select privado.puede_moderar())
+  ));
+
+create or replace function public.moderar_comentario(p_comentario bigint, p_oculto boolean)
+returns void
+language plpgsql security definer set search_path = ''
+as $$
+begin
+  if not privado.puede_moderar() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  update public.comentarios set oculto = p_oculto where id = p_comentario;
+  if not p_oculto then
+    delete from public.denuncias where comentario_id = p_comentario;
+  end if;
+end;
+$$;
+
+-- ---------------------------------------------------------------------
+-- Mis solicitudes (crear peticiones), Comunidad (publicar), Perfil (editar)
+-- ---------------------------------------------------------------------
+drop policy if exists "Crear peticiones propias" on public.peticiones;
+create policy "Crear peticiones propias" on public.peticiones
+  for insert to authenticated
+  with check (
+    usuario_id = (select auth.uid())
+    and estado = 'pendiente'
+    and firmas_count = 0
+    and not exists (
+      select 1 from unnest(fotos) as foto(foto)
+      where foto.foto not like (select auth.uid())::text || '/%'
+    )
+    and (select privado.tiene_permiso('dashboard', 'modificar'))
+  );
+
+drop policy if exists "Publicar con la propia cuenta" on public.publicaciones;
+create policy "Publicar con la propia cuenta" on public.publicaciones
+  for insert to authenticated
+  with check (usuario_id = (select auth.uid()) and (select privado.tiene_permiso('comunidad', 'modificar')));
+
+drop policy if exists "Usuarios editan su perfil" on public.profiles;
+create policy "Usuarios editan su perfil" on public.profiles
+  for update to authenticated
+  using ((select auth.uid()) = id and (select privado.tiene_permiso('perfil', 'modificar')))
+  with check ((select auth.uid()) = id);
+
+-- ---------------------------------------------------------------------
+-- Eventos: crear y borrar
+-- ---------------------------------------------------------------------
+drop policy if exists "Admins crean eventos" on public.eventos;
+create policy "Admins crean eventos" on public.eventos
+  for insert to authenticated
+  with check ((select privado.tiene_permiso('eventos', 'modificar')) and creado_por = (select auth.uid()));
+
+drop policy if exists "Admins borran eventos" on public.eventos;
+create policy "Admins borran eventos" on public.eventos
+  for delete to authenticated
+  using ((select privado.tiene_permiso('eventos', 'modificar')));
+
+-- ---------------------------------------------------------------------
+-- Bandeja: ver = resumen del área; modificar = responder y cambiar etapa
+-- (el funcionario sigue limitado a su área)
+-- ---------------------------------------------------------------------
+create or replace function public.actualizar_seguimiento(
+  p_peticion bigint, p_estado text, p_mensaje text default null, p_foto text default null
+)
+returns void
+language plpgsql security definer set search_path = ''
+as $$
+declare
+  yo public.profiles;
+  area_peticion bigint;
+begin
+  select * into yo from public.profiles where id = auth.uid();
+
+  if yo.id is null or not privado.tiene_permiso('bandeja', 'modificar') then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  select c.area_id into area_peticion
+  from public.peticiones p join public.categorias c on c.id = p.categoria_id
+  where p.id = p_peticion and p.estado = 'publicada';
+
+  if not found then
+    raise exception 'La petición no está publicada' using errcode = '22023';
+  end if;
+
+  if yo.rol = 'funcionario' and yo.area_id is not null and yo.area_id is distinct from area_peticion then
+    raise exception 'La petición es de otra área' using errcode = '42501';
+  end if;
+
+  if p_foto is not null and p_foto not like auth.uid()::text || '/%' then
+    raise exception 'Foto inválida' using errcode = '22023';
+  end if;
+
+  insert into public.peticion_actualizaciones (peticion_id, autor_id, estado, mensaje, foto)
+  values (p_peticion, auth.uid(), p_estado, nullif(trim(p_mensaje), ''), p_foto);
+
+  update public.peticiones set seguimiento = p_estado where id = p_peticion;
+
+  perform privado.notificar_interesados(p_peticion, 'seguimiento', p_estado);
+end;
+$$;
+
+do $$
+declare
+  definicion text;
+begin
+  -- estadisticas_area: mismo cuerpo, cambia solo el control de acceso
+  select pg_get_functiondef('public.estadisticas_area(bigint)'::regprocedure) into definicion;
+  definicion := replace(definicion,
+    'if yo.rol is null or yo.rol not in (''funcionario'', ''admin'') then',
+    'if yo.id is null or not privado.tiene_permiso(''bandeja'', ''ver'') then');
+  execute definicion;
+
+  -- Usuarios: ver el directorio / modificar áreas y solicitudes
+  select pg_get_functiondef('public.usuarios_admin()'::regprocedure) into definicion;
+  execute replace(definicion, 'if not privado.es_admin() then', 'if not privado.tiene_permiso(''usuarios'', ''ver'') then');
+
+  select pg_get_functiondef('public.asignar_area(uuid, bigint)'::regprocedure) into definicion;
+  execute replace(definicion, 'if not privado.es_admin() then', 'if not privado.tiene_permiso(''usuarios'', ''modificar'') then');
+
+  select pg_get_functiondef('public.resolver_solicitud_funcionario(uuid, boolean)'::regprocedure) into definicion;
+  execute replace(definicion, 'if not privado.es_admin() then', 'if not privado.tiene_permiso(''usuarios'', ''modificar'') then');
+
+  -- Panel analítico
+  select pg_get_functiondef('public.estadisticas_admin()'::regprocedure) into definicion;
+  execute replace(definicion, 'if not privado.es_admin() then', 'if not privado.tiene_permiso(''panel'', ''ver'') then');
+end;
+$$;
+
+-- ---------------------------------------------------------------------
+-- Documentos privados: ver / subir y borrar
+-- ---------------------------------------------------------------------
+drop policy if exists "Dueño ve documentos" on storage.objects;
+create policy "Dueño ve documentos" on storage.objects
+  for select to authenticated
+  using (bucket_id = 'documentos' and (select privado.tiene_permiso('documentos', 'ver')));
+
+drop policy if exists "Dueño sube documentos" on storage.objects;
+create policy "Dueño sube documentos" on storage.objects
+  for insert to authenticated
+  with check (bucket_id = 'documentos' and (select privado.tiene_permiso('documentos', 'modificar')));
+
+drop policy if exists "Dueño actualiza documentos" on storage.objects;
+create policy "Dueño actualiza documentos" on storage.objects
+  for update to authenticated
+  using (bucket_id = 'documentos' and (select privado.tiene_permiso('documentos', 'modificar')))
+  with check (bucket_id = 'documentos' and (select privado.tiene_permiso('documentos', 'modificar')));
+
+drop policy if exists "Dueño borra documentos" on storage.objects;
+create policy "Dueño borra documentos" on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'documentos' and (select privado.tiene_permiso('documentos', 'modificar')));

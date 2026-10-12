@@ -7,14 +7,26 @@ import Logo from '../components/Logo'
 import MenuUsuario from '../components/MenuUsuario'
 import FondoAnimado from '../components/FondoAnimado'
 import NotificacionesMenu from '../components/NotificacionesMenu'
-import { useEsDueno } from '../hooks/useEsDueno'
+import { usePermisos } from '../hooks/usePermisos'
+import { PANELES, panelPorClave } from '../utils/paneles'
 
 const sideLinkClass = ({ isActive }) =>
   `side-link${isActive ? ' active' : ''}`
 
+const PANELES_VECINALES = PANELES.filter((p) =>
+  ['dashboard', 'mapa', 'comunidad', 'estadisticas', 'eventos', 'perfil'].includes(p.clave)
+)
+
+const enlace = (panel) => (
+  <NavLink key={panel.clave} className={sideLinkClass} to={panel.ruta}>
+    <Icon name={panel.icono} size={22} />
+    {panel.nombre}
+  </NavLink>
+)
+
 function MainLayout() {
   const { user, profile } = useAuth()
-  const { esDueno } = useEsDueno(user?.id)
+  const { puede, esDueno } = usePermisos(user?.id)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -97,78 +109,37 @@ function MainLayout() {
             Inicio
           </NavLink>
 
-          <NavLink className={sideLinkClass} to="/dashboard">
-            <Icon name="file" size={22} />
-            Mis solicitudes
-          </NavLink>
+          {/* Cada enlace aparece según los permisos que definió el dueño */}
+          {PANELES_VECINALES.filter((p) => puede(p.clave)).map(enlace)}
 
-          <NavLink className={sideLinkClass} to="/mapa">
-            <Icon name="map" size={22} />
-            Mapa vecinal
-          </NavLink>
-
-          <NavLink className={sideLinkClass} to="/comunidad">
-            <Icon name="users" size={22} />
-            Comunidad
-          </NavLink>
-
-          <NavLink className={sideLinkClass} to="/estadisticas">
-            <Icon name="chart" size={22} />
-            Estadísticas
-          </NavLink>
-
-          <NavLink className={sideLinkClass} to="/eventos">
-            <Icon name="calendar" size={22} />
-            Eventos
-          </NavLink>
-
-          <NavLink className={sideLinkClass} to="/perfil">
-            <Icon name="user" size={22} />
-            Perfil
-          </NavLink>
-
-          {(profile?.rol === 'funcionario' || profile?.rol === 'admin') && (
+          {puede('bandeja') && (
             <>
               <p className="side-label">Gestión</p>
-
-              <NavLink className={sideLinkClass} to="/bandeja">
-                <Icon name="list" size={22} />
-                Bandeja del área
-              </NavLink>
+              {enlace(panelPorClave('bandeja'))}
             </>
           )}
 
-          {(profile?.rol === 'moderador' || profile?.rol === 'admin') && (
+          {puede('moderacion') && (
             <>
               <p className="side-label">Moderación</p>
-
-              <NavLink className={sideLinkClass} to="/admin/peticiones">
-                <Icon name="shield" size={22} />
-                Revisar contenido
-              </NavLink>
+              {enlace(panelPorClave('moderacion'))}
             </>
           )}
 
-          {profile?.rol === 'admin' && (
+          {(puede('usuarios') || puede('panel')) && (
             <>
               <p className="side-label">Administración</p>
-
-              <NavLink className={sideLinkClass} to="/admin/usuarios">
-                <Icon name="users" size={22} />
-                Usuarios
-              </NavLink>
-
-              <NavLink className={sideLinkClass} to="/admin/estadisticas">
-                <Icon name="chart" size={22} />
-                Panel analítico
-              </NavLink>
+              {puede('usuarios') && enlace(panelPorClave('usuarios'))}
+              {puede('panel') && enlace(panelPorClave('panel'))}
             </>
           )}
 
+          {puede('documentos') && enlace(panelPorClave('documentos'))}
+
           {esDueno && (
-            <NavLink className={sideLinkClass} to="/documentos">
-              <Icon name="lock" size={22} />
-              Documentos
+            <NavLink className={sideLinkClass} to="/permisos">
+              <Icon name="key" size={22} />
+              Permisos
             </NavLink>
           )}
 

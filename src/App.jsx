@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import MainLayout from './layouts/MainLayout'
 import ProtectedRoute from './routes/ProtectedRoute'
-import RoleRoute from './routes/RoleRoute'
+import PanelRoute from './routes/PanelRoute'
 import Home from './pages/Home'
 import AuthPage from './pages/AuthPage'
 
@@ -26,6 +26,7 @@ const Estadisticas = lazy(() => import('./pages/Estadisticas'))
 const EstadisticasAdmin = lazy(() => import('./pages/EstadisticasAdmin'))
 const Bandeja = lazy(() => import('./pages/Bandeja'))
 const Documentos = lazy(() => import('./pages/Documentos'))
+const Permisos = lazy(() => import('./pages/Permisos'))
 
 function App() {
   const { profile } = useAuth()
@@ -45,9 +46,9 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/mapa" element={<Mapa />} />
-            <Route path="/comunidad" element={<Comunidad />} />
-            <Route path="/eventos" element={<Eventos />} />
+            <Route path="/mapa" element={<PanelRoute panel="mapa"><Mapa /></PanelRoute>} />
+            <Route path="/comunidad" element={<PanelRoute panel="comunidad"><Comunidad /></PanelRoute>} />
+            <Route path="/eventos" element={<PanelRoute panel="eventos"><Eventos /></PanelRoute>} />
 
             <Route
               path="/peticiones/:id"
@@ -56,58 +57,60 @@ function App() {
 
             <Route
               path="/dashboard"
-              element={<Dashboard />}
+              element={<PanelRoute panel="dashboard"><Dashboard /></PanelRoute>}
             />
 
             <Route
               path="/peticiones/nueva"
-              element={<CreatePetition />}
+              element={<PanelRoute panel="dashboard" accion="modificar"><CreatePetition /></PanelRoute>}
             />
 
             {/* key: el formulario se reinicia cuando termina de cargar el perfil */}
             <Route
               path="/perfil"
-              element={<Perfil key={profile?.id ?? 'sin-perfil'} />}
+              element={<PanelRoute panel="perfil"><Perfil key={profile?.id ?? 'sin-perfil'} /></PanelRoute>}
             />
 
             <Route
               path="/admin/peticiones"
               element={
-                <RoleRoute allowedRoles={['admin', 'moderador']}>
+                <PanelRoute panel="moderacion">
                   <AdminPetitions />
-                </RoleRoute>
+                </PanelRoute>
               }
             />
 
-            <Route path="/estadisticas" element={<Estadisticas />} />
+            <Route path="/estadisticas" element={<PanelRoute panel="estadisticas"><Estadisticas /></PanelRoute>} />
 
-            {/* Solo el dueño del proyecto (la página y el almacenamiento lo verifican) */}
-            <Route path="/documentos" element={<Documentos />} />
+            <Route path="/documentos" element={<PanelRoute panel="documentos"><Documentos /></PanelRoute>} />
+
+            {/* Solo el dueño del proyecto (la página y la base lo verifican) */}
+            <Route path="/permisos" element={<Permisos />} />
 
             <Route
               path="/bandeja"
               element={
-                <RoleRoute allowedRoles={['funcionario', 'admin']}>
+                <PanelRoute panel="bandeja">
                   <Bandeja />
-                </RoleRoute>
+                </PanelRoute>
               }
             />
 
             <Route
               path="/admin/estadisticas"
               element={
-                <RoleRoute allowedRoles={['admin']}>
+                <PanelRoute panel="panel">
                   <EstadisticasAdmin />
-                </RoleRoute>
+                </PanelRoute>
               }
             />
 
             <Route
               path="/admin/usuarios"
               element={
-                <RoleRoute allowedRoles={['admin']}>
+                <PanelRoute panel="usuarios">
                   <Usuarios />
-                </RoleRoute>
+                </PanelRoute>
               }
             />
           </Route>

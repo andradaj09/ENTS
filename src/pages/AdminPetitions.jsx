@@ -12,12 +12,15 @@ import { Link } from 'react-router-dom'
 import { borrarComentario, getComentariosARevisar, moderarComentario } from '../services/participacionService'
 import { describirAlertas } from '../utils/moderacion'
 import { useAuth } from '../contexts/AuthContext'
-import { esAdmin } from '../utils/roles'
+import { usePermisos } from '../hooks/usePermisos'
 
 function AdminPetitions() {
-  const { profile } = useAuth()
-  // Las solicitudes de funcionario las resuelve solo un administrador
-  const gestionaUsuarios = esAdmin(profile)
+  const { user } = useAuth()
+  const { puede } = usePermisos(user?.id)
+  // Según los permisos que definió el dueño: actuar sobre el contenido
+  // (moderación → modificar) y resolver solicitudes (usuarios → modificar)
+  const puedeActuar = puede('moderacion', 'modificar')
+  const gestionaUsuarios = puede('usuarios', 'modificar')
   const [peticiones, setPeticiones] = useState([])
   const [solicitudes, setSolicitudes] = useState([])
   const [comentarios, setComentarios] = useState([])
@@ -123,6 +126,13 @@ function AdminPetitions() {
           que piden ser funcionarios.
         </p>
       </div>
+
+      {!puedeActuar && (
+        <div className="alert alert-light">
+          <Icon name="eye" size={16} className="me-2" />
+          Tu rango puede ver este panel, pero no aprobar, rechazar ni borrar contenido.
+        </div>
+      )}
 
       {error && (
         <div className="alert alert-danger">
@@ -258,6 +268,7 @@ function AdminPetitions() {
 
             <hr />
 
+            {puedeActuar && (
             <div className="d-flex gap-2">
 
               <button
@@ -277,6 +288,7 @@ function AdminPetitions() {
               </button>
 
             </div>
+            )}
 
           </div>
         </div>
@@ -304,6 +316,7 @@ function AdminPetitions() {
               {c.denuncias > 0 && c.alertas?.length > 0 && ' · '}
               {c.alertas?.length > 0 && `Revisión automática: ${describirAlertas(c.alertas)}`}
             </p>
+            {puedeActuar && (
             <div className="d-flex gap-2">
               <button className="btn btn-ghost btn-sm" disabled={procesando === `comentario-${c.id}`}
                 onClick={() => resolverComentario(c, 'mostrar')}>
@@ -314,6 +327,7 @@ function AdminPetitions() {
                 Borrar
               </button>
             </div>
+            )}
           </div>
         </div>
       ))}

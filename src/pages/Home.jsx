@@ -6,7 +6,7 @@ import {
   getProximosEventos,
 } from '../services/petitionService'
 import { capitalizar, claseUrgencia, tiempoRelativo, UMBRAL_URGENTE } from '../utils/format'
-import { esAdmin } from '../utils/roles'
+import { usePermisos } from '../hooks/usePermisos'
 import { NIVELES_PRIORIDAD, ordenarPorPrioridad } from '../utils/prioridad'
 import Icon from '../components/Icon'
 import HeroArt from '../components/HeroArt'
@@ -23,6 +23,7 @@ const formatoEvento = new Intl.DateTimeFormat('es-AR', {
 
 function Home() {
   const { user, profile } = useAuth()
+  const { puede } = usePermisos(user?.id)
 
   const [peticiones, setPeticiones] = useState([])
   const [eventos, setEventos] = useState([])
@@ -93,32 +94,38 @@ function Home() {
             </p>
 
             <div className="action-list">
-              <Link className="action-row" to="/peticiones/nueva">
-                <span className="icon-chip dark"><Icon name="plus" /></span>
-                Nueva petición
-                <Icon name="chevron" />
-              </Link>
+              {/* Cada acceso aparece si el rango tiene permiso para ese panel */}
+              {puede('dashboard', 'modificar') && (
+                <Link className="action-row" to="/peticiones/nueva">
+                  <span className="icon-chip dark"><Icon name="plus" /></span>
+                  Nueva petición
+                  <Icon name="chevron" />
+                </Link>
+              )}
 
-              <Link className="action-row" to="/mapa">
-                <span className="icon-chip"><Icon name="map" /></span>
-                Ver en el mapa
-                <Icon name="chevron" />
-              </Link>
+              {puede('mapa') && (
+                <Link className="action-row" to="/mapa">
+                  <span className="icon-chip"><Icon name="map" /></span>
+                  Ver en el mapa
+                  <Icon name="chevron" />
+                </Link>
+              )}
 
-              <Link
-                className="action-row"
-                to={user ? '/dashboard' : '/login'}
-              >
-                <span className="icon-chip"><Icon name="list" /></span>
-                Mis solicitudes
-                <Icon name="chevron" />
-              </Link>
+              {puede('dashboard') && (
+                <Link className="action-row" to="/dashboard">
+                  <span className="icon-chip"><Icon name="list" /></span>
+                  Mis solicitudes
+                  <Icon name="chevron" />
+                </Link>
+              )}
 
-              <Link className="action-row" to="/comunidad">
-                <span className="icon-chip"><Icon name="users" /></span>
-                Comunidad vecinal
-                <Icon name="chevron" />
-              </Link>
+              {puede('comunidad') && (
+                <Link className="action-row" to="/comunidad">
+                  <span className="icon-chip"><Icon name="users" /></span>
+                  Comunidad vecinal
+                  <Icon name="chevron" />
+                </Link>
+              )}
             </div>
           </div>
 
@@ -209,7 +216,7 @@ function Home() {
                 Ver agenda
               </Link>
 
-              {esAdmin(profile) && (
+              {puede('eventos', 'modificar') && (
                 <Link className="btn btn-dark btn-sm" to="/eventos#nuevo-evento">
                   <Icon name="plus" size={14} className="me-1" />
                   Crear evento
@@ -219,14 +226,16 @@ function Home() {
           </div>
 
           {/* Separado de los eventos: este acceso crea una petición, no un evento */}
-          <Link className="panel cta-green" to="/peticiones/nueva">
-            <Icon name="flag" size={22} />
-            <div>
-              <strong>Tu voz cuenta</strong>
-              <span>Hacé tu pedido, mejorá tu barrio.</span>
-            </div>
-            <Icon name="chevron" />
-          </Link>
+          {puede('dashboard', 'modificar') && (
+            <Link className="panel cta-green" to="/peticiones/nueva">
+              <Icon name="flag" size={22} />
+              <div>
+                <strong>Tu voz cuenta</strong>
+                <span>Hacé tu pedido, mejorá tu barrio.</span>
+              </div>
+              <Icon name="chevron" />
+            </Link>
+          )}
 
         </aside>
       </div>
@@ -279,9 +288,11 @@ function Home() {
             <p className="text-muted mb-4">
               Sé la primera persona en visibilizar una problemática de tu barrio.
             </p>
-            <Link to="/peticiones/nueva" className="btn btn-dark">
-              Crear petición
-            </Link>
+            {puede('dashboard', 'modificar') && (
+              <Link to="/peticiones/nueva" className="btn btn-dark">
+                Crear petición
+              </Link>
+            )}
           </div>
         )}
 

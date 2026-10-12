@@ -5,6 +5,7 @@ import Avatar from '../components/Avatar'
 import { AVATARES_PREDEFINIDOS } from '../components/avatares'
 import { nombreRol, PERMISOS_POR_ROL } from '../utils/roles'
 import { useEsDueno } from '../hooks/useEsDueno'
+import { usePermisos } from '../hooks/usePermisos'
 import Icon from '../components/Icon'
 import Insignias from '../components/Insignias'
 import BarriosSeguidos from '../components/BarriosSeguidos'
@@ -12,6 +13,8 @@ import BarriosSeguidos from '../components/BarriosSeguidos'
 function Perfil() {
   const { user, profile, setProfile } = useAuth()
   const { esDueno } = useEsDueno(user?.id)
+  // Editar datos y foto: según el permiso que definió el dueño
+  const puedeEditar = usePermisos(user?.id).puede('perfil', 'modificar')
   const archivoRef = useRef(null)
 
   const [form, setForm] = useState({
@@ -108,7 +111,7 @@ function Perfil() {
                     type="button"
                     className="btn btn-dark"
                     onClick={() => archivoRef.current?.click()}
-                    disabled={guardandoAvatar}
+                    disabled={guardandoAvatar || !puedeEditar}
                   >
                     <Icon name="image" size={18} className="me-2" />
                     Subir foto
@@ -119,7 +122,7 @@ function Perfil() {
                       type="button"
                       className="btn btn-ghost"
                       onClick={() => cambiarAvatar(async () => null)}
-                      disabled={guardandoAvatar}
+                      disabled={guardandoAvatar || !puedeEditar}
                     >
                       Quitar
                     </button>
@@ -150,7 +153,7 @@ function Perfil() {
                         type="button"
                         className={`avatar-opcion${avatarActual === valor ? ' activa' : ''}`}
                         onClick={() => cambiarAvatar(async () => valor)}
-                        disabled={guardandoAvatar}
+                        disabled={guardandoAvatar || !puedeEditar}
                         aria-label={`Avatar predefinido ${indice + 1}`}
                         aria-pressed={avatarActual === valor}
                       >
@@ -228,7 +231,15 @@ function Perfil() {
               {mensaje && <div className="alert alert-success">{mensaje}</div>}
               {error && <div className="alert alert-danger">{error}</div>}
 
+              {!puedeEditar && (
+                <p className="text-muted small">
+                  <Icon name="lock" size={14} className="me-1" />
+                  Tu rango no puede editar el perfil por ahora.
+                </p>
+              )}
+
               <form onSubmit={handleSubmit}>
+                <fieldset disabled={!puedeEditar}>
                 <div className="row">
                   <div className="col-md-6 mb-3">
                     <label className="form-label">Nombre</label>
@@ -253,9 +264,10 @@ function Perfil() {
                   </div>
                 </div>
 
-                <button className="btn btn-dark" disabled={guardando}>
+                <button className="btn btn-dark" disabled={guardando || !puedeEditar}>
                   {guardando ? 'Guardando...' : 'Guardar cambios'}
                 </button>
+                </fieldset>
               </form>
             </div>
           </div>

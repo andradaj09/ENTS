@@ -11,7 +11,8 @@ import {
   firmarPeticion,
   retirarFirma,
 } from '../services/petitionService'
-import { esModerador as puedeModerar, puedeResponder, puedeVerIdentidades } from '../utils/roles'
+import { puedeResponder, puedeVerIdentidades } from '../utils/roles'
+import { usePermisos } from '../hooks/usePermisos'
 import { META_FIRMAS, nombreEtapa, prioridadPorFirmas, proximoNivel } from '../utils/prioridad'
 import { tiempoRelativo } from '../utils/format'
 import GaleriaFotos from '../components/GaleriaFotos'
@@ -25,7 +26,9 @@ function PetitionDetail() {
   const { id } = useParams()
   const { user, profile } = useAuth()
   const navigate = useNavigate()
-  const esModerador = puedeModerar(profile)
+  const { puede } = usePermisos(user?.id)
+  // Editar, borrar y moderar comentarios: permiso de modificar en Moderación
+  const esModerador = puede('moderacion', 'modificar')
 
   const [peticion, setPeticion] = useState(null)
   // Funcionarios: solo las peticiones de su área; admins: todas
@@ -319,7 +322,10 @@ function PetitionDetail() {
             <Seguimiento
               peticion={peticion}
               usuarioId={user?.id}
-              puedeResponder={puedeResponder(profile, peticion)}
+              puedeResponder={
+                // Permiso de la bandeja + el funcionario sigue limitado a su área
+                puede('bandeja', 'modificar') && (profile?.rol !== 'funcionario' || puedeResponder(profile, peticion))
+              }
               onCambio={(seguimiento) => setPeticion((actual) => ({ ...actual, seguimiento }))}
             />
           )}

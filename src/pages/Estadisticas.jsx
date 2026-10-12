@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { getEstadisticasPublicas } from '../services/petitionService'
-import { esAdmin } from '../utils/roles'
+import { usePermisos } from '../hooks/usePermisos'
 import { Barras, Columnas, Proporcion, TarjetaGrafico, Tile } from '../components/Graficos'
 import { fechaCorta, numero } from '../utils/format'
 import Icon from '../components/Icon'
@@ -18,7 +18,8 @@ const URGENCIA = [
 // Estadísticas para todos los vecinos: solo números agregados de peticiones
 // publicadas y del muro. Ningún dato permite identificar a una persona.
 function Estadisticas() {
-  const { profile } = useAuth()
+  const { user } = useAuth()
+  const { puede } = usePermisos(user?.id)
   const [datos, setDatos] = useState(null)
   const [error, setError] = useState('')
 
@@ -61,7 +62,7 @@ function Estadisticas() {
           </p>
         </div>
 
-        {esAdmin(profile) && (
+        {puede('panel') && (
           <Link className="btn btn-dark btn-sm" to="/admin/estadisticas">
             <Icon name="lock" size={14} className="me-1" />
             Panel de administración

@@ -2,6 +2,7 @@ import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { getUsuariosAdmin } from '../services/petitionService'
 import { asignarArea, cambiarRol, getAreas, soyDueno } from '../services/participacionService'
 import { useAuth } from '../contexts/AuthContext'
+import { usePermisos } from '../hooks/usePermisos'
 import { normalizar } from '../utils/clasificador'
 import { nombreRol, PERMISOS_POR_ROL, ROLES_ASIGNABLES } from '../utils/roles'
 import { tiempoRelativo } from '../utils/format'
@@ -31,6 +32,8 @@ function Usuarios() {
   const [areas, setAreas] = useState([])
   const { user } = useAuth()
   const [esDueno, setEsDueno] = useState(false)
+  // Asignar áreas: permiso de modificar en Usuarios (lo define el dueño)
+  const puedeModificar = usePermisos(user?.id).puede('usuarios', 'modificar')
   const [aviso, setAviso] = useState('')
 
   const busquedaDiferida = normalizar(useDeferredValue(busqueda).trim())
@@ -197,6 +200,7 @@ function Usuarios() {
                       className="form-select form-select-sm w-auto"
                       value={usuario.area_id ?? ''}
                       onChange={(e) => cambiarArea(usuario, e.target.value)}
+                      disabled={!puedeModificar}
                       aria-label={`Área de ${usuario.nombre}`}
                     >
                       <option value="">Todas las áreas</option>

@@ -202,3 +202,20 @@ export async function borrarDocumento(nombre) {
 // Estadísticas del área: el funcionario ve la suya; el admin elige (o todas)
 export const getEstadisticasArea = (areaId) =>
   rpc('estadisticas_area', { p_area: areaId ? Number(areaId) : null })
+
+// ---------- Permisos por panel (los define el dueño) ----------
+
+export const getMisPermisos = () => rpc('mis_permisos')
+
+export async function getPermisosPanel() {
+  const { data, error } = await supabase.from('permisos_panel').select('rol, panel, ver, modificar')
+
+  if (error) {
+    throw error
+  }
+
+  return data
+}
+
+export const guardarPermiso = (rol, panel, ver, modificar) =>
+  rpc('guardar_permiso', { p_rol: rol, p_panel: panel, p_ver: ver, p_modificar: modificar })

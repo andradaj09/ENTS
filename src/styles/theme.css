@@ -3275,3 +3275,83 @@ a.event-item:hover {
   font-size: 0.76rem;
   color: var(--ents-muted);
 }
+
+/* ---------- Permisos (solo el dueño) ---------- */
+.permisos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1rem;
+}
+
+.permisos-rol { padding: 1.25rem; }
+
+.permisos-rol-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.permisos-rol-cabecera h2 { font-size: 1.15rem; font-weight: 800; margin: 0; }
+.permisos-rol-cabecera small { color: var(--ents-muted, #6b6b6b); }
+
+/* Mismo anillo que el avatar de cada rol */
+.permisos-anillo {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 6px solid currentColor;
+}
+.permisos-anillo.rol-ciudadano { color: #fff; box-shadow: 0 0 0 1px rgba(18, 18, 18, 0.18); }
+.permisos-anillo.rol-funcionario { color: #f5c518; }
+.permisos-anillo.rol-moderador { color: #1baf7a; }
+.permisos-anillo.rol-admin { color: #74acdf; }
+
+.permisos-encabezado,
+.permisos-lista li {
+  display: grid;
+  grid-template-columns: 1fr 64px 64px;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.permisos-encabezado {
+  padding: 0 0.5rem 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ents-muted, #6b6b6b);
+}
+.permisos-encabezado span:not(:first-child) { text-align: center; }
+
+.permisos-lista { list-style: none; margin: 0; padding: 0; }
+
+.permisos-lista li {
+  padding: 0.55rem 0.5rem;
+  border-top: 1px solid rgba(18, 18, 18, 0.08);
+  transition: opacity 0.2s;
+}
+.permisos-lista li.apagado .permisos-panel { opacity: 0.5; }
+
+.permisos-panel { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
+.permisos-panel > span { display: flex; flex-direction: column; min-width: 0; }
+.permisos-panel strong { font-size: 0.92rem; }
+.permisos-panel small { font-size: 0.75rem; color: var(--ents-muted, #6b6b6b); }
+
+.permiso-interruptor {
+  justify-self: center;
+  display: inline-flex;
+  padding: 6px;
+  border: 0;
+  background: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.permiso-interruptor:disabled { cursor: progress; opacity: 0.6; }
+.permiso-interruptor:focus-visible { outline: 2px solid var(--ents-ink); outline-offset: 2px; }
+
+.permisos-na { justify-self: center; color: var(--ents-muted, #6b6b6b); }
+
+[data-tema='oscuro'] .permisos-lista li { border-top-color: rgba(255, 255, 255, 0.1); }

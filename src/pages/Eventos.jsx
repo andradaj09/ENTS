@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { usePermisos } from '../hooks/usePermisos'
 import {
   createEvento,
   deleteEvento,
@@ -28,8 +29,10 @@ const formVacio = {
 }
 
 function Eventos() {
-  const { user, profile } = useAuth()
-  const esAdmin = profile?.rol === 'admin'
+  const { user } = useAuth()
+  // Crear y borrar eventos: según el permiso que definió el dueño
+  const { puede } = usePermisos(user?.id)
+  const esAdmin = puede('eventos', 'modificar')
 
   const [eventos, setEventos] = useState([])
   const [zonas, setZonas] = useState([])

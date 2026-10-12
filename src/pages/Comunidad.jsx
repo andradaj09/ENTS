@@ -9,7 +9,8 @@ import {
   getZonas,
 } from '../services/petitionService'
 import { claseUrgencia, tiempoRelativo } from '../utils/format'
-import { esAdmin, esModerador } from '../utils/roles'
+import { esAdmin } from '../utils/roles'
+import { usePermisos } from '../hooks/usePermisos'
 import { useEsDueno } from '../hooks/useEsDueno'
 import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
@@ -55,6 +56,8 @@ function Comunidad() {
   // Los autores del feed son anónimos; solo los admins los ven
   const verAutores = esAdmin(profile)
   const { esDueno } = useEsDueno(user?.id)
+  const { puede } = usePermisos(user?.id)
+  const puedePublicar = puede('comunidad', 'modificar')
 
   useEffect(() => {
     const cargar = async () => {
@@ -184,8 +187,8 @@ function Comunidad() {
     }
   }
 
-  // Borran: el autor, y moderadores o admins
-  const puedeEliminar = (publicacion) => publicacion.propia || esModerador(profile)
+  // Borran: el autor, y quien tiene permiso de modificar en Moderación
+  const puedeEliminar = (publicacion) => publicacion.propia || puede('moderacion', 'modificar')
 
   return (
     <div className="container py-5">
@@ -244,68 +247,71 @@ function Comunidad() {
         {/* ---------- Feed ---------- */}
         <section className="comunidad-feed">
 
-          <form className="card publicar" onSubmit={handlePublicar}>
-            <div className="card-body">
-              <div className="publicar-top">
-                <Avatar perfil={profile} size={44} dueno={esDueno} />
+          {/* Publicar: según el permiso que definió el dueño */}
+          {puedePublicar && (
+            <form className="card publicar" onSubmit={handlePublicar}>
+              <div className="card-body">
+                <div className="publicar-top">
+                  <Avatar perfil={profile} size={44} dueno={esDueno} />
 
-                <textarea
-                  className="publicar-texto"
-                  placeholder="¿Qué está pasando en tu barrio?"
-                  value={nueva.contenido}
-                  onChange={(e) => setNueva({ ...nueva, contenido: e.target.value })}
-                  maxLength={LARGO_MAXIMO}
-                  rows={3}
-                />
-              </div>
-
-              {errorPublicar && <div className="alert alert-danger mt-3 mb-0">{errorPublicar}</div>}
-
-              <div className="publicar-acciones">
-                <div
-                  className={`segmento${nueva.tipo === 'negativo' ? ' es-segundo' : ''}`}
-                  role="radiogroup"
-                  aria-label="Tipo de publicación"
-                >
-                  <span className="segmento-indicador" />
-                  {Object.entries(TIPOS).map(([valor, { etiqueta, icono }]) => (
-                    <button
-                      key={valor}
-                      type="button"
-                      role="radio"
-                      aria-checked={nueva.tipo === valor}
-                      className={nueva.tipo === valor ? 'active' : ''}
-                      onClick={() => setNueva({ ...nueva, tipo: valor })}
-                    >
-                      <Icon name={icono} size={15} />
-                      {etiqueta}
-                    </button>
-                  ))}
+                  <textarea
+                    className="publicar-texto"
+                    placeholder="¿Qué está pasando en tu barrio?"
+                    value={nueva.contenido}
+                    onChange={(e) => setNueva({ ...nueva, contenido: e.target.value })}
+                    maxLength={LARGO_MAXIMO}
+                    rows={3}
+                  />
                 </div>
 
-                <select
-                  className="form-select form-select-sm publicar-zona"
-                  value={zonaPublicacion}
-                  onChange={(e) => setNueva({ ...nueva, zonaId: e.target.value })}
-                  aria-label="Barrio"
-                >
-                  <option value="">Sin barrio</option>
-                  <OpcionesBarrios zonas={zonas} />
-                </select>
+                {errorPublicar && <div className="alert alert-danger mt-3 mb-0">{errorPublicar}</div>}
 
-                <span className="publicar-contador">
-                  {nueva.contenido.length}/{LARGO_MAXIMO}
-                </span>
+                <div className="publicar-acciones">
+                  <div
+                    className={`segmento${nueva.tipo === 'negativo' ? ' es-segundo' : ''}`}
+                    role="radiogroup"
+                    aria-label="Tipo de publicación"
+                  >
+                    <span className="segmento-indicador" />
+                    {Object.entries(TIPOS).map(([valor, { etiqueta, icono }]) => (
+                      <button
+                        key={valor}
+                        type="button"
+                        role="radio"
+                        aria-checked={nueva.tipo === valor}
+                        className={nueva.tipo === valor ? 'active' : ''}
+                        onClick={() => setNueva({ ...nueva, tipo: valor })}
+                      >
+                        <Icon name={icono} size={15} />
+                        {etiqueta}
+                      </button>
+                    ))}
+                  </div>
 
-                <button
-                  className="btn btn-dark"
-                  disabled={publicando || !nueva.contenido.trim()}
-                >
-                  {publicando ? 'Publicando...' : 'Publicar'}
-                </button>
+                  <select
+                    className="form-select form-select-sm publicar-zona"
+                    value={zonaPublicacion}
+                    onChange={(e) => setNueva({ ...nueva, zonaId: e.target.value })}
+                    aria-label="Barrio"
+                  >
+                    <option value="">Sin barrio</option>
+                    <OpcionesBarrios zonas={zonas} />
+                  </select>
+
+                  <span className="publicar-contador">
+                    {nueva.contenido.length}/{LARGO_MAXIMO}
+                  </span>
+
+                  <button
+                    className="btn btn-dark"
+                    disabled={publicando || !nueva.contenido.trim()}
+                  >
+                    {publicando ? 'Publicando...' : 'Publicar'}
+                  </button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          )}
 
           <div className="feed-filtros">
             <div className="chip-filter">

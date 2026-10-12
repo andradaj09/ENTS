@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { useEsDueno } from '../hooks/useEsDueno'
+import { usePermisos } from '../hooks/usePermisos'
 import {
   borrarDocumento,
   enlaceDocumento,
@@ -22,11 +22,14 @@ const nombreLegible = (archivo) => {
   return base.charAt(0).toUpperCase() + base.slice(1)
 }
 
-// Documentos del trabajo práctico (entregables). Solo para el dueño del
-// proyecto: el botón del menú, esta página y el almacenamiento lo verifican.
+// Documentos del trabajo práctico (entregables). Por defecto solo el dueño;
+// él puede habilitarlos a otros rangos en Permisos. El menú, la ruta y el
+// almacenamiento verifican el permiso.
 function Documentos() {
   const { user } = useAuth()
-  const { esDueno, listo } = useEsDueno(user?.id)
+  const { puede, listo } = usePermisos(user?.id)
+  const puedeVer = puede('documentos')
+  const puedeModificar = puede('documentos', 'modificar')
 
   const [documentos, setDocumentos] = useState([])
   const [cargando, setCargando] = useState(true)
@@ -44,10 +47,10 @@ function Documentos() {
   }, [])
 
   useEffect(() => {
-    if (esDueno) cargar()
-  }, [esDueno, cargar])
+    if (puedeVer) cargar()
+  }, [puedeVer, cargar])
 
-  if (listo && !esDueno) {
+  if (listo && !puedeVer) {
     return <Navigate to="/" replace />
   }
 
@@ -104,18 +107,20 @@ function Documentos() {
     <div className="container py-5">
       <div className="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
         <div>
-          <span className="eyebrow">Solo para vos</span>
+          <span className="eyebrow">Privado</span>
           <h1 className="page-title mb-1">Documentos del proyecto</h1>
           <p className="text-muted mb-0">
-            Entregables del trabajo práctico. Se guardan en un espacio privado: nadie más puede verlos.
+            Entregables del trabajo práctico. Se guardan en un espacio privado: solo los ven los rangos habilitados en Permisos.
           </p>
         </div>
 
-        <label className="btn btn-dark mb-0">
-          <Icon name="plus" size={16} className="me-2" />
-          {subiendo ? 'Subiendo...' : 'Subir PDF'}
-          <input type="file" accept="application/pdf" multiple hidden onChange={subir} disabled={subiendo} />
-        </label>
+        {puedeModificar && (
+          <label className="btn btn-dark mb-0">
+            <Icon name="plus" size={16} className="me-2" />
+            {subiendo ? 'Subiendo...' : 'Subir PDF'}
+            <input type="file" accept="application/pdf" multiple hidden onChange={subir} disabled={subiendo} />
+          </label>
+        )}
       </div>
 
       {error && <div className="alert alert-danger">{error}</div>}
@@ -141,14 +146,16 @@ function Documentos() {
               </span>
               <Icon name="arrow" size={18} />
             </button>
-            <button
-              type="button"
-              className="icon-btn"
-              onClick={() => borrar(doc.name)}
-              aria-label={`Borrar ${nombreLegible(doc.name)}`}
-            >
-              <Icon name="trash" size={18} />
-            </button>
+            {puedeModificar && (
+              <button
+                type="button"
+                className="icon-btn"
+                onClick={() => borrar(doc.name)}
+                aria-label={`Borrar ${nombreLegible(doc.name)}`}
+              >
+                <Icon name="trash" size={18} />
+              </button>
+            )}
           </li>
         ))}
       </ul>

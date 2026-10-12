@@ -35,6 +35,7 @@ const paths = {
   chart: 'M4 20 H20 M7 17 V12 M12 17 V6 M17 17 V9',
   calendar:'M4 6 H20 V21 H4 Z M4 10 H20 M8 3 V7 M16 3 V7',
   trash: 'M4 7 H20 M9 7 V4 H15 V7 M6 7 L7 21 H17 L18 7',
+  key: 'M3 9 H9 V15 H3 Z M9 12 H21 M17 12 V16 M20 12 V15',
 }
 
 function Icon({ name, size = 20, className = '' }) {
