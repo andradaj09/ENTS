@@ -61,12 +61,62 @@ export async function getIdentidadesPeticion(peticionId) {
   return data
 }
 
-export async function getCategorias() {
-  const { data, error } = await supabase
-    .from('categorias')
-    .select('id, nombre')
-    .eq('activa', true)
-    .order('nombre')
+// Categorías y zonas casi nunca cambian: se piden una vez por sesión y se
+// reutilizan, así los formularios y el mapa abren sin esperar a la red.
+const cache = new Map()
+
+function cachear(clave, consulta) {
+  if (!cache.has(clave)) {
+    const promesa = consulta().catch((err) => {
+      cache.delete(clave)
+      throw err
+    })
+    cache.set(clave, promesa)
+  }
+
+  return cache.get(clave)
+}
+
+export function getCategorias() {
+  return cachear('categorias', async () => {
+    const { data, error } = await supabase
+      .from('categorias')
+      .select('id, nombre')
+      .eq('activa', true)
+      .order('nombre')
+
+    if (error) {
+      throw error
+    }
+
+    return data
+  })
+}
+
+export function getZonas() {
+  return cachear('zonas', async () => {
+    const { data, error } = await supabase
+      .from('zonas')
+      .select('*')
+      .eq('activa', true)
+      .order('nombre')
+
+    if (error) {
+      throw error
+    }
+
+    return data
+  })
+}
+
+// Precarga en segundo plano (por ejemplo, al pasar por "Nueva petición")
+export function precargarOpciones() {
+  getCategorias().catch(() => {})
+  getZonas().catch(() => {})
+}
+
+export async function getEstadisticasPublicas() {
+  const { data, error } = await supabase.rpc('estadisticas_publicas')
 
   if (error) {
     throw error
@@ -75,12 +125,9 @@ export async function getCategorias() {
   return data
 }
 
-export async function getZonas() {
-  const { data, error } = await supabase
-    .from('zonas')
-    .select('*')
-    .eq('activa', true)
-    .order('nombre')
+// Solo administradores: la base rechaza la llamada para cualquier otro rol
+export async function getEstadisticasAdmin() {
+  const { data, error } = await supabase.rpc('estadisticas_admin')
 
   if (error) {
     throw error

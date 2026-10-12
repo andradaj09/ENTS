@@ -24,14 +24,54 @@ const PALABRAS_CLAVE = {
     'comedor escolar', 'secundario', 'primaria',
   ],
   ambiente: [
-    'basur', 'residuo', 'contamin', 'arbol', 'poda', 'espacio verde',
+    'basur', 'residuo', 'contamin', 'arbol', 'poda', 'forestac',
     'rio', 'canal', 'olor', 'humo', 'quema', 'reciclaj', 'ruido', 'microbasural',
-    'roedor', 'ratas', 'animales sueltos', 'perros sueltos', 'ambiente',
+    'roedor', 'ratas', 'ambiente', 'agroquimic', 'fumigac',
   ],
   infraestructura: [
-    'bache', 'calle', 'asfalt', 'pavimento', 'vereda', 'cordon', 'rampa', 'puente',
+    'bache', 'calle', 'asfalt', 'pavimento', 'vereda', 'cordon', 'puente',
     'desague', 'cloaca', 'inunda', 'alcantarill', 'obra', 'pozo', 'cuneta',
-    'accesibilidad', 'adoquin',
+    'adoquin',
+  ],
+  animales: [
+    'animal', 'perro', 'gato', 'mascota', 'callejer', 'abandonad', 'castrac',
+    'zoonosis', 'veterinari', 'jauria', 'maltrato animal', 'caballo', 'carrero',
+    'rabia', 'mordedura',
+  ],
+  accesibilidad: [
+    'accesib', 'discapacidad', 'silla de ruedas', 'rampa', 'ciego', 'no vident',
+    'sordo', 'hipoacus', 'movilidad reducida', 'braille', 'lengua de senas',
+    'baston', 'barrera arquitectonica',
+  ],
+  'espacios publicos': [
+    'plaza', 'parque', 'espacio verde', 'espacio publico', 'juegos', 'hamaca',
+    'tobogan', 'banco', 'bebedero', 'paseo', 'costanera', 'mobiliario urbano',
+    'cesto', 'grafiti', 'pintada',
+  ],
+  'cultura y deporte': [
+    'cultur', 'deport', 'cancha', 'polideportivo', 'club', 'futbol', 'gimnasio',
+    'pileta', 'natacion', 'teatro', 'musica', 'murga', 'taller', 'arte', 'museo',
+    'festival', 'recreac', 'actividad fisica',
+  ],
+  'desarrollo social': [
+    'comedor', 'merendero', 'alimento', 'hambre', 'pobreza', 'situacion de calle',
+    'personas en calle', 'asistencia', 'subsidio', 'desempleo', 'trabajo',
+    'empleo', 'changa', 'olla popular', 'vulnerab', 'ayuda social', 'adiccion',
+  ],
+  'ninez y adolescencia': [
+    'nino', 'nina', 'ninez', 'chicos', 'chicas', 'infancia', 'infantil',
+    'adolescen', 'jovenes', 'menores', 'guarderia', 'sala cuna', 'jardin maternal',
+    'bullying', 'trabajo infantil',
+  ],
+  'adultos mayores': [
+    'adulto mayor', 'adultos mayores', 'jubilad', 'pensionad', 'tercera edad',
+    'anciano', 'abuelo', 'abuela', 'geriatric', 'centro de jubilados', 'pami',
+    'personas mayores',
+  ],
+  'genero y diversidad': [
+    'genero', 'violencia de genero', 'mujer', 'femicid', 'machis', 'acoso',
+    'diversidad', 'lgbt', 'transgener', 'travesti', 'disidencia', 'igualdad', 'abuso',
+    'linea 144', 'punto violeta',
   ],
   transporte: [
     'colectivo', 'omnibus', 'parada', 'transporte', 'semaforo', 'transito',

@@ -29,6 +29,7 @@ const paths = {
   eye: 'M2 12 L7 6 H17 L22 12 L17 18 H7 Z M10 10 H14 V14 H10 Z',
   eyeOff: 'M2 12 L7 6 H17 L22 12 L17 18 H7 Z M4 4 L20 20',
   arrow: 'M4 12 H20 M14 6 L20 12 L14 18',
+  chart: 'M4 20 H20 M7 17 V12 M12 17 V6 M17 17 V9',
   calendar:'M4 6 H20 V21 H4 Z M4 10 H20 M8 3 V7 M16 3 V7',
   trash: 'M4 7 H20 M9 7 V4 H15 V7 M6 7 L7 21 H17 L18 7',
 }

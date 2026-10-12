@@ -6,7 +6,8 @@
 -- esquema_inicial_ents, funciones_auxiliares_privadas,
 -- optimizar_politicas_e_indices, fotos_en_peticiones,
 -- admins_borran_fotos_de_peticiones, roles_y_anonimato,
--- anonimato_total_y_vista_admin, perfil_desde_google). Este archivo es la versión final
+-- anonimato_total_y_vista_admin, perfil_desde_google,
+-- estadisticas_y_categorias). Este archivo es la versión final
 -- consolidada, para recrear la base en otro proyecto:
 -- Supabase → SQL Editor → New query → pegar todo → Run.
 -- ==========================================================
@@ -809,3 +810,194 @@ begin
   return new;
 end;
 $$;
+
+
+-- ----------------------------------------------------------
+-- 11. Estadísticas (vecinos y administradores) y categorías nuevas
+-- ----------------------------------------------------------
+
+insert into public.categorias (nombre) values
+  ('Animales'),
+  ('Accesibilidad'),
+  ('Espacios públicos'),
+  ('Cultura y deporte'),
+  ('Desarrollo social'),
+  ('Niñez y adolescencia'),
+  ('Adultos mayores'),
+  ('Género y diversidad')
+on conflict (nombre) do nothing;
+
+-- Para todos los usuarios: solo agregados de peticiones publicadas y del muro.
+-- No incluye ningún dato que identifique a una persona.
+create or replace function public.estadisticas_publicas()
+returns json
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  with pub as (
+    select * from public.peticiones where estado = 'publicada'
+  )
+  select json_build_object(
+    'totales', json_build_object(
+      'peticiones', (select count(*) from pub),
+      'firmas', (select coalesce(sum(firmas_count), 0) from pub),
+      'urgentes', (select count(*) from pub where score_urgencia >= 70),
+      'barrios', (select count(distinct zona_id) from pub),
+      'nuevas_semana', (select count(*) from pub where created_at > now() - interval '7 days'),
+      'publicaciones', (select count(*) from public.publicaciones)
+    ),
+    'por_categoria', (
+      select coalesce(json_agg(x order by x.cantidad desc, x.nombre), '[]'::json)
+      from (
+        select c.nombre, count(p.id) as cantidad, coalesce(sum(p.firmas_count), 0) as firmas
+        from public.categorias c
+        join pub p on p.categoria_id = c.id
+        group by c.nombre
+      ) x
+    ),
+    'por_barrio', (
+      select coalesce(json_agg(x order by x.cantidad desc, x.nombre), '[]'::json)
+      from (
+        select z.id, z.nombre, count(p.id) as cantidad,
+               coalesce(sum(p.firmas_count), 0) as firmas,
+               round(coalesce(avg(p.score_urgencia), 0)) as urgencia_promedio
+        from public.zonas z
+        left join pub p on p.zona_id = z.id
+        where z.activa
+        group by z.id, z.nombre
+      ) x
+    ),
+    'por_semana', (
+      select json_agg(json_build_object('semana', s.semana, 'cantidad', (
+        select count(*) from pub p
+        where p.created_at >= s.semana and p.created_at < s.semana + interval '1 week'
+      )) order by s.semana)
+      from generate_series(
+        date_trunc('week', now()) - interval '11 weeks',
+        date_trunc('week', now()),
+        interval '1 week'
+      ) as s(semana)
+    ),
+    'urgencia', json_build_object(
+      'alta', (select count(*) from pub where score_urgencia >= 70),
+      'media', (select count(*) from pub where score_urgencia >= 40 and score_urgencia < 70),
+      'baja', (select count(*) from pub where score_urgencia < 40)
+    ),
+    'feed', json_build_object(
+      'positivo', (select count(*) from public.publicaciones where tipo = 'positivo'),
+      'negativo', (select count(*) from public.publicaciones where tipo = 'negativo')
+    )
+  );
+$$;
+
+-- Solo administradores (lo verifica la propia función): incluye datos personales
+create or replace function public.estadisticas_admin()
+returns json
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_admin() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  return json_build_object(
+    'usuarios', json_build_object(
+      'total', (select count(*) from public.profiles),
+      'vecinos', (select count(*) from public.profiles where rol = 'ciudadano'),
+      'funcionarios', (select count(*) from public.profiles where rol = 'funcionario'),
+      'admins', (select count(*) from public.profiles where rol = 'admin'),
+      'solicitudes', (select count(*) from public.profiles where rol_solicitado = 'funcionario'),
+      'activos_30d', (select count(*) from auth.users where last_sign_in_at > now() - interval '30 days'),
+      'nuevos_semana', (select count(*) from auth.users where created_at > now() - interval '7 days'),
+      'sin_actividad', (
+        select count(*) from public.profiles pr
+        where not exists (select 1 from public.peticiones p where p.usuario_id = pr.id)
+          and not exists (select 1 from public.firmas f where f.usuario_id = pr.id)
+          and not exists (select 1 from public.publicaciones pu where pu.usuario_id = pr.id)
+      )
+    ),
+    'registros_por_semana', (
+      select json_agg(json_build_object('semana', s.semana, 'cantidad', (
+        select count(*) from auth.users u
+        where u.created_at >= s.semana and u.created_at < s.semana + interval '1 week'
+      )) order by s.semana)
+      from generate_series(
+        date_trunc('week', now()) - interval '11 weeks',
+        date_trunc('week', now()),
+        interval '1 week'
+      ) as s(semana)
+    ),
+    'estados', json_build_object(
+      'pendiente', (select count(*) from public.peticiones where estado = 'pendiente'),
+      'publicada', (select count(*) from public.peticiones where estado = 'publicada'),
+      'rechazada', (select count(*) from public.peticiones where estado = 'rechazada')
+    ),
+    'moderacion', json_build_object(
+      'horas_promedio', (
+        select round(avg(extract(epoch from (updated_at - created_at)) / 3600)::numeric, 1)
+        from public.peticiones
+        where estado in ('publicada', 'rechazada') and updated_at is not null
+      ),
+      'pendiente_mas_antigua', (
+        select min(created_at) from public.peticiones where estado = 'pendiente'
+      )
+    ),
+    'firmas_por_dia', (
+      select json_agg(json_build_object('dia', d.dia, 'cantidad', (
+        select count(*) from public.firmas f
+        where f.created_at >= d.dia and f.created_at < d.dia + interval '1 day'
+      )) order by d.dia)
+      from generate_series(
+        date_trunc('day', now()) - interval '29 days',
+        date_trunc('day', now()),
+        interval '1 day'
+      ) as d(dia)
+    ),
+    'top_usuarios', (
+      select coalesce(json_agg(x), '[]'::json)
+      from (
+        select pr.nombre, pr.apellido, u.email::text as email, pr.rol,
+               (select count(*) from public.peticiones p where p.usuario_id = pr.id) as peticiones,
+               (select count(*) from public.firmas f where f.usuario_id = pr.id) as firmas,
+               (select count(*) from public.publicaciones pu where pu.usuario_id = pr.id) as publicaciones
+        from public.profiles pr
+        join auth.users u on u.id = pr.id
+        order by 5 + 6 + 7 desc
+        limit 8
+      ) x
+      where x.peticiones + x.firmas + x.publicaciones > 0
+    ),
+    'feed_por_barrio', (
+      select coalesce(json_agg(x order by (x.positivo + x.negativo) desc), '[]'::json)
+      from (
+        select z.nombre,
+               count(*) filter (where pu.tipo = 'positivo') as positivo,
+               count(*) filter (where pu.tipo = 'negativo') as negativo
+        from public.publicaciones pu
+        join public.zonas z on z.id = pu.zona_id
+        group by z.nombre
+      ) x
+    ),
+    'pendientes_por_barrio', (
+      select coalesce(json_agg(x order by x.cantidad desc), '[]'::json)
+      from (
+        select z.nombre, count(*) as cantidad
+        from public.peticiones p
+        join public.zonas z on z.id = p.zona_id
+        where p.estado = 'pendiente'
+        group by z.nombre
+      ) x
+    )
+  );
+end;
+$$;
+
+revoke execute on function public.estadisticas_publicas() from public, anon;
+revoke execute on function public.estadisticas_admin() from public, anon;
+grant execute on function public.estadisticas_publicas() to authenticated;
+grant execute on function public.estadisticas_admin() to authenticated;

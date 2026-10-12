@@ -106,6 +106,11 @@ function MainLayout() {
             Comunidad
           </NavLink>
 
+          <NavLink className={sideLinkClass} to="/estadisticas">
+            <Icon name="chart" size={22} />
+            Estadísticas
+          </NavLink>
+
           <NavLink className={sideLinkClass} to="/eventos">
             <Icon name="calendar" size={22} />
             Eventos
@@ -128,6 +133,11 @@ function MainLayout() {
               <NavLink className={sideLinkClass} to="/admin/usuarios">
                 <Icon name="users" size={22} />
                 Usuarios
+              </NavLink>
+
+              <NavLink className={sideLinkClass} to="/admin/estadisticas">
+                <Icon name="chart" size={22} />
+                Panel analítico
               </NavLink>
             </>
           )}

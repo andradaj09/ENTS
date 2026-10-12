@@ -17,6 +17,8 @@ import Comunidad from './pages/Comunidad'
 import Eventos from './pages/Eventos'
 import Perfil from './pages/Perfil'
 import Usuarios from './pages/Usuarios'
+import Estadisticas from './pages/Estadisticas'
+import EstadisticasAdmin from './pages/EstadisticasAdmin'
 
 function App() {
   const { profile } = useAuth()
@@ -65,6 +67,17 @@ function App() {
               element={
                 <RoleRoute allowedRoles={['admin']}>
                   <AdminPetitions />
+                </RoleRoute>
+              }
+            />
+
+            <Route path="/estadisticas" element={<Estadisticas />} />
+
+            <Route
+              path="/admin/estadisticas"
+              element={
+                <RoleRoute allowedRoles={['admin']}>
+                  <EstadisticasAdmin />
                 </RoleRoute>
               }
             />

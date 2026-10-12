@@ -369,3 +369,80 @@
     overflow: visible;
   }
 }
+
+/* ---------- Vista por barrios ---------- */
+
+.mapa-vista {
+  display: inline-flex;
+  padding: 3px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: rgba(11, 11, 11, 0.06);
+}
+
+.mapa-vista button {
+  border: 0;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #52514e;
+}
+
+.mapa-vista button.active {
+  background: #0b0b0b;
+  color: #fff;
+}
+
+.mapa-metrica {
+  display: block;
+  max-width: 230px;
+  margin-bottom: 10px;
+}
+
+.mapa-escala {
+  display: flex;
+  gap: 2px;
+}
+
+.mapa-escala-paso {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 36px;
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  color: #52514e;
+}
+
+.mapa-escala-paso i {
+  display: block;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.mapa-escala-nota {
+  margin: 8px 0 0;
+  max-width: 230px;
+  font-size: 0.72rem;
+  color: #898781;
+}
+
+.mapa-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  border: 1px solid rgba(11, 11, 11, 0.1);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  color: #52514e;
+  box-shadow: 0 8px 20px rgba(40, 32, 10, 0.14);
+}
+
+.mapa-tooltip strong {
+  color: #0b0b0b;
+  font-size: 0.85rem;
+}

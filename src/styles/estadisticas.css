@@ -1,0 +1,350 @@
+/* ==========================================================
+   Estadísticas — tarjetas de números y gráficos
+   ========================================================== */
+
+.estadisticas {
+  --serie-1: #2a78d6;
+  --serie-2: #eb6834;
+  --ink-1: #0b0b0b;
+  --ink-2: #52514e;
+  --ink-muted: #898781;
+  --guia: #e1e0d9;
+  --pista: rgba(11, 11, 11, 0.04);
+}
+
+.estadisticas-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.estadisticas-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.estadisticas-grid > * { grid-column: span 12; }
+
+@media (min-width: 992px) {
+  .estadisticas-grid .ancho-6 { grid-column: span 6; }
+  .estadisticas-grid .ancho-7 { grid-column: span 7; }
+  .estadisticas-grid .ancho-5 { grid-column: span 5; }
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+}
+
+.stat-tile-etiqueta {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.stat-tile strong {
+  font-size: 1.9rem;
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--ink-1);
+}
+
+.stat-tile small {
+  font-size: 0.74rem;
+  color: var(--ink-muted);
+}
+
+/* ---------- Tarjeta de gráfico ---------- */
+
+.grafico-tarjeta {
+  padding: 20px 22px;
+}
+
+.grafico-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.grafico-head h2 {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+
+.grafico-head p {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.grafico-toggle {
+  flex-shrink: 0;
+  border: 1px solid rgba(11, 11, 11, 0.12);
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: transparent;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.grafico-toggle:hover { background: rgba(11, 11, 11, 0.05); }
+
+.grafico-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 12px;
+  font-size: 0.78rem;
+  color: var(--ink-2);
+}
+
+.grafico-leyenda span,
+.grafico-tooltip-serie,
+.proporcion-items span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.grafico-leyenda i,
+.grafico-tooltip-serie i,
+.proporcion-items i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.grafico-tabla {
+  max-height: 340px;
+  overflow: auto;
+  font-size: 0.82rem;
+}
+
+.grafico-tabla td,
+.grafico-tabla th {
+  background: transparent;
+  font-variant-numeric: tabular-nums;
+}
+
+.grafico-vacio {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.grafico-tooltip {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: max-content;
+  padding: 8px 12px;
+  border: 1px solid rgba(11, 11, 11, 0.1);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(40, 32, 10, 0.14);
+  font-size: 0.76rem;
+  color: var(--ink-2);
+  pointer-events: none;
+}
+
+.grafico-tooltip strong { color: var(--ink-1); }
+
+/* ---------- Barras horizontales ---------- */
+
+.barras {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.barras-fila {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(90px, 34%) minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.barras-fila.activa { background: var(--pista); }
+
+.barras-etiqueta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
+.barras-pista {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.barras-barra {
+  display: block;
+  height: 12px;
+  min-width: 3px;
+  border-radius: 0 4px 4px 0;
+}
+
+.barras-pila {
+  display: flex;
+  gap: 2px;
+  min-width: 3px;
+}
+
+.barras-pila .barras-barra { border-radius: 0; }
+.barras-pila .barras-barra:last-child { border-radius: 0 4px 4px 0; }
+
+.barras-valor {
+  flex-shrink: 0;
+  font-size: 0.76rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-1);
+}
+
+.barras-fila .grafico-tooltip { left: 60%; }
+
+/* ---------- Columnas ---------- */
+
+.columnas {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+}
+
+.columnas-eje {
+  position: relative;
+  width: 28px;
+  height: var(--alto);
+}
+
+.columnas-eje span {
+  position: absolute;
+  right: 0;
+  transform: translateY(50%);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.columnas-plot {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  height: var(--alto);
+  margin-bottom: 20px;
+  border-bottom: 1px solid #c3c2b7;
+}
+
+.columnas-guia {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--guia);
+}
+
+.columnas-col {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  outline: none;
+}
+
+.columnas-col.activa { background: var(--pista); }
+
+.columnas-barra {
+  position: relative;
+  width: min(70%, 28px);
+  border-radius: 4px 4px 0 0;
+}
+
+.columnas-x {
+  position: absolute;
+  top: calc(100% + 4px);
+  white-space: nowrap;
+  font-size: 0.66rem;
+  color: var(--ink-muted);
+}
+
+/* ---------- Proporción (parte de un todo) ---------- */
+
+.proporcion-barra {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--pista);
+}
+
+.proporcion-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
+.proporcion-items strong {
+  color: var(--ink-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.proporcion-items small { color: var(--ink-muted); }
+
+/* ---------- Tabla de usuarios más activos ---------- */
+
+.tabla-activos {
+  font-size: 0.82rem;
+}
+
+.tabla-activos td,
+.tabla-activos th {
+  background: transparent;
+  vertical-align: middle;
+  font-variant-numeric: tabular-nums;
+}
+
+.aviso-privado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #0b0b0b;
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
