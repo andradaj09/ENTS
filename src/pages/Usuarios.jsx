@@ -1,6 +1,7 @@
 import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { getUsuariosAdmin } from '../services/petitionService'
-import { asignarArea, getAreas } from '../services/participacionService'
+import { asignarArea, cambiarRol, getAreas, soyDueno } from '../services/participacionService'
+import { useAuth } from '../contexts/AuthContext'
 import { normalizar } from '../utils/clasificador'
 import { nombreRol } from '../utils/roles'
 import { tiempoRelativo } from '../utils/format'
@@ -27,8 +28,44 @@ function Usuarios() {
   const [busqueda, setBusqueda] = useState('')
   const [filtroRol, setFiltroRol] = useState('todos')
   const [areas, setAreas] = useState([])
+  const { user } = useAuth()
+  const [esDueno, setEsDueno] = useState(false)
+  const [aviso, setAviso] = useState('')
 
   const busquedaDiferida = normalizar(useDeferredValue(busqueda).trim())
+
+  // Solo el dueño del proyecto ve el selector de rol (la base lo vuelve a verificar)
+  useEffect(() => {
+    soyDueno().then(setEsDueno).catch(() => setEsDueno(false))
+  }, [])
+
+  const ROLES = [
+    ['ciudadano', 'Vecino/a'],
+    ['funcionario', 'Funcionario/a'],
+    ['admin', 'Administrador/a'],
+  ]
+
+  const elegirRol = async (usuario, rol) => {
+    if (rol === usuario.rol) return
+
+    const nombre = `${usuario.nombre} ${usuario.apellido}`
+    const avisoAdmin = rol === 'admin'
+      ? '\n\nVa a poder moderar, ver los datos de todas las cuentas y el panel analítico.'
+      : ''
+    if (!window.confirm(`¿Cambiar a ${nombre} de ${nombreRol(usuario.rol)} a ${nombreRol(rol)}?${avisoAdmin}`)) return
+
+    try {
+      setAviso('')
+      await cambiarRol(usuario.id, rol)
+      setUsuarios((actuales) => actuales.map((u) => (u.id === usuario.id
+        ? { ...u, rol, rol_solicitado: null, area_id: rol === 'funcionario' ? u.area_id : null }
+        : u)))
+      setAviso(`${nombre} ahora es ${nombreRol(rol).toLowerCase()}.`)
+    } catch (err) {
+      console.error('Error cambiando rol:', err)
+      setError(err.message?.includes('dueño') ? 'Solo el dueño del proyecto puede cambiar roles.' : 'No se pudo cambiar el rol.')
+    }
+  }
 
   useEffect(() => {
     getAreas().then(setAreas).catch((err) => console.error('Error cargando áreas:', err))
@@ -103,6 +140,14 @@ function Usuarios() {
       {loading && <p className="text-muted">Cargando usuarios...</p>}
 
       {error && <div className="alert alert-danger">{error}</div>}
+      {aviso && <div className="alert alert-success">{aviso}</div>}
+
+      {esDueno && (
+        <p className="text-muted small">
+          <Icon name="lock" size={14} className="me-1" />
+          Como dueño del proyecto podés cambiar el rol de cada cuenta. Ningún otro administrador puede hacerlo.
+        </p>
+      )}
 
       {!loading && !error && (
         <p className="text-muted small">
@@ -160,6 +205,20 @@ function Usuarios() {
                     >
                       <option value="">Todas las áreas</option>
                       {areas.map((a) => <option key={a.id} value={a.id}>{a.nombre}</option>)}
+                    </select>
+                  </div>
+                )}
+
+                {esDueno && usuario.id !== user?.id && (
+                  <div className="info-row align-items-center">
+                    <span>Rol</span>
+                    <select
+                      className="form-select form-select-sm w-auto"
+                      value={usuario.rol}
+                      onChange={(e) => elegirRol(usuario, e.target.value)}
+                      aria-label={`Rol de ${usuario.nombre}`}
+                    >
+                      {ROLES.map(([valor, nombre]) => <option key={valor} value={valor}>{nombre}</option>)}
                     </select>
                   </div>
                 )}

@@ -1857,3 +1857,71 @@ set zona_id = privado.barrio_mas_cercano(lat, lng)
 where lat is not null
   and privado.barrio_mas_cercano(lat, lng) is not null
   and zona_id is distinct from privado.barrio_mas_cercano(lat, lng);
+
+-- ----------------------------------------------------------
+-- 14. Dueño del proyecto: la única cuenta que cambia roles
+-- ----------------------------------------------------------
+
+create table if not exists privado.duenos (
+  usuario_id uuid primary key references public.profiles (id) on delete cascade
+);
+
+-- Se agrega a mano el dueño (con su correo registrado):
+-- insert into privado.duenos (usuario_id)
+-- select p.id from public.profiles p join auth.users u on u.id = p.id
+-- where lower(u.email) = 'correo-del-dueno@ejemplo.com';
+
+create or replace function privado.es_dueno()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (select 1 from privado.duenos where usuario_id = auth.uid());
+$$;
+
+create or replace function public.soy_dueno()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select privado.es_dueno();
+$$;
+
+create or replace function public.cambiar_rol(p_usuario uuid, p_rol text)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_dueno() then
+    raise exception 'Solo el dueño del proyecto puede cambiar roles' using errcode = '42501';
+  end if;
+
+  if p_rol not in ('ciudadano', 'funcionario', 'admin') then
+    raise exception 'Rol inválido' using errcode = '22023';
+  end if;
+
+  if p_usuario = auth.uid() then
+    raise exception 'No podés cambiar tu propio rol' using errcode = '22023';
+  end if;
+
+  update public.profiles
+  set rol = p_rol,
+      rol_solicitado = null,
+      area_id = case when p_rol = 'funcionario' then area_id else null end
+  where id = p_usuario;
+
+  if not found then
+    raise exception 'Usuario no encontrado' using errcode = 'P0002';
+  end if;
+end;
+$$;
+
+revoke execute on function public.soy_dueno(), public.cambiar_rol(uuid, text) from public, anon;
+grant execute on function public.soy_dueno(), public.cambiar_rol(uuid, text) to authenticated;
+revoke execute on function privado.es_dueno() from public, anon, authenticated;

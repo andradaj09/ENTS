@@ -144,3 +144,10 @@ export async function getAreas() {
 
 export const asignarArea = (usuarioId, areaId) =>
   rpc('asignar_area', { p_usuario: usuarioId, p_area: areaId })
+
+// ---------- Roles (solo el dueño del proyecto; lo verifica la base) ----------
+
+export const soyDueno = () => rpc('soy_dueno')
+
+export const cambiarRol = (usuarioId, rol) =>
+  rpc('cambiar_rol', { p_usuario: usuarioId, p_rol: rol })
