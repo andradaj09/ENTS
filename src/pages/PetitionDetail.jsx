@@ -375,8 +375,9 @@ function PetitionDetail() {
                   </div>
 
                   <p className="text-muted small mt-3 mb-0">
-                    El score será calculado automáticamente
-                    según la actividad de la petición.
+                    Se calcula solo: gravedad de la categoría, palabras de
+                    riesgo en el texto, firmas, firmas de la última semana
+                    y si tiene fotos. Se actualiza con cada firma.
                   </p>
                 </div>
               </div>

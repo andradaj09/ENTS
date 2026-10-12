@@ -1925,3 +1925,115 @@ $$;
 revoke execute on function public.soy_dueno(), public.cambiar_rol(uuid, text) from public, anon;
 grant execute on function public.soy_dueno(), public.cambiar_rol(uuid, text) to authenticated;
 revoke execute on function privado.es_dueno() from public, anon, authenticated;
+
+-- ----------------------------------------------------------
+-- 15. Score de urgencia automático (0 a 100)
+--   gravedad de la categoría (hasta 35) + palabras de riesgo (8 c/u, hasta 30)
+--   + apoyo logarítmico (hasta 20 con 50 firmas) + firmas de los últimos
+--   7 días (2 c/u, hasta 10) + evidencia fotográfica (5).
+--   Se recalcula al crear, al editar y cada vez que cambian las firmas.
+-- ----------------------------------------------------------
+
+alter table public.categorias add column if not exists peso_urgencia integer not null default 20
+  check (peso_urgencia between 0 and 30);
+
+update public.categorias set peso_urgencia = v.peso
+from (values
+  ('Salud', 30), ('Seguridad', 30), ('Género y diversidad', 30), ('Niñez y adolescencia', 28),
+  ('Servicios públicos', 25), ('Vivienda', 25), ('Adultos mayores', 25), ('Desarrollo social', 25),
+  ('Infraestructura', 22), ('Accesibilidad', 20), ('Ambiente', 20), ('Educación', 20),
+  ('Transporte', 18), ('Animales', 18), ('Espacios públicos', 12), ('Cultura y deporte', 10)
+) as v(nombre, peso)
+where categorias.nombre = v.nombre;
+
+create or replace function privado.calcular_urgencia(
+  p_id bigint, p_categoria bigint, p_titulo text, p_descripcion text, p_firmas integer, p_fotos text[]
+)
+returns numeric
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+declare
+  t text := translate(lower(coalesce(p_titulo, '') || ' ' || coalesce(p_descripcion, '')), 'áéíóúüñ', 'aeiouun');
+  gravedad numeric;
+  riesgo integer := 0;
+  palabra text;
+  apoyo numeric;
+  recientes integer := 0;
+begin
+  select coalesce(peso_urgencia, 20) into gravedad from public.categorias where id = p_categoria;
+  gravedad := coalesce(gravedad, 20) * 35.0 / 30;
+
+  foreach palabra in array array[
+    'peligr', 'accidente', 'herid', 'riesgo', 'urgente', 'emergencia', 'chicos', 'ninos', 'nenes',
+    'inunda', 'sin agua', 'sin luz', 'incendio', 'cables', 'derrumb', 'violencia', 'robo', 'enferm',
+    'ambulancia', 'muert', 'mordedura', 'derrame', 'cloaca'
+  ] loop
+    if t ~ ('(^|[^a-z])' || palabra) then
+      riesgo := riesgo + 8;
+    end if;
+  end loop;
+  riesgo := least(riesgo, 30);
+
+  apoyo := least(20, 20 * ln(1 + greatest(coalesce(p_firmas, 0), 0)) / ln(51));
+
+  if p_id is not null then
+    select count(*) into recientes from public.firmas
+    where peticion_id = p_id and created_at > now() - interval '7 days';
+  end if;
+
+  return least(100, round(
+    gravedad + riesgo + apoyo + least(10, recientes * 2)
+    + case when cardinality(coalesce(p_fotos, '{}')) > 0 then 5 else 0 end
+  ));
+end;
+$$;
+
+revoke execute on function privado.calcular_urgencia(bigint, bigint, text, text, integer, text[]) from public, anon, authenticated;
+
+create or replace function privado.preparar_peticion()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if tg_op = 'INSERT' then
+    new.seguimiento := 'recibida';
+    new.elevada_at := null;
+  end if;
+
+  if tg_op = 'INSERT' or new.titulo is distinct from old.titulo
+     or new.descripcion is distinct from old.descripcion then
+    new.alertas := privado.revisar_texto(new.titulo || ' ' || new.descripcion);
+  end if;
+
+  if tg_op = 'UPDATE' and new.firmas_count >= privado.meta_firmas()
+     and old.firmas_count < privado.meta_firmas() and new.elevada_at is null then
+    new.elevada_at := now();
+  end if;
+
+  new.score_urgencia := privado.calcular_urgencia(
+    case when tg_op = 'UPDATE' then new.id end,
+    new.categoria_id, new.titulo, new.descripcion, new.firmas_count, new.fotos
+  );
+
+  return new;
+end;
+$$;
+
+-- El score lo pone la base: la política de creación ya no exige score 0
+drop policy if exists "Crear peticiones propias" on public.peticiones;
+create policy "Crear peticiones propias" on public.peticiones
+  for insert to authenticated
+  with check (
+    usuario_id = (select auth.uid())
+    and estado = 'pendiente'
+    and firmas_count = 0
+    and not exists (
+      select 1 from unnest(peticiones.fotos) foto(foto)
+      where foto.foto !~~ ((select auth.uid())::text || '/%')
+    )
+  );
