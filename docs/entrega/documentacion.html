@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ENTS — Documentación del Trabajo Práctico</title>
+<style>
+  @page {
+    size: A4;
+    margin: 22mm 20mm 20mm 20mm;
+    @bottom-center { content: counter(page); font: 9pt 'Segoe UI', Arial, sans-serif; color: #6b6a64; }
+    @top-right { content: "ENTS — Everyone Needs To Smile"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; }
+  }
+  @page :first { @bottom-center { content: none; } @top-right { content: none; } }
+
+  :root { --azul: #1c5cab; --marino: #0d366b; --celeste: #cde2fb; --tinta: #14213d; --gris: #4a5568; --linea: #d9d7cf; --crema: #f6f4ee; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 10.5pt/1.55 'Segoe UI', Arial, sans-serif; color: var(--tinta); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  h1, h2, h3, h4 { color: var(--marino); line-height: 1.25; break-after: avoid; }
+  h1 { font-size: 20pt; margin: 0 0 10pt; padding-bottom: 6pt; border-bottom: 2.5pt solid var(--azul); break-before: page; }
+  h2 { font-size: 14pt; margin: 18pt 0 6pt; }
+  h3 { font-size: 11.5pt; margin: 14pt 0 4pt; }
+  h4 { font-size: 10.5pt; margin: 10pt 0 2pt; }
+  p { margin: 0 0 7pt; text-align: justify; }
+  ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
+  li { margin-bottom: 2pt; }
+  table { width: 100%; border-collapse: collapse; margin: 6pt 0 12pt; font-size: 9pt; break-inside: auto; }
+  tr { break-inside: avoid; }
+  th { background: var(--marino); color: #fff; text-align: left; font-weight: 600; padding: 4pt 6pt; }
+  td { border-bottom: 0.6pt solid var(--linea); padding: 4pt 6pt; vertical-align: top; }
+  tbody tr:nth-child(even) td { background: #f7f6f2; }
+  code, .mono { font-family: Consolas, 'Courier New', monospace; font-size: 8.8pt; }
+  pre { font: 8.2pt/1.45 Consolas, 'Courier New', monospace; background: var(--crema); border: 0.6pt solid var(--linea); border-radius: 4pt; padding: 8pt; white-space: pre-wrap; break-inside: avoid; }
+  .nota { background: #fff7e6; border-left: 3pt solid #eda100; padding: 6pt 9pt; margin: 6pt 0 10pt; font-size: 9.5pt; }
+  .completar { background: #fff1c2; padding: 0 3pt; border-radius: 2pt; }
+  .figura { break-inside: avoid; margin: 8pt 0 12pt; text-align: center; }
+  .figura figcaption, .pie { font-size: 8.5pt; color: var(--gris); text-align: center; margin-top: 4pt; }
+  .dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+  .tarjeta { border: 0.8pt solid var(--linea); border-radius: 5pt; padding: 7pt 9pt; break-inside: avoid; }
+  .tarjeta h4 { margin-top: 0; }
+
+  /* Carátula */
+  .caratula { height: 253mm; display: flex; flex-direction: column; justify-content: space-between; }
+  .caratula .inst { font-size: 12pt; font-weight: 600; color: var(--marino); letter-spacing: 1pt; text-transform: uppercase; }
+  .caratula .titulo { font-size: 30pt; font-weight: 800; color: var(--marino); line-height: 1.1; margin: 0; border: 0; }
+  .caratula .sub { font-size: 13pt; color: var(--gris); margin-top: 8pt; }
+  .caratula .franja { height: 6pt; background: linear-gradient(90deg, var(--marino), var(--azul), #9ec5f4); border-radius: 3pt; margin: 14pt 0; }
+  .caratula table td { border: 0; padding: 3pt 0; font-size: 11pt; background: none !important; }
+  .caratula table td:first-child { width: 42mm; color: var(--gris); }
+
+  /* Índice */
+  .indice ol { list-style: none; padding-left: 0; }
+  .indice ol ol { padding-left: 14pt; }
+  .indice li { margin: 2pt 0; }
+  .indice a { color: var(--tinta); text-decoration: none; }
+
+  /* EDT */
+  .edt { display: flex; flex-direction: column; align-items: center; gap: 8pt; break-inside: avoid; }
+  .edt-raiz { background: var(--marino); color: #fff; font-weight: 700; padding: 6pt 14pt; border-radius: 4pt; font-size: 10pt; }
+  .edt-ramas { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4pt; width: 100%; }
+  .edt-rama { display: flex; flex-direction: column; gap: 3pt; }
+  .edt-rama .cab { background: var(--azul); color: #fff; font-weight: 600; font-size: 7.6pt; padding: 4pt; border-radius: 3pt; text-align: center; min-height: 30pt; }
+  .edt-rama .hoja { border: 0.7pt solid var(--azul); color: var(--tinta); font-size: 7.2pt; padding: 3pt; border-radius: 3pt; background: #f2f7fd; }
+
+  /* Gantt */
+  .gantt td, .gantt th { padding: 2.5pt 3pt; font-size: 8pt; }
+  .gantt th.s { width: 6.2%; text-align: center; }
+  .gantt td.c { padding: 2pt 1pt; }
+  .gantt td.c span { display: block; height: 9pt; border-radius: 2pt; }
+  .barra-g { background: #3987e5; } .barra-a { background: #6da7ec; } .barra-d { background: #1c5cab; } .barra-h { background: #0d366b; } .barra-q { background: #eb6834; } .barra-x { background: #9ec5f4; }
+
+  /* Diagramas */
+  .diagrama { border: 0.8pt solid var(--linea); border-radius: 6pt; padding: 10pt; background: #fbfaf7; break-inside: avoid; }
+  .caja { border: 1pt solid var(--azul); border-radius: 4pt; padding: 5pt 7pt; background: #fff; font-size: 8.6pt; }
+  .caja b { color: var(--marino); }
+  .fila { display: flex; gap: 8pt; align-items: stretch; justify-content: center; }
+  .flecha { align-self: center; color: var(--azul); font-weight: 700; font-size: 13pt; }
+  .entidad { border: 1pt solid var(--marino); border-radius: 4pt; font-size: 7.6pt; background: #fff; break-inside: avoid; }
+  .entidad .nom { background: var(--marino); color: #fff; font-weight: 700; padding: 2pt 5pt; }
+  .entidad .cols { padding: 3pt 5pt; line-height: 1.4; }
+  .der { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6pt; }
+</style>
+</head>
+<body>
+
+<!-- ===================== CARÁTULA ===================== -->
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:11pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span></div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../public/logo.svg" alt="" style="width:64pt;height:64pt;border-radius:12pt">
+      <div>
+        <h1 class="titulo">Everyone Needs To Smile</h1>
+        <div class="sub">Plataforma de peticiones vecinales con procesamiento de datos y medición de impacto</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Cátedra</td><td>Práctica Profesionalizante</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Empresa / proyecto</td><td>ENTS — Everyone Needs To Smile</td></tr>
+      <tr><td>Trabajo práctico</td><td>Documentación del proyecto y entregables de gestión</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+    <div style="font-size:9pt;color:#6b6a64;margin-top:8pt">Sitio publicado: entscordoba.netlify.app</div>
+  </div>
+</section>
+
+<!-- ===================== HISTORIAL DE REVISIÓN ===================== -->
+<h1 id="historial">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:20%">Fecha y hora</th><th style="width:22%">Autor</th><th>Detalle de la modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Propuesta original: plataforma solidaria de donaciones (Project Charter, alcance, EDT, plan de comunicación, Gantt, product backlog, arquitectura).</td></tr>
+    <tr><td>2.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Reorientación del proyecto: se reemplaza el módulo de pagos y donaciones por un sistema de peticiones con clasificación automática, firmas, score de urgencia, detección de similares y reportes.</td></tr>
+    <tr><td>2.1</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Actualización de todos los entregables al nuevo alcance y documentación del sistema implementado (arquitectura, modelo de datos, seguridad, pruebas).</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<p class="pie">Cada integrante que modifique el documento agrega una fila con la versión, la fecha y hora, su nombre y el cambio realizado.</p>
+
+<!-- ===================== ÍNDICE ===================== -->
+<h1 id="indice">Tabla de contenido</h1>
+<nav class="indice">
+<ol>
+  <li><a href="#introduccion">1. Introducción</a></li>
+  <li><a href="#objetivos">2. Objetivos</a></li>
+  <li><a href="#contenido">3. Contenido del trabajo práctico</a>
+    <ol>
+      <li><a href="#contexto">3.1 Contexto, estudio de necesidades y reorientación</a></li>
+      <li><a href="#charter">3.2 Project Charter</a></li>
+      <li><a href="#alcance">3.3 Declaración de alcance (Scope Statement)</a></li>
+      <li><a href="#edt">3.4 Estructura de desglose del trabajo (EDT / WBS)</a></li>
+      <li><a href="#actividades">3.5 Lista de actividades</a></li>
+      <li><a href="#diccionario">3.6 Diccionario de actividades</a></li>
+      <li><a href="#comunicacion">3.7 Plan de comunicación</a></li>
+      <li><a href="#gantt">3.8 Diagrama de Gantt</a></li>
+      <li><a href="#backlog">3.9 Requerimientos y product backlog</a></li>
+      <li><a href="#arquitectura">3.10 Arquitectura del sistema</a></li>
+      <li><a href="#datos">3.11 Modelo de datos</a></li>
+      <li><a href="#procesos">3.12 Procesamiento automático de datos</a></li>
+      <li><a href="#seguridad">3.13 Autenticación, roles y seguridad</a></li>
+      <li><a href="#impacto">3.14 Reportes y evaluación de impacto</a></li>
+      <li><a href="#calidad">3.15 Pruebas y calidad</a></li>
+      <li><a href="#implementacion">3.16 Ambiente de implementación y despliegue</a></li>
+    </ol>
+  </li>
+  <li><a href="#bibliografia">4. Bibliografía</a></li>
+  <li><a href="#fuentes">5. Fuentes de información</a></li>
+  <li><a href="#anexo">6. Anexo</a></li>
+</ol>
+</nav>
+
+<!-- ===================== 1. INTRODUCCIÓN ===================== -->
+<h1 id="introduccion">1. Introducción</h1>
+<p>Everyone Needs To Smile (ENTS) es una plataforma web en la que los vecinos de la ciudad de Córdoba y de Villa Allende publican problemas de su barrio —salud, seguridad, infraestructura, servicios, vivienda, ambiente, entre otros—, los apoyan con su firma y siguen cómo los resuelven los organismos responsables.</p>
+<p>El proyecto nació como una plataforma solidaria de donaciones. Durante el análisis, el equipo concluyó que el módulo de pagos agregaba complejidad desproporcionada (integración con pasarelas, cumplimiento legal y trazabilidad de fondos) frente al valor que aportaba. Por eso se reorientó hacia un <b>sistema de peticiones ciudadanas con medición de impacto</b>: no un formulario de reclamos, sino un sistema que procesa los datos —clasificación automática por categoría y zona, score de urgencia, detección de peticiones similares y reportes exportables— para que los organismos sepan qué atender primero y puedan registrar la respuesta, cerrando el ciclo.</p>
+<p>Este documento presenta los entregables de gestión del proyecto actualizados al nuevo alcance (Project Charter, declaración de alcance, EDT, lista y diccionario de actividades, plan de comunicación y diagrama de Gantt) y la documentación técnica del sistema efectivamente implementado y publicado: requerimientos, arquitectura, modelo de datos, algoritmos de procesamiento, seguridad, pruebas y ambiente de implementación.</p>
+<p>Consideramos que el trabajo es relevante porque convierte reclamos dispersos en información ordenada por barrio, urgencia y apoyo vecinal, que tanto la comunidad como las áreas del municipio pueden consultar, priorizar y responder.</p>
+
+<!-- ===================== 2. OBJETIVOS ===================== -->
+<h1 id="objetivos">2. Objetivos</h1>
+<h2>2.1 Objetivo general</h2>
+<p>Desarrollar y poner en funcionamiento una plataforma web de peticiones vecinales para Córdoba y Villa Allende que permita a los vecinos visibilizar problemáticas de su barrio, apoyarlas con firmas y seguir su resolución, y que procese esa información para que los organismos públicos y las organizaciones sociales prioricen y registren su respuesta.</p>
+<h2>2.2 Objetivos específicos</h2>
+<ol>
+  <li>Permitir crear peticiones con texto, fotos y ubicación, clasificándolas automáticamente por categoría y barrio.</li>
+  <li>Registrar firmas de apoyo y ordenar las peticiones por prioridad según la cantidad de firmas.</li>
+  <li>Calcular automáticamente un score de urgencia de 0 a 100 a partir de la gravedad, el riesgo, el apoyo y su velocidad.</li>
+  <li>Detectar peticiones similares para concentrar el apoyo en un único pedido.</li>
+  <li>Ofrecer a los funcionarios una bandeja por área para responder y registrar el avance hasta la resolución.</li>
+  <li>Generar estadísticas públicas anónimas y reportes exportables (Excel y PDF) para organismos.</li>
+  <li>Garantizar el anonimato entre vecinos y la protección de datos personales mediante reglas aplicadas en la base de datos.</li>
+  <li>Asegurar la calidad con pruebas automáticas, accesibilidad y buen rendimiento en celulares.</li>
+</ol>
+
+<!-- ===================== 3. CONTENIDO ===================== -->
+<h1 id="contenido">3. Contenido del trabajo práctico</h1>
+
+<h2 id="contexto">3.1 Contexto, estudio de necesidades y reorientación</h2>
+<h3>Análisis socioeconómico de Córdoba y encuesta</h3>
+<p>El equipo realizó previamente un análisis socioeconómico de la ciudad de Córdoba y una encuesta de necesidades a vecinos. Ambos se mantienen como base del proyecto, ya que justifican las categorías de problemáticas, el foco en el nivel de barrio y la necesidad de un canal ordenado de reclamos.</p>
+<div class="nota">Incorporar aquí los resultados del análisis socioeconómico y de la encuesta del equipo (preguntas, cantidad de respuestas y principales hallazgos). No se reproducen en esta versión para no alterar los datos originales.</div>
+<h3>Necesidades detectadas</h3>
+<ul>
+  <li><b>Vecinos:</b> no tienen un canal único para reclamar ni saben si alguien atiende su pedido; reclaman en forma individual y sin seguimiento.</li>
+  <li><b>Barrios:</b> los mismos problemas se reportan muchas veces y de manera dispersa, sin un registro común que muestre su magnitud.</li>
+  <li><b>Organismos y ONG:</b> carecen de información ordenada por zona, urgencia y apoyo para decidir qué atender primero y rendir cuentas de lo hecho.</li>
+</ul>
+<h3>Reorientación del proyecto</h3>
+<table>
+  <thead><tr><th style="width:50%">Se mantiene</th><th>Se reemplaza</th></tr></thead>
+  <tbody>
+    <tr><td>Análisis socioeconómico de Córdoba</td><td>Módulo de pagos y donaciones → <b>sistema de peticiones</b></td></tr>
+    <tr><td>Arquitectura en capas (MVC)</td><td>Lógica de recaudación → <b>firmas y prioridad</b></td></tr>
+    <tr><td>Base de datos relacional SQL</td><td>Seguimiento de fondos → <b>seguimiento de la respuesta oficial</b></td></tr>
+    <tr><td>Autenticación y seguridad</td><td>Verificación de causas → <b>moderación y detección de similares</b></td></tr>
+    <tr><td>Enfoque de evaluación de impacto</td><td>Informes de recaudación → <b>reportes para organismos</b></td></tr>
+    <tr><td>Encuesta y estudio de necesidades</td><td>— (se agregan clasificación automática y score de urgencia)</td></tr>
+  </tbody>
+</table>
+
+<h2 id="charter">3.2 Project Charter</h2>
+<table>
+  <tbody>
+    <tr><td style="width:26%"><b>Nombre del proyecto</b></td><td>ENTS — Everyone Needs To Smile</td></tr>
+    <tr><td><b>Descripción</b></td><td>Plataforma web de peticiones vecinales para Córdoba y Villa Allende, con clasificación automática, firmas, score de urgencia, detección de similares, seguimiento de la respuesta oficial y reportes para organismos.</td></tr>
+    <tr><td><b>Propósito / justificación</b></td><td>Dar a los vecinos un canal único y transparente para visibilizar problemas de su barrio y a los organismos información ordenada para priorizarlos, con la respuesta registrada a la vista de todos.</td></tr>
+    <tr><td><b>Objetivos medibles</b></td><td>
+      <ul style="margin:0">
+        <li>Plataforma publicada y accesible desde la web y como app instalable.</li>
+        <li>100% de las peticiones nuevas con categoría, barrio y score asignados automáticamente.</li>
+        <li>Cobertura de los 111 barrios cargados (Córdoba y Villa Allende).</li>
+        <li>Pruebas automáticas aprobadas antes de cada publicación.</li>
+      </ul></td></tr>
+    <tr><td><b>Alcance (resumen)</b></td><td>Registro e ingreso; peticiones con fotos y ubicación; firmas; procesamiento automático; mapa por barrios; comunidad y eventos; seguimiento y notificaciones; moderación; roles; estadísticas y reportes. Ver 3.3.</td></tr>
+    <tr><td><b>Entregables principales</b></td><td>Aplicación web publicada; base de datos con esquema documentado; repositorio de código; documentación del proyecto; presentación.</td></tr>
+    <tr><td><b>Interesados</b></td><td>Vecinos de Córdoba y Villa Allende; áreas del municipio y funcionarios; ONG y organizaciones sociales; docente de la cátedra; equipo de desarrollo.</td></tr>
+    <tr><td><b>Equipo</b></td><td>Jiménez, Ignacio · Andrada, Juan Pablo · Patrón, Máximo</td></tr>
+    <tr><td><b>Recursos</b></td><td>Humanos: 3 integrantes. Tecnológicos: GitHub (repositorio), Supabase (base de datos, autenticación y archivos), Netlify (publicación), OpenStreetMap (mapas), planes gratuitos. Costo monetario directo: sin costo con los planes gratuitos actuales.</td></tr>
+    <tr><td><b>Hitos</b></td><td>Reorientación aprobada · Diseño de datos · Primera versión funcional · Sistema de roles y anonimato · Procesamiento y reportes · Calidad (pruebas, rendimiento) · Entrega final.</td></tr>
+    <tr><td><b>Riesgos principales</b></td><td>Baja participación de vecinos al inicio · Contenido inapropiado o con datos personales · Límites de los planes gratuitos · Dependencia de servicios externos · Disponibilidad del equipo.</td></tr>
+    <tr><td><b>Supuestos</b></td><td>Los usuarios cuentan con acceso a internet y un navegador moderno; los organismos designan funcionarios para responder.</td></tr>
+    <tr><td><b>Restricciones</b></td><td>Plazo del ciclo lectivo; equipo de 3 personas; sin presupuesto; sin integración con sistemas internos del municipio.</td></tr>
+    <tr><td><b>Criterios de éxito</b></td><td>El ciclo completo (pedir → firmar → priorizar → responder → resolver) funciona de punta a punta en el sitio publicado, con las reglas de privacidad verificadas.</td></tr>
+    <tr><td><b>Aprobación</b></td><td>Docente: ____________________ &nbsp;&nbsp; Fecha: ___/___/______</td></tr>
+  </tbody>
+</table>
+
+<h2 id="alcance">3.3 Declaración de alcance (Scope Statement)</h2>
+<h3>Descripción del producto</h3>
+<p>Aplicación web adaptable a celular e instalable (PWA), con un panel para vecinos, una bandeja para funcionarios y paneles de moderación y análisis para administradores, respaldada por una base de datos relacional con reglas de seguridad por fila.</p>
+<div class="dos-col">
+  <div class="tarjeta">
+    <h4>Incluido en el alcance</h4>
+    <ul>
+      <li>Registro, ingreso con correo o Google y recuperación de contraseña.</li>
+      <li>Peticiones con hasta 3 fotos y ubicación en mapa.</li>
+      <li>Categoría y barrio automáticos; score de urgencia automático.</li>
+      <li>Firmas, prioridad por firmas y meta de 50 firmas (elevación).</li>
+      <li>Detección de peticiones similares.</li>
+      <li>Moderación previa a la publicación y revisión automática de textos.</li>
+      <li>Seguimiento en 5 etapas con respuesta oficial y foto.</li>
+      <li>Comentarios anónimos con denuncias.</li>
+      <li>Notificaciones dentro de la app y barrios seguidos.</li>
+      <li>Mapa por barrios, comunidad vecinal y agenda de eventos.</li>
+      <li>Estadísticas públicas, panel analítico y exportación a Excel y PDF.</li>
+      <li>Roles: vecino, funcionario por área, administrador y dueño.</li>
+    </ul>
+  </div>
+  <div class="tarjeta">
+    <h4>Fuera del alcance</h4>
+    <ul>
+      <li>Pagos, donaciones o recaudación dentro de la plataforma (si existen, se realizan por fuera).</li>
+      <li>Integración con sistemas internos del municipio.</li>
+      <li>Envío de notificaciones por correo o SMS.</li>
+      <li>Aplicación nativa de tienda (se cubre con la PWA).</li>
+      <li>Polígonos oficiales de barrios (se usan centros de OpenStreetMap).</li>
+    </ul>
+    <h4>Criterios de aceptación</h4>
+    <ul>
+      <li>Cada funcionalidad incluida operativa en el sitio publicado.</li>
+      <li>Un vecino no puede ver identidades ajenas ni datos de otros.</li>
+      <li>Pruebas automáticas aprobadas y compilación sin errores.</li>
+    </ul>
+  </div>
+</div>
+<h3>Supuestos y restricciones</h3>
+<p>Se trabaja con los planes gratuitos de los servicios elegidos, un equipo de tres integrantes y el calendario de la cátedra. La información geográfica de los barrios proviene de OpenStreetMap.</p>
+
+<h2 id="edt">3.4 Estructura de desglose del trabajo (EDT / WBS)</h2>
+<div class="figura">
+<div class="edt">
+  <div class="edt-raiz">1. ENTS — Plataforma de peticiones vecinales</div>
+  <div class="edt-ramas">
+    <div class="edt-rama"><div class="cab">1.1 Gestión del proyecto</div><div class="hoja">1.1.1 Project Charter</div><div class="hoja">1.1.2 Alcance</div><div class="hoja">1.1.3 Plan de comunicación</div><div class="hoja">1.1.4 Cronograma</div><div class="hoja">1.1.5 Seguimiento</div></div>
+    <div class="edt-rama"><div class="cab">1.2 Análisis</div><div class="hoja">1.2.1 Estudio de necesidades y encuesta</div><div class="hoja">1.2.2 Análisis socioeconómico</div><div class="hoja">1.2.3 Requerimientos</div><div class="hoja">1.2.4 Product backlog</div></div>
+    <div class="edt-rama"><div class="cab">1.3 Diseño</div><div class="hoja">1.3.1 Arquitectura</div><div class="hoja">1.3.2 Modelo de datos</div><div class="hoja">1.3.3 Interfaz</div><div class="hoja">1.3.4 Seguridad y roles</div></div>
+    <div class="edt-rama"><div class="cab">1.4 Desarrollo</div><div class="hoja">1.4.1 Autenticación y roles</div><div class="hoja">1.4.2 Peticiones y firmas</div><div class="hoja">1.4.3 Procesamiento automático</div><div class="hoja">1.4.4 Mapa y comunidad</div><div class="hoja">1.4.5 Seguimiento y avisos</div><div class="hoja">1.4.6 Reportes</div><div class="hoja">1.4.7 Moderación</div></div>
+    <div class="edt-rama"><div class="cab">1.5 Pruebas y calidad</div><div class="hoja">1.5.1 Pruebas automáticas</div><div class="hoja">1.5.2 Pruebas de permisos</div><div class="hoja">1.5.3 Accesibilidad y rendimiento</div></div>
+    <div class="edt-rama"><div class="cab">1.6 Implementación</div><div class="hoja">1.6.1 Base de datos</div><div class="hoja">1.6.2 Publicación web</div><div class="hoja">1.6.3 App instalable</div></div>
+    <div class="edt-rama"><div class="cab">1.7 Documentación y cierre</div><div class="hoja">1.7.1 Documento</div><div class="hoja">1.7.2 Presentación</div><div class="hoja">1.7.3 Entrega</div></div>
+  </div>
+</div>
+<figcaption>Figura 1. EDT del proyecto orientada a entregables (tres niveles).</figcaption>
+</div>
+
+<h2 id="actividades">3.5 Lista de actividades</h2>
+<p>Duraciones en días hábiles de trabajo del equipo. Las predecesoras indican qué actividad debe terminar antes de empezar la siguiente.</p>
+<table>
+  <thead><tr><th style="width:7%">ID</th><th>Actividad</th><th style="width:9%">EDT</th><th style="width:9%">Duración</th><th style="width:14%">Predecesoras</th><th style="width:13%">Responsable</th></tr></thead>
+  <tbody>
+    <tr><td>A1</td><td>Analizar la propuesta de reorientación y redefinir el proyecto</td><td>1.1.1</td><td>3</td><td>—</td><td>Equipo</td></tr>
+    <tr><td>A2</td><td>Redactar Project Charter y declaración de alcance</td><td>1.1.1–1.1.2</td><td>3</td><td>A1</td><td>Equipo</td></tr>
+    <tr><td>A3</td><td>Definir plan de comunicación y cronograma</td><td>1.1.3–1.1.4</td><td>2</td><td>A2</td><td>Equipo</td></tr>
+    <tr><td>A4</td><td>Revisar encuesta y análisis socioeconómico</td><td>1.2.1–1.2.2</td><td>3</td><td>A1</td><td>Equipo</td></tr>
+    <tr><td>A5</td><td>Relevar requerimientos y armar product backlog</td><td>1.2.3–1.2.4</td><td>4</td><td>A2, A4</td><td>Equipo</td></tr>
+    <tr><td>A6</td><td>Diseñar arquitectura y elegir tecnologías</td><td>1.3.1</td><td>3</td><td>A5</td><td>Equipo</td></tr>
+    <tr><td>A7</td><td>Diseñar modelo de datos y reglas de seguridad</td><td>1.3.2, 1.3.4</td><td>4</td><td>A6</td><td>Equipo</td></tr>
+    <tr><td>A8</td><td>Diseñar interfaz y navegación</td><td>1.3.3</td><td>4</td><td>A5</td><td>Equipo</td></tr>
+    <tr><td>A9</td><td>Configurar repositorio, base de datos y publicación</td><td>1.6.1–1.6.2</td><td>2</td><td>A6</td><td>Equipo</td></tr>
+    <tr><td>A10</td><td>Desarrollar autenticación, roles y anonimato</td><td>1.4.1</td><td>5</td><td>A7, A9</td><td>Equipo</td></tr>
+    <tr><td>A11</td><td>Desarrollar peticiones, fotos, firmas y moderación</td><td>1.4.2, 1.4.7</td><td>6</td><td>A10, A8</td><td>Equipo</td></tr>
+    <tr><td>A12</td><td>Desarrollar clasificación, barrio, score y similares</td><td>1.4.3</td><td>5</td><td>A11</td><td>Equipo</td></tr>
+    <tr><td>A13</td><td>Desarrollar mapa por barrios, comunidad y eventos</td><td>1.4.4</td><td>5</td><td>A11</td><td>Equipo</td></tr>
+    <tr><td>A14</td><td>Desarrollar seguimiento, notificaciones y comentarios</td><td>1.4.5</td><td>5</td><td>A11</td><td>Equipo</td></tr>
+    <tr><td>A15</td><td>Desarrollar estadísticas, panel analítico y exportes</td><td>1.4.6</td><td>4</td><td>A12, A13</td><td>Equipo</td></tr>
+    <tr><td>A16</td><td>Pruebas automáticas y pruebas de permisos por rol</td><td>1.5.1–1.5.2</td><td>4</td><td>A12, A14, A15</td><td>Equipo</td></tr>
+    <tr><td>A17</td><td>Accesibilidad, modo oscuro, app instalable y rendimiento</td><td>1.5.3, 1.6.3</td><td>4</td><td>A15</td><td>Equipo</td></tr>
+    <tr><td>A18</td><td>Redactar documentación</td><td>1.7.1</td><td>5</td><td>A16, A17</td><td>Equipo</td></tr>
+    <tr><td>A19</td><td>Preparar presentación</td><td>1.7.2</td><td>2</td><td>A18</td><td>Equipo</td></tr>
+    <tr><td>A20</td><td>Entrega y defensa</td><td>1.7.3</td><td>1</td><td>A19</td><td>Equipo</td></tr>
+  </tbody>
+</table>
+<div class="nota">Completar la columna "Responsable" con el integrante a cargo de cada actividad según la distribución real del equipo.</div>
+
+<h2 id="diccionario">3.6 Diccionario de actividades</h2>
+<table>
+  <thead><tr><th style="width:8%">EDT</th><th style="width:20%">Paquete</th><th>Descripción</th><th style="width:22%">Entregable</th><th style="width:22%">Criterio de aceptación</th></tr></thead>
+  <tbody>
+    <tr><td>1.1</td><td>Gestión del proyecto</td><td>Planificación, coordinación y control del proyecto.</td><td>Charter, alcance, plan de comunicación, Gantt</td><td>Aprobados por el equipo y la cátedra</td></tr>
+    <tr><td>1.2.1</td><td>Estudio de necesidades</td><td>Encuesta a vecinos y análisis de problemáticas por barrio.</td><td>Informe de resultados</td><td>Necesidades priorizadas y vinculadas a categorías</td></tr>
+    <tr><td>1.2.3</td><td>Requerimientos</td><td>Relevamiento de requerimientos funcionales y no funcionales.</td><td>Lista RF/RNF</td><td>Cada RF trazable a una historia de usuario</td></tr>
+    <tr><td>1.2.4</td><td>Product backlog</td><td>Historias de usuario con criterios de aceptación y prioridad.</td><td>Backlog priorizado</td><td>Historias estimables y verificables</td></tr>
+    <tr><td>1.3.1</td><td>Arquitectura</td><td>Definición de capas, tecnologías y despliegue.</td><td>Diagrama de arquitectura y despliegue</td><td>Cubre todos los RF y RNF</td></tr>
+    <tr><td>1.3.2</td><td>Modelo de datos</td><td>Tablas, relaciones, restricciones y funciones de la base.</td><td>DER y esquema SQL</td><td>Esquema reproducible desde <code>schema.sql</code></td></tr>
+    <tr><td>1.3.4</td><td>Seguridad y roles</td><td>Reglas de acceso por fila y por columna, roles y anonimato.</td><td>Políticas RLS y funciones</td><td>Pruebas por rol sin accesos indebidos</td></tr>
+    <tr><td>1.4.1</td><td>Autenticación y roles</td><td>Registro, ingreso con Google, recuperación, solicitud de funcionario.</td><td>Módulo de cuentas</td><td>Flujos completos funcionando</td></tr>
+    <tr><td>1.4.2</td><td>Peticiones y firmas</td><td>Alta con fotos y ubicación, firma y retiro de firma, prioridad.</td><td>Módulo de peticiones</td><td>Un usuario firma una sola vez; contador correcto</td></tr>
+    <tr><td>1.4.3</td><td>Procesamiento automático</td><td>Clasificación, barrio, score de urgencia y similares.</td><td>Algoritmos y funciones</td><td>Casos de prueba resueltos correctamente</td></tr>
+    <tr><td>1.4.4</td><td>Mapa y comunidad</td><td>Mapa por barrios, muro vecinal y eventos.</td><td>Pantallas de mapa, comunidad y agenda</td><td>Filtros por barrio operativos</td></tr>
+    <tr><td>1.4.5</td><td>Seguimiento y avisos</td><td>Etapas, respuesta oficial, notificaciones, comentarios.</td><td>Línea de tiempo y campana</td><td>Cada cambio genera aviso a interesados</td></tr>
+    <tr><td>1.4.6</td><td>Reportes</td><td>Estadísticas públicas, panel analítico y exportes.</td><td>Paneles y archivos CSV/PDF</td><td>Datos coinciden con la base</td></tr>
+    <tr><td>1.4.7</td><td>Moderación</td><td>Aprobación, edición y revisión automática de contenido.</td><td>Panel de moderación</td><td>Nada se publica sin aprobación</td></tr>
+    <tr><td>1.5</td><td>Pruebas y calidad</td><td>Pruebas automáticas, de permisos, accesibilidad y rendimiento.</td><td>Suite de pruebas</td><td>100% de pruebas aprobadas</td></tr>
+    <tr><td>1.6</td><td>Implementación</td><td>Base de datos en la nube, publicación continua y PWA.</td><td>Sitio publicado</td><td>Cada versión publicada desde el repositorio</td></tr>
+    <tr><td>1.7</td><td>Documentación y cierre</td><td>Documento, presentación y entrega.</td><td>PDF y presentación</td><td>Cumple la estructura de la cátedra</td></tr>
+  </tbody>
+</table>
+
+<h2 id="comunicacion">3.7 Plan de comunicación</h2>
+<p>El plan asegura que el equipo, la cátedra y los usuarios piloto reciban la información correcta, en el momento adecuado y por el canal apropiado.</p>
+<table>
+  <thead><tr><th style="width:20%">Qué se comunica</th><th style="width:14%">Emisor</th><th style="width:16%">Receptor</th><th style="width:22%">Canal</th><th style="width:13%">Frecuencia</th><th>Propósito</th></tr></thead>
+  <tbody>
+    <tr><td>Avance y tareas del sprint</td><td>Equipo</td><td>Equipo</td><td>Reunión breve + grupo de mensajería</td><td>2 veces por semana</td><td>Coordinar y destrabar tareas</td></tr>
+    <tr><td>Cambios de código</td><td>Integrante</td><td>Equipo</td><td>GitHub (ramas y Pull Requests)</td><td>Por cambio</td><td>Revisión antes de publicar</td></tr>
+    <tr><td>Planificación de sprint</td><td>Equipo</td><td>Equipo</td><td>Tablero de tareas</td><td>Inicio de sprint</td><td>Priorizar el backlog</td></tr>
+    <tr><td>Revisión de sprint</td><td>Equipo</td><td>Docente</td><td>Clase / demostración</td><td>Fin de sprint</td><td>Validar avances</td></tr>
+    <tr><td>Cambios de alcance</td><td>Equipo</td><td>Docente</td><td>Reunión + documento</td><td>Cuando ocurren</td><td>Aprobar reorientaciones</td></tr>
+    <tr><td>Novedades de la plataforma</td><td>Plataforma</td><td>Vecinos</td><td>Notificaciones en la app</td><td>Automática</td><td>Informar estado de peticiones</td></tr>
+    <tr><td>Respuestas oficiales</td><td>Funcionarios</td><td>Vecinos</td><td>Seguimiento de la petición</td><td>Por actualización</td><td>Cerrar el ciclo de la petición</td></tr>
+    <tr><td>Reportes de problemáticas</td><td>Administración</td><td>Organismos y ONG</td><td>Exportes Excel / PDF</td><td>Periódica</td><td>Priorizar y rendir cuentas</td></tr>
+  </tbody>
+</table>
+<div class="figura diagrama">
+  <div class="fila">
+    <div class="caja"><b>Vecinos</b><br>peticiones, firmas, comentarios</div>
+    <div class="flecha">⇄</div>
+    <div class="caja"><b>Plataforma ENTS</b><br>notificaciones y seguimiento</div>
+    <div class="flecha">⇄</div>
+    <div class="caja"><b>Funcionarios por área</b><br>respuestas oficiales</div>
+    <div class="flecha">→</div>
+    <div class="caja"><b>Organismos / ONG</b><br>reportes exportables</div>
+  </div>
+  <div class="fila" style="margin-top:8pt">
+    <div class="caja"><b>Equipo</b><br>mensajería, GitHub, tablero</div>
+    <div class="flecha">⇄</div>
+    <div class="caja"><b>Docente</b><br>revisiones de sprint</div>
+  </div>
+  <figcaption>Figura 2. Flujo de la comunicación.</figcaption>
+</div>
+
+<h2 id="gantt">3.8 Diagrama de Gantt</h2>
+<p>Cronograma en semanas relativas al inicio de la reorientación (S1 = primera semana). Las fechas reales de cada entrega de código figuran en el Anexo B.</p>
+<table class="gantt">
+  <thead><tr><th>Actividad</th><th class="s">S1</th><th class="s">S2</th><th class="s">S3</th><th class="s">S4</th><th class="s">S5</th><th class="s">S6</th><th class="s">S7</th><th class="s">S8</th><th class="s">S9</th><th class="s">S10</th><th class="s">S11</th><th class="s">S12</th></tr></thead>
+  <tbody>
+    <tr><td>A1–A3 Reorientación y planificación</td><td class="c"><span class="barra-g"></span></td><td class="c"><span class="barra-g"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>A4–A5 Análisis y backlog</td><td></td><td class="c"><span class="barra-a"></span></td><td class="c"><span class="barra-a"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>A6–A8 Diseño</td><td></td><td></td><td class="c"><span class="barra-a"></span></td><td class="c"><span class="barra-a"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>A9 Configuración</td><td></td><td></td><td></td><td class="c"><span class="barra-x"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>A10 Autenticación y roles</td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>A11 Peticiones, firmas, moderación</td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>A12 Procesamiento automático</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>A13 Mapa, comunidad, eventos</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>A14 Seguimiento y notificaciones</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td></tr>
+    <tr><td>A15 Estadísticas y reportes</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td></tr>
+    <tr><td>A16–A17 Pruebas y calidad</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-q"></span></td><td class="c"><span class="barra-q"></span></td><td></td><td></td></tr>
+    <tr><td>A18–A19 Documentación y presentación</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-h"></span></td><td class="c"><span class="barra-h"></span></td><td></td></tr>
+    <tr><td>A20 Entrega y defensa</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-h"></span></td></tr>
+  </tbody>
+</table>
+<p class="pie">Referencias de color: celeste = planificación; azul claro = análisis y diseño; azul = desarrollo; naranja = pruebas; azul marino = documentación y cierre.</p>
+
+<h2 id="backlog">3.9 Requerimientos y product backlog</h2>
+<h3>Requerimientos funcionales</h3>
+<table>
+  <thead><tr><th style="width:9%">ID</th><th>Requerimiento</th></tr></thead>
+  <tbody>
+    <tr><td>RF01</td><td>Registrar usuarios con correo y contraseña o con Google; recuperar la contraseña por correo.</td></tr>
+    <tr><td>RF02</td><td>Elegir el tipo de cuenta al registrarse (vecino o funcionario, este último sujeto a aprobación).</td></tr>
+    <tr><td>RF03</td><td>Crear peticiones con título, descripción, hasta 3 fotos y ubicación en el mapa.</td></tr>
+    <tr><td>RF04</td><td>Sugerir automáticamente la categoría según el texto y el barrio según la ubicación.</td></tr>
+    <tr><td>RF05</td><td>Calcular automáticamente el score de urgencia de cada petición.</td></tr>
+    <tr><td>RF06</td><td>Advertir peticiones similares antes de crear una nueva.</td></tr>
+    <tr><td>RF07</td><td>Moderar las peticiones antes de publicarlas (aprobar, rechazar, editar, eliminar).</td></tr>
+    <tr><td>RF08</td><td>Firmar y retirar la firma de una petición publicada; ordenar por prioridad según firmas.</td></tr>
+    <tr><td>RF09</td><td>Elevar automáticamente al área correspondiente las peticiones que alcanzan 50 firmas.</td></tr>
+    <tr><td>RF10</td><td>Registrar respuestas oficiales y la etapa de seguimiento (recibida → resuelta) con foto.</td></tr>
+    <tr><td>RF11</td><td>Notificar a autor y firmantes de cada novedad; permitir seguir barrios.</td></tr>
+    <tr><td>RF12</td><td>Comentar en forma anónima, denunciar comentarios y moderarlos.</td></tr>
+    <tr><td>RF13</td><td>Mostrar el mapa por barrios coloreado por peticiones, firmas o urgencia.</td></tr>
+    <tr><td>RF14</td><td>Ofrecer estadísticas públicas anónimas y un panel analítico para administradores.</td></tr>
+    <tr><td>RF15</td><td>Exportar reportes de peticiones y barrios a Excel y PDF.</td></tr>
+    <tr><td>RF16</td><td>Asignar áreas a funcionarios y mostrarles una bandeja de su área.</td></tr>
+    <tr><td>RF17</td><td>Permitir solo al dueño del proyecto cambiar el rol de las cuentas.</td></tr>
+    <tr><td>RF18</td><td>Publicar en el muro vecinal y consultar la agenda de eventos por barrio.</td></tr>
+  </tbody>
+</table>
+<h3>Requerimientos no funcionales</h3>
+<table>
+  <thead><tr><th style="width:9%">ID</th><th>Requerimiento</th></tr></thead>
+  <tbody>
+    <tr><td>RNF01</td><td>Privacidad: anonimato entre vecinos; identidades visibles solo para funcionarios y administradores.</td></tr>
+    <tr><td>RNF02</td><td>Seguridad: reglas de acceso aplicadas en la base de datos, comunicación por HTTPS.</td></tr>
+    <tr><td>RNF03</td><td>Usabilidad: interfaz en español, adaptable a celular, modo claro y oscuro.</td></tr>
+    <tr><td>RNF04</td><td>Accesibilidad: navegación con teclado, foco visible, respeto de movimiento reducido, tablas alternativas a los gráficos.</td></tr>
+    <tr><td>RNF05</td><td>Rendimiento: carga por partes de cada página y animaciones reducidas en celulares.</td></tr>
+    <tr><td>RNF06</td><td>Disponibilidad: aplicación instalable (PWA) que abre aun con conexión inestable.</td></tr>
+    <tr><td>RNF07</td><td>Mantenibilidad: código con revisión automática (lint), pruebas automáticas y esquema SQL versionado.</td></tr>
+  </tbody>
+</table>
+<h3>Product backlog (historias de usuario)</h3>
+<table>
+  <thead><tr><th style="width:6%">#</th><th style="width:44%">Historia de usuario</th><th>Criterios de aceptación</th><th style="width:10%">Prioridad</th></tr></thead>
+  <tbody>
+    <tr><td>HU1</td><td>Como vecino, quiero registrarme e ingresar (también con Google) para participar en la plataforma.</td><td>Formulario con nombre, apellido, correo y contraseña; mensajes de error en español; recuperación de contraseña.</td><td>Alta</td></tr>
+    <tr><td>HU2</td><td>Como vecino, quiero crear una petición con fotos y ubicación para visibilizar un problema de mi barrio.</td><td>Categoría y barrio sugeridos solos; hasta 3 fotos; queda pendiente de moderación.</td><td>Alta</td></tr>
+    <tr><td>HU3</td><td>Como vecino, quiero ver si ya existe un pedido parecido para firmarlo en lugar de repetirlo.</td><td>Se muestran hasta 3 similares mientras escribo, con barrio, firmas y distancia.</td><td>Alta</td></tr>
+    <tr><td>HU4</td><td>Como vecino, quiero firmar una petición para darle más prioridad.</td><td>Una firma por persona; puedo retirarla; el orden y el color de prioridad se actualizan.</td><td>Alta</td></tr>
+    <tr><td>HU5</td><td>Como administrador, quiero moderar las peticiones antes de publicarlas.</td><td>Aprobar, rechazar, editar o eliminar; alertas automáticas visibles.</td><td>Alta</td></tr>
+    <tr><td>HU6</td><td>Como funcionario, quiero ver las peticiones de mi área ordenadas por prioridad y responderlas.</td><td>Bandeja filtrada por área; respuesta con etapa, mensaje y foto.</td><td>Alta</td></tr>
+    <tr><td>HU7</td><td>Como vecino, quiero seguir el avance de una petición hasta que se resuelva.</td><td>Línea de tiempo con 5 etapas y respuestas oficiales; aviso en cada cambio.</td><td>Alta</td></tr>
+    <tr><td>HU8</td><td>Como vecino, quiero ver en un mapa los problemas por barrio.</td><td>Mapa con 111 barrios coloreados; filtro y botón para seguir un barrio.</td><td>Media</td></tr>
+    <tr><td>HU9</td><td>Como organismo, quiero reportes de qué se pide, dónde y con qué urgencia.</td><td>Estadísticas por categoría, barrio y semana; exportes a Excel y PDF.</td><td>Media</td></tr>
+    <tr><td>HU10</td><td>Como vecino, quiero comentar en forma anónima para aportar datos.</td><td>Se bloquean datos personales; denuncia y ocultamiento con 3 denuncias.</td><td>Media</td></tr>
+    <tr><td>HU11</td><td>Como vecino, quiero gestionar mi perfil y ver mis logros.</td><td>Edición de nombre y foto; insignias; barrios seguidos.</td><td>Baja</td></tr>
+    <tr><td>HU12</td><td>Como dueño del proyecto, quiero asignar el rol de cada cuenta.</td><td>Solo el dueño ve y puede usar el selector de rol.</td><td>Baja</td></tr>
+  </tbody>
+</table>
+
+<h2 id="arquitectura">3.10 Arquitectura del sistema</h2>
+<p>Se mantiene la separación en capas del diseño original (modelo-vista-controlador), pero se simplifica la infraestructura: en lugar de un backend propio en Node.js/C# con MySQL, Docker y Heroku, se utiliza un <b>backend como servicio</b> (Supabase, sobre PostgreSQL) que provee base de datos, autenticación, almacenamiento de archivos y una API generada a partir del esquema. Esto reduce la infraestructura a mantener y concentra la lógica de negocio crítica en la base de datos, donde no puede ser alterada desde el navegador.</p>
+<table>
+  <thead><tr><th style="width:18%">Capa</th><th style="width:32%">Tecnología</th><th>Responsabilidad</th></tr></thead>
+  <tbody>
+    <tr><td><b>Vista</b></td><td>React 19, React Router, Bootstrap 5 con tema propio, Leaflet</td><td>Páginas y componentes; interacción; validaciones inmediatas (categoría, moderación, similares).</td></tr>
+    <tr><td><b>Controlador</b></td><td>Servicios de la app (<code>src/services</code>) y funciones RPC de la base</td><td>Orquestación de casos de uso: crear, firmar, responder, moderar, reportar.</td></tr>
+    <tr><td><b>Modelo</b></td><td>PostgreSQL en Supabase, con RLS y disparadores</td><td>Datos, reglas de acceso, cálculo del score, notificaciones, prioridad y elevación.</td></tr>
+  </tbody>
+</table>
+<h3>Paquetes del código</h3>
+<table>
+  <thead><tr><th style="width:24%">Paquete</th><th>Contenido</th></tr></thead>
+  <tbody>
+    <tr><td><code>src/pages</code></td><td>Una pantalla por archivo: Inicio, Mapa, Comunidad, Eventos, Petición, Nueva petición, Bandeja, Estadísticas, Moderación, Usuarios, Perfil, Acceso.</td></tr>
+    <tr><td><code>src/components</code></td><td>Piezas reutilizables: tarjeta de petición, seguimiento, comentarios, gráficos, selectores de fotos y ubicación, menús.</td></tr>
+    <tr><td><code>src/services</code></td><td>Acceso a datos: peticiones, participación (seguimiento, comentarios, roles) y autenticación.</td></tr>
+    <tr><td><code>src/utils</code></td><td>Lógica pura y probada: prioridad, clasificador, barrios, moderación, exportación, zonas del mapa.</td></tr>
+    <tr><td><code>supabase/schema.sql</code></td><td>Esquema completo: tablas, políticas, funciones y disparadores.</td></tr>
+  </tbody>
+</table>
+<div class="figura diagrama">
+  <div class="fila">
+    <div class="caja"><b>Navegador / PWA</b><br>React + Vite<br>service worker</div>
+    <div class="flecha">→</div>
+    <div class="caja"><b>Netlify</b><br>publicación y CDN<br>HTTPS</div>
+  </div>
+  <div class="fila" style="margin-top:8pt">
+    <div class="caja"><b>Supabase Auth</b><br>correo y Google</div>
+    <div class="caja"><b>PostgreSQL</b><br>tablas, RLS, RPC<br>disparadores</div>
+    <div class="caja"><b>Storage</b><br>fotos y avatares</div>
+    <div class="caja"><b>OpenStreetMap</b><br>teselas del mapa</div>
+  </div>
+  <figcaption>Figura 3. Diagrama de despliegue: el cliente se descarga desde Netlify y se comunica por HTTPS con los servicios de Supabase y con OpenStreetMap. GitHub dispara la publicación automática en cada versión.</figcaption>
+</div>
+
+<h2 id="datos">3.11 Modelo de datos</h2>
+<p>Base relacional en PostgreSQL con 13 tablas. Todas tienen seguridad por fila activada.</p>
+<div class="figura">
+<div class="der">
+  <div class="entidad"><div class="nom">profiles</div><div class="cols">id (PK, = usuario)<br>nombre, apellido<br>rol, rol_solicitado<br>cargo, organizacion<br>avatar_url<br>area_id (FK areas)</div></div>
+  <div class="entidad"><div class="nom">peticiones</div><div class="cols">id (PK)<br>usuario_id (FK profiles)<br>titulo, descripcion, fotos[]<br>categoria_id (FK), zona_id (FK)<br>lat, lng<br>estado, seguimiento<br>score_urgencia, firmas_count<br>alertas[], elevada_at</div></div>
+  <div class="entidad"><div class="nom">firmas</div><div class="cols">id (PK)<br>peticion_id (FK)<br>usuario_id (FK)<br>created_at<br><i>única por petición y usuario</i></div></div>
+  <div class="entidad"><div class="nom">peticion_actualizaciones</div><div class="cols">id (PK)<br>peticion_id (FK)<br>autor_id (FK profiles)<br>estado, mensaje, foto</div></div>
+  <div class="entidad"><div class="nom">categorias</div><div class="cols">id (PK)<br>nombre, activa<br>peso_urgencia<br>area_id (FK areas)</div></div>
+  <div class="entidad"><div class="nom">areas</div><div class="cols">id (PK)<br>nombre</div></div>
+  <div class="entidad"><div class="nom">zonas</div><div class="cols">id (PK)<br>nombre, localidad<br>lat, lng, activa</div></div>
+  <div class="entidad"><div class="nom">barrios_seguidos</div><div class="cols">usuario_id (PK, FK)<br>zona_id (PK, FK)</div></div>
+  <div class="entidad"><div class="nom">comentarios</div><div class="cols">id (PK)<br>peticion_id (FK)<br>usuario_id (FK)<br>texto, oculto, alertas[]</div></div>
+  <div class="entidad"><div class="nom">denuncias</div><div class="cols">id (PK)<br>comentario_id (FK)<br>usuario_id (FK)<br>motivo</div></div>
+  <div class="entidad"><div class="nom">notificaciones</div><div class="cols">id (PK)<br>usuario_id (FK)<br>tipo, mensaje, leida<br>peticion_id (FK)</div></div>
+  <div class="entidad"><div class="nom">publicaciones / eventos</div><div class="cols">muro vecinal y agenda<br>usuario o creador (FK)<br>zona_id (FK)</div></div>
+</div>
+<figcaption>Figura 4. Diagrama entidad-relación (simplificado). Relaciones principales: una petición pertenece a un usuario, una categoría y un barrio; tiene muchas firmas, actualizaciones y comentarios; cada categoría pertenece a un área.</figcaption>
+</div>
+<h3>Diagrama de estados de una petición</h3>
+<div class="figura diagrama">
+  <div class="fila">
+    <div class="caja"><b>Pendiente</b><br>creada por el vecino</div>
+    <div class="flecha">→</div>
+    <div class="caja"><b>Publicada</b><br>aprobada por moderación</div>
+    <div class="flecha">/</div>
+    <div class="caja"><b>Rechazada</b><br>no cumple las normas</div>
+  </div>
+  <div class="fila" style="margin-top:8pt">
+    <div class="caja">Recibida</div><div class="flecha">→</div>
+    <div class="caja">En revisión</div><div class="flecha">→</div>
+    <div class="caja">Derivada</div><div class="flecha">→</div>
+    <div class="caja">En obra</div><div class="flecha">→</div>
+    <div class="caja"><b>Resuelta</b></div>
+  </div>
+  <figcaption>Figura 5. Estados de moderación (arriba) y etapas de seguimiento de una petición publicada (abajo). Al alcanzar 50 firmas se registra además la elevación al área.</figcaption>
+</div>
+
+<h2 id="procesos">3.12 Procesamiento automático de datos</h2>
+<h3>Clasificación por categoría</h3>
+<p>Cada una de las 16 categorías tiene raíces de palabras clave (por ejemplo, Salud: hospital, dispensario, pediatr…). El texto se normaliza (minúsculas, sin acentos) y se cuentan coincidencias al inicio de palabra; las del título valen el doble. Gana la categoría con más puntaje; si hay empate total, no se sugiere y elige la persona.</p>
+<h3>Detección del barrio</h3>
+<p>Con la ubicación marcada (o la del dispositivo) se elige el barrio cuyo centro está más cerca, hasta 3 km, entre 111 barrios de Córdoba y Villa Allende cuyas coordenadas se obtuvieron de OpenStreetMap.</p>
+<h3>Score de urgencia (0 a 100)</h3>
+<table>
+  <thead><tr><th>Componente</th><th style="width:30%">Puntos</th></tr></thead>
+  <tbody>
+    <tr><td>Gravedad de la categoría (p. ej. Salud 35, Cultura 12)</td><td>hasta 35</td></tr>
+    <tr><td>Palabras de riesgo en el texto (peligro, accidente, inundación, sin agua, chicos…)</td><td>8 c/u, hasta 30</td></tr>
+    <tr><td>Apoyo: 20 × ln(1 + firmas) / ln(51)</td><td>hasta 20</td></tr>
+    <tr><td>Velocidad: 2 por firma de los últimos 7 días</td><td>hasta 10</td></tr>
+    <tr><td>Evidencia fotográfica</td><td>5</td></tr>
+  </tbody>
+</table>
+<p>Se calcula en la base de datos al crear, editar y con cada firma. Niveles: urgente (70 o más), media (40 a 69) y baja (menos de 40). Ejemplo: "Cables caídos, peligro para los chicos" (Servicios públicos) obtiene 53; con 10 firmas y una foto llega a 70.</p>
+<h3>Prioridad por firmas</h3>
+<p>Nueva (0–4), baja (5–9), media (10–19), alta (20–49) y máxima (50 o más). El inicio ordena por firmas, luego por urgencia y por fecha. A las 50 firmas la petición se eleva y se notifica a los funcionarios del área y a los administradores.</p>
+<h3>Detección de peticiones similares</h3>
+<p>Se extraen las palabras clave (sin conectores ni términos genéricos como "calle" o "barrio") y se comparan por similitud de trigramas (extensión <code>pg_trgm</code>). Se sugieren hasta 3 peticiones con parecido ≥ 0,32, o ≥ 0,22 si están a menos de 800 metros.</p>
+<h3>Moderación automática</h3>
+<p>Se detectan correos, teléfonos, números de documento y lenguaje ofensivo. En comentarios, los datos personales se bloquean y el lenguaje ofensivo queda oculto hasta revisión; en peticiones, se muestran alertas al moderador.</p>
+
+<h2 id="seguridad">3.13 Autenticación, roles y seguridad</h2>
+<table>
+  <thead><tr><th style="width:18%">Rol</th><th>Permisos</th></tr></thead>
+  <tbody>
+    <tr><td>Vecino</td><td>Crear, firmar y comentar peticiones; seguir barrios; ver estadísticas públicas. Anónimo para los demás vecinos.</td></tr>
+    <tr><td>Funcionario</td><td>Ver autor y firmantes; responder y cambiar la etapa de las peticiones de su área. Lo aprueba un administrador.</td></tr>
+    <tr><td>Administrador</td><td>Moderar peticiones y comentarios, asignar áreas, ver el directorio de usuarios y el panel analítico.</td></tr>
+    <tr><td>Dueño</td><td>Único que puede cambiar el rol de las cuentas.</td></tr>
+  </tbody>
+</table>
+<ul>
+  <li><b>Autenticación:</b> correo y contraseña o Google (OAuth); recuperación de contraseña por correo; sesiones gestionadas por Supabase Auth.</li>
+  <li><b>Seguridad por fila (RLS):</b> cada tabla define quién puede leer, crear, modificar o borrar cada fila.</li>
+  <li><b>Anonimato por columna:</b> la columna del autor de una petición no es legible para los vecinos; las identidades solo se obtienen mediante funciones que verifican el rol.</li>
+  <li><b>Funciones seguras:</b> las operaciones sensibles (responder, moderar, cambiar rol, estadísticas de administración) verifican el rol dentro de la base.</li>
+  <li><b>Validaciones del servidor:</b> el score, la etapa inicial y las alertas los fija la base, aunque el cliente intente enviar otros valores.</li>
+  <li><b>Transporte:</b> toda la comunicación usa HTTPS.</li>
+</ul>
+<p>Las reglas se verificaron simulando usuarios de cada rol dentro de transacciones que luego se deshacen: un vecino no puede responder como funcionario, ni publicar un teléfono, ni cambiar la etapa, ni ver la moderación, ni cambiar roles.</p>
+
+<h2 id="impacto">3.14 Reportes y evaluación de impacto</h2>
+<p>La evaluación de impacto se apoya en los datos que la plataforma registra en cada paso del ciclo:</p>
+<table>
+  <thead><tr><th style="width:30%">Indicador</th><th>Cómo se mide</th></tr></thead>
+  <tbody>
+    <tr><td>Problemáticas activas</td><td>Peticiones publicadas por categoría, barrio y semana.</td></tr>
+    <tr><td>Apoyo comunitario</td><td>Firmas totales, por día y velocidad de crecimiento.</td></tr>
+    <tr><td>Urgencia</td><td>Distribución alta / media / baja y urgencia promedio por barrio.</td></tr>
+    <tr><td>Respuesta institucional</td><td>Peticiones por etapa de seguimiento y tiempo promedio de revisión.</td></tr>
+    <tr><td>Resolución</td><td>Cantidad y proporción de peticiones resueltas.</td></tr>
+    <tr><td>Participación</td><td>Cuentas activas en 30 días, publicaciones y comentarios.</td></tr>
+  </tbody>
+</table>
+<p>Las estadísticas públicas muestran solo agregados anónimos. El panel analítico de administradores agrega datos de cuentas y moderación, y permite exportar las peticiones (con área, barrio, etapa, prioridad, firmas y urgencia) y el resumen por barrio a Excel, y la vista completa a PDF, para presentar ante organismos y ONG.</p>
+
+<h2 id="calidad">3.15 Pruebas y calidad</h2>
+<ul>
+  <li><b>Pruebas automáticas:</b> 43 pruebas con Vitest sobre prioridad, orden del inicio, clasificación, detección de barrio, moderación de textos, áreas del mapa y exportación. Las pruebas detectaron y permitieron corregir un error real en la detección de lenguaje ofensivo.</li>
+  <li><b>Pruebas de permisos:</b> escenarios por rol ejecutados en la base de datos.</li>
+  <li><b>Revisión de código:</b> oxlint sin errores y compilación de producción antes de cada publicación.</li>
+  <li><b>Accesibilidad:</b> enlace para saltar al contenido, foco visible, etiquetas asociadas a los campos, contraste en modo claro y oscuro, versión en tabla de cada gráfico y respeto de la preferencia de movimiento reducido.</li>
+  <li><b>Rendimiento:</b> cada página se descarga recién al visitarla; en celulares se desactivan animaciones continuas y desenfoques; las listas largas no se dibujan fuera de pantalla.</li>
+</ul>
+
+<h2 id="implementacion">3.16 Ambiente de implementación y despliegue</h2>
+<table>
+  <thead><tr><th style="width:28%">Herramienta</th><th>Uso</th></tr></thead>
+  <tbody>
+    <tr><td>React 19 + Vite 8</td><td>Desarrollo y compilación del cliente web.</td></tr>
+    <tr><td>Bootstrap 5 + tema propio</td><td>Estilos, modo claro y oscuro.</td></tr>
+    <tr><td>Leaflet + OpenStreetMap</td><td>Mapa vecinal y selector de ubicación.</td></tr>
+    <tr><td>Supabase (PostgreSQL)</td><td>Base de datos, autenticación, almacenamiento y API.</td></tr>
+    <tr><td>Netlify</td><td>Publicación continua desde GitHub con HTTPS.</td></tr>
+    <tr><td>Git + GitHub</td><td>Control de versiones; ramas y Pull Requests.</td></tr>
+    <tr><td>Vitest + oxlint</td><td>Pruebas automáticas y revisión de código.</td></tr>
+    <tr><td>Node.js 22</td><td>Entorno de desarrollo local.</td></tr>
+  </tbody>
+</table>
+<p><b>Ambientes:</b> desarrollo local (<code>npm run dev</code>) conectado a la base en la nube; producción en Netlify, que publica automáticamente cada versión de la rama principal del repositorio. El esquema completo de la base se versiona en <code>supabase/schema.sql</code> para poder recrearla.</p>
+
+<!-- ===================== 4. BIBLIOGRAFÍA ===================== -->
+<h1 id="bibliografia">4. Bibliografía</h1>
+<table>
+  <thead><tr><th>Obra</th><th style="width:22%">Autor</th><th style="width:12%">Edición</th><th style="width:20%">Editorial</th></tr></thead>
+  <tbody>
+    <tr><td>Guía de los fundamentos para la dirección de proyectos (Guía del PMBOK®), 7.ª edición</td><td>Project Management Institute</td><td>2021</td><td>Project Management Institute</td></tr>
+    <tr><td>Ingeniería de Software, 9.ª edición</td><td>Ian Sommerville</td><td>2011</td><td>Pearson Educación</td></tr>
+    <tr><td>Ingeniería del software: un enfoque práctico, 7.ª edición</td><td>Roger S. Pressman</td><td>2010</td><td>McGraw-Hill</td></tr>
+    <tr><td>La Guía de Scrum</td><td>Ken Schwaber y Jeff Sutherland</td><td>2020</td><td>Scrum.org / Scrum Inc.</td></tr>
+    <tr><td>Clean Code: A Handbook of Agile Software Craftsmanship</td><td>Robert C. Martin</td><td>2008</td><td>Prentice Hall</td></tr>
+    <tr><td>Web Content Accessibility Guidelines (WCAG) 2.2</td><td>W3C</td><td>2023</td><td>World Wide Web Consortium</td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 5. FUENTES ===================== -->
+<h1 id="fuentes">5. Fuentes de información</h1>
+<ul>
+  <li>Docentes de la cátedra Práctica Profesionalizante del Instituto Cervantes.</li>
+  <li>Documentación previa del equipo: presentación "Everyone Needs To Smile", entregables de gestión y documento de Práctica Profesionalizante (versión de donaciones).</li>
+  <li>Encuesta de necesidades a vecinos y análisis socioeconómico de Córdoba realizados por el equipo.</li>
+  <li>OpenStreetMap y su servicio de búsqueda Nominatim: ubicación de los 111 barrios de Córdoba y Villa Allende.</li>
+  <li>Documentación oficial de React (react.dev), Vite (vite.dev), Supabase (supabase.com/docs), PostgreSQL (postgresql.org/docs), Leaflet (leafletjs.com), Netlify (docs.netlify.com) y MDN Web Docs (aplicaciones web progresivas).</li>
+</ul>
+
+<!-- ===================== 6. ANEXO ===================== -->
+<h1 id="anexo">6. Anexo</h1>
+<h2>A. Glosario</h2>
+<table>
+  <tbody>
+    <tr><td style="width:24%"><b>Petición</b></td><td>Pedido de un vecino sobre un problema de su barrio.</td></tr>
+    <tr><td><b>Firma</b></td><td>Apoyo de un vecino a una petición; cada persona firma una sola vez.</td></tr>
+    <tr><td><b>Score de urgencia</b></td><td>Puntaje de 0 a 100 calculado automáticamente según gravedad, riesgo, apoyo y evidencia.</td></tr>
+    <tr><td><b>Elevación</b></td><td>Aviso automático al área cuando una petición alcanza 50 firmas.</td></tr>
+    <tr><td><b>RLS</b></td><td>Row Level Security: reglas de la base que deciden qué filas puede ver o modificar cada usuario.</td></tr>
+    <tr><td><b>RPC</b></td><td>Función de la base de datos invocada desde la aplicación.</td></tr>
+    <tr><td><b>PWA</b></td><td>Aplicación web progresiva: sitio que se puede instalar como app.</td></tr>
+  </tbody>
+</table>
+<h2>B. Hitos reales del repositorio</h2>
+<table>
+  <thead><tr><th style="width:16%">Fecha</th><th>Entrega</th></tr></thead>
+  <tbody>
+    <tr><td>04/10/2026</td><td>Configuración inicial del proyecto; autenticación, peticiones, firmas y moderación.</td></tr>
+    <tr><td>11/10/2026</td><td>Panel vecinal conectado a Supabase; roles y anonimato; ingreso con Google y recuperación de contraseña; política de privacidad.</td></tr>
+    <tr><td>12/10/2026</td><td>Estadísticas y mapa por barrios; 111 barrios; prioridad por firmas, seguimiento, comentarios y notificaciones; bandeja por área, exportes, PWA, modo oscuro y pruebas; cambio de roles; rendimiento en celulares; score de urgencia automático.</td></tr>
+  </tbody>
+</table>
+<h2>C. Fórmula del score de urgencia (extracto del esquema)</h2>
+<pre>gravedad  := peso_urgencia_de_la_categoria * 35 / 30;          -- hasta 35
+riesgo    := least(8 * palabras_de_riesgo_encontradas, 30);    -- hasta 30
+apoyo     := least(20, 20 * ln(1 + firmas) / ln(51));          -- hasta 20
+velocidad := least(10, 2 * firmas_de_los_ultimos_7_dias);      -- hasta 10
+evidencia := case when tiene_fotos then 5 else 0 end;          -- 5
+score     := least(100, round(gravedad + riesgo + apoyo + velocidad + evidencia));</pre>
+<h2>D. Puesta en marcha local</h2>
+<pre>git clone https://github.com/andradaj09/ENTS.git
+cd ENTS
+npm install
+# crear .env con VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY
+npm run dev        # http://localhost:5173
+npm test           # pruebas automáticas
+npm run build      # versión de producción</pre>
+<h2>E. Enlaces</h2>
+<ul>
+  <li>Aplicación publicada: https://entscordoba.netlify.app</li>
+  <li>Repositorio (privado): https://github.com/andradaj09/ENTS</li>
+</ul>
+
+</body>
+</html>
