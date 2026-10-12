@@ -34,7 +34,8 @@ function Contenido({ perfil, size }) {
 
 // rol / dueno: si no se pasan, se toman del perfil (perfil.rol, perfil.es_dueno).
 // sinAnillo: para vistas previas (por ejemplo, la galería de avatares).
-function Avatar({ perfil, size = 40, className = '', rol, dueno, sinAnillo = false }) {
+// sinEtiqueta: muestra el anillo del dueño pero sin la etiqueta "CEO".
+function Avatar({ perfil, size = 40, className = '', rol, dueno, sinAnillo = false, sinEtiqueta = false }) {
   const rolFinal = rol ?? perfil?.rol ?? 'ciudadano'
   const esDueno = dueno ?? Boolean(perfil?.es_dueno)
   const sinImagen = !perfil?.avatar_url
@@ -63,7 +64,7 @@ function Avatar({ perfil, size = 40, className = '', rol, dueno, sinAnillo = fal
       title={esDueno ? 'CEO' : undefined}
     >
       {contenido}
-      {esDueno && (
+      {esDueno && !sinEtiqueta && (
         <span className="avatar-ceo" style={{ fontSize: Math.max(7, Math.round(size * 0.19)) }}>
           CEO
         </span>

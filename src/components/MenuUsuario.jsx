@@ -89,7 +89,7 @@ function MenuUsuario({ user, profile }) {
       {abierto && (
         <div className="menu-usuario-panel" role="menu">
           <div className="menu-usuario-cabecera">
-            <Avatar perfil={profile} size={46} dueno={esDueno} />
+            <Avatar perfil={profile} size={46} dueno={esDueno} sinEtiqueta />
             <div>
               <strong>{nombre || 'Mi cuenta'}</strong>
               <span>{user?.email}</span>
