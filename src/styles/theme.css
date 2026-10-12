@@ -832,9 +832,21 @@ hr {
   flex-direction: column;
   gap: 4px;
   align-self: start;
-  min-height: calc(100vh - 124px);
+  /* Fijo: ocupa el alto de la pantalla y no se mueve al desplazar la página.
+     Si los enlaces no entran (pantallas bajas), se desplaza solo el menú. */
+  height: calc(100dvh - 116px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
   padding: 20px 16px;
   animation: entrada-suave 0.6s 0.05s var(--ease-out) both;
+}
+
+.sidebar .side-link { flex-shrink: 0; }
+
+/* En pantallas bajas la nota decorativa cede su lugar a los enlaces */
+@media (max-height: 820px) {
+  .sidebar .side-note { display: none; }
 }
 
 .side-link {

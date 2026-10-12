@@ -291,3 +291,11 @@
   border-color: rgba(93, 187, 138, 0.3);
   background: rgba(93, 187, 138, 0.12);
 }
+
+/* Cajón del menú en celular */
+@media (max-width: 991.98px) {
+  [data-tema='oscuro'] .sidebar,
+  [data-tema='oscuro'] .app-grid.sidebar-collapsed .sidebar {
+    background: rgba(26, 27, 24, 0.97);
+  }
+}
