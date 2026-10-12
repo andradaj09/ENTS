@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ENTS — Lista de actividades</title>
+<link rel="stylesheet" href="estilos.css">
+<style>
+  @page { @top-right { content: "ENTS · Lista de actividades"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; } }
+
+</style>
+</head>
+<body>
+
+
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 4 de 7</div>
+        <h1 class="titulo">Lista de actividades</h1>
+        <div class="sub">Actividades, duraciones, dependencias y ruta crítica del proyecto ENTS</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-04</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Nueva lista de 20 actividades para el sistema de peticiones, con cálculo de ruta crítica.</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<h2>Contenido</h2><ol><li>Convenciones</li><li>Lista de actividades</li><li>Resumen del cronograma</li><li>Ruta crítica</li></ol>
+
+<h1 class="salto">1. Convenciones</h1>
+<ul>
+  <li><b>Duración:</b> días hábiles de trabajo del equipo.</li>
+  <li><b>Dependencias:</b> de tipo fin-comienzo (la actividad empieza cuando terminan todas sus predecesoras).</li>
+  <li><b>Inicio y fin:</b> día hábil relativo al comienzo del proyecto (día 0). Se convierten a fechas una vez fijada la fecha de inicio (<span class="completar">[__/__/____]</span>).</li>
+  <li><b>Holgura:</b> días que la actividad puede atrasarse sin atrasar el proyecto. Holgura 0 = actividad crítica.</li>
+</ul>
+
+<h1>2. Lista de actividades</h1>
+<table>
+  <thead><tr><th style="width:5%">ID</th><th>Actividad</th><th style="width:10%">EDT</th><th style="width:7%">Dur.</th><th style="width:11%">Predecesoras</th><th style="width:7%">Inicio</th><th style="width:6%">Fin</th><th style="width:8%">Holgura</th><th style="width:11%">Responsable</th></tr></thead>
+  <tbody>
+    <tr><td><b>A1</b></td><td>Analizar la propuesta de reorientación y redefinir el proyecto</td><td>1.1.1</td><td>3</td><td>—</td><td>0</td><td>3</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A2</b></td><td>Redactar Project Charter y declaración de alcance</td><td>1.1.1–1.1.2</td><td>3</td><td>A1</td><td>3</td><td>6</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td>A3</td><td>Definir plan de comunicación y cronograma</td><td>1.1.3–1.1.4</td><td>2</td><td>A2</td><td>6</td><td>8</td><td>2</td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A4</b></td><td>Revisar encuesta y análisis socioeconómico</td><td>1.2.1–1.2.2</td><td>3</td><td>A1</td><td>3</td><td>6</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A5</b></td><td>Relevar requerimientos y armar product backlog</td><td>1.2.3–1.2.4</td><td>4</td><td>A2, A4</td><td>6</td><td>10</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A6</b></td><td>Diseñar arquitectura y elegir tecnologías</td><td>1.3.1</td><td>3</td><td>A5, A3</td><td>10</td><td>13</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A7</b></td><td>Diseñar modelo de datos y reglas de seguridad</td><td>1.3.2, 1.3.4</td><td>4</td><td>A6</td><td>13</td><td>17</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td>A8</td><td>Diseñar interfaz y navegación</td><td>1.3.3</td><td>4</td><td>A5</td><td>10</td><td>14</td><td>8</td><td><span class="completar">[asignar]</span></td></tr><tr><td>A9</td><td>Configurar repositorio, base de datos y publicación</td><td>1.6.1–1.6.2</td><td>2</td><td>A6</td><td>13</td><td>15</td><td>2</td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A10</b></td><td>Desarrollar autenticación, roles y anonimato</td><td>1.4.1</td><td>5</td><td>A7, A9</td><td>17</td><td>22</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A11</b></td><td>Desarrollar peticiones, fotos, firmas y moderación</td><td>1.4.2, 1.4.7</td><td>6</td><td>A10, A8</td><td>22</td><td>28</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A12</b></td><td>Desarrollar clasificación, barrio, score y similares</td><td>1.4.3</td><td>5</td><td>A11</td><td>28</td><td>33</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A13</b></td><td>Desarrollar mapa por barrios, comunidad y eventos</td><td>1.4.4</td><td>5</td><td>A11</td><td>28</td><td>33</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td>A14</td><td>Desarrollar seguimiento, notificaciones y comentarios</td><td>1.4.5</td><td>5</td><td>A11</td><td>28</td><td>33</td><td>4</td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A15</b></td><td>Desarrollar estadísticas, panel analítico y exportes</td><td>1.4.6</td><td>4</td><td>A12, A13</td><td>33</td><td>37</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A16</b></td><td>Pruebas automáticas y pruebas de permisos por rol</td><td>1.5.1–1.5.2</td><td>4</td><td>A12, A14, A15</td><td>37</td><td>41</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A17</b></td><td>Accesibilidad, modo oscuro, app instalable y rendimiento</td><td>1.5.3, 1.6.3</td><td>4</td><td>A15</td><td>37</td><td>41</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A18</b></td><td>Redactar documentación</td><td>1.7.1</td><td>5</td><td>A16, A17</td><td>41</td><td>46</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A19</b></td><td>Preparar presentación</td><td>1.7.2</td><td>2</td><td>A18</td><td>46</td><td>48</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A20</b></td><td>Entrega y defensa</td><td>1.7.3</td><td>1</td><td>A19</td><td>48</td><td>49</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+
+<h1>3. Resumen del cronograma</h1>
+<table class="ficha"><tbody>
+  <tr><td>Cantidad de actividades</td><td>20</td></tr>
+  <tr><td>Duración total del proyecto</td><td>49 días hábiles (≈ 10 semanas)</td></tr>
+  <tr><td>Esfuerzo total (suma de duraciones)</td><td>74 días-actividad</td></tr>
+  <tr><td>Actividades críticas</td><td>16 de 20</td></tr>
+</tbody></table>
+
+<h1>4. Ruta crítica</h1>
+<p>La ruta crítica es la secuencia de actividades sin holgura: cualquier atraso en ellas atrasa la entrega final.</p>
+<p style="font-weight:600;color:#0d366b">A1 → A2 → A4 → A5 → A6 → A7 → A10 → A11 → A12 → A13 → A15 → A16 → A17 → A18 → A19 → A20</p>
+<p>Las actividades fuera de la ruta crítica (A3 con 2 días, A8 con 8 días, A9 con 2 días, A14 con 4 días) pueden reprogramarse dentro de su holgura para equilibrar la carga del equipo.</p>
+<div class="nota">Completar la columna "Responsable" con el integrante a cargo de cada actividad.</div>
+
+</body>
+</html>

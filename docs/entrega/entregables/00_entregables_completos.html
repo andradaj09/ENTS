@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ENTS — Entregables de gestión (completo)</title>
+<link rel="stylesheet" href="estilos.css">
+<style>
+  @page { @top-right { content: "ENTS · Entregables de gestión del proyecto"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; } }
+  .caratula { break-before: page; }
+  .caratula:first-of-type { break-before: auto; }
+
+  .edt { display: flex; flex-direction: column; align-items: center; gap: 8pt; break-inside: avoid; margin: 8pt 0; }
+  .edt-raiz { background: #0d366b; color: #fff; font-weight: 700; padding: 6pt 14pt; border-radius: 4pt; font-size: 10pt; }
+  .edt-ramas { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4pt; width: 100%; }
+  .edt-rama { display: flex; flex-direction: column; gap: 3pt; }
+  .edt-rama .cab { background: #1c5cab; color: #fff; font-weight: 600; font-size: 7.6pt; padding: 4pt; border-radius: 3pt; text-align: center; min-height: 30pt; }
+  .edt-rama .hoja { border: 0.7pt solid #1c5cab; color: #14213d; font-size: 7.2pt; padding: 3pt; border-radius: 3pt; background: #f2f7fd; }
+
+  .gantt { border: 0.8pt solid #d9d7cf; border-radius: 5pt; padding: 6pt 8pt; break-inside: avoid; }
+  .g-fila { display: grid; grid-template-columns: 62mm 1fr; align-items: center; min-height: 15pt; border-bottom: 0.5pt solid #eceae3; }
+  .g-nombre { font-size: 7.6pt; padding-right: 6pt; line-height: 1.2; }
+  .g-pista { position: relative; height: 15pt; }
+  .g-linea { position: absolute; top: 0; bottom: 0; border-left: 0.5pt solid #e1e0d9; }
+  .g-barra { position: absolute; top: 3.5pt; height: 8pt; border-radius: 2pt; }
+  .g-holgura { position: absolute; top: 6pt; height: 3pt; background: repeating-linear-gradient(90deg, #9ec5f4 0 3pt, transparent 3pt 5pt); }
+  .g-hito { position: absolute; top: 3pt; width: 9pt; height: 9pt; background: #0d366b; transform: translateX(-4.5pt) rotate(45deg); }
+  .g-cabecera { background: #0d366b; color: #fff; font-weight: 600; border-radius: 3pt; }
+  .g-cabecera .g-nombre { padding-left: 4pt; font-size: 8pt; }
+  .g-semana { position: absolute; top: 3pt; text-align: center; font-size: 7.6pt; }
+  .g-separador { font-size: 8pt; font-weight: 700; color: #0d366b; padding: 5pt 0 2pt; }
+  .g-leyenda { display: flex; flex-wrap: wrap; gap: 4pt 14pt; font-size: 8pt; color: #4a5568; margin: 6pt 0 10pt; }
+  .g-leyenda span { display: inline-flex; align-items: center; gap: 4pt; }
+  .g-leyenda i { width: 14pt; height: 7pt; border-radius: 2pt; display: inline-block; }
+  .g-leyenda i.rayas { height: 3pt; background: repeating-linear-gradient(90deg, #9ec5f4 0 3pt, transparent 3pt 5pt); }
+  .g-leyenda i.rombo { width: 7pt; height: 7pt; background: #0d366b; transform: rotate(45deg); border-radius: 0; }
+
+  .matriz { display: grid; grid-template-columns: 26pt 1fr 1fr; grid-template-rows: 1fr 1fr 18pt; gap: 4pt; height: 210pt; break-inside: avoid; margin: 6pt 0 12pt; }
+  .cuad { border-radius: 5pt; padding: 7pt 9pt; font-size: 8.8pt; }
+  .cuad b { display: block; font-size: 9pt; margin-bottom: 3pt; }
+  .eje-y { grid-row: 1 / 3; writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; font-size: 8.5pt; color: #4a5568; }
+  .eje-x { grid-column: 2 / 4; text-align: center; font-size: 8.5pt; color: #4a5568; }
+  .flujo { display: flex; flex-direction: column; gap: 8pt; border: 0.8pt solid #d9d7cf; border-radius: 6pt; padding: 10pt; background: #fbfaf7; break-inside: avoid; }
+  .fila { display: flex; gap: 8pt; align-items: center; justify-content: center; }
+  .caja { border: 1pt solid #1c5cab; border-radius: 4pt; padding: 5pt 7pt; background: #fff; font-size: 8.6pt; text-align: center; }
+  .caja b { color: #0d366b; }
+  .flecha { color: #1c5cab; font-weight: 700; font-size: 13pt; }
+  table.ficha { margin-bottom: 9pt; break-inside: avoid; } table.ficha th { font-size: 9.5pt; } table.ficha td { padding: 2.5pt 6pt; }
+</style>
+</head>
+<body>
+
+
+<!-- ===================== CARÁTULA ===================== -->
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 1 de 7</div>
+        <h1 class="titulo">Project Charter</h1>
+        <div class="sub">Acta de constitución del proyecto ENTS — Everyone Needs To Smile</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-01</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== HISTORIAL ===================== -->
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Acta original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Reescritura completa para el sistema de peticiones vecinales: propósito, objetivos, alcance, hitos, riesgos, presupuesto e interesados.</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<h2>Contenido</h2>
+<ol>
+  <li>Información general del proyecto</li>
+  <li>Propósito y justificación</li>
+  <li>Descripción del proyecto y del producto</li>
+  <li>Objetivos y criterios de éxito</li>
+  <li>Requisitos de alto nivel</li>
+  <li>Alcance preliminar</li>
+  <li>Entregables principales</li>
+  <li>Supuestos y restricciones</li>
+  <li>Riesgos iniciales</li>
+  <li>Cronograma de hitos</li>
+  <li>Presupuesto y recursos</li>
+  <li>Interesados</li>
+  <li>Equipo, roles y autoridad</li>
+  <li>Aprobación</li>
+</ol>
+
+<!-- ===================== 1 ===================== -->
+<h1 class="salto">1. Información general del proyecto</h1>
+<table class="ficha">
+  <tbody>
+    <tr><td>Nombre del proyecto</td><td>ENTS — Everyone Needs To Smile</td></tr>
+    <tr><td>Descripción breve</td><td>Plataforma web de peticiones vecinales con procesamiento de datos y medición de impacto para Córdoba y Villa Allende.</td></tr>
+    <tr><td>Organización</td><td>Instituto Cervantes — Cátedra Práctica Profesionalizante</td></tr>
+    <tr><td>Patrocinador</td><td>Docente de la cátedra, Ing. Loza</td></tr>
+    <tr><td>Director del proyecto</td><td><span class="completar">[integrante designado]</span></td></tr>
+    <tr><td>Equipo</td><td>Jiménez, Ignacio · Andrada, Juan Pablo · Patrón, Máximo</td></tr>
+    <tr><td>Fecha de inicio</td><td><span class="completar">[__/__/____]</span> (reorientación del proyecto)</td></tr>
+    <tr><td>Fecha estimada de cierre</td><td><span class="completar">[__/__/____]</span> (entrega y defensa)</td></tr>
+    <tr><td>Producto publicado</td><td>https://entscordoba.netlify.app</td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 2 ===================== -->
+<h1>2. Propósito y justificación</h1>
+<h2>2.1 Problema</h2>
+<p>En los barrios de Córdoba los mismos problemas —baches, falta de alumbrado, basurales, inseguridad, falta de atención sanitaria— se reclaman una y otra vez, de manera individual y por canales dispersos. El vecino no sabe si alguien recibió su reclamo ni qué pasó con él; los organismos públicos y las organizaciones sociales no cuentan con información ordenada por zona, urgencia y apoyo vecinal para decidir qué atender primero ni para rendir cuentas de lo realizado.</p>
+<h2>2.2 Justificación</h2>
+<p>La primera versión del proyecto proponía una plataforma de donaciones. Durante el análisis se concluyó que el módulo de pagos implicaba integraciones con pasarelas, obligaciones legales y trazabilidad de fondos desproporcionadas para el equipo y el plazo, y que el mayor valor estaba en <b>ordenar y procesar la demanda vecinal</b>. Por eso el proyecto se reorienta hacia un sistema de peticiones ciudadanas que:</p>
+<ul>
+  <li>concentra los reclamos de un barrio en peticiones únicas, apoyadas con firmas;</li>
+  <li>las procesa automáticamente (categoría, barrio, score de urgencia, detección de similares);</li>
+  <li>las pone a disposición de las áreas del municipio para que respondan y registren el avance;</li>
+  <li>genera reportes para organismos y ONG, y estadísticas públicas para la comunidad.</li>
+</ul>
+<p>La reorientación conserva lo ya trabajado —encuesta y estudio de necesidades, análisis socioeconómico de Córdoba, arquitectura en capas, base de datos SQL, autenticación y seguridad, enfoque de evaluación de impacto— y reemplaza el módulo de pagos por el módulo de reportes.</p>
+
+<!-- ===================== 3 ===================== -->
+<h1>3. Descripción del proyecto y del producto</h1>
+<p>El proyecto consiste en analizar, diseñar, desarrollar, probar, publicar y documentar una aplicación web —instalable en el celular— con las siguientes capacidades:</p>
+<table>
+  <thead><tr><th style="width:28%">Módulo</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td>Cuentas y roles</td><td>Registro e ingreso (correo o Google), recuperación de contraseña; roles de vecino, funcionario por área, administrador y dueño.</td></tr>
+    <tr><td>Peticiones</td><td>Alta con texto, hasta 3 fotos y ubicación; moderación previa a la publicación.</td></tr>
+    <tr><td>Procesamiento automático</td><td>Categoría según el texto, barrio según la ubicación, score de urgencia de 0 a 100, detección de peticiones similares y revisión de datos personales y lenguaje.</td></tr>
+    <tr><td>Firmas y prioridad</td><td>Firma única por persona; prioridad por cantidad de firmas; elevación automática al área al llegar a 50.</td></tr>
+    <tr><td>Seguimiento</td><td>Cinco etapas (recibida, en revisión, derivada, en obra, resuelta) con respuesta oficial y foto; notificaciones a autor y firmantes.</td></tr>
+    <tr><td>Comunidad</td><td>Mapa por barrios, muro vecinal, agenda de eventos, comentarios anónimos y barrios seguidos.</td></tr>
+    <tr><td>Reportes</td><td>Estadísticas públicas anónimas, panel analítico y exportación a Excel y PDF.</td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 4 ===================== -->
+<h1>4. Objetivos y criterios de éxito</h1>
+<h2>4.1 Objetivo general</h2>
+<p>Poner en funcionamiento una plataforma web que permita a los vecinos de Córdoba y Villa Allende visibilizar, apoyar y seguir la resolución de los problemas de su barrio, y que procese esa información para que los organismos prioricen y registren su respuesta.</p>
+<h2>4.2 Objetivos específicos medibles</h2>
+<table>
+  <thead><tr><th style="width:5%">#</th><th>Objetivo</th><th style="width:30%">Indicador</th><th style="width:20%">Meta</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Publicar la plataforma accesible desde la web y como app instalable.</td><td>Sitio en línea con HTTPS y manifiesto de app</td><td>Disponible al cierre</td></tr>
+    <tr><td>2</td><td>Clasificar automáticamente cada petición nueva.</td><td>% de peticiones con categoría, barrio y score asignados</td><td>100%</td></tr>
+    <tr><td>3</td><td>Cubrir el territorio de Córdoba y Villa Allende.</td><td>Barrios cargados con ubicación</td><td>≥ 100 barrios</td></tr>
+    <tr><td>4</td><td>Completar el ciclo de la petición.</td><td>Etapas de seguimiento operativas</td><td>5 de 5</td></tr>
+    <tr><td>5</td><td>Garantizar la privacidad entre vecinos.</td><td>Pruebas de permisos por rol aprobadas</td><td>100%</td></tr>
+    <tr><td>6</td><td>Asegurar la calidad del código.</td><td>Pruebas automáticas aprobadas antes de publicar</td><td>100%</td></tr>
+    <tr><td>7</td><td>Entregar la documentación de gestión.</td><td>Entregables completos</td><td>7 de 7</td></tr>
+  </tbody>
+</table>
+<h2>4.3 Criterios de éxito del proyecto</h2>
+<ul>
+  <li>El ciclo completo —pedir, firmar, priorizar, responder y resolver— funciona de punta a punta en el sitio publicado.</li>
+  <li>Ningún vecino puede ver la identidad de otro ni datos personales ajenos.</li>
+  <li>La documentación cumple la estructura exigida por la cátedra y es aprobada por el docente.</li>
+</ul>
+
+<!-- ===================== 5 ===================== -->
+<h1>5. Requisitos de alto nivel</h1>
+<div class="dos-col">
+  <div class="tarjeta">
+    <h4>Funcionales</h4>
+    <ul>
+      <li>Crear, moderar, firmar y comentar peticiones.</li>
+      <li>Asignar categoría, barrio y urgencia automáticamente.</li>
+      <li>Avisar peticiones similares antes de crear una nueva.</li>
+      <li>Registrar respuestas oficiales por área.</li>
+      <li>Notificar novedades a los interesados.</li>
+      <li>Mostrar mapa por barrios y estadísticas.</li>
+      <li>Exportar reportes para organismos.</li>
+    </ul>
+  </div>
+  <div class="tarjeta">
+    <h4>No funcionales</h4>
+    <ul>
+      <li>Privacidad: anonimato entre vecinos.</li>
+      <li>Seguridad: reglas aplicadas en la base de datos, HTTPS.</li>
+      <li>Usabilidad: español, adaptable a celular, modo oscuro.</li>
+      <li>Accesibilidad: teclado, contraste, movimiento reducido.</li>
+      <li>Rendimiento: carga por partes, fluidez en celulares.</li>
+      <li>Mantenibilidad: pruebas automáticas y esquema versionado.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== 6 ===================== -->
+<h1>6. Alcance preliminar</h1>
+<div class="dos-col">
+  <div class="tarjeta">
+    <h4>Dentro del alcance</h4>
+    <ul>
+      <li>Aplicación web e instalable (PWA).</li>
+      <li>Base de datos con reglas de seguridad por fila.</li>
+      <li>Procesamiento automático de peticiones.</li>
+      <li>Seguimiento, notificaciones y comentarios.</li>
+      <li>Mapa, comunidad y eventos.</li>
+      <li>Estadísticas, panel analítico y exportes.</li>
+      <li>Documentación y presentación del proyecto.</li>
+    </ul>
+  </div>
+  <div class="tarjeta">
+    <h4>Fuera del alcance</h4>
+    <ul>
+      <li>Pagos, donaciones o recaudación dentro de la plataforma.</li>
+      <li>Integración con sistemas internos del municipio.</li>
+      <li>Notificaciones por correo o SMS.</li>
+      <li>Aplicaciones nativas para tiendas.</li>
+      <li>Polígonos oficiales de los barrios.</li>
+    </ul>
+  </div>
+</div>
+<p>El detalle completo se desarrolla en el Entregable 2, Declaración de alcance.</p>
+
+<!-- ===================== 7 ===================== -->
+<h1>7. Entregables principales</h1>
+<table>
+  <thead><tr><th style="width:5%">#</th><th style="width:34%">Entregable</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Aplicación web publicada</td><td>Sitio en producción con todos los módulos del alcance.</td></tr>
+    <tr><td>2</td><td>Base de datos documentada</td><td>Esquema SQL completo y reproducible, con políticas y funciones.</td></tr>
+    <tr><td>3</td><td>Repositorio de código</td><td>Código fuente versionado, con instrucciones de instalación y pruebas.</td></tr>
+    <tr><td>4</td><td>Entregables de gestión</td><td>Project Charter, declaración de alcance, EDT, lista y diccionario de actividades, plan de comunicación y Gantt.</td></tr>
+    <tr><td>5</td><td>Documentación técnica</td><td>Requerimientos, arquitectura, modelo de datos, seguridad, pruebas e implementación.</td></tr>
+    <tr><td>6</td><td>Presentación</td><td>Exposición del proyecto para la defensa.</td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 8 ===================== -->
+<h1>8. Supuestos y restricciones</h1>
+<h2>8.1 Supuestos</h2>
+<ul>
+  <li>Los vecinos cuentan con un celular o computadora con conexión a internet y un navegador actualizado.</li>
+  <li>Los servicios en la nube elegidos (GitHub, Supabase, Netlify, OpenStreetMap) mantienen sus planes gratuitos durante el proyecto.</li>
+  <li>Para la operación real, los organismos designan funcionarios por área que responden las peticiones.</li>
+  <li>Los integrantes del equipo mantienen su disponibilidad durante el ciclo lectivo.</li>
+</ul>
+<h2>8.2 Restricciones</h2>
+<ul>
+  <li><b>Tiempo:</b> el proyecto debe entregarse dentro del calendario de la cátedra.</li>
+  <li><b>Equipo:</b> tres integrantes con dedicación parcial.</li>
+  <li><b>Presupuesto:</b> sin financiamiento; solo herramientas y servicios gratuitos.</li>
+  <li><b>Técnicas:</b> sin acceso a sistemas internos del municipio; límites de uso de los planes gratuitos.</li>
+  <li><b>Legales:</b> cumplimiento de la Ley 25.326 de Protección de Datos Personales; publicación de una política de privacidad.</li>
+</ul>
+
+<!-- ===================== 9 ===================== -->
+<h1>9. Riesgos iniciales</h1>
+<table>
+  <thead><tr><th style="width:4%">#</th><th style="width:30%">Riesgo</th><th style="width:11%">Prob.</th><th style="width:11%">Impacto</th><th>Respuesta planificada</th></tr></thead>
+  <tbody>
+    <tr><td>R1</td><td>Baja participación de vecinos al inicio</td><td><span class="nivel media">Media</span></td><td><span class="nivel alta">Alto</span></td><td>Prueba piloto en un barrio, difusión en redes y app instalable de uso simple.</td></tr>
+    <tr><td>R2</td><td>Publicación de datos personales o contenido ofensivo</td><td><span class="nivel media">Media</span></td><td><span class="nivel alta">Alto</span></td><td>Moderación previa, revisión automática de textos, denuncias y ocultamiento automático.</td></tr>
+    <tr><td>R3</td><td>Acceso indebido a identidades o datos</td><td><span class="nivel baja">Baja</span></td><td><span class="nivel alta">Alto</span></td><td>Reglas de seguridad en la base (RLS, permisos por columna) y pruebas por rol.</td></tr>
+    <tr><td>R4</td><td>Superar los límites de los planes gratuitos</td><td><span class="nivel baja">Baja</span></td><td><span class="nivel media">Medio</span></td><td>Compresión de fotos, monitoreo de uso y plan de migración a un plan pago.</td></tr>
+    <tr><td>R5</td><td>Caída o cambio de un servicio externo</td><td><span class="nivel baja">Baja</span></td><td><span class="nivel media">Medio</span></td><td>Esquema SQL versionado para recrear la base; código desacoplado del proveedor de publicación.</td></tr>
+    <tr><td>R6</td><td>Indisponibilidad de un integrante</td><td><span class="nivel media">Media</span></td><td><span class="nivel media">Medio</span></td><td>Documentación del repositorio, revisión cruzada y tareas repartidas en sprints cortos.</td></tr>
+    <tr><td>R7</td><td>Cambios de alcance tardíos</td><td><span class="nivel media">Media</span></td><td><span class="nivel media">Medio</span></td><td>Control de cambios con aprobación del docente (ver Plan de comunicación).</td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 10 ===================== -->
+<h1>10. Cronograma de hitos</h1>
+<table>
+  <thead><tr><th style="width:5%">#</th><th>Hito</th><th style="width:24%">Fecha</th><th style="width:18%">Estado</th></tr></thead>
+  <tbody>
+    <tr><td>H1</td><td>Reorientación del proyecto aprobada</td><td><span class="completar">[__/__/____]</span></td><td>Cumplido</td></tr>
+    <tr><td>H2</td><td>Project Charter y alcance aprobados</td><td><span class="completar">[__/__/____]</span></td><td><span class="completar">[estado]</span></td></tr>
+    <tr><td>H3</td><td>Diseño de arquitectura y base de datos</td><td><span class="completar">[__/__/____]</span></td><td>Cumplido</td></tr>
+    <tr><td>H4</td><td>Primera versión funcional: autenticación, peticiones, firmas y moderación</td><td>04/10/2026</td><td>Cumplido</td></tr>
+    <tr><td>H5</td><td>Roles, anonimato e ingreso con Google</td><td>11/10/2026</td><td>Cumplido</td></tr>
+    <tr><td>H6</td><td>Procesamiento automático, seguimiento y reportes</td><td>12/10/2026</td><td>Cumplido</td></tr>
+    <tr><td>H7</td><td>Calidad: pruebas, accesibilidad, app instalable y rendimiento</td><td>12/10/2026</td><td>Cumplido</td></tr>
+    <tr><td>H8</td><td>Documentación y presentación completas</td><td><span class="completar">[__/__/____]</span></td><td>En curso</td></tr>
+    <tr><td>H9</td><td>Entrega y defensa</td><td><span class="completar">[__/__/____]</span></td><td>Pendiente</td></tr>
+  </tbody>
+</table>
+<p class="pie">Las fechas de H4 a H7 corresponden a las versiones registradas en el repositorio del proyecto.</p>
+
+<!-- ===================== 11 ===================== -->
+<h1>11. Presupuesto y recursos</h1>
+<h2>11.1 Recursos tecnológicos</h2>
+<table>
+  <thead><tr><th style="width:26%">Recurso</th><th>Uso</th><th style="width:22%">Costo</th></tr></thead>
+  <tbody>
+    <tr><td>GitHub</td><td>Repositorio privado y control de versiones</td><td>Plan gratuito — $0</td></tr>
+    <tr><td>Supabase</td><td>Base de datos PostgreSQL, autenticación y almacenamiento de fotos</td><td>Plan gratuito — $0</td></tr>
+    <tr><td>Netlify</td><td>Publicación del sitio con HTTPS</td><td>Plan gratuito — $0</td></tr>
+    <tr><td>OpenStreetMap</td><td>Mapas y ubicación de barrios</td><td>Gratuito — $0</td></tr>
+    <tr><td>Google Cloud (OAuth)</td><td>Ingreso con cuenta de Google</td><td>Gratuito — $0</td></tr>
+    <tr><td>Herramientas de desarrollo</td><td>Node.js, React, Vite, editor de código</td><td>Código abierto — $0</td></tr>
+  </tbody>
+</table>
+<h2>11.2 Recursos humanos</h2>
+<table>
+  <thead><tr><th>Concepto</th><th style="width:22%">Cantidad</th><th style="width:22%">Total</th></tr></thead>
+  <tbody>
+    <tr><td>Horas de trabajo por integrante</td><td><span class="completar">[__] h</span></td><td><span class="completar">[__] h</span></td></tr>
+    <tr><td>Integrantes</td><td>3</td><td>—</td></tr>
+    <tr><td>Valor hora de referencia (estimación académica)</td><td><span class="completar">$[____]</span></td><td><span class="completar">$[____]</span></td></tr>
+  </tbody>
+</table>
+<div class="nota">El costo monetario directo del proyecto es $0 gracias a los planes gratuitos. El costo en horas de trabajo se incluye como referencia: completar con las horas registradas por el equipo.</div>
+
+<!-- ===================== 12 ===================== -->
+<h1>12. Interesados</h1>
+<table>
+  <thead><tr><th style="width:22%">Interesado</th><th style="width:28%">Rol en el proyecto</th><th>Interés / expectativa</th><th style="width:10%">Influencia</th></tr></thead>
+  <tbody>
+    <tr><td>Docente (Ing. Loza)</td><td>Patrocinador; aprueba alcance y entregables</td><td>Cumplimiento de objetivos académicos y de la metodología</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td>Equipo de proyecto</td><td>Planifica, desarrolla y documenta</td><td>Entregar un producto funcional y aprobar la materia</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td>Vecinos de Córdoba y Villa Allende</td><td>Usuarios principales</td><td>Que sus reclamos se vean, se atiendan y se resuelvan</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td>Áreas del municipio y funcionarios</td><td>Usuarios que responden</td><td>Información priorizada por zona y urgencia</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td>ONG y organizaciones sociales</td><td>Destinatarios de reportes</td><td>Datos para orientar su trabajo territorial</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td>Instituto Cervantes</td><td>Institución</td><td>Calidad de la formación y de los proyectos</td><td><span class="nivel media">Media</span></td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 13 ===================== -->
+<h1>13. Equipo, roles y autoridad</h1>
+<table>
+  <thead><tr><th style="width:28%">Integrante</th><th style="width:30%">Rol</th><th>Responsabilidades principales</th></tr></thead>
+  <tbody>
+    <tr><td>Jiménez, Ignacio</td><td><span class="completar">[rol]</span></td><td><span class="completar">[responsabilidades]</span></td></tr>
+    <tr><td>Andrada, Juan Pablo</td><td><span class="completar">[rol]</span></td><td><span class="completar">[responsabilidades]</span></td></tr>
+    <tr><td>Patrón, Máximo</td><td><span class="completar">[rol]</span></td><td><span class="completar">[responsabilidades]</span></td></tr>
+  </tbody>
+</table>
+<p class="pie">Roles sugeridos: director del proyecto, responsable de desarrollo y base de datos, responsable de diseño y experiencia de usuario, responsable de calidad y documentación.</p>
+<h2>13.1 Autoridad del director del proyecto</h2>
+<ul>
+  <li>Asignar y redistribuir tareas entre los integrantes dentro de cada sprint.</li>
+  <li>Priorizar el product backlog dentro del alcance aprobado.</li>
+  <li>Aprobar la publicación de nuevas versiones del sitio.</li>
+  <li>Escalar al docente los cambios de alcance, plazo o riesgos críticos.</li>
+</ul>
+
+<!-- ===================== 14 ===================== -->
+<h1>14. Aprobación</h1>
+<p>Con la firma de este documento se autoriza formalmente el inicio del proyecto ENTS con el propósito, los objetivos, el alcance preliminar y los recursos aquí descritos.</p>
+<div class="firmas">
+  <div class="firma"><b>Ing. Loza</b>Docente — Patrocinador<br>Fecha: ___/___/______</div>
+  <div class="firma"><b><span class="completar">[Director del proyecto]</span></b>Director del proyecto<br>Fecha: ___/___/______</div>
+  <div class="firma"><b>Jiménez, Ignacio</b>Integrante<br>Fecha: ___/___/______</div>
+  <div class="firma"><b>Andrada, Juan Pablo</b>Integrante<br>Fecha: ___/___/______</div>
+  <div class="firma"><b>Patrón, Máximo</b>Integrante<br>Fecha: ___/___/______</div>
+</div>
+
+
+
+
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 2 de 7</div>
+        <h1 class="titulo">Declaración de alcance</h1>
+        <div class="sub">Scope Statement del proyecto ENTS — Everyone Needs To Smile</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-02</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Reescritura completa para el sistema de peticiones vecinales: alcance del producto, requisitos, entregables, exclusiones y control de cambios.</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<h2>Contenido</h2><ol><li>Objetivo del documento</li><li>Alcance del producto</li><li>Requisitos funcionales</li><li>Requisitos no funcionales</li><li>Entregables del proyecto</li><li>Criterios de aceptación del producto</li><li>Exclusiones</li><li>Supuestos y restricciones</li><li>Límites e interfaces del sistema</li><li>Control de cambios del alcance</li><li>Aprobación</li></ol>
+
+<h1 class="salto">1. Objetivo del documento</h1>
+<p>Este documento define en detalle qué incluye y qué no incluye el proyecto ENTS, a partir del alcance preliminar del Project Charter. Sirve como referencia para planificar, ejecutar y aceptar el trabajo, y para evaluar cualquier pedido de cambio.</p>
+
+<h1>2. Alcance del producto</h1>
+<p>ENTS es una aplicación web adaptable a celular e instalable (PWA) en la que los vecinos de Córdoba y Villa Allende publican problemas de su barrio, los apoyan con firmas y siguen su resolución; los funcionarios de cada área del municipio responden y registran el avance; y los administradores moderan, analizan y exportan la información. Sus características principales son:</p>
+
+<table>
+  <thead><tr><th style="width:26%">Característica</th><th>Descripción</th></tr></thead>
+  <tbody><tr><td>Cuentas y roles</td><td>Registro e ingreso con correo o Google; recuperación de contraseña; roles de vecino, funcionario por área, administrador y dueño.</td></tr><tr><td>Peticiones</td><td>Título, descripción, hasta 3 fotos comprimidas y ubicación en mapa; quedan pendientes hasta su moderación.</td></tr><tr><td>Procesamiento automático</td><td>Categoría (16) por palabras clave, barrio (111) por cercanía, score de urgencia, detección de similares y revisión de textos.</td></tr><tr><td>Firmas y prioridad</td><td>Una firma por persona; cinco niveles de prioridad; elevación al área a las 50 firmas.</td></tr><tr><td>Seguimiento</td><td>Etapas recibida → en revisión → derivada → en obra → resuelta, con respuesta oficial y foto.</td></tr><tr><td>Participación</td><td>Notificaciones, comentarios anónimos con denuncias, barrios seguidos e insignias.</td></tr><tr><td>Comunidad</td><td>Mapa por barrios, muro vecinal y agenda de eventos.</td></tr><tr><td>Reportes</td><td>Estadísticas públicas anónimas, panel analítico, exportación a Excel y PDF.</td></tr><tr><td>Administración</td><td>Moderación, directorio de usuarios, asignación de áreas, cambio de roles (solo dueño) y documentos privados.</td></tr></tbody>
+</table>
+
+<h1>3. Requisitos funcionales</h1>
+
+<table>
+  <thead><tr><th style="width:9%">ID</th><th>Requisito</th><th style="width:12%">Prioridad</th></tr></thead>
+  <tbody><tr><td>RF01</td><td>Registrar usuarios con correo y contraseña o con Google; recuperar la contraseña por correo.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF02</td><td>Elegir el tipo de cuenta al registrarse (vecino o funcionario, este último sujeto a aprobación).</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF03</td><td>Crear peticiones con título, descripción, hasta 3 fotos y ubicación en el mapa.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF04</td><td>Sugerir automáticamente la categoría según el texto y el barrio según la ubicación.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF05</td><td>Calcular automáticamente el score de urgencia (0 a 100) de cada petición.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF06</td><td>Advertir peticiones similares antes de crear una nueva.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF07</td><td>Moderar las peticiones antes de publicarlas (aprobar, rechazar, editar, eliminar).</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF08</td><td>Firmar y retirar la firma; ordenar el inicio por prioridad según firmas.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF09</td><td>Elevar automáticamente al área las peticiones que alcanzan 50 firmas.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF10</td><td>Registrar respuestas oficiales y la etapa de seguimiento con foto.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF11</td><td>Notificar a autor y firmantes de cada novedad; permitir seguir barrios.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF12</td><td>Comentar en forma anónima, denunciar y moderar comentarios.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF13</td><td>Mostrar el mapa por barrios coloreado por peticiones, firmas o urgencia.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF14</td><td>Ofrecer estadísticas públicas anónimas y un panel analítico para administradores.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF15</td><td>Exportar reportes de peticiones y barrios a Excel y PDF.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF16</td><td>Asignar áreas a funcionarios y mostrarles una bandeja de su área.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF17</td><td>Permitir solo al dueño del proyecto cambiar el rol de las cuentas.</td><td><span class="nivel baja">Baja</span></td></tr><tr><td>RF18</td><td>Publicar en el muro vecinal y consultar la agenda de eventos por barrio.</td><td><span class="nivel baja">Baja</span></td></tr></tbody>
+</table>
+
+<h1>4. Requisitos no funcionales</h1>
+
+<table>
+  <thead><tr><th style="width:10%">ID</th><th style="width:17%">Atributo</th><th>Requisito</th></tr></thead>
+  <tbody><tr><td>RNF01</td><td>Privacidad</td><td>Anonimato entre vecinos; identidades visibles solo para funcionarios y administradores.</td></tr><tr><td>RNF02</td><td>Seguridad</td><td>Reglas de acceso aplicadas en la base de datos (RLS); comunicación por HTTPS.</td></tr><tr><td>RNF03</td><td>Usabilidad</td><td>Interfaz en español, adaptable a celular, modo claro y oscuro.</td></tr><tr><td>RNF04</td><td>Accesibilidad</td><td>Navegación con teclado, foco visible, movimiento reducido, tablas alternativas a los gráficos.</td></tr><tr><td>RNF05</td><td>Rendimiento</td><td>Carga por partes de cada página; animaciones reducidas en celulares.</td></tr><tr><td>RNF06</td><td>Disponibilidad</td><td>Aplicación instalable (PWA) que abre aun con conexión inestable.</td></tr><tr><td>RNF07</td><td>Mantenibilidad</td><td>Revisión automática de código, pruebas automáticas y esquema SQL versionado.</td></tr><tr><td>RNF08</td><td>Legal</td><td>Política de privacidad publicada; cumplimiento de la Ley 25.326.</td></tr></tbody>
+</table>
+
+<h1>5. Entregables del proyecto</h1>
+
+<table>
+  <thead><tr><th style="width:5%">#</th><th style="width:22%">Entregable</th><th>Descripción</th><th style="width:33%">Criterio de aceptación</th></tr></thead>
+  <tbody><tr><td>1</td><td>Aplicación web publicada</td><td>Sitio en producción con todos los módulos del alcance.</td><td>Todas las características operativas en el sitio publicado.</td></tr><tr><td>2</td><td>Base de datos</td><td>Esquema SQL con tablas, políticas, funciones y disparadores.</td><td>Se recrea completa ejecutando <code>schema.sql</code>.</td></tr><tr><td>3</td><td>Repositorio de código</td><td>Código fuente versionado con README e instrucciones.</td><td>Otro integrante puede instalarlo y correrlo siguiendo el README.</td></tr><tr><td>4</td><td>Suite de pruebas</td><td>Pruebas automáticas y pruebas de permisos por rol.</td><td>100% aprobadas antes de cada publicación.</td></tr><tr><td>5</td><td>Entregables de gestión</td><td>Charter, alcance, EDT, actividades, diccionario, comunicación y Gantt.</td><td>Completos y consistentes entre sí.</td></tr><tr><td>6</td><td>Documentación técnica</td><td>Requerimientos, arquitectura, datos, seguridad, pruebas e implementación.</td><td>Refleja el sistema implementado.</td></tr><tr><td>7</td><td>Presentación</td><td>Exposición del proyecto para la defensa.</td><td>Aprobada por el equipo y ensayada.</td></tr></tbody>
+</table>
+
+<h1>6. Criterios de aceptación del producto</h1>
+<ul>
+  <li>El ciclo completo —pedir, moderar, firmar, priorizar, responder y resolver— funciona en el sitio publicado.</li>
+  <li>Toda petición nueva recibe categoría sugerida, barrio y score de urgencia sin intervención manual.</li>
+  <li>Un vecino no puede ver la identidad de otros vecinos ni modificar datos ajenos (verificado con pruebas por rol).</li>
+  <li>No se publican teléfonos, correos ni documentos en los comentarios.</li>
+  <li>La aplicación se puede instalar en el celular y navegar con teclado.</li>
+  <li>Las pruebas automáticas se ejecutan sin errores y la compilación de producción es exitosa.</li>
+</ul>
+
+<h1>7. Exclusiones</h1>
+
+<table>
+  <thead><tr><th style="width:45%">Fuera del alcance</th><th>Motivo</th></tr></thead>
+  <tbody><tr><td>Pagos, donaciones o recaudación dentro de la plataforma</td><td>Complejidad legal y de integración; si se coordinan donaciones, ocurren por fuera.</td></tr><tr><td>Integración con sistemas internos del municipio</td><td>Sin acceso a esos sistemas; los funcionarios responden desde ENTS.</td></tr><tr><td>Notificaciones por correo electrónico o SMS</td><td>Requiere servicios pagos; se usan notificaciones dentro de la app.</td></tr><tr><td>Aplicaciones nativas para Android o iOS</td><td>Se cubre con la aplicación instalable (PWA).</td></tr><tr><td>Polígonos oficiales de los barrios</td><td>Se usan los centros de OpenStreetMap; se evalúa como mejora futura.</td></tr><tr><td>Atención de reclamos en forma directa por el equipo</td><td>El equipo provee la herramienta; la resolución corresponde a los organismos.</td></tr></tbody>
+</table>
+
+<h1>8. Supuestos y restricciones</h1>
+<div class="dos-col">
+  <div class="tarjeta"><h4>Supuestos</h4><ul>
+    <li>Los usuarios tienen acceso a internet y un navegador actualizado.</li>
+    <li>Los servicios gratuitos se mantienen durante el proyecto.</li>
+    <li>Los organismos designan funcionarios por área para la operación real.</li>
+    <li>El equipo mantiene su disponibilidad durante el ciclo lectivo.</li>
+  </ul></div>
+  <div class="tarjeta"><h4>Restricciones</h4><ul>
+    <li>Plazo: calendario de la cátedra.</li>
+    <li>Equipo: tres integrantes con dedicación parcial.</li>
+    <li>Presupuesto: $0 (solo servicios gratuitos).</li>
+    <li>Legales: Ley 25.326 de Protección de Datos Personales.</li>
+  </ul></div>
+</div>
+
+<h1>9. Límites e interfaces del sistema</h1>
+
+<table>
+  <thead><tr><th style="width:18%">Sistema externo</th><th style="width:36%">Interfaz</th><th>Uso</th></tr></thead>
+  <tbody><tr><td>Supabase</td><td>API REST y cliente JavaScript sobre HTTPS</td><td>Base de datos, autenticación, almacenamiento de fotos y documentos.</td></tr><tr><td>Netlify</td><td>Publicación continua desde GitHub</td><td>Sitio en producción con HTTPS.</td></tr><tr><td>OpenStreetMap</td><td>Teselas del mapa; Nominatim (carga única de barrios)</td><td>Mapa vecinal y ubicación de barrios.</td></tr><tr><td>Google</td><td>OAuth 2.0</td><td>Ingreso con cuenta de Google (opcional).</td></tr><tr><td>Navegador del usuario</td><td>Geolocalización, cámara/archivos, service worker</td><td>Ubicación de la petición, fotos e instalación de la app.</td></tr></tbody>
+</table>
+
+<h1>10. Control de cambios del alcance</h1>
+<ol>
+  <li>Cualquier integrante registra el pedido de cambio (qué, por qué, impacto estimado en tiempo y calidad).</li>
+  <li>El equipo lo analiza en la siguiente reunión de planificación.</li>
+  <li>Si afecta objetivos, entregables o plazos, se presenta al docente para su aprobación.</li>
+  <li>Si se aprueba, se actualizan este documento, la EDT, la lista de actividades y el Gantt, y se registra en el historial de revisión.</li>
+</ol>
+<div class="nota">Ejemplo de cambio aprobado: reemplazo del módulo de pagos y donaciones por el sistema de peticiones (versión 2.0 de este documento).</div>
+
+<h1>11. Aprobación</h1>
+<div class="firmas">
+  <div class="firma"><b>Ing. Loza</b>Docente — Patrocinador<br>Fecha: ___/___/______</div>
+  <div class="firma"><b><span class="completar">[Director del proyecto]</span></b>Director del proyecto<br>Fecha: ___/___/______</div>
+</div>
+
+
+
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 3 de 7</div>
+        <h1 class="titulo">EDT / WBS</h1>
+        <div class="sub">Estructura de desglose del trabajo del proyecto ENTS</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-03</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Nueva EDT orientada a entregables para el sistema de peticiones vecinales (7 componentes, 29 paquetes de trabajo).</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<h2>Contenido</h2><ol><li>Criterios de construcción</li><li>Diagrama de la EDT</li><li>EDT en formato de lista</li><li>Relación con las actividades</li></ol>
+
+<h1 class="salto">1. Criterios de construcción</h1>
+<ul>
+  <li><b>Orientada a entregables:</b> cada elemento representa un resultado verificable, no una tarea suelta.</li>
+  <li><b>Regla del 100%:</b> la EDT incluye todo el trabajo del proyecto y nada que esté fuera del alcance aprobado.</li>
+  <li><b>Tres niveles:</b> proyecto (nivel 1), componentes (nivel 2) y paquetes de trabajo (nivel 3).</li>
+  <li><b>Codificación jerárquica:</b> cada paquete se identifica con un código (por ejemplo, 1.4.3) que se usa en la lista y el diccionario de actividades.</li>
+</ul>
+<table class="ficha"><tbody>
+  <tr><td>Componentes (nivel 2)</td><td>7</td></tr>
+  <tr><td>Paquetes de trabajo (nivel 3)</td><td>29</td></tr>
+  <tr><td>Actividades asociadas</td><td>20 (ver Entregable 4)</td></tr>
+</tbody></table>
+
+<h1>2. Diagrama de la EDT</h1>
+
+<div class="edt">
+  <div class="edt-raiz">1. ENTS — Plataforma de peticiones vecinales</div>
+  <div class="edt-ramas">
+    <div class="edt-rama"><div class="cab">1.1 Gestión del proyecto</div><div class="hoja">1.1.1 Project Charter</div><div class="hoja">1.1.2 Declaración de alcance</div><div class="hoja">1.1.3 Plan de comunicación</div><div class="hoja">1.1.4 Cronograma (Gantt)</div><div class="hoja">1.1.5 Seguimiento y control</div></div><div class="edt-rama"><div class="cab">1.2 Análisis</div><div class="hoja">1.2.1 Estudio de necesidades y encuesta</div><div class="hoja">1.2.2 Análisis socioeconómico</div><div class="hoja">1.2.3 Requerimientos</div><div class="hoja">1.2.4 Product backlog</div></div><div class="edt-rama"><div class="cab">1.3 Diseño</div><div class="hoja">1.3.1 Arquitectura</div><div class="hoja">1.3.2 Modelo de datos</div><div class="hoja">1.3.3 Interfaz y navegación</div><div class="hoja">1.3.4 Seguridad y roles</div></div><div class="edt-rama"><div class="cab">1.4 Desarrollo</div><div class="hoja">1.4.1 Autenticación y roles</div><div class="hoja">1.4.2 Peticiones y firmas</div><div class="hoja">1.4.3 Procesamiento automático</div><div class="hoja">1.4.4 Mapa y comunidad</div><div class="hoja">1.4.5 Seguimiento y avisos</div><div class="hoja">1.4.6 Reportes</div><div class="hoja">1.4.7 Moderación</div></div><div class="edt-rama"><div class="cab">1.5 Pruebas y calidad</div><div class="hoja">1.5.1 Pruebas automáticas</div><div class="hoja">1.5.2 Pruebas de permisos</div><div class="hoja">1.5.3 Accesibilidad y rendimiento</div></div><div class="edt-rama"><div class="cab">1.6 Implementación</div><div class="hoja">1.6.1 Base de datos en la nube</div><div class="hoja">1.6.2 Publicación web</div><div class="hoja">1.6.3 App instalable</div></div><div class="edt-rama"><div class="cab">1.7 Documentación y cierre</div><div class="hoja">1.7.1 Documentación</div><div class="hoja">1.7.2 Presentación</div><div class="hoja">1.7.3 Entrega y defensa</div></div>
+  </div>
+</div>
+<p class="pie">Figura 1. EDT del proyecto ENTS (tres niveles).</p>
+
+<h1 class="salto">3. EDT en formato de lista</h1>
+<table>
+  <thead><tr><th style="width:12%">Código</th><th style="width:35%">Elemento</th><th>Descripción / entregable</th></tr></thead>
+  <tbody>
+    <tr><td><b>1</b></td><td><b>ENTS — Plataforma de peticiones vecinales</b></td><td>Proyecto completo.</td></tr>
+    <tr><td><b>1.1</b></td><td><b>Gestión del proyecto</b></td><td>Planificación, coordinación y control.</td></tr><tr><td>&nbsp;&nbsp;1.1.1</td><td>&nbsp;&nbsp;Project Charter</td><td>Propuesta de reorientación aprobada; Project Charter y Declaración de alcance</td></tr><tr><td>&nbsp;&nbsp;1.1.2</td><td>&nbsp;&nbsp;Declaración de alcance</td><td>Project Charter y Declaración de alcance</td></tr><tr><td>&nbsp;&nbsp;1.1.3</td><td>&nbsp;&nbsp;Plan de comunicación</td><td>Plan de comunicación y cronograma base</td></tr><tr><td>&nbsp;&nbsp;1.1.4</td><td>&nbsp;&nbsp;Cronograma (Gantt)</td><td>Plan de comunicación y cronograma base</td></tr><tr><td>&nbsp;&nbsp;1.1.5</td><td>&nbsp;&nbsp;Seguimiento y control</td><td>—</td></tr><tr><td><b>1.2</b></td><td><b>Análisis</b></td><td>Comprensión del problema y de los requisitos.</td></tr><tr><td>&nbsp;&nbsp;1.2.1</td><td>&nbsp;&nbsp;Estudio de necesidades y encuesta</td><td>Informe de necesidades actualizado</td></tr><tr><td>&nbsp;&nbsp;1.2.2</td><td>&nbsp;&nbsp;Análisis socioeconómico</td><td>Informe de necesidades actualizado</td></tr><tr><td>&nbsp;&nbsp;1.2.3</td><td>&nbsp;&nbsp;Requerimientos</td><td>Requerimientos y product backlog priorizado</td></tr><tr><td>&nbsp;&nbsp;1.2.4</td><td>&nbsp;&nbsp;Product backlog</td><td>Requerimientos y product backlog priorizado</td></tr><tr><td><b>1.3</b></td><td><b>Diseño</b></td><td>Definición técnica y visual de la solución.</td></tr><tr><td>&nbsp;&nbsp;1.3.1</td><td>&nbsp;&nbsp;Arquitectura</td><td>Documento de arquitectura y despliegue</td></tr><tr><td>&nbsp;&nbsp;1.3.2</td><td>&nbsp;&nbsp;Modelo de datos</td><td>DER, esquema SQL y políticas de acceso</td></tr><tr><td>&nbsp;&nbsp;1.3.3</td><td>&nbsp;&nbsp;Interfaz y navegación</td><td>Prototipo de pantallas y estilo visual</td></tr><tr><td>&nbsp;&nbsp;1.3.4</td><td>&nbsp;&nbsp;Seguridad y roles</td><td>DER, esquema SQL y políticas de acceso</td></tr><tr><td><b>1.4</b></td><td><b>Desarrollo</b></td><td>Construcción de las funcionalidades.</td></tr><tr><td>&nbsp;&nbsp;1.4.1</td><td>&nbsp;&nbsp;Autenticación y roles</td><td>Módulo de cuentas y roles</td></tr><tr><td>&nbsp;&nbsp;1.4.2</td><td>&nbsp;&nbsp;Peticiones y firmas</td><td>Módulo de peticiones y moderación</td></tr><tr><td>&nbsp;&nbsp;1.4.3</td><td>&nbsp;&nbsp;Procesamiento automático</td><td>Procesamiento automático</td></tr><tr><td>&nbsp;&nbsp;1.4.4</td><td>&nbsp;&nbsp;Mapa y comunidad</td><td>Mapa, muro vecinal y agenda</td></tr><tr><td>&nbsp;&nbsp;1.4.5</td><td>&nbsp;&nbsp;Seguimiento y avisos</td><td>Seguimiento, avisos y comentarios</td></tr><tr><td>&nbsp;&nbsp;1.4.6</td><td>&nbsp;&nbsp;Reportes</td><td>Paneles y reportes Excel/PDF</td></tr><tr><td>&nbsp;&nbsp;1.4.7</td><td>&nbsp;&nbsp;Moderación</td><td>Módulo de peticiones y moderación</td></tr><tr><td><b>1.5</b></td><td><b>Pruebas y calidad</b></td><td>Verificación del producto.</td></tr><tr><td>&nbsp;&nbsp;1.5.1</td><td>&nbsp;&nbsp;Pruebas automáticas</td><td>Suite de pruebas y reporte de permisos</td></tr><tr><td>&nbsp;&nbsp;1.5.2</td><td>&nbsp;&nbsp;Pruebas de permisos</td><td>Suite de pruebas y reporte de permisos</td></tr><tr><td>&nbsp;&nbsp;1.5.3</td><td>&nbsp;&nbsp;Accesibilidad y rendimiento</td><td>App instalable, accesible y fluida en celular</td></tr><tr><td><b>1.6</b></td><td><b>Implementación</b></td><td>Puesta en producción.</td></tr><tr><td>&nbsp;&nbsp;1.6.1</td><td>&nbsp;&nbsp;Base de datos en la nube</td><td>Repositorio, proyecto Supabase y sitio en Netlify</td></tr><tr><td>&nbsp;&nbsp;1.6.2</td><td>&nbsp;&nbsp;Publicación web</td><td>Repositorio, proyecto Supabase y sitio en Netlify</td></tr><tr><td>&nbsp;&nbsp;1.6.3</td><td>&nbsp;&nbsp;App instalable</td><td>App instalable, accesible y fluida en celular</td></tr><tr><td><b>1.7</b></td><td><b>Documentación y cierre</b></td><td>Documentos, presentación y entrega.</td></tr><tr><td>&nbsp;&nbsp;1.7.1</td><td>&nbsp;&nbsp;Documentación</td><td>Documentación del proyecto y entregables de gestión</td></tr><tr><td>&nbsp;&nbsp;1.7.2</td><td>&nbsp;&nbsp;Presentación</td><td>Presentación para la defensa</td></tr><tr><td>&nbsp;&nbsp;1.7.3</td><td>&nbsp;&nbsp;Entrega y defensa</td><td>Proyecto entregado y defendido</td></tr>
+  </tbody>
+</table>
+
+<h1>4. Relación con las actividades</h1>
+
+<table>
+  <thead><tr><th style="width:30%">Componente</th><th>Actividades</th></tr></thead>
+  <tbody><tr><td>1.1 Gestión del proyecto</td><td>A1 Analizar la propuesta de reorientación y redefinir el proyecto<br>A2 Redactar Project Charter y declaración de alcance<br>A3 Definir plan de comunicación y cronograma</td></tr><tr><td>1.2 Análisis</td><td>A4 Revisar encuesta y análisis socioeconómico<br>A5 Relevar requerimientos y armar product backlog</td></tr><tr><td>1.3 Diseño</td><td>A6 Diseñar arquitectura y elegir tecnologías<br>A7 Diseñar modelo de datos y reglas de seguridad<br>A8 Diseñar interfaz y navegación</td></tr><tr><td>1.4 Desarrollo</td><td>A10 Desarrollar autenticación, roles y anonimato<br>A11 Desarrollar peticiones, fotos, firmas y moderación<br>A12 Desarrollar clasificación, barrio, score y similares<br>A13 Desarrollar mapa por barrios, comunidad y eventos<br>A14 Desarrollar seguimiento, notificaciones y comentarios<br>A15 Desarrollar estadísticas, panel analítico y exportes</td></tr><tr><td>1.5 Pruebas y calidad</td><td>A16 Pruebas automáticas y pruebas de permisos por rol<br>A17 Accesibilidad, modo oscuro, app instalable y rendimiento</td></tr><tr><td>1.6 Implementación</td><td>A9 Configurar repositorio, base de datos y publicación<br>A17 Accesibilidad, modo oscuro, app instalable y rendimiento</td></tr><tr><td>1.7 Documentación y cierre</td><td>A18 Redactar documentación<br>A19 Preparar presentación<br>A20 Entrega y defensa</td></tr></tbody>
+</table>
+
+
+
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 4 de 7</div>
+        <h1 class="titulo">Lista de actividades</h1>
+        <div class="sub">Actividades, duraciones, dependencias y ruta crítica del proyecto ENTS</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-04</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Nueva lista de 20 actividades para el sistema de peticiones, con cálculo de ruta crítica.</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<h2>Contenido</h2><ol><li>Convenciones</li><li>Lista de actividades</li><li>Resumen del cronograma</li><li>Ruta crítica</li></ol>
+
+<h1 class="salto">1. Convenciones</h1>
+<ul>
+  <li><b>Duración:</b> días hábiles de trabajo del equipo.</li>
+  <li><b>Dependencias:</b> de tipo fin-comienzo (la actividad empieza cuando terminan todas sus predecesoras).</li>
+  <li><b>Inicio y fin:</b> día hábil relativo al comienzo del proyecto (día 0). Se convierten a fechas una vez fijada la fecha de inicio (<span class="completar">[__/__/____]</span>).</li>
+  <li><b>Holgura:</b> días que la actividad puede atrasarse sin atrasar el proyecto. Holgura 0 = actividad crítica.</li>
+</ul>
+
+<h1>2. Lista de actividades</h1>
+<table>
+  <thead><tr><th style="width:5%">ID</th><th>Actividad</th><th style="width:10%">EDT</th><th style="width:7%">Dur.</th><th style="width:11%">Predecesoras</th><th style="width:7%">Inicio</th><th style="width:6%">Fin</th><th style="width:8%">Holgura</th><th style="width:11%">Responsable</th></tr></thead>
+  <tbody>
+    <tr><td><b>A1</b></td><td>Analizar la propuesta de reorientación y redefinir el proyecto</td><td>1.1.1</td><td>3</td><td>—</td><td>0</td><td>3</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A2</b></td><td>Redactar Project Charter y declaración de alcance</td><td>1.1.1–1.1.2</td><td>3</td><td>A1</td><td>3</td><td>6</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td>A3</td><td>Definir plan de comunicación y cronograma</td><td>1.1.3–1.1.4</td><td>2</td><td>A2</td><td>6</td><td>8</td><td>2</td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A4</b></td><td>Revisar encuesta y análisis socioeconómico</td><td>1.2.1–1.2.2</td><td>3</td><td>A1</td><td>3</td><td>6</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A5</b></td><td>Relevar requerimientos y armar product backlog</td><td>1.2.3–1.2.4</td><td>4</td><td>A2, A4</td><td>6</td><td>10</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A6</b></td><td>Diseñar arquitectura y elegir tecnologías</td><td>1.3.1</td><td>3</td><td>A5, A3</td><td>10</td><td>13</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A7</b></td><td>Diseñar modelo de datos y reglas de seguridad</td><td>1.3.2, 1.3.4</td><td>4</td><td>A6</td><td>13</td><td>17</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td>A8</td><td>Diseñar interfaz y navegación</td><td>1.3.3</td><td>4</td><td>A5</td><td>10</td><td>14</td><td>8</td><td><span class="completar">[asignar]</span></td></tr><tr><td>A9</td><td>Configurar repositorio, base de datos y publicación</td><td>1.6.1–1.6.2</td><td>2</td><td>A6</td><td>13</td><td>15</td><td>2</td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A10</b></td><td>Desarrollar autenticación, roles y anonimato</td><td>1.4.1</td><td>5</td><td>A7, A9</td><td>17</td><td>22</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A11</b></td><td>Desarrollar peticiones, fotos, firmas y moderación</td><td>1.4.2, 1.4.7</td><td>6</td><td>A10, A8</td><td>22</td><td>28</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A12</b></td><td>Desarrollar clasificación, barrio, score y similares</td><td>1.4.3</td><td>5</td><td>A11</td><td>28</td><td>33</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A13</b></td><td>Desarrollar mapa por barrios, comunidad y eventos</td><td>1.4.4</td><td>5</td><td>A11</td><td>28</td><td>33</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td>A14</td><td>Desarrollar seguimiento, notificaciones y comentarios</td><td>1.4.5</td><td>5</td><td>A11</td><td>28</td><td>33</td><td>4</td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A15</b></td><td>Desarrollar estadísticas, panel analítico y exportes</td><td>1.4.6</td><td>4</td><td>A12, A13</td><td>33</td><td>37</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A16</b></td><td>Pruebas automáticas y pruebas de permisos por rol</td><td>1.5.1–1.5.2</td><td>4</td><td>A12, A14, A15</td><td>37</td><td>41</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A17</b></td><td>Accesibilidad, modo oscuro, app instalable y rendimiento</td><td>1.5.3, 1.6.3</td><td>4</td><td>A15</td><td>37</td><td>41</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A18</b></td><td>Redactar documentación</td><td>1.7.1</td><td>5</td><td>A16, A17</td><td>41</td><td>46</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A19</b></td><td>Preparar presentación</td><td>1.7.2</td><td>2</td><td>A18</td><td>46</td><td>48</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr><tr><td><b>A20</b></td><td>Entrega y defensa</td><td>1.7.3</td><td>1</td><td>A19</td><td>48</td><td>49</td><td><span class="nivel alta">0 · crítica</span></td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+
+<h1>3. Resumen del cronograma</h1>
+<table class="ficha"><tbody>
+  <tr><td>Cantidad de actividades</td><td>20</td></tr>
+  <tr><td>Duración total del proyecto</td><td>49 días hábiles (≈ 10 semanas)</td></tr>
+  <tr><td>Esfuerzo total (suma de duraciones)</td><td>74 días-actividad</td></tr>
+  <tr><td>Actividades críticas</td><td>16 de 20</td></tr>
+</tbody></table>
+
+<h1>4. Ruta crítica</h1>
+<p>La ruta crítica es la secuencia de actividades sin holgura: cualquier atraso en ellas atrasa la entrega final.</p>
+<p style="font-weight:600;color:#0d366b">A1 → A2 → A4 → A5 → A6 → A7 → A10 → A11 → A12 → A13 → A15 → A16 → A17 → A18 → A19 → A20</p>
+<p>Las actividades fuera de la ruta crítica (A3 con 2 días, A8 con 8 días, A9 con 2 días, A14 con 4 días) pueden reprogramarse dentro de su holgura para equilibrar la carga del equipo.</p>
+<div class="nota">Completar la columna "Responsable" con el integrante a cargo de cada actividad.</div>
+
+
+
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 5 de 7</div>
+        <h1 class="titulo">Diccionario de actividades</h1>
+        <div class="sub">Ficha detallada de cada actividad del proyecto ENTS</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-05</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Nuevo diccionario con una ficha por cada una de las 20 actividades del sistema de peticiones.</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<h2>Contenido</h2>
+<p>Cada ficha describe una actividad de la lista (Entregable 4): el paquete de la EDT al que pertenece, el entregable que produce, los recursos que usa, su duración y ubicación en el cronograma, sus dependencias y el criterio con el que se acepta como terminada.</p>
+<h1 class="salto">Fichas de actividades</h1>
+
+<table class="ficha">
+  <thead><tr><th colspan="2">A1 · Analizar la propuesta de reorientación y redefinir el proyecto</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.1.1</td></tr>
+    <tr><td>Entregable</td><td>Propuesta de reorientación aprobada</td></tr>
+    <tr><td>Recursos</td><td>Equipo completo; documentación previa</td></tr>
+    <tr><td>Duración</td><td>3 días hábiles (día 0 a 3) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>— / A2, A4</td></tr>
+    <tr><td>Criterio de aceptación</td><td>El equipo y el docente acuerdan el nuevo enfoque</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A2 · Redactar Project Charter y declaración de alcance</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.1.1–1.1.2</td></tr>
+    <tr><td>Entregable</td><td>Project Charter y Declaración de alcance</td></tr>
+    <tr><td>Recursos</td><td>Equipo; plantillas de gestión</td></tr>
+    <tr><td>Duración</td><td>3 días hábiles (día 3 a 6) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A1 / A3, A5</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Documentos completos y aprobados por el docente</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A3 · Definir plan de comunicación y cronograma</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.1.3–1.1.4</td></tr>
+    <tr><td>Entregable</td><td>Plan de comunicación y cronograma base</td></tr>
+    <tr><td>Recursos</td><td>Equipo</td></tr>
+    <tr><td>Duración</td><td>2 días hábiles (día 6 a 8) · holgura 2</td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A2 / A6</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Canales, frecuencias y responsables definidos</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A4 · Revisar encuesta y análisis socioeconómico</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.2.1–1.2.2</td></tr>
+    <tr><td>Entregable</td><td>Informe de necesidades actualizado</td></tr>
+    <tr><td>Recursos</td><td>Resultados de la encuesta; análisis previo</td></tr>
+    <tr><td>Duración</td><td>3 días hábiles (día 3 a 6) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A1 / A5</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Necesidades vinculadas a las categorías del sistema</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A5 · Relevar requerimientos y armar product backlog</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.2.3–1.2.4</td></tr>
+    <tr><td>Entregable</td><td>Requerimientos y product backlog priorizado</td></tr>
+    <tr><td>Recursos</td><td>Equipo; tablero de tareas</td></tr>
+    <tr><td>Duración</td><td>4 días hábiles (día 6 a 10) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A2, A4 / A6, A8</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Cada requerimiento trazable a una historia de usuario</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A6 · Diseñar arquitectura y elegir tecnologías</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.3.1</td></tr>
+    <tr><td>Entregable</td><td>Documento de arquitectura y despliegue</td></tr>
+    <tr><td>Recursos</td><td>Equipo; documentación de las tecnologías</td></tr>
+    <tr><td>Duración</td><td>3 días hábiles (día 10 a 13) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A5, A3 / A7, A9</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Cubre todos los requerimientos con servicios gratuitos</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A7 · Diseñar modelo de datos y reglas de seguridad</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.3.2, 1.3.4</td></tr>
+    <tr><td>Entregable</td><td>DER, esquema SQL y políticas de acceso</td></tr>
+    <tr><td>Recursos</td><td>Supabase; PostgreSQL</td></tr>
+    <tr><td>Duración</td><td>4 días hábiles (día 13 a 17) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A6 / A10</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Esquema reproducible y reglas por rol definidas</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A8 · Diseñar interfaz y navegación</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.3.3</td></tr>
+    <tr><td>Entregable</td><td>Prototipo de pantallas y estilo visual</td></tr>
+    <tr><td>Recursos</td><td>Editor de diseño; equipo</td></tr>
+    <tr><td>Duración</td><td>4 días hábiles (día 10 a 14) · holgura 8</td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A5 / A11</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Flujos principales aprobados por el equipo</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A9 · Configurar repositorio, base de datos y publicación</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.6.1–1.6.2</td></tr>
+    <tr><td>Entregable</td><td>Repositorio, proyecto Supabase y sitio en Netlify</td></tr>
+    <tr><td>Recursos</td><td>GitHub; Supabase; Netlify</td></tr>
+    <tr><td>Duración</td><td>2 días hábiles (día 13 a 15) · holgura 2</td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A6 / A10</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Cada cambio en la rama principal se publica solo</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A10 · Desarrollar autenticación, roles y anonimato</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.4.1</td></tr>
+    <tr><td>Entregable</td><td>Módulo de cuentas y roles</td></tr>
+    <tr><td>Recursos</td><td>React; Supabase Auth</td></tr>
+    <tr><td>Duración</td><td>5 días hábiles (día 17 a 22) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A7, A9 / A11</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Registro, ingreso con Google, recuperación y roles operativos</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A11 · Desarrollar peticiones, fotos, firmas y moderación</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.4.2, 1.4.7</td></tr>
+    <tr><td>Entregable</td><td>Módulo de peticiones y moderación</td></tr>
+    <tr><td>Recursos</td><td>React; Supabase; Storage</td></tr>
+    <tr><td>Duración</td><td>6 días hábiles (día 22 a 28) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A10, A8 / A12, A13, A14</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Alta con fotos y ubicación; una firma por persona; moderación previa</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A12 · Desarrollar clasificación, barrio, score y similares</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.4.3</td></tr>
+    <tr><td>Entregable</td><td>Procesamiento automático</td></tr>
+    <tr><td>Recursos</td><td>PostgreSQL (pg_trgm); OpenStreetMap</td></tr>
+    <tr><td>Duración</td><td>5 días hábiles (día 28 a 33) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A11 / A15, A16</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Casos de prueba de cada algoritmo resueltos correctamente</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A13 · Desarrollar mapa por barrios, comunidad y eventos</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.4.4</td></tr>
+    <tr><td>Entregable</td><td>Mapa, muro vecinal y agenda</td></tr>
+    <tr><td>Recursos</td><td>Leaflet; OpenStreetMap</td></tr>
+    <tr><td>Duración</td><td>5 días hábiles (día 28 a 33) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A11 / A15</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Filtros por barrio operativos en las tres pantallas</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A14 · Desarrollar seguimiento, notificaciones y comentarios</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.4.5</td></tr>
+    <tr><td>Entregable</td><td>Seguimiento, avisos y comentarios</td></tr>
+    <tr><td>Recursos</td><td>Supabase (disparadores y funciones)</td></tr>
+    <tr><td>Duración</td><td>5 días hábiles (día 28 a 33) · holgura 4</td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A11 / A16</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Cada cambio de etapa notifica a autor y firmantes</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A15 · Desarrollar estadísticas, panel analítico y exportes</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.4.6</td></tr>
+    <tr><td>Entregable</td><td>Paneles y reportes Excel/PDF</td></tr>
+    <tr><td>Recursos</td><td>React; funciones de estadísticas</td></tr>
+    <tr><td>Duración</td><td>4 días hábiles (día 33 a 37) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A12, A13 / A16, A17</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Los datos de los paneles coinciden con la base</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A16 · Pruebas automáticas y pruebas de permisos por rol</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.5.1–1.5.2</td></tr>
+    <tr><td>Entregable</td><td>Suite de pruebas y reporte de permisos</td></tr>
+    <tr><td>Recursos</td><td>Vitest; consultas por rol</td></tr>
+    <tr><td>Duración</td><td>4 días hábiles (día 37 a 41) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A12, A14, A15 / A18</td></tr>
+    <tr><td>Criterio de aceptación</td><td>100% de las pruebas aprobadas</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A17 · Accesibilidad, modo oscuro, app instalable y rendimiento</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.5.3, 1.6.3</td></tr>
+    <tr><td>Entregable</td><td>App instalable, accesible y fluida en celular</td></tr>
+    <tr><td>Recursos</td><td>Service worker; manifiesto; CSS</td></tr>
+    <tr><td>Duración</td><td>4 días hábiles (día 37 a 41) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A15 / A18</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Navegable con teclado; instalable; sin animaciones pesadas en celular</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A18 · Redactar documentación</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.7.1</td></tr>
+    <tr><td>Entregable</td><td>Documentación del proyecto y entregables de gestión</td></tr>
+    <tr><td>Recursos</td><td>Equipo</td></tr>
+    <tr><td>Duración</td><td>5 días hábiles (día 41 a 46) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A16, A17 / A19</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Cumple la estructura exigida por la cátedra</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A19 · Preparar presentación</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.7.2</td></tr>
+    <tr><td>Entregable</td><td>Presentación para la defensa</td></tr>
+    <tr><td>Recursos</td><td>Equipo</td></tr>
+    <tr><td>Duración</td><td>2 días hábiles (día 46 a 48) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A18 / A20</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Ensayada y dentro del tiempo asignado</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+<table class="ficha">
+  <thead><tr><th colspan="2">A20 · Entrega y defensa</th></tr></thead>
+  <tbody>
+    <tr><td>Paquete de la EDT</td><td>1.7.3</td></tr>
+    <tr><td>Entregable</td><td>Proyecto entregado y defendido</td></tr>
+    <tr><td>Recursos</td><td>Equipo completo</td></tr>
+    <tr><td>Duración</td><td>1 días hábiles (día 48 a 49) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A19 / —</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Aprobación del docente</td></tr>
+    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+  </tbody>
+</table>
+
+
+
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 6 de 7</div>
+        <h1 class="titulo">Plan de comunicación</h1>
+        <div class="sub">Gestión de las comunicaciones del proyecto ENTS</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-06</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Nuevo plan de comunicación con interesados, matriz de comunicaciones, reuniones, escalamiento y plantilla de minuta.</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<h2>Contenido</h2><ol><li>Objetivo</li><li>Interesados</li><li>Matriz de poder e interés</li><li>Matriz de comunicaciones</li><li>Reuniones</li><li>Canales y herramientas</li><li>Flujo de la comunicación</li><li>Escalamiento y gestión de cambios</li><li>Convenciones del equipo</li><li>Plantilla de minuta</li></ol>
+
+<h1 class="salto">1. Objetivo</h1>
+<p>Asegurar que cada interesado reciba la información que necesita, en el momento oportuno y por el canal adecuado, para que el equipo trabaje coordinado, la cátedra conozca el avance y, en la operación de la plataforma, vecinos, funcionarios y organismos estén informados del estado de cada petición.</p>
+
+<h1>2. Interesados</h1>
+
+<table>
+  <thead><tr><th style="width:24%">Interesado</th><th>Necesidad de información</th><th style="width:9%">Poder</th><th style="width:9%">Interés</th><th style="width:17%">Estrategia</th></tr></thead>
+  <tbody><tr><td>Docente (Ing. Loza)</td><td>Avance, cambios de alcance, entregables</td><td><span class="nivel alta">Alto</span></td><td><span class="nivel alta">Alto</span></td><td>Gestionar de cerca</td></tr><tr><td>Equipo de proyecto</td><td>Tareas, bloqueos, decisiones técnicas</td><td><span class="nivel alta">Alto</span></td><td><span class="nivel alta">Alto</span></td><td>Gestionar de cerca</td></tr><tr><td>Áreas del municipio / funcionarios</td><td>Peticiones de su área, prioridad, elevaciones</td><td><span class="nivel alta">Alto</span></td><td><span class="nivel media">Medio</span></td><td>Mantener satisfechos</td></tr><tr><td>Vecinos</td><td>Estado de sus peticiones y de su barrio</td><td><span class="nivel baja">Bajo</span></td><td><span class="nivel alta">Alto</span></td><td>Mantener informados</td></tr><tr><td>ONG y organizaciones sociales</td><td>Reportes por zona y urgencia</td><td><span class="nivel baja">Bajo</span></td><td><span class="nivel media">Medio</span></td><td>Mantener informados</td></tr><tr><td>Instituto Cervantes</td><td>Resultados del proyecto</td><td><span class="nivel media">Medio</span></td><td><span class="nivel baja">Bajo</span></td><td>Monitorear</td></tr></tbody>
+</table>
+
+<h1>3. Matriz de poder e interés</h1>
+<div class="matriz">
+  <div class="eje-y">Poder →</div>
+  <div class="cuad" style="background:#fdefc8"><b>Mantener satisfechos</b>Áreas del municipio y funcionarios</div>
+  <div class="cuad" style="background:#fbe0d4"><b>Gestionar de cerca</b>Docente · Equipo de proyecto</div>
+  <div class="cuad" style="background:#eceae3"><b>Monitorear</b>Instituto Cervantes</div>
+  <div class="cuad" style="background:#d8efe2"><b>Mantener informados</b>Vecinos · ONG y organizaciones sociales</div>
+  <div class="eje-x">Interés →</div>
+</div>
+
+<h1>4. Matriz de comunicaciones</h1>
+
+<table>
+  <thead><tr><th style="width:20%">Qué se comunica</th><th style="width:12%">Emisor</th><th style="width:13%">Receptor</th><th style="width:22%">Canal</th><th style="width:14%">Frecuencia</th><th>Formato</th></tr></thead>
+  <tbody><tr><td>Avance y bloqueos</td><td>Cada integrante</td><td>Equipo</td><td>Reunión breve + mensajería</td><td><span class="completar">[frecuencia]</span></td><td>Oral / mensaje</td></tr><tr><td>Planificación del sprint</td><td>Director</td><td>Equipo</td><td>Reunión + tablero de tareas</td><td>Inicio de sprint</td><td>Backlog priorizado</td></tr><tr><td>Cambios de código</td><td>Integrante</td><td>Equipo</td><td>GitHub: rama + Pull Request</td><td>Por cambio</td><td>Descripción del PR</td></tr><tr><td>Publicación de versiones</td><td>Director</td><td>Equipo</td><td>Netlify (automática) + aviso</td><td>Por versión</td><td>Mensaje con el resumen</td></tr><tr><td>Revisión del sprint</td><td>Equipo</td><td>Docente</td><td>Clase / demostración</td><td>Fin de sprint</td><td>Demo del sitio</td></tr><tr><td>Cambios de alcance</td><td>Director</td><td>Docente</td><td>Reunión + documento</td><td>Cuando ocurren</td><td>Pedido de cambio</td></tr><tr><td>Entregables de gestión</td><td>Equipo</td><td>Docente</td><td>PDF</td><td>Según calendario</td><td>Documento</td></tr><tr><td>Estado de las peticiones</td><td>Plataforma</td><td>Vecinos</td><td>Notificaciones en la app</td><td>Automática</td><td>Aviso</td></tr><tr><td>Respuestas oficiales</td><td>Funcionarios</td><td>Vecinos</td><td>Seguimiento de la petición</td><td>Por actualización</td><td>Mensaje + foto</td></tr><tr><td>Peticiones elevadas</td><td>Plataforma</td><td>Funcionarios</td><td>Notificación + bandeja</td><td>Al llegar a 50 firmas</td><td>Aviso</td></tr><tr><td>Reportes de problemáticas</td><td>Administración</td><td>Organismos / ONG</td><td>Exportes Excel / PDF</td><td><span class="completar">[periodicidad]</span></td><td>Reporte</td></tr></tbody>
+</table>
+
+<h1>5. Reuniones</h1>
+
+<table>
+  <thead><tr><th style="width:22%">Reunión</th><th>Propósito</th><th style="width:17%">Participantes</th><th style="width:16%">Frecuencia</th><th style="width:10%">Duración</th></tr></thead>
+  <tbody><tr><td>Seguimiento</td><td>Qué hice, qué voy a hacer, qué me bloquea</td><td>Equipo</td><td><span class="completar">[frecuencia]</span></td><td>15 min</td></tr><tr><td>Planificación de sprint</td><td>Elegir y repartir tareas del backlog</td><td>Equipo</td><td>Inicio de sprint</td><td>45 min</td></tr><tr><td>Revisión de sprint</td><td>Mostrar lo terminado y recibir devoluciones</td><td>Equipo y docente</td><td>Fin de sprint</td><td>30 min</td></tr><tr><td>Retrospectiva</td><td>Qué mejorar en la forma de trabajo</td><td>Equipo</td><td>Fin de sprint</td><td>20 min</td></tr></tbody>
+</table>
+
+<h1>6. Canales y herramientas</h1>
+
+<table>
+  <thead><tr><th style="width:30%">Canal</th><th>Uso</th></tr></thead>
+  <tbody><tr><td><span class="completar">[grupo de mensajería]</span></td><td>Coordinación diaria, avisos rápidos y bloqueos.</td></tr><tr><td>GitHub</td><td>Código, Pull Requests, revisión entre integrantes e historial de cambios.</td></tr><tr><td><span class="completar">[tablero de tareas]</span></td><td>Product backlog, tareas del sprint y estado de cada una.</td></tr><tr><td><span class="completar">[videollamada / presencial]</span></td><td>Reuniones de planificación, seguimiento y retrospectiva.</td></tr><tr><td>Plataforma ENTS</td><td>Comunicación con vecinos y funcionarios: notificaciones, seguimiento y comentarios.</td></tr><tr><td>Correo electrónico</td><td>Comunicaciones formales con el docente y entrega de documentos.</td></tr></tbody>
+</table>
+
+<h1>7. Flujo de la comunicación</h1>
+<div class="flujo">
+  <div class="fila">
+    <div class="caja"><b>Vecinos</b><br>peticiones, firmas, comentarios</div><div class="flecha">⇄</div>
+    <div class="caja"><b>Plataforma ENTS</b><br>notificaciones y seguimiento</div><div class="flecha">⇄</div>
+    <div class="caja"><b>Funcionarios por área</b><br>respuestas oficiales</div><div class="flecha">→</div>
+    <div class="caja"><b>Organismos / ONG</b><br>reportes</div>
+  </div>
+  <div class="fila">
+    <div class="caja"><b>Integrantes</b><br>avance diario</div><div class="flecha">⇄</div>
+    <div class="caja"><b>Director del proyecto</b><br>coordina y decide</div><div class="flecha">⇄</div>
+    <div class="caja"><b>Docente</b><br>aprueba y orienta</div>
+  </div>
+</div>
+<p class="pie">Figura 1. Flujo de la comunicación del proyecto (abajo) y de la plataforma en operación (arriba).</p>
+
+<h1>8. Escalamiento y gestión de cambios</h1>
+<ol>
+  <li><b>Nivel 1 — Integrante:</b> resuelve el problema dentro de su tarea; si no puede en 1 día, lo avisa en el grupo.</li>
+  <li><b>Nivel 2 — Equipo / director:</b> se trata en la reunión de seguimiento; el director redistribuye tareas o ajusta prioridades.</li>
+  <li><b>Nivel 3 — Docente:</b> los cambios de alcance, de fechas de entrega o los riesgos críticos se presentan al docente con su impacto.</li>
+</ol>
+
+<h1>9. Convenciones del equipo</h1>
+<ul>
+  <li><b>Ramas:</b> la rama principal (<code>main</code>) es la versión publicada; cada cambio se hace en una rama propia y se integra con Pull Request.</li>
+  <li><b>Mensajes de commit:</b> en español, en presente y describiendo el cambio (por ejemplo, "Score de urgencia calculado automáticamente").</li>
+  <li><b>Antes de integrar:</b> revisión de código, pruebas automáticas y compilación sin errores.</li>
+  <li><b>Documentos:</b> cada modificación se registra en el historial de revisión con autor, fecha y hora.</li>
+</ul>
+
+<h1>10. Plantilla de minuta de reunión</h1>
+<table class="ficha"><tbody>
+  <tr><td>Fecha y hora</td><td>&nbsp;</td></tr>
+  <tr><td>Tipo de reunión</td><td>Seguimiento / Planificación / Revisión / Retrospectiva</td></tr>
+  <tr><td>Participantes</td><td>&nbsp;</td></tr>
+  <tr><td>Temas tratados</td><td>&nbsp;<br>&nbsp;</td></tr>
+  <tr><td>Decisiones</td><td>&nbsp;<br>&nbsp;</td></tr>
+  <tr><td>Tareas (qué · quién · para cuándo)</td><td>&nbsp;<br>&nbsp;</td></tr>
+  <tr><td>Próxima reunión</td><td>&nbsp;</td></tr>
+</tbody></table>
+
+
+
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 7 de 7</div>
+        <h1 class="titulo">Diagrama de Gantt</h1>
+        <div class="sub">Cronograma del proyecto ENTS con ruta crítica e hitos</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-07</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Nuevo cronograma de 49 días hábiles (10 semanas) calculado a partir de la lista de actividades, con ruta crítica e hitos.</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<h2>Contenido</h2><ol><li>Diagrama de Gantt</li><li>Hitos</li><li>Ruta crítica</li><li>Conversión a fechas</li></ol>
+
+<h1 class="salto">1. Diagrama de Gantt</h1>
+<p>Cada barra representa una actividad de la lista (Entregable 4), ubicada según sus dependencias. Escala: semanas de 5 días hábiles desde el inicio del proyecto.</p>
+
+<div class="gantt">
+  <div class="g-fila g-cabecera">
+    <div class="g-nombre">Actividad</div>
+    <div class="g-pista"><span class="g-semana" style="left:0.000%;width:10.000%">S1</span><span class="g-semana" style="left:10.000%;width:10.000%">S2</span><span class="g-semana" style="left:20.000%;width:10.000%">S3</span><span class="g-semana" style="left:30.000%;width:10.000%">S4</span><span class="g-semana" style="left:40.000%;width:10.000%">S5</span><span class="g-semana" style="left:50.000%;width:10.000%">S6</span><span class="g-semana" style="left:60.000%;width:10.000%">S7</span><span class="g-semana" style="left:70.000%;width:10.000%">S8</span><span class="g-semana" style="left:80.000%;width:10.000%">S9</span><span class="g-semana" style="left:90.000%;width:10.000%">S10</span></div>
+  </div>
+  
+  <div class="g-fila">
+    <div class="g-nombre"><b>A1</b> Analizar la propuesta de reorientación y redefinir el proyecto</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:0.000%;width:6.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A2</b> Redactar Project Charter y declaración de alcance</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:6.000%;width:6.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">A3 Definir plan de comunicación y cronograma</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:12.000%;width:4.000%;background:#3987e5"></span>
+      <span class="g-holgura" style="left:16.000%;width:4.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A4</b> Revisar encuesta y análisis socioeconómico</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:6.000%;width:6.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A5</b> Relevar requerimientos y armar product backlog</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:12.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A6</b> Diseñar arquitectura y elegir tecnologías</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:20.000%;width:6.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A7</b> Diseñar modelo de datos y reglas de seguridad</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:26.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">A8 Diseñar interfaz y navegación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:20.000%;width:8.000%;background:#3987e5"></span>
+      <span class="g-holgura" style="left:28.000%;width:16.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">A9 Configurar repositorio, base de datos y publicación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:26.000%;width:4.000%;background:#3987e5"></span>
+      <span class="g-holgura" style="left:30.000%;width:4.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A10</b> Desarrollar autenticación, roles y anonimato</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:34.000%;width:10.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A11</b> Desarrollar peticiones, fotos, firmas y moderación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:44.000%;width:12.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A12</b> Desarrollar clasificación, barrio, score y similares</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:56.000%;width:10.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A13</b> Desarrollar mapa por barrios, comunidad y eventos</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:56.000%;width:10.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">A14 Desarrollar seguimiento, notificaciones y comentarios</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:56.000%;width:10.000%;background:#3987e5"></span>
+      <span class="g-holgura" style="left:66.000%;width:8.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A15</b> Desarrollar estadísticas, panel analítico y exportes</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:66.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A16</b> Pruebas automáticas y pruebas de permisos por rol</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:74.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A17</b> Accesibilidad, modo oscuro, app instalable y rendimiento</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:74.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A18</b> Redactar documentación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:82.000%;width:10.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A19</b> Preparar presentación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:92.000%;width:4.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A20</b> Entrega y defensa</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:96.000%;width:2.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-separador">Hitos</div>
+  
+  <div class="g-fila">
+    <div class="g-nombre">◆ Charter y alcance aprobados</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:12.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ Diseño completo</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:34.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ Primera versión funcional</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:56.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ Producto completo y probado</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:82.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ Entrega y defensa</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:98.000%"></span>
+    </div>
+  </div>
+</div>
+<div class="g-leyenda">
+  <span><i style="background:#eb6834"></i>Actividad crítica (sin holgura)</span>
+  <span><i style="background:#3987e5"></i>Actividad con holgura</span>
+  <span><i class="rayas"></i>Holgura disponible</span>
+  <span><i class="rombo"></i>Hito</span>
+</div>
+
+<h1>2. Hitos</h1>
+
+<table>
+  <thead><tr><th>Hito</th><th style="width:14%">Día hábil</th><th style="width:14%">Semana</th><th style="width:20%">Fecha</th></tr></thead>
+  <tbody><tr><td>Charter y alcance aprobados</td><td>6</td><td>S2</td><td><span class="completar">[__/__/____]</span></td></tr><tr><td>Diseño completo</td><td>17</td><td>S4</td><td><span class="completar">[__/__/____]</span></td></tr><tr><td>Primera versión funcional</td><td>28</td><td>S6</td><td><span class="completar">[__/__/____]</span></td></tr><tr><td>Producto completo y probado</td><td>41</td><td>S9</td><td><span class="completar">[__/__/____]</span></td></tr><tr><td>Entrega y defensa</td><td>49</td><td>S10</td><td><span class="completar">[__/__/____]</span></td></tr></tbody>
+</table>
+
+<h1>3. Ruta crítica</h1>
+<p style="font-weight:600;color:#0d366b">A1 → A2 → A4 → A5 → A6 → A7 → A10 → A11 → A12 → A13 → A15 → A16 → A17 → A18 → A19 → A20</p>
+<p>Duración total: <b>49 días hábiles</b> (≈ 10 semanas). Un atraso en cualquiera de estas actividades atrasa la entrega. Las demás tienen holgura: A3 (2 días), A8 (8 días), A9 (2 días), A14 (4 días).</p>
+
+<h1>4. Conversión a fechas</h1>
+<p>Al fijar la fecha de inicio del proyecto (<span class="completar">[__/__/____]</span>), cada día hábil se convierte sumando días laborables (sin fines de semana ni feriados). Las versiones del sistema registradas en el repositorio son: primera versión funcional el 04/10/2026; roles, anonimato e ingreso con Google el 11/10/2026; procesamiento automático, seguimiento, reportes y calidad el 12/10/2026.</p>
+
+</body>
+</html>

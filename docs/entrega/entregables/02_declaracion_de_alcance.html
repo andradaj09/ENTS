@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ENTS — Declaración de alcance</title>
+<link rel="stylesheet" href="estilos.css">
+<style>
+  @page { @top-right { content: "ENTS · Declaración de alcance (Scope Statement)"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; } }
+
+</style>
+</head>
+<body>
+
+
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 2 de 7</div>
+        <h1 class="titulo">Declaración de alcance</h1>
+        <div class="sub">Scope Statement del proyecto ENTS — Everyone Needs To Smile</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-02</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Reescritura completa para el sistema de peticiones vecinales: alcance del producto, requisitos, entregables, exclusiones y control de cambios.</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<h2>Contenido</h2><ol><li>Objetivo del documento</li><li>Alcance del producto</li><li>Requisitos funcionales</li><li>Requisitos no funcionales</li><li>Entregables del proyecto</li><li>Criterios de aceptación del producto</li><li>Exclusiones</li><li>Supuestos y restricciones</li><li>Límites e interfaces del sistema</li><li>Control de cambios del alcance</li><li>Aprobación</li></ol>
+
+<h1 class="salto">1. Objetivo del documento</h1>
+<p>Este documento define en detalle qué incluye y qué no incluye el proyecto ENTS, a partir del alcance preliminar del Project Charter. Sirve como referencia para planificar, ejecutar y aceptar el trabajo, y para evaluar cualquier pedido de cambio.</p>
+
+<h1>2. Alcance del producto</h1>
+<p>ENTS es una aplicación web adaptable a celular e instalable (PWA) en la que los vecinos de Córdoba y Villa Allende publican problemas de su barrio, los apoyan con firmas y siguen su resolución; los funcionarios de cada área del municipio responden y registran el avance; y los administradores moderan, analizan y exportan la información. Sus características principales son:</p>
+
+<table>
+  <thead><tr><th style="width:26%">Característica</th><th>Descripción</th></tr></thead>
+  <tbody><tr><td>Cuentas y roles</td><td>Registro e ingreso con correo o Google; recuperación de contraseña; roles de vecino, funcionario por área, administrador y dueño.</td></tr><tr><td>Peticiones</td><td>Título, descripción, hasta 3 fotos comprimidas y ubicación en mapa; quedan pendientes hasta su moderación.</td></tr><tr><td>Procesamiento automático</td><td>Categoría (16) por palabras clave, barrio (111) por cercanía, score de urgencia, detección de similares y revisión de textos.</td></tr><tr><td>Firmas y prioridad</td><td>Una firma por persona; cinco niveles de prioridad; elevación al área a las 50 firmas.</td></tr><tr><td>Seguimiento</td><td>Etapas recibida → en revisión → derivada → en obra → resuelta, con respuesta oficial y foto.</td></tr><tr><td>Participación</td><td>Notificaciones, comentarios anónimos con denuncias, barrios seguidos e insignias.</td></tr><tr><td>Comunidad</td><td>Mapa por barrios, muro vecinal y agenda de eventos.</td></tr><tr><td>Reportes</td><td>Estadísticas públicas anónimas, panel analítico, exportación a Excel y PDF.</td></tr><tr><td>Administración</td><td>Moderación, directorio de usuarios, asignación de áreas, cambio de roles (solo dueño) y documentos privados.</td></tr></tbody>
+</table>
+
+<h1>3. Requisitos funcionales</h1>
+
+<table>
+  <thead><tr><th style="width:9%">ID</th><th>Requisito</th><th style="width:12%">Prioridad</th></tr></thead>
+  <tbody><tr><td>RF01</td><td>Registrar usuarios con correo y contraseña o con Google; recuperar la contraseña por correo.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF02</td><td>Elegir el tipo de cuenta al registrarse (vecino o funcionario, este último sujeto a aprobación).</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF03</td><td>Crear peticiones con título, descripción, hasta 3 fotos y ubicación en el mapa.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF04</td><td>Sugerir automáticamente la categoría según el texto y el barrio según la ubicación.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF05</td><td>Calcular automáticamente el score de urgencia (0 a 100) de cada petición.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF06</td><td>Advertir peticiones similares antes de crear una nueva.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF07</td><td>Moderar las peticiones antes de publicarlas (aprobar, rechazar, editar, eliminar).</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF08</td><td>Firmar y retirar la firma; ordenar el inicio por prioridad según firmas.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF09</td><td>Elevar automáticamente al área las peticiones que alcanzan 50 firmas.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF10</td><td>Registrar respuestas oficiales y la etapa de seguimiento con foto.</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>RF11</td><td>Notificar a autor y firmantes de cada novedad; permitir seguir barrios.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF12</td><td>Comentar en forma anónima, denunciar y moderar comentarios.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF13</td><td>Mostrar el mapa por barrios coloreado por peticiones, firmas o urgencia.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF14</td><td>Ofrecer estadísticas públicas anónimas y un panel analítico para administradores.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF15</td><td>Exportar reportes de peticiones y barrios a Excel y PDF.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF16</td><td>Asignar áreas a funcionarios y mostrarles una bandeja de su área.</td><td><span class="nivel media">Media</span></td></tr><tr><td>RF17</td><td>Permitir solo al dueño del proyecto cambiar el rol de las cuentas.</td><td><span class="nivel baja">Baja</span></td></tr><tr><td>RF18</td><td>Publicar en el muro vecinal y consultar la agenda de eventos por barrio.</td><td><span class="nivel baja">Baja</span></td></tr></tbody>
+</table>
+
+<h1>4. Requisitos no funcionales</h1>
+
+<table>
+  <thead><tr><th style="width:10%">ID</th><th style="width:17%">Atributo</th><th>Requisito</th></tr></thead>
+  <tbody><tr><td>RNF01</td><td>Privacidad</td><td>Anonimato entre vecinos; identidades visibles solo para funcionarios y administradores.</td></tr><tr><td>RNF02</td><td>Seguridad</td><td>Reglas de acceso aplicadas en la base de datos (RLS); comunicación por HTTPS.</td></tr><tr><td>RNF03</td><td>Usabilidad</td><td>Interfaz en español, adaptable a celular, modo claro y oscuro.</td></tr><tr><td>RNF04</td><td>Accesibilidad</td><td>Navegación con teclado, foco visible, movimiento reducido, tablas alternativas a los gráficos.</td></tr><tr><td>RNF05</td><td>Rendimiento</td><td>Carga por partes de cada página; animaciones reducidas en celulares.</td></tr><tr><td>RNF06</td><td>Disponibilidad</td><td>Aplicación instalable (PWA) que abre aun con conexión inestable.</td></tr><tr><td>RNF07</td><td>Mantenibilidad</td><td>Revisión automática de código, pruebas automáticas y esquema SQL versionado.</td></tr><tr><td>RNF08</td><td>Legal</td><td>Política de privacidad publicada; cumplimiento de la Ley 25.326.</td></tr></tbody>
+</table>
+
+<h1>5. Entregables del proyecto</h1>
+
+<table>
+  <thead><tr><th style="width:5%">#</th><th style="width:22%">Entregable</th><th>Descripción</th><th style="width:33%">Criterio de aceptación</th></tr></thead>
+  <tbody><tr><td>1</td><td>Aplicación web publicada</td><td>Sitio en producción con todos los módulos del alcance.</td><td>Todas las características operativas en el sitio publicado.</td></tr><tr><td>2</td><td>Base de datos</td><td>Esquema SQL con tablas, políticas, funciones y disparadores.</td><td>Se recrea completa ejecutando <code>schema.sql</code>.</td></tr><tr><td>3</td><td>Repositorio de código</td><td>Código fuente versionado con README e instrucciones.</td><td>Otro integrante puede instalarlo y correrlo siguiendo el README.</td></tr><tr><td>4</td><td>Suite de pruebas</td><td>Pruebas automáticas y pruebas de permisos por rol.</td><td>100% aprobadas antes de cada publicación.</td></tr><tr><td>5</td><td>Entregables de gestión</td><td>Charter, alcance, EDT, actividades, diccionario, comunicación y Gantt.</td><td>Completos y consistentes entre sí.</td></tr><tr><td>6</td><td>Documentación técnica</td><td>Requerimientos, arquitectura, datos, seguridad, pruebas e implementación.</td><td>Refleja el sistema implementado.</td></tr><tr><td>7</td><td>Presentación</td><td>Exposición del proyecto para la defensa.</td><td>Aprobada por el equipo y ensayada.</td></tr></tbody>
+</table>
+
+<h1>6. Criterios de aceptación del producto</h1>
+<ul>
+  <li>El ciclo completo —pedir, moderar, firmar, priorizar, responder y resolver— funciona en el sitio publicado.</li>
+  <li>Toda petición nueva recibe categoría sugerida, barrio y score de urgencia sin intervención manual.</li>
+  <li>Un vecino no puede ver la identidad de otros vecinos ni modificar datos ajenos (verificado con pruebas por rol).</li>
+  <li>No se publican teléfonos, correos ni documentos en los comentarios.</li>
+  <li>La aplicación se puede instalar en el celular y navegar con teclado.</li>
+  <li>Las pruebas automáticas se ejecutan sin errores y la compilación de producción es exitosa.</li>
+</ul>
+
+<h1>7. Exclusiones</h1>
+
+<table>
+  <thead><tr><th style="width:45%">Fuera del alcance</th><th>Motivo</th></tr></thead>
+  <tbody><tr><td>Pagos, donaciones o recaudación dentro de la plataforma</td><td>Complejidad legal y de integración; si se coordinan donaciones, ocurren por fuera.</td></tr><tr><td>Integración con sistemas internos del municipio</td><td>Sin acceso a esos sistemas; los funcionarios responden desde ENTS.</td></tr><tr><td>Notificaciones por correo electrónico o SMS</td><td>Requiere servicios pagos; se usan notificaciones dentro de la app.</td></tr><tr><td>Aplicaciones nativas para Android o iOS</td><td>Se cubre con la aplicación instalable (PWA).</td></tr><tr><td>Polígonos oficiales de los barrios</td><td>Se usan los centros de OpenStreetMap; se evalúa como mejora futura.</td></tr><tr><td>Atención de reclamos en forma directa por el equipo</td><td>El equipo provee la herramienta; la resolución corresponde a los organismos.</td></tr></tbody>
+</table>
+
+<h1>8. Supuestos y restricciones</h1>
+<div class="dos-col">
+  <div class="tarjeta"><h4>Supuestos</h4><ul>
+    <li>Los usuarios tienen acceso a internet y un navegador actualizado.</li>
+    <li>Los servicios gratuitos se mantienen durante el proyecto.</li>
+    <li>Los organismos designan funcionarios por área para la operación real.</li>
+    <li>El equipo mantiene su disponibilidad durante el ciclo lectivo.</li>
+  </ul></div>
+  <div class="tarjeta"><h4>Restricciones</h4><ul>
+    <li>Plazo: calendario de la cátedra.</li>
+    <li>Equipo: tres integrantes con dedicación parcial.</li>
+    <li>Presupuesto: $0 (solo servicios gratuitos).</li>
+    <li>Legales: Ley 25.326 de Protección de Datos Personales.</li>
+  </ul></div>
+</div>
+
+<h1>9. Límites e interfaces del sistema</h1>
+
+<table>
+  <thead><tr><th style="width:18%">Sistema externo</th><th style="width:36%">Interfaz</th><th>Uso</th></tr></thead>
+  <tbody><tr><td>Supabase</td><td>API REST y cliente JavaScript sobre HTTPS</td><td>Base de datos, autenticación, almacenamiento de fotos y documentos.</td></tr><tr><td>Netlify</td><td>Publicación continua desde GitHub</td><td>Sitio en producción con HTTPS.</td></tr><tr><td>OpenStreetMap</td><td>Teselas del mapa; Nominatim (carga única de barrios)</td><td>Mapa vecinal y ubicación de barrios.</td></tr><tr><td>Google</td><td>OAuth 2.0</td><td>Ingreso con cuenta de Google (opcional).</td></tr><tr><td>Navegador del usuario</td><td>Geolocalización, cámara/archivos, service worker</td><td>Ubicación de la petición, fotos e instalación de la app.</td></tr></tbody>
+</table>
+
+<h1>10. Control de cambios del alcance</h1>
+<ol>
+  <li>Cualquier integrante registra el pedido de cambio (qué, por qué, impacto estimado en tiempo y calidad).</li>
+  <li>El equipo lo analiza en la siguiente reunión de planificación.</li>
+  <li>Si afecta objetivos, entregables o plazos, se presenta al docente para su aprobación.</li>
+  <li>Si se aprueba, se actualizan este documento, la EDT, la lista de actividades y el Gantt, y se registra en el historial de revisión.</li>
+</ol>
+<div class="nota">Ejemplo de cambio aprobado: reemplazo del módulo de pagos y donaciones por el sistema de peticiones (versión 2.0 de este documento).</div>
+
+<h1>11. Aprobación</h1>
+<div class="firmas">
+  <div class="firma"><b>Ing. Loza</b>Docente — Patrocinador<br>Fecha: ___/___/______</div>
+  <div class="firma"><b><span class="completar">[Director del proyecto]</span></b>Director del proyecto<br>Fecha: ___/___/______</div>
+</div>
+
+</body>
+</html>

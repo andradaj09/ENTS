@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ENTS — EDT / WBS</title>
+<link rel="stylesheet" href="estilos.css">
+<style>
+  @page { @top-right { content: "ENTS · Estructura de desglose del trabajo (EDT / WBS)"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; } }
+
+  .edt { display: flex; flex-direction: column; align-items: center; gap: 8pt; break-inside: avoid; margin: 8pt 0; }
+  .edt-raiz { background: #0d366b; color: #fff; font-weight: 700; padding: 6pt 14pt; border-radius: 4pt; font-size: 10pt; }
+  .edt-ramas { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4pt; width: 100%; }
+  .edt-rama { display: flex; flex-direction: column; gap: 3pt; }
+  .edt-rama .cab { background: #1c5cab; color: #fff; font-weight: 600; font-size: 7.6pt; padding: 4pt; border-radius: 3pt; text-align: center; min-height: 30pt; }
+  .edt-rama .hoja { border: 0.7pt solid #1c5cab; color: #14213d; font-size: 7.2pt; padding: 3pt; border-radius: 3pt; background: #f2f7fd; }
+</style>
+</head>
+<body>
+
+
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 3 de 7</div>
+        <h1 class="titulo">EDT / WBS</h1>
+        <div class="sub">Estructura de desglose del trabajo del proyecto ENTS</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-03</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Nueva EDT orientada a entregables para el sistema de peticiones vecinales (7 componentes, 29 paquetes de trabajo).</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<h2>Contenido</h2><ol><li>Criterios de construcción</li><li>Diagrama de la EDT</li><li>EDT en formato de lista</li><li>Relación con las actividades</li></ol>
+
+<h1 class="salto">1. Criterios de construcción</h1>
+<ul>
+  <li><b>Orientada a entregables:</b> cada elemento representa un resultado verificable, no una tarea suelta.</li>
+  <li><b>Regla del 100%:</b> la EDT incluye todo el trabajo del proyecto y nada que esté fuera del alcance aprobado.</li>
+  <li><b>Tres niveles:</b> proyecto (nivel 1), componentes (nivel 2) y paquetes de trabajo (nivel 3).</li>
+  <li><b>Codificación jerárquica:</b> cada paquete se identifica con un código (por ejemplo, 1.4.3) que se usa en la lista y el diccionario de actividades.</li>
+</ul>
+<table class="ficha"><tbody>
+  <tr><td>Componentes (nivel 2)</td><td>7</td></tr>
+  <tr><td>Paquetes de trabajo (nivel 3)</td><td>29</td></tr>
+  <tr><td>Actividades asociadas</td><td>20 (ver Entregable 4)</td></tr>
+</tbody></table>
+
+<h1>2. Diagrama de la EDT</h1>
+
+<div class="edt">
+  <div class="edt-raiz">1. ENTS — Plataforma de peticiones vecinales</div>
+  <div class="edt-ramas">
+    <div class="edt-rama"><div class="cab">1.1 Gestión del proyecto</div><div class="hoja">1.1.1 Project Charter</div><div class="hoja">1.1.2 Declaración de alcance</div><div class="hoja">1.1.3 Plan de comunicación</div><div class="hoja">1.1.4 Cronograma (Gantt)</div><div class="hoja">1.1.5 Seguimiento y control</div></div><div class="edt-rama"><div class="cab">1.2 Análisis</div><div class="hoja">1.2.1 Estudio de necesidades y encuesta</div><div class="hoja">1.2.2 Análisis socioeconómico</div><div class="hoja">1.2.3 Requerimientos</div><div class="hoja">1.2.4 Product backlog</div></div><div class="edt-rama"><div class="cab">1.3 Diseño</div><div class="hoja">1.3.1 Arquitectura</div><div class="hoja">1.3.2 Modelo de datos</div><div class="hoja">1.3.3 Interfaz y navegación</div><div class="hoja">1.3.4 Seguridad y roles</div></div><div class="edt-rama"><div class="cab">1.4 Desarrollo</div><div class="hoja">1.4.1 Autenticación y roles</div><div class="hoja">1.4.2 Peticiones y firmas</div><div class="hoja">1.4.3 Procesamiento automático</div><div class="hoja">1.4.4 Mapa y comunidad</div><div class="hoja">1.4.5 Seguimiento y avisos</div><div class="hoja">1.4.6 Reportes</div><div class="hoja">1.4.7 Moderación</div></div><div class="edt-rama"><div class="cab">1.5 Pruebas y calidad</div><div class="hoja">1.5.1 Pruebas automáticas</div><div class="hoja">1.5.2 Pruebas de permisos</div><div class="hoja">1.5.3 Accesibilidad y rendimiento</div></div><div class="edt-rama"><div class="cab">1.6 Implementación</div><div class="hoja">1.6.1 Base de datos en la nube</div><div class="hoja">1.6.2 Publicación web</div><div class="hoja">1.6.3 App instalable</div></div><div class="edt-rama"><div class="cab">1.7 Documentación y cierre</div><div class="hoja">1.7.1 Documentación</div><div class="hoja">1.7.2 Presentación</div><div class="hoja">1.7.3 Entrega y defensa</div></div>
+  </div>
+</div>
+<p class="pie">Figura 1. EDT del proyecto ENTS (tres niveles).</p>
+
+<h1 class="salto">3. EDT en formato de lista</h1>
+<table>
+  <thead><tr><th style="width:12%">Código</th><th style="width:35%">Elemento</th><th>Descripción / entregable</th></tr></thead>
+  <tbody>
+    <tr><td><b>1</b></td><td><b>ENTS — Plataforma de peticiones vecinales</b></td><td>Proyecto completo.</td></tr>
+    <tr><td><b>1.1</b></td><td><b>Gestión del proyecto</b></td><td>Planificación, coordinación y control.</td></tr><tr><td>&nbsp;&nbsp;1.1.1</td><td>&nbsp;&nbsp;Project Charter</td><td>Propuesta de reorientación aprobada; Project Charter y Declaración de alcance</td></tr><tr><td>&nbsp;&nbsp;1.1.2</td><td>&nbsp;&nbsp;Declaración de alcance</td><td>Project Charter y Declaración de alcance</td></tr><tr><td>&nbsp;&nbsp;1.1.3</td><td>&nbsp;&nbsp;Plan de comunicación</td><td>Plan de comunicación y cronograma base</td></tr><tr><td>&nbsp;&nbsp;1.1.4</td><td>&nbsp;&nbsp;Cronograma (Gantt)</td><td>Plan de comunicación y cronograma base</td></tr><tr><td>&nbsp;&nbsp;1.1.5</td><td>&nbsp;&nbsp;Seguimiento y control</td><td>—</td></tr><tr><td><b>1.2</b></td><td><b>Análisis</b></td><td>Comprensión del problema y de los requisitos.</td></tr><tr><td>&nbsp;&nbsp;1.2.1</td><td>&nbsp;&nbsp;Estudio de necesidades y encuesta</td><td>Informe de necesidades actualizado</td></tr><tr><td>&nbsp;&nbsp;1.2.2</td><td>&nbsp;&nbsp;Análisis socioeconómico</td><td>Informe de necesidades actualizado</td></tr><tr><td>&nbsp;&nbsp;1.2.3</td><td>&nbsp;&nbsp;Requerimientos</td><td>Requerimientos y product backlog priorizado</td></tr><tr><td>&nbsp;&nbsp;1.2.4</td><td>&nbsp;&nbsp;Product backlog</td><td>Requerimientos y product backlog priorizado</td></tr><tr><td><b>1.3</b></td><td><b>Diseño</b></td><td>Definición técnica y visual de la solución.</td></tr><tr><td>&nbsp;&nbsp;1.3.1</td><td>&nbsp;&nbsp;Arquitectura</td><td>Documento de arquitectura y despliegue</td></tr><tr><td>&nbsp;&nbsp;1.3.2</td><td>&nbsp;&nbsp;Modelo de datos</td><td>DER, esquema SQL y políticas de acceso</td></tr><tr><td>&nbsp;&nbsp;1.3.3</td><td>&nbsp;&nbsp;Interfaz y navegación</td><td>Prototipo de pantallas y estilo visual</td></tr><tr><td>&nbsp;&nbsp;1.3.4</td><td>&nbsp;&nbsp;Seguridad y roles</td><td>DER, esquema SQL y políticas de acceso</td></tr><tr><td><b>1.4</b></td><td><b>Desarrollo</b></td><td>Construcción de las funcionalidades.</td></tr><tr><td>&nbsp;&nbsp;1.4.1</td><td>&nbsp;&nbsp;Autenticación y roles</td><td>Módulo de cuentas y roles</td></tr><tr><td>&nbsp;&nbsp;1.4.2</td><td>&nbsp;&nbsp;Peticiones y firmas</td><td>Módulo de peticiones y moderación</td></tr><tr><td>&nbsp;&nbsp;1.4.3</td><td>&nbsp;&nbsp;Procesamiento automático</td><td>Procesamiento automático</td></tr><tr><td>&nbsp;&nbsp;1.4.4</td><td>&nbsp;&nbsp;Mapa y comunidad</td><td>Mapa, muro vecinal y agenda</td></tr><tr><td>&nbsp;&nbsp;1.4.5</td><td>&nbsp;&nbsp;Seguimiento y avisos</td><td>Seguimiento, avisos y comentarios</td></tr><tr><td>&nbsp;&nbsp;1.4.6</td><td>&nbsp;&nbsp;Reportes</td><td>Paneles y reportes Excel/PDF</td></tr><tr><td>&nbsp;&nbsp;1.4.7</td><td>&nbsp;&nbsp;Moderación</td><td>Módulo de peticiones y moderación</td></tr><tr><td><b>1.5</b></td><td><b>Pruebas y calidad</b></td><td>Verificación del producto.</td></tr><tr><td>&nbsp;&nbsp;1.5.1</td><td>&nbsp;&nbsp;Pruebas automáticas</td><td>Suite de pruebas y reporte de permisos</td></tr><tr><td>&nbsp;&nbsp;1.5.2</td><td>&nbsp;&nbsp;Pruebas de permisos</td><td>Suite de pruebas y reporte de permisos</td></tr><tr><td>&nbsp;&nbsp;1.5.3</td><td>&nbsp;&nbsp;Accesibilidad y rendimiento</td><td>App instalable, accesible y fluida en celular</td></tr><tr><td><b>1.6</b></td><td><b>Implementación</b></td><td>Puesta en producción.</td></tr><tr><td>&nbsp;&nbsp;1.6.1</td><td>&nbsp;&nbsp;Base de datos en la nube</td><td>Repositorio, proyecto Supabase y sitio en Netlify</td></tr><tr><td>&nbsp;&nbsp;1.6.2</td><td>&nbsp;&nbsp;Publicación web</td><td>Repositorio, proyecto Supabase y sitio en Netlify</td></tr><tr><td>&nbsp;&nbsp;1.6.3</td><td>&nbsp;&nbsp;App instalable</td><td>App instalable, accesible y fluida en celular</td></tr><tr><td><b>1.7</b></td><td><b>Documentación y cierre</b></td><td>Documentos, presentación y entrega.</td></tr><tr><td>&nbsp;&nbsp;1.7.1</td><td>&nbsp;&nbsp;Documentación</td><td>Documentación del proyecto y entregables de gestión</td></tr><tr><td>&nbsp;&nbsp;1.7.2</td><td>&nbsp;&nbsp;Presentación</td><td>Presentación para la defensa</td></tr><tr><td>&nbsp;&nbsp;1.7.3</td><td>&nbsp;&nbsp;Entrega y defensa</td><td>Proyecto entregado y defendido</td></tr>
+  </tbody>
+</table>
+
+<h1>4. Relación con las actividades</h1>
+
+<table>
+  <thead><tr><th style="width:30%">Componente</th><th>Actividades</th></tr></thead>
+  <tbody><tr><td>1.1 Gestión del proyecto</td><td>A1 Analizar la propuesta de reorientación y redefinir el proyecto<br>A2 Redactar Project Charter y declaración de alcance<br>A3 Definir plan de comunicación y cronograma</td></tr><tr><td>1.2 Análisis</td><td>A4 Revisar encuesta y análisis socioeconómico<br>A5 Relevar requerimientos y armar product backlog</td></tr><tr><td>1.3 Diseño</td><td>A6 Diseñar arquitectura y elegir tecnologías<br>A7 Diseñar modelo de datos y reglas de seguridad<br>A8 Diseñar interfaz y navegación</td></tr><tr><td>1.4 Desarrollo</td><td>A10 Desarrollar autenticación, roles y anonimato<br>A11 Desarrollar peticiones, fotos, firmas y moderación<br>A12 Desarrollar clasificación, barrio, score y similares<br>A13 Desarrollar mapa por barrios, comunidad y eventos<br>A14 Desarrollar seguimiento, notificaciones y comentarios<br>A15 Desarrollar estadísticas, panel analítico y exportes</td></tr><tr><td>1.5 Pruebas y calidad</td><td>A16 Pruebas automáticas y pruebas de permisos por rol<br>A17 Accesibilidad, modo oscuro, app instalable y rendimiento</td></tr><tr><td>1.6 Implementación</td><td>A9 Configurar repositorio, base de datos y publicación<br>A17 Accesibilidad, modo oscuro, app instalable y rendimiento</td></tr><tr><td>1.7 Documentación y cierre</td><td>A18 Redactar documentación<br>A19 Preparar presentación<br>A20 Entrega y defensa</td></tr></tbody>
+</table>
+
+</body>
+</html>

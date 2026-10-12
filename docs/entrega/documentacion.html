@@ -78,6 +78,24 @@
   .entidad .nom { background: var(--marino); color: #fff; font-weight: 700; padding: 2pt 5pt; }
   .entidad .cols { padding: 3pt 5pt; line-height: 1.4; }
   .der { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6pt; }
+
+  .gantt { border: 0.8pt solid #d9d7cf; border-radius: 5pt; padding: 6pt 8pt; break-inside: avoid; }
+  .g-fila { display: grid; grid-template-columns: 62mm 1fr; align-items: center; min-height: 15pt; border-bottom: 0.5pt solid #eceae3; }
+  .g-nombre { font-size: 7.6pt; padding-right: 6pt; line-height: 1.2; }
+  .g-pista { position: relative; height: 15pt; }
+  .g-linea { position: absolute; top: 0; bottom: 0; border-left: 0.5pt solid #e1e0d9; }
+  .g-barra { position: absolute; top: 3.5pt; height: 8pt; border-radius: 2pt; }
+  .g-holgura { position: absolute; top: 6pt; height: 3pt; background: repeating-linear-gradient(90deg, #9ec5f4 0 3pt, transparent 3pt 5pt); }
+  .g-hito { position: absolute; top: 3pt; width: 9pt; height: 9pt; background: #0d366b; transform: translateX(-4.5pt) rotate(45deg); }
+  .g-cabecera { background: #0d366b; color: #fff; font-weight: 600; border-radius: 3pt; }
+  .g-cabecera .g-nombre { padding-left: 4pt; font-size: 8pt; }
+  .g-semana { position: absolute; top: 3pt; text-align: center; font-size: 7.6pt; }
+  .g-separador { font-size: 8pt; font-weight: 700; color: #0d366b; padding: 5pt 0 2pt; }
+  .g-leyenda { display: flex; flex-wrap: wrap; gap: 4pt 14pt; font-size: 8pt; color: #4a5568; margin: 6pt 0 10pt; }
+  .g-leyenda span { display: inline-flex; align-items: center; gap: 4pt; }
+  .g-leyenda i { width: 14pt; height: 7pt; border-radius: 2pt; display: inline-block; }
+  .g-leyenda i.rayas { height: 3pt; background: repeating-linear-gradient(90deg, #9ec5f4 0 3pt, transparent 3pt 5pt); }
+  .g-leyenda i.rombo { width: 7pt; height: 7pt; background: #0d366b; transform: rotate(45deg); border-radius: 0; }
 </style>
 </head>
 <body>
@@ -305,7 +323,7 @@
     <tr><td>A3</td><td>Definir plan de comunicación y cronograma</td><td>1.1.3–1.1.4</td><td>2</td><td>A2</td><td>Equipo</td></tr>
     <tr><td>A4</td><td>Revisar encuesta y análisis socioeconómico</td><td>1.2.1–1.2.2</td><td>3</td><td>A1</td><td>Equipo</td></tr>
     <tr><td>A5</td><td>Relevar requerimientos y armar product backlog</td><td>1.2.3–1.2.4</td><td>4</td><td>A2, A4</td><td>Equipo</td></tr>
-    <tr><td>A6</td><td>Diseñar arquitectura y elegir tecnologías</td><td>1.3.1</td><td>3</td><td>A5</td><td>Equipo</td></tr>
+    <tr><td>A6</td><td>Diseñar arquitectura y elegir tecnologías</td><td>1.3.1</td><td>3</td><td>A5, A3</td><td>Equipo</td></tr>
     <tr><td>A7</td><td>Diseñar modelo de datos y reglas de seguridad</td><td>1.3.2, 1.3.4</td><td>4</td><td>A6</td><td>Equipo</td></tr>
     <tr><td>A8</td><td>Diseñar interfaz y navegación</td><td>1.3.3</td><td>4</td><td>A5</td><td>Equipo</td></tr>
     <tr><td>A9</td><td>Configurar repositorio, base de datos y publicación</td><td>1.6.1–1.6.2</td><td>2</td><td>A6</td><td>Equipo</td></tr>
@@ -382,26 +400,219 @@
 </div>
 
 <h2 id="gantt">3.8 Diagrama de Gantt</h2>
-<p>Cronograma en semanas relativas al inicio de la reorientación (S1 = primera semana). Las fechas reales de cada entrega de código figuran en el Anexo B.</p>
-<table class="gantt">
-  <thead><tr><th>Actividad</th><th class="s">S1</th><th class="s">S2</th><th class="s">S3</th><th class="s">S4</th><th class="s">S5</th><th class="s">S6</th><th class="s">S7</th><th class="s">S8</th><th class="s">S9</th><th class="s">S10</th><th class="s">S11</th><th class="s">S12</th></tr></thead>
-  <tbody>
-    <tr><td>A1–A3 Reorientación y planificación</td><td class="c"><span class="barra-g"></span></td><td class="c"><span class="barra-g"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>A4–A5 Análisis y backlog</td><td></td><td class="c"><span class="barra-a"></span></td><td class="c"><span class="barra-a"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>A6–A8 Diseño</td><td></td><td></td><td class="c"><span class="barra-a"></span></td><td class="c"><span class="barra-a"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>A9 Configuración</td><td></td><td></td><td></td><td class="c"><span class="barra-x"></span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>A10 Autenticación y roles</td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>A11 Peticiones, firmas, moderación</td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>A12 Procesamiento automático</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>A13 Mapa, comunidad, eventos</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>A14 Seguimiento y notificaciones</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td></tr>
-    <tr><td>A15 Estadísticas y reportes</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-d"></span></td><td></td><td></td><td></td></tr>
-    <tr><td>A16–A17 Pruebas y calidad</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-q"></span></td><td class="c"><span class="barra-q"></span></td><td></td><td></td></tr>
-    <tr><td>A18–A19 Documentación y presentación</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-h"></span></td><td class="c"><span class="barra-h"></span></td><td></td></tr>
-    <tr><td>A20 Entrega y defensa</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c"><span class="barra-h"></span></td></tr>
-  </tbody>
-</table>
-<p class="pie">Referencias de color: celeste = planificación; azul claro = análisis y diseño; azul = desarrollo; naranja = pruebas; azul marino = documentación y cierre.</p>
+<p>Cronograma de 49 días hábiles (≈ 10 semanas) calculado a partir de la lista de actividades; en naranja, la ruta crítica. Las fechas reales de cada entrega de código figuran en el Anexo B.</p>
+
+<div class="gantt">
+  <div class="g-fila g-cabecera">
+    <div class="g-nombre">Actividad</div>
+    <div class="g-pista"><span class="g-semana" style="left:0.000%;width:10.000%">S1</span><span class="g-semana" style="left:10.000%;width:10.000%">S2</span><span class="g-semana" style="left:20.000%;width:10.000%">S3</span><span class="g-semana" style="left:30.000%;width:10.000%">S4</span><span class="g-semana" style="left:40.000%;width:10.000%">S5</span><span class="g-semana" style="left:50.000%;width:10.000%">S6</span><span class="g-semana" style="left:60.000%;width:10.000%">S7</span><span class="g-semana" style="left:70.000%;width:10.000%">S8</span><span class="g-semana" style="left:80.000%;width:10.000%">S9</span><span class="g-semana" style="left:90.000%;width:10.000%">S10</span></div>
+  </div>
+  
+  <div class="g-fila">
+    <div class="g-nombre"><b>A1</b> Analizar la propuesta de reorientación y redefinir el proyecto</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:0.000%;width:6.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A2</b> Redactar Project Charter y declaración de alcance</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:6.000%;width:6.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">A3 Definir plan de comunicación y cronograma</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:12.000%;width:4.000%;background:#3987e5"></span>
+      <span class="g-holgura" style="left:16.000%;width:4.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A4</b> Revisar encuesta y análisis socioeconómico</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:6.000%;width:6.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A5</b> Relevar requerimientos y armar product backlog</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:12.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A6</b> Diseñar arquitectura y elegir tecnologías</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:20.000%;width:6.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A7</b> Diseñar modelo de datos y reglas de seguridad</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:26.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">A8 Diseñar interfaz y navegación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:20.000%;width:8.000%;background:#3987e5"></span>
+      <span class="g-holgura" style="left:28.000%;width:16.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">A9 Configurar repositorio, base de datos y publicación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:26.000%;width:4.000%;background:#3987e5"></span>
+      <span class="g-holgura" style="left:30.000%;width:4.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A10</b> Desarrollar autenticación, roles y anonimato</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:34.000%;width:10.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A11</b> Desarrollar peticiones, fotos, firmas y moderación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:44.000%;width:12.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A12</b> Desarrollar clasificación, barrio, score y similares</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:56.000%;width:10.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A13</b> Desarrollar mapa por barrios, comunidad y eventos</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:56.000%;width:10.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">A14 Desarrollar seguimiento, notificaciones y comentarios</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:56.000%;width:10.000%;background:#3987e5"></span>
+      <span class="g-holgura" style="left:66.000%;width:8.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A15</b> Desarrollar estadísticas, panel analítico y exportes</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:66.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A16</b> Pruebas automáticas y pruebas de permisos por rol</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:74.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A17</b> Accesibilidad, modo oscuro, app instalable y rendimiento</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:74.000%;width:8.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A18</b> Redactar documentación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:82.000%;width:10.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A19</b> Preparar presentación</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:92.000%;width:4.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre"><b>A20</b> Entrega y defensa</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-barra" style="left:96.000%;width:2.000%;background:#eb6834"></span>
+      
+    </div>
+  </div>
+  <div class="g-separador">Hitos</div>
+  
+  <div class="g-fila">
+    <div class="g-nombre">◆ Charter y alcance aprobados</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:12.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ Diseño completo</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:34.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ Primera versión funcional</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:56.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ Producto completo y probado</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:82.000%"></span>
+    </div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ Entrega y defensa</div>
+    <div class="g-pista">
+      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+      <span class="g-hito" style="left:98.000%"></span>
+    </div>
+  </div>
+</div>
+<div class="g-leyenda">
+  <span><i style="background:#eb6834"></i>Actividad crítica (sin holgura)</span>
+  <span><i style="background:#3987e5"></i>Actividad con holgura</span>
+  <span><i class="rayas"></i>Holgura disponible</span>
+  <span><i class="rombo"></i>Hito</span>
+</div>
+<p class="pie">Ruta crítica: A1 → A2 → A4 → A5 → A6 → A7 → A10 → A11 → A12 → A13 → A15 → A16 → A17 → A18 → A19 → A20.</p>
 
 <h2 id="backlog">3.9 Requerimientos y product backlog</h2>
 <h3>Requerimientos funcionales</h3>
