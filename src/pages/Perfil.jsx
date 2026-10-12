@@ -3,13 +3,15 @@ import { useAuth } from '../contexts/AuthContext'
 import { subirAvatar, updatePerfil } from '../services/authService'
 import Avatar from '../components/Avatar'
 import { AVATARES_PREDEFINIDOS } from '../components/avatares'
-import { nombreRol } from '../utils/roles'
+import { nombreRol, PERMISOS_POR_ROL } from '../utils/roles'
+import { useEsDueno } from '../hooks/useEsDueno'
 import Icon from '../components/Icon'
 import Insignias from '../components/Insignias'
 import BarriosSeguidos from '../components/BarriosSeguidos'
 
 function Perfil() {
   const { user, profile, setProfile } = useAuth()
+  const { esDueno } = useEsDueno(user?.id)
   const archivoRef = useRef(null)
 
   const [form, setForm] = useState({
@@ -94,7 +96,7 @@ function Perfil() {
           <div className="card">
             <div className="card-body perfil-foto">
               <div className="perfil-foto-actual">
-                <Avatar perfil={profile} size={112} />
+                <Avatar perfil={profile} size={112} dueno={esDueno} />
                 {guardandoAvatar && <span className="perfil-foto-cargando" />}
               </div>
 
@@ -152,7 +154,7 @@ function Perfil() {
                         aria-label={`Avatar predefinido ${indice + 1}`}
                         aria-pressed={avatarActual === valor}
                       >
-                        <Avatar perfil={{ avatar_url: valor }} size={56} />
+                        <Avatar perfil={{ avatar_url: valor }} size={56} sinAnillo />
                       </button>
                     )
                   })}
@@ -172,9 +174,20 @@ function Perfil() {
                 <span>{user?.email}</span>
               </div>
 
-              <div className="info-row">
+              <div className="info-row align-items-center">
                 <span>Tipo de cuenta</span>
-                <span>{nombreRol(profile?.rol)}</span>
+                <span className={`badge rol-${esDueno ? 'dueno' : profile?.rol ?? 'ciudadano'}`}>
+                  {nombreRol(profile?.rol, esDueno)}
+                </span>
+              </div>
+
+              <div className="perfil-permisos">
+                <span>Lo que podés hacer</span>
+                <ul>
+                  {PERMISOS_POR_ROL[esDueno ? 'dueno' : profile?.rol ?? 'ciudadano']?.map((p) => (
+                    <li key={p}>{p}</li>
+                  ))}
+                </ul>
               </div>
 
               {(profile?.cargo || profile?.organizacion) && (

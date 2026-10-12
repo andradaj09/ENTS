@@ -198,3 +198,7 @@ export async function borrarDocumento(nombre) {
     throw error
   }
 }
+
+// Estadísticas del área: el funcionario ve la suya; el admin elige (o todas)
+export const getEstadisticasArea = (areaId) =>
+  rpc('estadisticas_area', { p_area: areaId ? Number(areaId) : null })

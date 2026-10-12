@@ -11,8 +11,13 @@ import Icon from '../components/Icon'
 import { Link } from 'react-router-dom'
 import { borrarComentario, getComentariosARevisar, moderarComentario } from '../services/participacionService'
 import { describirAlertas } from '../utils/moderacion'
+import { useAuth } from '../contexts/AuthContext'
+import { esAdmin } from '../utils/roles'
 
 function AdminPetitions() {
+  const { profile } = useAuth()
+  // Las solicitudes de funcionario las resuelve solo un administrador
+  const gestionaUsuarios = esAdmin(profile)
   const [peticiones, setPeticiones] = useState([])
   const [solicitudes, setSolicitudes] = useState([])
   const [comentarios, setComentarios] = useState([])
@@ -25,7 +30,7 @@ function AdminPetitions() {
       try {
         const [peticionesData, solicitudesData, comentariosData] = await Promise.all([
           getPeticionesPendientes(),
-          getSolicitudesFuncionario(),
+          gestionaUsuarios ? getSolicitudesFuncionario() : Promise.resolve([]),
           getComentariosARevisar(),
         ])
 
@@ -42,7 +47,7 @@ function AdminPetitions() {
     }
 
     cargar()
-  }, [])
+  }, [gestionaUsuarios])
 
   const cambiarEstado = async (peticionId, nuevoEstado) => {
     try {
@@ -125,7 +130,9 @@ function AdminPetitions() {
         </div>
       )}
 
-      {/* ---------- Solicitudes de funcionario ---------- */}
+      {/* ---------- Solicitudes de funcionario (solo administradores) ---------- */}
+      {gestionaUsuarios && (
+        <>
 
       <p className="line-label">
         Solicitudes de funcionario ({solicitudes.length})
@@ -185,6 +192,9 @@ function AdminPetitions() {
             </div>
           ))}
         </div>
+      )}
+
+        </>
       )}
 
       {/* ---------- Peticiones pendientes ---------- */}

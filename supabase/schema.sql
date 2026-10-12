@@ -8,7 +8,8 @@
 -- admins_borran_fotos_de_peticiones, roles_y_anonimato,
 -- anonimato_total_y_vista_admin, perfil_desde_google,
 -- estadisticas_y_categorias, mas_barrios_cordoba_y_villa_allende,
--- seguimiento_notificaciones_comentarios_areas y sus correcciones).
+-- seguimiento_notificaciones_comentarios_areas y sus correcciones, score_urgencia_automatico,
+-- dueno_cambia_roles, documentos_privados_dueno, cinco_roles_moderador_y_area).
 -- Este archivo es la versión final
 -- consolidada, para recrear la base en otro proyecto:
 -- Supabase → SQL Editor → New query → pegar todo → Run.
@@ -2065,3 +2066,357 @@ create policy "Dueño borra documentos" on storage.objects
 
 grant usage on schema privado to authenticated;
 grant execute on function privado.es_dueno() to authenticated;
+
+-- ----------------------------------------------------------
+-- 17. Cinco roles: vecino, funcionario (por área), moderador,
+--     administrador y dueño
+-- ----------------------------------------------------------
+
+-- Nuevo rol: moderador
+alter table public.profiles drop constraint if exists profiles_rol_check;
+alter table public.profiles add constraint profiles_rol_check
+  check (rol in ('ciudadano', 'funcionario', 'moderador', 'admin'));
+
+-- Moderación: la hacen moderadores y administradores
+create or replace function privado.es_moderador()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and rol in ('moderador', 'admin')
+  );
+$$;
+
+-- ¿Puede ver quién creó y firmó ESTA petición?
+-- Admin: todas. Funcionario: solo las de su área (o todas si no tiene área).
+create or replace function privado.puede_ver_identidades_de(p_peticion bigint)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1 from public.profiles yo
+    where yo.id = auth.uid()
+      and (
+        yo.rol = 'admin'
+        or (yo.rol = 'funcionario' and (
+          yo.area_id is null
+          or yo.area_id = (
+            select c.area_id from public.peticiones p
+            join public.categorias c on c.id = p.categoria_id
+            where p.id = p_peticion
+          )
+        ))
+      )
+  );
+$$;
+
+grant execute on function privado.es_moderador(), privado.puede_ver_identidades_de(bigint) to authenticated;
+
+-- Políticas de moderación: pasan de "solo admin" a "moderador o admin"
+drop policy if exists "Ver peticiones" on public.peticiones;
+create policy "Ver peticiones" on public.peticiones for select to authenticated
+  using (estado = 'publicada' or usuario_id = (select auth.uid()) or (select privado.es_moderador()));
+
+drop policy if exists "Admins moderan peticiones" on public.peticiones;
+create policy "Moderadores moderan peticiones" on public.peticiones for update to authenticated
+  using ((select privado.es_moderador())) with check ((select privado.es_moderador()));
+
+drop policy if exists "Admins borran peticiones" on public.peticiones;
+create policy "Moderadores borran peticiones" on public.peticiones for delete to authenticated
+  using ((select privado.es_moderador()));
+
+drop policy if exists "Autor o admin borran comentarios" on public.comentarios;
+create policy "Autor o moderador borran comentarios" on public.comentarios for delete to authenticated
+  using (usuario_id = (select auth.uid()) or (select privado.es_moderador()));
+
+drop policy if exists "Autor o admin borran publicaciones" on public.publicaciones;
+create policy "Autor o moderador borran publicaciones" on public.publicaciones for delete to authenticated
+  using (usuario_id = (select auth.uid()) or (select privado.es_moderador()));
+
+-- El moderador ve nombre y apellido de los perfiles (para moderar)
+drop policy if exists "Ver perfiles" on public.profiles;
+create policy "Ver perfiles" on public.profiles for select to authenticated
+  using (id = (select auth.uid()) or (select privado.es_moderador()));
+
+drop policy if exists "Autor o admin borran fotos de peticiones" on storage.objects;
+create policy "Autor o moderador borran fotos de peticiones" on storage.objects for delete to authenticated
+  using (bucket_id = 'peticiones' and (
+    (storage.foldername(name))[1] = (select auth.uid())::text or (select privado.es_moderador())
+  ));
+
+-- Firmas: el funcionario solo ve las de peticiones de su área
+drop policy if exists "Ver firmas" on public.firmas;
+create policy "Ver firmas" on public.firmas for select to authenticated
+  using (usuario_id = (select auth.uid()) or privado.puede_ver_identidades_de(peticion_id));
+
+-- Pendientes de moderación
+create or replace function public.peticiones_pendientes()
+returns setof public.peticiones
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select * from public.peticiones
+  where estado = 'pendiente' and privado.es_moderador()
+  order by created_at desc;
+$$;
+
+-- Comentarios: moderar y revisar
+create or replace function public.moderar_comentario(p_comentario bigint, p_oculto boolean)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_moderador() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  update public.comentarios set oculto = p_oculto where id = p_comentario;
+  if not p_oculto then
+    delete from public.denuncias where comentario_id = p_comentario;
+  end if;
+end;
+$$;
+
+create or replace function public.comentarios_a_revisar()
+returns table (id bigint, peticion_id bigint, titulo text, texto text, fecha timestamptz, denuncias bigint, alertas text[], autor text)
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_moderador() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  return query
+    select c.id, c.peticion_id, p.titulo, c.texto, c.created_at,
+           (select count(*) from public.denuncias d where d.comentario_id = c.id),
+           c.alertas, pr.nombre || ' ' || pr.apellido
+    from public.comentarios c
+    join public.peticiones p on p.id = c.peticion_id
+    join public.profiles pr on pr.id = c.usuario_id
+    where c.oculto or exists (select 1 from public.denuncias d where d.comentario_id = c.id)
+    order by c.created_at desc;
+end;
+$$;
+
+create or replace function public.comentarios_peticion(p_peticion bigint)
+returns table (id bigint, texto text, fecha timestamptz, propio boolean, oculto boolean, denuncias bigint, autor text, alertas text[])
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select c.id, c.texto, c.created_at, c.usuario_id = auth.uid(), c.oculto,
+         case when privado.es_moderador() then (select count(*) from public.denuncias d where d.comentario_id = c.id) else 0 end,
+         case when privado.es_moderador() then pr.nombre || ' ' || pr.apellido end,
+         case when privado.es_moderador() then c.alertas else '{}'::text[] end
+  from public.comentarios c
+  join public.profiles pr on pr.id = c.usuario_id
+  where c.peticion_id = p_peticion
+    and privado.puede_ver_peticion(p_peticion)
+    and (not c.oculto or c.usuario_id = auth.uid() or privado.es_moderador())
+  order by c.created_at;
+$$;
+
+-- Identidades de una petición: con rol y si es el dueño (para el color de la foto)
+create or replace function public.identidades_peticion(p_peticion bigint)
+returns json
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+declare
+  ver_correo boolean := privado.es_admin();
+begin
+  if not privado.puede_ver_identidades_de(p_peticion) then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  return json_build_object(
+    'autor', (
+      select json_build_object(
+        'nombre', pr.nombre, 'apellido', pr.apellido, 'avatar_url', pr.avatar_url,
+        'rol', pr.rol, 'es_dueno', exists (select 1 from privado.duenos d where d.usuario_id = pr.id),
+        'email', case when ver_correo then u.email end
+      )
+      from public.peticiones p
+      join public.profiles pr on pr.id = p.usuario_id
+      join auth.users u on u.id = p.usuario_id
+      where p.id = p_peticion
+    ),
+    'firmantes', coalesce((
+      select json_agg(
+        json_build_object(
+          'nombre', pr.nombre, 'apellido', pr.apellido, 'avatar_url', pr.avatar_url,
+          'rol', pr.rol, 'es_dueno', exists (select 1 from privado.duenos d where d.usuario_id = pr.id),
+          'email', case when ver_correo then u.email end,
+          'fecha', f.created_at
+        )
+        order by f.created_at desc
+      )
+      from public.firmas f
+      join public.profiles pr on pr.id = f.usuario_id
+      join auth.users u on u.id = f.usuario_id
+      where f.peticion_id = p_peticion
+    ), '[]'::json)
+  );
+end;
+$$;
+
+drop function if exists public.autores_publicaciones();
+create function public.autores_publicaciones()
+returns table (publicacion_id bigint, nombre text, apellido text, avatar_url text, email text, rol text, es_dueno boolean)
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_admin() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  return query
+    select pu.id, pr.nombre, pr.apellido, pr.avatar_url, u.email::text, pr.rol,
+           exists (select 1 from privado.duenos d where d.usuario_id = pr.id)
+    from public.publicaciones pu
+    join public.profiles pr on pr.id = pu.usuario_id
+    join auth.users u on u.id = pu.usuario_id;
+end;
+$$;
+
+drop function if exists public.usuarios_admin();
+create function public.usuarios_admin()
+returns table (id uuid, nombre text, apellido text, email text, rol text, rol_solicitado text, cargo text,
+               organizacion text, avatar_url text, registrado timestamptz, ultimo_ingreso timestamptz,
+               correo_confirmado boolean, peticiones bigint, firmas bigint, publicaciones bigint, area_id bigint,
+               es_dueno boolean)
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_admin() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  return query
+    select
+      pr.id, pr.nombre, pr.apellido, u.email::text, pr.rol, pr.rol_solicitado,
+      pr.cargo, pr.organizacion, pr.avatar_url, u.created_at, u.last_sign_in_at,
+      u.email_confirmed_at is not null,
+      (select count(*) from public.peticiones p where p.usuario_id = pr.id),
+      (select count(*) from public.firmas f where f.usuario_id = pr.id),
+      (select count(*) from public.publicaciones pu where pu.usuario_id = pr.id),
+      pr.area_id,
+      exists (select 1 from privado.duenos d where d.usuario_id = pr.id)
+    from public.profiles pr
+    join auth.users u on u.id = pr.id
+    order by u.created_at desc;
+end;
+$$;
+
+-- El dueño puede asignar también el rol de moderador
+create or replace function public.cambiar_rol(p_usuario uuid, p_rol text)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if not privado.es_dueno() then
+    raise exception 'Solo el dueño del proyecto puede cambiar roles' using errcode = '42501';
+  end if;
+
+  if p_rol not in ('ciudadano', 'funcionario', 'moderador', 'admin') then
+    raise exception 'Rol inválido' using errcode = '22023';
+  end if;
+
+  if p_usuario = auth.uid() then
+    raise exception 'No podés cambiar tu propio rol' using errcode = '22023';
+  end if;
+
+  update public.profiles
+  set rol = p_rol,
+      rol_solicitado = null,
+      area_id = case when p_rol = 'funcionario' then area_id else null end
+  where id = p_usuario;
+
+  if not found then
+    raise exception 'Usuario no encontrado' using errcode = 'P0002';
+  end if;
+end;
+$$;
+
+-- Estadísticas del área para funcionarios (y admins, de un área o de todas)
+create or replace function public.estadisticas_area(p_area bigint default null)
+returns json
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+declare
+  yo public.profiles;
+  area bigint;
+begin
+  select * into yo from public.profiles where id = auth.uid();
+
+  if yo.rol is null or yo.rol not in ('funcionario', 'admin') then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  -- El funcionario con área solo ve la suya; el admin elige
+  area := case when yo.rol = 'funcionario' then yo.area_id else p_area end;
+
+  return (
+    with pets as (
+      select p.* from public.peticiones p
+      join public.categorias c on c.id = p.categoria_id
+      where p.estado = 'publicada' and (area is null or c.area_id = area)
+    )
+    select json_build_object(
+      'area', (select nombre from public.areas where id = area),
+      'total', (select count(*) from pets),
+      'sin_resolver', (select count(*) from pets where seguimiento <> 'resuelta'),
+      'resueltas', (select count(*) from pets where seguimiento = 'resuelta'),
+      'elevadas', (select count(*) from pets where elevada_at is not null and seguimiento <> 'resuelta'),
+      'urgentes', (select count(*) from pets where score_urgencia >= 70 and seguimiento <> 'resuelta'),
+      'sin_respuesta', (
+        select count(*) from pets p
+        where not exists (select 1 from public.peticion_actualizaciones a where a.peticion_id = p.id)
+      ),
+      'dias_a_resolver', (
+        select round(avg(extract(epoch from (r.fecha - p.created_at)) / 86400)::numeric, 1)
+        from pets p
+        join lateral (
+          select min(a.created_at) as fecha from public.peticion_actualizaciones a
+          where a.peticion_id = p.id and a.estado = 'resuelta'
+        ) r on r.fecha is not null
+      ),
+      'por_etapa', (
+        select json_object_agg(e, (select count(*) from pets where seguimiento = e))
+        from unnest(array['recibida', 'en_revision', 'derivada', 'en_obra', 'resuelta']) as e
+      )
+    )
+  );
+end;
+$$;
+
+revoke execute on function public.estadisticas_area(bigint), public.autores_publicaciones(), public.usuarios_admin() from public, anon;
+grant execute on function public.estadisticas_area(bigint), public.autores_publicaciones(), public.usuarios_admin() to authenticated;

@@ -73,7 +73,7 @@ function App() {
             <Route
               path="/admin/peticiones"
               element={
-                <RoleRoute allowedRoles={['admin']}>
+                <RoleRoute allowedRoles={['admin', 'moderador']}>
                   <AdminPetitions />
                 </RoleRoute>
               }

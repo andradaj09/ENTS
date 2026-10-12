@@ -138,14 +138,20 @@ function MainLayout() {
             </>
           )}
 
-          {profile?.rol === 'admin' && (
+          {(profile?.rol === 'moderador' || profile?.rol === 'admin') && (
             <>
-              <p className="side-label">Administración</p>
+              <p className="side-label">Moderación</p>
 
               <NavLink className={sideLinkClass} to="/admin/peticiones">
                 <Icon name="shield" size={22} />
-                Moderación
+                Revisar contenido
               </NavLink>
+            </>
+          )}
+
+          {profile?.rol === 'admin' && (
+            <>
+              <p className="side-label">Administración</p>
 
               <NavLink className={sideLinkClass} to="/admin/usuarios">
                 <Icon name="users" size={22} />

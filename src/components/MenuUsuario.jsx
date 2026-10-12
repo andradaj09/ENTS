@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { logoutUser } from '../services/authService'
 import { nombreRol } from '../utils/roles'
+import { useEsDueno } from '../hooks/useEsDueno'
 import { aplicarTema, temaActual } from '../utils/tema'
 import { alCambiarInstalacion, esIOS, instalar, puedeInstalarDirecto, yaInstalada } from '../utils/instalacion'
 import Avatar from './Avatar'
@@ -11,6 +12,7 @@ import Icon from './Icon'
 // accesos rápidos y el botón para cerrar sesión.
 function MenuUsuario({ user, profile }) {
   const navigate = useNavigate()
+  const { esDueno } = useEsDueno(user?.id)
   const [abierto, setAbierto] = useState(false)
   const [saliendo, setSaliendo] = useState(false)
   const [oscuro, setOscuro] = useState(() => temaActual() === 'oscuro')
@@ -81,17 +83,17 @@ function MenuUsuario({ user, profile }) {
         aria-label="Abrir el menú de tu cuenta"
         aria-expanded={abierto}
       >
-        <Avatar perfil={profile} size={44} />
+        <Avatar perfil={profile} size={44} dueno={esDueno} />
       </button>
 
       {abierto && (
         <div className="menu-usuario-panel" role="menu">
           <div className="menu-usuario-cabecera">
-            <Avatar perfil={profile} size={46} />
+            <Avatar perfil={profile} size={46} dueno={esDueno} />
             <div>
               <strong>{nombre || 'Mi cuenta'}</strong>
               <span>{user?.email}</span>
-              <small>{nombreRol(profile?.rol)}</small>
+              <small>{nombreRol(profile?.rol, esDueno)}</small>
             </div>
           </div>
 

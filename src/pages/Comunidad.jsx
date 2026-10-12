@@ -9,7 +9,8 @@ import {
   getZonas,
 } from '../services/petitionService'
 import { claseUrgencia, tiempoRelativo } from '../utils/format'
-import { esAdmin } from '../utils/roles'
+import { esAdmin, esModerador } from '../utils/roles'
+import { useEsDueno } from '../hooks/useEsDueno'
 import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
 import OpcionesBarrios from '../components/OpcionesBarrios'
@@ -53,6 +54,7 @@ function Comunidad() {
 
   // Los autores del feed son anónimos; solo los admins los ven
   const verAutores = esAdmin(profile)
+  const { esDueno } = useEsDueno(user?.id)
 
   useEffect(() => {
     const cargar = async () => {
@@ -182,7 +184,8 @@ function Comunidad() {
     }
   }
 
-  const puedeEliminar = (publicacion) => publicacion.propia || verAutores
+  // Borran: el autor, y moderadores o admins
+  const puedeEliminar = (publicacion) => publicacion.propia || esModerador(profile)
 
   return (
     <div className="container py-5">
@@ -244,7 +247,7 @@ function Comunidad() {
           <form className="card publicar" onSubmit={handlePublicar}>
             <div className="card-body">
               <div className="publicar-top">
-                <Avatar perfil={profile} size={44} />
+                <Avatar perfil={profile} size={44} dueno={esDueno} />
 
                 <textarea
                   className="publicar-texto"
@@ -355,7 +358,7 @@ function Comunidad() {
                     {publicacion.autor ? (
                       <Avatar perfil={publicacion.autor} size={40} />
                     ) : publicacion.propia ? (
-                      <Avatar perfil={profile} size={40} />
+                      <Avatar perfil={profile} size={40} dueno={esDueno} />
                     ) : (
                       <span className="avatar avatar-anonimo" style={{ width: 40, height: 40 }}>
                         <Icon name="user" size={20} />

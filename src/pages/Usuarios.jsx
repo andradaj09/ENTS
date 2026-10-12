@@ -3,7 +3,7 @@ import { getUsuariosAdmin } from '../services/petitionService'
 import { asignarArea, cambiarRol, getAreas, soyDueno } from '../services/participacionService'
 import { useAuth } from '../contexts/AuthContext'
 import { normalizar } from '../utils/clasificador'
-import { nombreRol } from '../utils/roles'
+import { nombreRol, PERMISOS_POR_ROL, ROLES_ASIGNABLES } from '../utils/roles'
 import { tiempoRelativo } from '../utils/format'
 import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
@@ -12,6 +12,7 @@ const FILTROS_ROL = [
   ['todos', 'Todos'],
   ['ciudadano', 'Vecinos'],
   ['funcionario', 'Funcionarios'],
+  ['moderador', 'Moderadores'],
   ['admin', 'Admins'],
   ['solicitud', 'Solicitudes pendientes'],
 ]
@@ -39,19 +40,14 @@ function Usuarios() {
     soyDueno().then(setEsDueno).catch(() => setEsDueno(false))
   }, [])
 
-  const ROLES = [
-    ['ciudadano', 'Vecino/a'],
-    ['funcionario', 'Funcionario/a'],
-    ['admin', 'Administrador/a'],
-  ]
+  const ROLES = ROLES_ASIGNABLES
 
   const elegirRol = async (usuario, rol) => {
     if (rol === usuario.rol) return
 
     const nombre = `${usuario.nombre} ${usuario.apellido}`
-    const avisoAdmin = rol === 'admin'
-      ? '\n\nVa a poder moderar, ver los datos de todas las cuentas y el panel analítico.'
-      : ''
+    // Se resume qué va a poder hacer con el rol nuevo
+    const avisoAdmin = '\n\nVa a poder:\n• ' + PERMISOS_POR_ROL[rol].join('\n• ')
     if (!window.confirm(`¿Cambiar a ${nombre} de ${nombreRol(usuario.rol)} a ${nombreRol(rol)}?${avisoAdmin}`)) return
 
     try {
@@ -175,7 +171,7 @@ function Usuarios() {
                   </div>
 
                   <div className="usuario-etiquetas">
-                    <span className={`badge rol-${usuario.rol}`}>{nombreRol(usuario.rol)}</span>
+                    <span className={`badge rol-${usuario.es_dueno ? 'dueno' : usuario.rol}`}>{nombreRol(usuario.rol, usuario.es_dueno)}</span>
                     {usuario.rol_solicitado === 'funcionario' && (
                       <span className="badge text-bg-light">Pide ser funcionario</span>
                     )}

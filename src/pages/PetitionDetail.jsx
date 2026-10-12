@@ -11,7 +11,7 @@ import {
   firmarPeticion,
   retirarFirma,
 } from '../services/petitionService'
-import { esAdmin, puedeResponder, puedeVerIdentidades } from '../utils/roles'
+import { esModerador as puedeModerar, puedeResponder, puedeVerIdentidades } from '../utils/roles'
 import { META_FIRMAS, nombreEtapa, prioridadPorFirmas, proximoNivel } from '../utils/prioridad'
 import { tiempoRelativo } from '../utils/format'
 import GaleriaFotos from '../components/GaleriaFotos'
@@ -25,10 +25,11 @@ function PetitionDetail() {
   const { id } = useParams()
   const { user, profile } = useAuth()
   const navigate = useNavigate()
-  const esModerador = esAdmin(profile)
-  const veIdentidades = puedeVerIdentidades(profile)
+  const esModerador = puedeModerar(profile)
 
   const [peticion, setPeticion] = useState(null)
+  // Funcionarios: solo las peticiones de su área; admins: todas
+  const veIdentidades = Boolean(peticion) && puedeVerIdentidades(profile, peticion)
   const [yaFirmo, setYaFirmo] = useState(false)
   const [cantidadFirmas, setCantidadFirmas] = useState(0)
   // Autor y firmantes: solo se cargan para funcionarios y admins

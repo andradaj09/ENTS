@@ -618,8 +618,8 @@ hr {
   flex: none;
 }
 
-.perfil-foto-actual .avatar {
-  box-shadow: 0 0 0 4px #fff, 0 16px 34px rgba(18, 18, 18, 0.18);
+.perfil-foto-actual .avatar-marco {
+  box-shadow: 0 16px 34px rgba(18, 18, 18, 0.18);
   animation: entrada-suave 0.5s var(--ease-out) both;
 }
 
@@ -1957,18 +1957,19 @@ a.event-item:hover {
 }
 
 .badge.rol-ciudadano {
-  background: var(--ents-green-soft);
-  color: #1f5f3f;
+  border: 1px solid rgba(18, 18, 18, 0.15);
+  background: #ffffff;
+  color: #121212;
 }
 
 .badge.rol-funcionario {
-  background: #e8f0fa;
-  color: var(--ents-blue-strong);
+  background: #fbe9a6;
+  color: #6b5200;
 }
 
 .badge.rol-admin {
-  background: var(--ents-ink);
-  color: #fff;
+  background: #cfe3f5;
+  color: #1d4f7a;
 }
 
 .usuario-actividad {
@@ -2353,9 +2354,9 @@ a.event-item:hover {
     height: 52px;
   }
 
-  .topbar-avatar .avatar {
-    width: 38px !important;
-    height: 38px !important;
+  .topbar-avatar .avatar-marco {
+    width: 40px !important;
+    height: 40px !important;
   }
 
   .notif-panel {
@@ -3152,4 +3153,125 @@ a.event-item:hover {
 @media (max-width: 480px) {
   .documento-abrir { padding: 12px 14px; gap: 10px; }
   .documento-abrir > .icon:last-child { display: none; }
+}
+
+/* ==========================================================
+   Anillo de la foto según el rol
+   dueño: azul Francia → blanco + "CEO" · admin: celeste ·
+   moderador: verde · funcionario: amarillo · vecino: blanco
+   ========================================================== */
+
+.avatar-marco {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  box-sizing: border-box;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(18, 18, 18, 0.15);
+}
+
+.avatar-marco .avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.avatar-marco.sin-anillo { box-shadow: none; }
+.avatar-marco.sin-anillo .avatar { border-radius: 30%; }
+
+.avatar-marco.rol-ciudadano {
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(18, 18, 18, 0.12), 0 4px 12px rgba(18, 18, 18, 0.15);
+}
+
+.avatar-marco.rol-funcionario { background: #f5c518; }
+.avatar-marco.rol-moderador { background: #1baf7a; }
+.avatar-marco.rol-admin { background: #74acdf; }
+
+.avatar-marco.rol-dueno {
+  background: linear-gradient(135deg, #0055a4 0%, #2f7bd6 45%, #ffffff 100%);
+}
+
+/* Etiqueta CEO: abajo a la izquierda de la foto, en cualquier lugar */
+.avatar-ceo {
+  position: absolute;
+  left: -6%;
+  bottom: -4%;
+  padding: 0.12em 0.45em;
+  border: 1.5px solid #ffffff;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0055a4, #2f7bd6);
+  color: #ffffff;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 6px rgba(0, 40, 90, 0.35);
+  pointer-events: none;
+}
+
+.badge.rol-moderador {
+  background: rgba(27, 175, 122, 0.16) !important;
+  color: #0f6b4a !important;
+}
+
+.badge.rol-dueno {
+  background: linear-gradient(135deg, #0055a4, #2f7bd6) !important;
+  color: #ffffff !important;
+}
+
+
+/* ---------- Perfil: lo que permite el rol ---------- */
+
+.perfil-permisos {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--ents-radius-sm);
+  background: rgba(18, 18, 18, 0.04);
+}
+
+.perfil-permisos span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ents-muted);
+}
+
+.perfil-permisos ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.86rem;
+}
+
+/* ---------- Bandeja: resumen del área ---------- */
+
+.bandeja-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.bandeja-resumen div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--ents-radius-sm);
+  background: var(--glass-inner);
+}
+
+.bandeja-resumen strong {
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+.bandeja-resumen span {
+  font-size: 0.76rem;
+  color: var(--ents-muted);
 }

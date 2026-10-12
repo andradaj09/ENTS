@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { getPeticionesPublicadas } from '../services/petitionService'
-import { getAreas } from '../services/participacionService'
+import { getAreas, getEstadisticasArea } from '../services/participacionService'
 import {
   ETAPAS_SEGUIMIENTO,
   nombreEtapa,
@@ -23,6 +23,7 @@ function Bandeja() {
   const [etapa, setEtapa] = useState('pendientes')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [resumen, setResumen] = useState(null)
 
   const areaFija = profile?.rol === 'funcionario' && profile.area_id
 
@@ -38,6 +39,17 @@ function Bandeja() {
       })
       .finally(() => setLoading(false))
   }, [])
+
+  // Resumen del área (el funcionario siempre recibe el de la suya)
+  useEffect(() => {
+    let activo = true
+    getEstadisticasArea(areaFiltro === 'todas' ? null : areaFiltro)
+      .then((datos) => activo && setResumen(datos))
+      .catch((err) => console.error('Error cargando el resumen del área:', err))
+    return () => {
+      activo = false
+    }
+  }, [areaFiltro])
 
   const delArea = useMemo(() => peticiones.filter((p) =>
     areaFiltro === 'todas' || String(p.categorias?.area_id) === areaFiltro
@@ -85,6 +97,17 @@ function Bandeja() {
           </select>
         )}
       </div>
+
+      {resumen && (
+        <div className="bandeja-resumen" aria-label="Resumen del área">
+          <div><strong>{resumen.sin_resolver}</strong><span>Sin resolver</span></div>
+          <div><strong>{resumen.sin_respuesta}</strong><span>Sin ninguna respuesta</span></div>
+          <div><strong>{resumen.urgentes}</strong><span>Urgentes (70+)</span></div>
+          <div><strong>{resumen.elevadas}</strong><span>Elevadas por firmas</span></div>
+          <div><strong>{resumen.resueltas}</strong><span>Resueltas</span></div>
+          <div><strong>{resumen.dias_a_resolver ?? '—'}</strong><span>Días promedio a resolver</span></div>
+        </div>
+      )}
 
       {loading && <p className="text-muted">Cargando bandeja...</p>}
       {error && <div className="alert alert-danger">{error}</div>}
