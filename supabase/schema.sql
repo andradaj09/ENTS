@@ -7,7 +7,8 @@
 -- optimizar_politicas_e_indices, fotos_en_peticiones,
 -- admins_borran_fotos_de_peticiones, roles_y_anonimato,
 -- anonimato_total_y_vista_admin, perfil_desde_google,
--- estadisticas_y_categorias). Este archivo es la versión final
+-- estadisticas_y_categorias, mas_barrios_cordoba_y_villa_allende).
+-- Este archivo es la versión final
 -- consolidada, para recrear la base en otro proyecto:
 -- Supabase → SQL Editor → New query → pegar todo → Run.
 -- ==========================================================
@@ -1001,3 +1002,117 @@ revoke execute on function public.estadisticas_publicas() from public, anon;
 revoke execute on function public.estadisticas_admin() from public, anon;
 grant execute on function public.estadisticas_publicas() to authenticated;
 grant execute on function public.estadisticas_admin() to authenticated;
+
+-- ----------------------------------------------------------
+-- 12. Más barrios de Córdoba y de Villa Allende
+-- (centros tomados de OpenStreetMap)
+-- ----------------------------------------------------------
+
+alter table public.zonas add column if not exists localidad text not null default 'Córdoba';
+
+insert into public.zonas (nombre, lat, lng, localidad) values
+  ('Alto Alberdi', -31.4061, -64.2214, 'Córdoba'),
+  ('Pueyrredón', -31.4023, -64.1682, 'Córdoba'),
+  ('Juniors', -31.4188, -64.1663, 'Córdoba'),
+  ('Yofre Norte', -31.3837, -64.1338, 'Córdoba'),
+  ('Yofre Sur', -31.3929, -64.1423, 'Córdoba'),
+  ('Altamira', -31.4230, -64.1317, 'Córdoba'),
+  ('Maldonado', -31.4142, -64.1327, 'Córdoba'),
+  ('Müller', -31.4154, -64.1386, 'Córdoba'),
+  ('Ciudad de Mis Sueños', -31.4788, -64.0860, 'Córdoba'),
+  ('Villa El Libertador', -31.4768, -64.2200, 'Córdoba'),
+  ('Comercial', -31.4852, -64.2112, 'Córdoba'),
+  ('Parque Vélez Sarsfield', -31.4411, -64.2052, 'Córdoba'),
+  ('Bella Vista', -31.4305, -64.2048, 'Córdoba'),
+  ('Rogelio Martínez', -31.4374, -64.1782, 'Córdoba'),
+  ('Las Flores', -31.4521, -64.1995, 'Córdoba'),
+  ('Ciudad Universitaria', -31.4408, -64.1903, 'Córdoba'),
+  ('Villa Revol', -31.4445, -64.1728, 'Córdoba'),
+  ('Cofico', -31.4029, -64.1849, 'Córdoba'),
+  ('Providencia', -31.4012, -64.2004, 'Córdoba'),
+  ('Talleres Oeste', -31.3904, -64.1517, 'Córdoba'),
+  ('Talleres Este', -31.3874, -64.1550, 'Córdoba'),
+  ('Los Paraísos', -31.3823, -64.1945, 'Córdoba'),
+  ('Villa Azalais', -31.3726, -64.1517, 'Córdoba'),
+  ('Guiñazú', -31.3153, -64.1762, 'Córdoba'),
+  ('Villa Esquiú', -31.3611, -64.1108, 'Córdoba'),
+  ('Marqués de Sobremonte', -31.3617, -64.1982, 'Córdoba'),
+  ('Poeta Lugones', -31.3610, -64.2120, 'Córdoba'),
+  ('Urca', -31.3823, -64.2371, 'Córdoba'),
+  ('Villa Belgrano', -31.3580, -64.2525, 'Córdoba'),
+  ('Villa Warcalde', -31.3395, -64.2987, 'Córdoba'),
+  ('Granja de Funes', -31.3482, -64.2458, 'Córdoba'),
+  ('Valle Escondido', -31.3672, -64.2746, 'Córdoba'),
+  ('Quebrada de las Rosas', -31.3932, -64.2557, 'Córdoba'),
+  ('Las Palmas', -31.4048, -64.2400, 'Córdoba'),
+  ('Villa Páez', -31.3954, -64.2069, 'Córdoba'),
+  ('San Martín', -31.3873, -64.1988, 'Córdoba'),
+  ('Villa Rivera Indarte', -31.3197, -64.2948, 'Córdoba'),
+  ('Los Boulevares', -31.3449, -64.2322, 'Córdoba'),
+  ('Jardín Espinosa', -31.4521, -64.1718, 'Córdoba'),
+  ('Ituzaingó', -31.4659, -64.0944, 'Córdoba'),
+  ('Empalme', -31.4331, -64.1297, 'Córdoba'),
+  ('Ferreyra', -31.4625, -64.1059, 'Córdoba'),
+  ('Residencial América', -31.3820, -64.1625, 'Córdoba'),
+  ('Parque Liceo', -31.3585, -64.1522, 'Córdoba'),
+  ('Villa Retiro', -31.3324, -64.1434, 'Córdoba'),
+  ('Patricios', -31.3754, -64.1378, 'Córdoba'),
+  ('Los Plátanos', -31.4177, -64.2303, 'Córdoba'),
+  ('Mariano Fragueiro', -31.3680, -64.1859, 'Córdoba'),
+  ('Parque Chacabuco', -31.3822, -64.2115, 'Córdoba'),
+  ('Inaudi', -31.4768, -64.1926, 'Córdoba'),
+  ('Los Olmos', -31.4589, -64.2171, 'Córdoba'),
+  ('Crisol Norte', -31.4283, -64.1674, 'Córdoba'),
+  ('Crisol Sur', -31.4344, -64.1676, 'Córdoba'),
+  ('Villa Centenario', -31.3647, -64.2314, 'Córdoba'),
+  ('Villa Siburu', -31.3953, -64.2286, 'Córdoba'),
+  ('Paso de los Andes', -31.4161, -64.2035, 'Córdoba'),
+  ('Marechal', -31.3953, -64.2137, 'Córdoba'),
+  ('Ameghino Norte', -31.4295, -64.2381, 'Córdoba'),
+  ('Las Margaritas', -31.3780, -64.2097, 'Córdoba'),
+  ('General Bustos', -31.3888, -64.1722, 'Córdoba'),
+  ('Villa Corina', -31.3741, -64.1454, 'Córdoba'),
+  ('San Fernando', -31.4485, -64.1914, 'Córdoba'),
+  ('Colinas de Vélez Sarsfield', -31.4383, -64.2000, 'Córdoba'),
+  ('Parque Capital', -31.4334, -64.2176, 'Córdoba'),
+  ('Jardín del Pilar', -31.4441, -64.1534, 'Córdoba'),
+  ('Matienzo', -31.4403, -64.2390, 'Córdoba'),
+  ('Zumarán', -31.3773, -64.2022, 'Córdoba'),
+  ('Villa Allende Parque', -31.3121, -64.2832, 'Córdoba'),
+  ('Arguello Norte', -31.3278, -64.2631, 'Córdoba'),
+  ('Cerro Chico', -31.3669, -64.2240, 'Córdoba'),
+  ('Los Naranjos', -31.4299, -64.2273, 'Córdoba'),
+  ('Ayacucho', -31.3789, -64.1726, 'Córdoba'),
+  ('Colón', -31.4369, -64.1548, 'Córdoba'),
+  ('Bajo Palermo', -31.3861, -64.2227, 'Córdoba'),
+  ('Hipólito Yrigoyen', -31.3721, -64.1863, 'Córdoba'),
+  ('José Ignacio Díaz', -31.4468, -64.1453, 'Córdoba'),
+  ('Coronel Olmedo', -31.4803, -64.1396, 'Córdoba'),
+  ('Villa Avalos', -31.4134, -64.2444, 'Córdoba'),
+  ('Primero de Mayo', -31.4303, -64.1186, 'Córdoba'),
+  ('Acosta', -31.4243, -64.1247, 'Córdoba'),
+  ('Los Gigantes', -31.3633, -64.1695, 'Córdoba'),
+  ('Mirizzi', -31.4708, -64.2064, 'Córdoba'),
+  ('Parque Horizonte', -31.4584, -64.2064, 'Córdoba'),
+  ('Cárcano', -31.4652, -64.1450, 'Córdoba'),
+  ('Smata', -31.4539, -64.2223, 'Córdoba'),
+  ('Altos de Vélez Sarsfield', -31.4491, -64.2147, 'Córdoba'),
+  ('Lomas de San Martín', -31.3824, -64.2059, 'Córdoba'),
+  ('Villa Rivadavia', -31.5127, -64.1949, 'Córdoba'),
+  ('Ampliación Residencial América', -31.3759, -64.1604, 'Córdoba'),
+  ('Lomas Este', -31.2957, -64.2831, 'Villa Allende'),
+  ('Lomas Oeste', -31.2945, -64.2881, 'Villa Allende'),
+  ('Villa Allende Golf', -31.2793, -64.2818, 'Villa Allende'),
+  ('Las Polinesias', -31.2912, -64.3126, 'Villa Allende'),
+  ('Pan de Azúcar', -31.3031, -64.2747, 'Villa Allende'),
+  ('San Alfonso', -31.3055, -64.2916, 'Villa Allende'),
+  ('Cóndor Alto', -31.2785, -64.2965, 'Villa Allende'),
+  ('Cóndor Bajo', -31.2822, -64.3002, 'Villa Allende'),
+  ('Lomas Sur', -31.3045, -64.2801, 'Villa Allende'),
+  ('Centro (Villa Allende)', -31.2936, -64.2977, 'Villa Allende')
+on conflict (nombre) do nothing;
+
+-- Centros más precisos (OpenStreetMap) para barrios que ya existían
+update public.zonas set lat = -31.4235, lng = -64.1510 where nombre = 'San Vicente';
+update public.zonas set lat = -31.3876, lng = -64.2116 where nombre = 'Villa Cabrera';
+update public.zonas set lat = -31.3767, lng = -64.2341 where nombre = 'Cerro de las Rosas';

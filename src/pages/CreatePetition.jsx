@@ -11,6 +11,7 @@ import { detectarBarrio } from '../utils/barrios'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorFotos from '../components/SelectorFotos'
 import Icon from '../components/Icon'
+import OpcionesBarrios from '../components/OpcionesBarrios'
 
 // Etiqueta que indica si el campo se completó solo o lo eligió la persona
 function EtiquetaAuto({ automatico, manual, onRestablecer, sugerencia }) {
@@ -341,14 +342,7 @@ function CreatePetition() {
                     {zonaManual ? 'Seleccionar barrio' : 'Se detecta con la ubicación...'}
                   </option>
 
-                  {zonas.map((zona) => (
-                    <option
-                      key={zona.id}
-                      value={zona.id}
-                    >
-                      {zona.nombre}
-                    </option>
-                  ))}
+                  <OpcionesBarrios zonas={zonas} />
                 </select>
 
                 {ubicacion && !zonaDetectada && !zonaManual && (

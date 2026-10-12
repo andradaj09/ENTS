@@ -14,6 +14,7 @@ import { nivelUrgencia } from '../utils/format'
 import { CENTRO_CORDOBA, MAPA_BASE, ubicacionPeticion } from '../utils/ubicacion'
 import { areasDeBarrios, clasesEscala, colorPara, SIN_DATOS } from '../utils/zonasMapa'
 import Icon from '../components/Icon'
+import OpcionesBarrios from '../components/OpcionesBarrios'
 
 // Qué mide el color de cada barrio en la vista por zonas
 const METRICAS = {
@@ -60,7 +61,12 @@ function ControlVista({ puntos, seleccion }) {
     if (encuadre.length === 0) return
 
     const limites = L.latLngBounds(encuadre.map((p) => [p.lat, p.lng]))
-    map.flyToBounds(limites, { padding: [60, 60], maxZoom: 15, duration: 0.8 })
+    map.flyToBounds(limites, {
+      paddingTopLeft: [60, 150], // deja libre el lugar de la leyenda
+      paddingBottomRight: [40, 40],
+      maxZoom: 15,
+      duration: 0.8,
+    })
   }, [puntos, map])
 
   useEffect(() => {
@@ -116,6 +122,14 @@ function Mapa() {
     }))
     .sort((a, b) => (Number(b.score_urgencia) || 0) - (Number(a.score_urgencia) || 0)),
   [peticiones, zonaFiltro])
+
+  // Qué encuadrar: en la vista por barrios, todos los barrios (incluye Villa Allende);
+  // con un barrio elegido o en la vista de peticiones, solo los puntos visibles
+  const encuadre = useMemo(() => (
+    vista === 'barrios' && zonaFiltro === 'todas'
+      ? zonas.map((z) => ({ lat: Number(z.lat), lng: Number(z.lng) }))
+      : puntos
+  ), [vista, zonaFiltro, zonas, puntos])
 
   // Resumen por barrio con todas las peticiones (sin importar el filtro)
   const resumenBarrios = useMemo(() => {
@@ -221,7 +235,7 @@ function Mapa() {
             />
           ))}
 
-          <ControlVista puntos={puntos} seleccion={seleccion} />
+          <ControlVista puntos={encuadre} seleccion={seleccion} />
         </MapContainer>
 
         <div className="mapa-leyenda">
@@ -292,11 +306,7 @@ function Mapa() {
             aria-label="Filtrar por barrio"
           >
             <option value="todas">Todos los barrios</option>
-            {zonas.map((zona) => (
-              <option key={zona.id} value={zona.id}>
-                {zona.nombre}
-              </option>
-            ))}
+            <OpcionesBarrios zonas={zonas} />
           </select>
         </header>
 

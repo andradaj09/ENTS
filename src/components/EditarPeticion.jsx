@@ -5,6 +5,7 @@ import {
   updatePeticion,
 } from '../services/petitionService'
 import Icon from './Icon'
+import OpcionesBarrios from './OpcionesBarrios'
 
 const ESTADOS = [
   ['pendiente', 'Pendiente de revisión'],
@@ -145,9 +146,7 @@ function EditarPeticion({ peticion, onGuardado, onCerrar }) {
               onChange={handleChange}
               required
             >
-              {zonas.map((zona) => (
-                <option key={zona.id} value={zona.id}>{zona.nombre}</option>
-              ))}
+              <OpcionesBarrios zonas={zonas} />
             </select>
           </div>
 

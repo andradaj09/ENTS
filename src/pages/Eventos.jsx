@@ -9,6 +9,7 @@ import {
 } from '../services/petitionService'
 import Icon from '../components/Icon'
 import { capitalizar } from '../utils/format'
+import OpcionesBarrios from '../components/OpcionesBarrios'
 
 const formatoFecha = new Intl.DateTimeFormat('es-AR', {
   weekday: 'long',
@@ -251,11 +252,7 @@ function Eventos() {
                       onChange={handleChange}
                     >
                       <option value="">Todos los barrios</option>
-                      {zonas.map((zona) => (
-                        <option key={zona.id} value={zona.id}>
-                          {zona.nombre}
-                        </option>
-                      ))}
+                      <OpcionesBarrios zonas={zonas} />
                     </select>
                   </div>
 

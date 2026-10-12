@@ -12,6 +12,7 @@ import { claseUrgencia, tiempoRelativo } from '../utils/format'
 import { esAdmin } from '../utils/roles'
 import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
+import OpcionesBarrios from '../components/OpcionesBarrios'
 import '../styles/comunidad.css'
 
 const LARGO_MAXIMO = 500
@@ -214,9 +215,7 @@ function Comunidad() {
             aria-label="Filtrar por barrio"
           >
             <option value="">Todos los barrios</option>
-            {zonas.map((zona) => (
-              <option key={zona.id} value={zona.id}>{zona.nombre}</option>
-            ))}
+            <OpcionesBarrios zonas={zonas} />
           </select>
         </label>
       </div>
@@ -288,9 +287,7 @@ function Comunidad() {
                   aria-label="Barrio"
                 >
                   <option value="">Sin barrio</option>
-                  {zonas.map((zona) => (
-                    <option key={zona.id} value={zona.id}>{zona.nombre}</option>
-                  ))}
+                  <OpcionesBarrios zonas={zonas} />
                 </select>
 
                 <span className="publicar-contador">
