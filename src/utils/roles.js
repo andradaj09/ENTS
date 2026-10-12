@@ -22,3 +22,12 @@ export function esAdmin(perfil) {
 export function puedeVerIdentidades(perfil) {
   return perfil?.rol === 'funcionario' || perfil?.rol === 'admin'
 }
+
+// ¿Puede actualizar el seguimiento de esta petición?
+// Admins siempre; funcionarios si no tienen área o si es la de la categoría.
+// (La base lo vuelve a verificar en actualizar_seguimiento.)
+export function puedeResponder(perfil, peticion) {
+  if (perfil?.rol === 'admin') return true
+  if (perfil?.rol !== 'funcionario') return false
+  return !perfil.area_id || perfil.area_id === peticion?.categorias?.area_id
+}

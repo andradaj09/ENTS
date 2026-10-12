@@ -12,6 +12,8 @@ import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorFotos from '../components/SelectorFotos'
 import Icon from '../components/Icon'
 import OpcionesBarrios from '../components/OpcionesBarrios'
+import PeticionesSimilares from '../components/PeticionesSimilares'
+import { describirAlertas, revisarTexto, tieneDatosPersonales } from '../utils/moderacion'
 
 // Etiqueta que indica si el campo se completó solo o lo eligió la persona
 function EtiquetaAuto({ automatico, manual, onRestablecer, sugerencia }) {
@@ -129,6 +131,9 @@ function CreatePetition() {
     ? form.zonaId
     : String(zonaDetectada?.id ?? form.zonaId)
 
+  // Revisión automática (la base hace la misma y se la muestra a los moderadores)
+  const alertasTexto = revisarTexto(`${form.titulo} ${form.descripcion}`)
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -241,6 +246,19 @@ function CreatePetition() {
                 onChange={handleChange}
                 placeholder="Contá qué pasa, desde cuándo y a quiénes afecta."
                 required
+              />
+
+              {alertasTexto.length > 0 && (
+                <p className="small text-danger mt-2 mb-0">
+                  {tieneDatosPersonales(alertasTexto)
+                    ? `Tu petición tiene ${describirAlertas(alertasTexto)}. Es pública: mejor no incluyas datos personales.`
+                    : `Tu petición podría tener ${describirAlertas(alertasTexto)}. Un moderador la va a revisar con más atención.`}
+                </p>
+              )}
+
+              <PeticionesSimilares
+                texto={`${form.titulo} ${form.descripcion}`}
+                ubicacion={ubicacion}
               />
             </div>
 

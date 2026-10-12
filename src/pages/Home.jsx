@@ -7,6 +7,7 @@ import {
 } from '../services/petitionService'
 import { capitalizar, claseUrgencia, tiempoRelativo, UMBRAL_URGENTE } from '../utils/format'
 import { esAdmin } from '../utils/roles'
+import { NIVELES_PRIORIDAD, ordenarPorPrioridad } from '../utils/prioridad'
 import Icon from '../components/Icon'
 import HeroArt from '../components/HeroArt'
 import PalabraRotativa from '../components/PalabraRotativa'
@@ -63,16 +64,15 @@ function Home() {
     ...new Set(peticiones.map((p) => p.categorias?.nombre).filter(Boolean)),
   ], [peticiones])
 
-  const filtradas = categoria === 'todas'
-    ? peticiones
-    : peticiones.filter((p) => p.categorias?.nombre === categoria)
+  // Más firmas = más prioridad: arriba y con el azul más fuerte
+  const filtradas = ordenarPorPrioridad(
+    categoria === 'todas'
+      ? peticiones
+      : peticiones.filter((p) => p.categorias?.nombre === categoria)
+  )
 
-  // La petición con más firmas se destaca
-  const idDestacada = filtradas.length > 1
-    ? filtradas.reduce((max, p) =>
-        (p.firmas_count ?? 0) > (max.firmas_count ?? 0) ? p : max
-      ).id
-    : null
+  // La primera (la de más apoyo) se destaca si ya tiene firmas
+  const idDestacada = filtradas[0]?.firmas_count > 0 ? filtradas[0].id : null
 
   return (
     <>
@@ -236,6 +236,9 @@ function Home() {
           <div>
             <span className="eyebrow">Comunidad</span>
             <h2>Peticiones activas</h2>
+            <p className="text-muted small mb-0 mt-1">
+              Ordenadas por apoyo: las que tienen más firmas aparecen primero.
+            </p>
           </div>
 
           {categorias.length > 1 && (
@@ -252,6 +255,17 @@ function Home() {
             </div>
           )}
         </div>
+
+        {!loading && peticiones.length > 0 && (
+          <ul className="prioridad-leyenda" aria-label="Niveles de prioridad">
+            {NIVELES_PRIORIDAD.map((nivel) => (
+              <li key={nivel.clave}>
+                <i style={{ background: nivel.color }} />
+                {nivel.corto} · {nivel.desde === 0 ? 'menos de 5' : nivel.desde + '+'} firmas
+              </li>
+            ))}
+          </ul>
+        )}
 
         {loading && <p className="text-muted">Cargando peticiones...</p>}
 

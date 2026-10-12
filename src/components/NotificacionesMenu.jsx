@@ -1,48 +1,63 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getNotificaciones } from '../services/petitionService'
-import {
-  getUltimaVista,
-  marcarNotificacionesVistas,
-} from '../utils/notificaciones'
+import { getNotificaciones, marcarNotificacionesLeidas } from '../services/petitionService'
 import { tiempoRelativo } from '../utils/format'
+import { nombreEtapa } from '../utils/prioridad'
 import Icon from './Icon'
 
+// Texto de cada tipo de aviso (el mensaje trae el dato variable)
 const TEXTOS = {
-  publicada: { icono: 'check', texto: 'Tu petición fue publicada' },
-  rechazada: { icono: 'alert', texto: 'Tu petición fue rechazada' },
-  firma: { icono: 'pen', texto: 'Nueva firma en tu petición' },
+  publicada: { icono: 'check', texto: () => 'Tu petición fue publicada' },
+  rechazada: { icono: 'alert', texto: () => 'Tu petición fue rechazada' },
+  firma: { icono: 'pen', texto: () => 'Nueva firma en tu petición' },
+  hito: { icono: 'up', texto: (m) => `Llegó a ${m} firmas` },
+  elevada: { icono: 'flag', texto: () => 'Petición elevada a tu área: alcanzó la meta de firmas' },
+  seguimiento: { icono: 'shield', texto: (m) => `Respuesta oficial: ahora está "${nombreEtapa(m)}"` },
+  comentario: { icono: 'megaphone', texto: () => 'Nuevo comentario en tu petición' },
+  barrio: { icono: 'map', texto: (m) => `Nueva petición en ${m}` },
 }
+
+const SIN_TEXTO = { icono: 'bell', texto: () => 'Novedad en una petición' }
 
 // Campana del cabezal: muestra la cantidad sin leer y despliega
 // un panel de vidrio con las notificaciones.
 function NotificacionesMenu({ usuarioId }) {
   const [abierto, setAbierto] = useState(false)
   const [notificaciones, setNotificaciones] = useState([])
-  const [ultimaVista, setUltimaVista] = useState(() => getUltimaVista(usuarioId))
   const [error, setError] = useState(false)
   const contenedorRef = useRef(null)
 
   useEffect(() => {
     let activo = true
 
-    getNotificaciones()
-      .then((datos) => {
-        if (activo) setNotificaciones(datos)
-      })
-      .catch((err) => {
-        console.error('Error cargando notificaciones:', err)
-        if (activo) setError(true)
-      })
+    const cargar = () =>
+      getNotificaciones()
+        .then((datos) => {
+          if (activo) setNotificaciones(datos)
+        })
+        .catch((err) => {
+          console.error('Error cargando notificaciones:', err)
+          if (activo) setError(true)
+        })
+
+    cargar()
+
+    // Se vuelve a consultar cada minuto mientras la pestaña está visible
+    const intervalo = setInterval(() => {
+      if (document.visibilityState === 'visible') cargar()
+    }, 60000)
 
     return () => {
       activo = false
+      clearInterval(intervalo)
     }
   }, [usuarioId])
 
   // Al cerrar (de cualquier forma), lo que se vio deja de contar como nuevo
   const cerrar = () => {
-    setUltimaVista(Date.now())
+    setNotificaciones((actuales) =>
+      actuales.some((n) => !n.leida) ? actuales.map((n) => ({ ...n, leida: true })) : actuales
+    )
     setAbierto(false)
   }
 
@@ -67,7 +82,7 @@ function NotificacionesMenu({ usuarioId }) {
     }
   }, [abierto])
 
-  const esNueva = (n) => new Date(n.fecha).getTime() > ultimaVista
+  const esNueva = (n) => !n.leida
   const sinLeer = notificaciones.filter(esNueva).length
 
   const alternar = () => {
@@ -76,7 +91,12 @@ function NotificacionesMenu({ usuarioId }) {
       return
     }
 
-    marcarNotificacionesVistas(usuarioId)
+    // Se marcan leídas en la base (vale para todos los dispositivos)
+    if (sinLeer > 0) {
+      marcarNotificacionesLeidas().catch((err) =>
+        console.error('Error marcando notificaciones:', err)
+      )
+    }
     setAbierto(true)
   }
 
@@ -108,12 +128,12 @@ function NotificacionesMenu({ usuarioId }) {
 
             {!error && notificaciones.length === 0 && (
               <p className="notif-vacio">
-                Cuando tus peticiones reciban firmas o cambien de estado, te avisamos acá.
+                Cuando tus peticiones (o las que firmaste) tengan novedades, te avisamos acá.
               </p>
             )}
 
             {notificaciones.map((n) => {
-              const { icono, texto } = TEXTOS[n.tipo]
+              const { icono, texto } = TEXTOS[n.tipo] ?? SIN_TEXTO
 
               return (
                 <Link
@@ -127,7 +147,7 @@ function NotificacionesMenu({ usuarioId }) {
                   </span>
 
                   <div>
-                    <p>{texto}</p>
+                    <p>{texto(n.mensaje)}</p>
                     <span>{n.titulo} · {tiempoRelativo(n.fecha)}</span>
                   </div>
                 </Link>

@@ -11,12 +11,15 @@ import {
   firmarPeticion,
   retirarFirma,
 } from '../services/petitionService'
-import { esAdmin, puedeVerIdentidades } from '../utils/roles'
+import { esAdmin, puedeResponder, puedeVerIdentidades } from '../utils/roles'
+import { META_FIRMAS, nombreEtapa, prioridadPorFirmas, proximoNivel } from '../utils/prioridad'
 import { tiempoRelativo } from '../utils/format'
 import GaleriaFotos from '../components/GaleriaFotos'
 import EditarPeticion from '../components/EditarPeticion'
 import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
+import Seguimiento from '../components/Seguimiento'
+import Comentarios from '../components/Comentarios'
 
 function PetitionDetail() {
   const { id } = useParams()
@@ -197,6 +200,10 @@ function PetitionDetail() {
     year: 'numeric',
   })
 
+  const prioridad = prioridadPorFirmas(cantidadFirmas)
+  const siguiente = proximoNivel(cantidadFirmas)
+  const avanceMeta = Math.min(100, (cantidadFirmas / META_FIRMAS) * 100)
+
   const estadoFormateado = peticion.estado
     .replaceAll('_', ' ')
     .replace(/\b\w/g, (letra) => letra.toUpperCase())
@@ -261,9 +268,23 @@ function PetitionDetail() {
           {peticion.zonas?.nombre}
         </span>
 
-        <span className="badge text-bg-light">
-          {estadoFormateado}
-        </span>
+        {peticion.estado === 'publicada' ? (
+          <>
+            <span className={`badge seguimiento-badge etapa-${peticion.seguimiento}`}>
+              {nombreEtapa(peticion.seguimiento)}
+            </span>
+            <span
+              className="prioridad-badge"
+              style={{ '--prioridad': prioridad.color, '--prioridad-texto': prioridad.texto }}
+            >
+              {prioridad.nombre}
+            </span>
+          </>
+        ) : (
+          <span className="badge text-bg-light">
+            {estadoFormateado}
+          </span>
+        )}
       </div>
 
       <h1 className="page-title mb-4">
@@ -293,7 +314,16 @@ function PetitionDetail() {
             </div>
           </div>
 
-          <div className="row g-4">
+          {peticion.estado === 'publicada' && (
+            <Seguimiento
+              peticion={peticion}
+              usuarioId={user?.id}
+              puedeResponder={puedeResponder(profile, peticion)}
+              onCambio={(seguimiento) => setPeticion((actual) => ({ ...actual, seguimiento }))}
+            />
+          )}
+
+          <div className="row g-4 mb-4">
 
             <div className="col-md-6">
               <div className="card h-100">
@@ -353,12 +383,17 @@ function PetitionDetail() {
             </div>
 
           </div>
+
+          <Comentarios peticion={peticion} usuarioId={user?.id} esModerador={esModerador} />
         </div>
 
         {/* FIRMAS */}
 
         <div className="col-lg-4">
-          <div className="card card-featured">
+          <div
+            className={`card card-prioridad prioridad-${prioridad.clave}`}
+            style={{ '--prioridad': prioridad.color, '--prioridad-texto': prioridad.texto }}
+          >
             <div className="card-body">
 
               <p className="card-kicker">Apoyos</p>
@@ -367,6 +402,22 @@ function PetitionDetail() {
                 {cantidadFirmas}
                 <small> {cantidadFirmas === 1 ? 'firma' : 'firmas'}</small>
               </div>
+
+              <div className="meta-firmas" role="progressbar" aria-valuemin={0}
+                aria-valuemax={META_FIRMAS} aria-valuenow={Math.min(cantidadFirmas, META_FIRMAS)}
+                aria-label="Firmas hacia la meta">
+                <span style={{ width: `${avanceMeta}%` }} />
+              </div>
+              <p className="meta-firmas-texto">
+                {peticion.elevada_at || cantidadFirmas >= META_FIRMAS
+                  ? 'Meta alcanzada: la petición se elevó al área del municipio.'
+                  : `Meta: ${META_FIRMAS} firmas para elevarla al municipio.`}
+                {siguiente && (
+                  <span className="d-block">
+                    Faltan {siguiente.faltan} para {siguiente.nivel.nombre.toLowerCase()}.
+                  </span>
+                )}
+              </p>
 
               <ul className="check-list">
                 <li>Visibiliza la problemática</li>

@@ -18,13 +18,16 @@ const COLUMNAS_PETICION = `
   fotos,
   firmas_count,
   created_at,
-  updated_at
+  updated_at,
+  seguimiento,
+  elevada_at
 `
 
 const CATEGORIA_Y_BARRIO = `
   categorias (
     id,
-    nombre
+    nombre,
+    area_id
   ),
   zonas (
     id,
@@ -261,6 +264,7 @@ export async function getPeticionesPendientes() {
     .rpc('peticiones_pendientes')
     .select(`
       ${COLUMNAS_PETICION},
+      alertas,
       ${CATEGORIA_Y_BARRIO},
       profiles (
         nombre,
@@ -365,8 +369,9 @@ export async function getPeticionesPublicadas() {
   return data
 }
 
-// Cambios de estado y firmas recibidas en las peticiones propias
-// (la base no revela quién firmó)
+// Notificaciones guardadas en la base: cambios de estado, firmas, hitos,
+// respuestas oficiales, comentarios y novedades de los barrios seguidos
+// (nunca revelan quién firmó o comentó)
 export async function getNotificaciones() {
   const { data, error } = await supabase.rpc('mis_notificaciones')
 
@@ -379,8 +384,18 @@ export async function getNotificaciones() {
     tipo: notificacion.tipo,
     peticionId: notificacion.peticion_id,
     titulo: notificacion.titulo,
+    mensaje: notificacion.mensaje,
+    leida: notificacion.leida,
     fecha: notificacion.fecha,
   }))
+}
+
+export async function marcarNotificacionesLeidas() {
+  const { error } = await supabase.rpc('marcar_notificaciones_leidas')
+
+  if (error) {
+    throw error
+  }
 }
 
 // ---------- Eventos ----------
