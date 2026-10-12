@@ -5,6 +5,8 @@ import Avatar from '../components/Avatar'
 import { AVATARES_PREDEFINIDOS } from '../components/avatares'
 import { nombreRol } from '../utils/roles'
 import Icon from '../components/Icon'
+import Insignias from '../components/Insignias'
+import BarriosSeguidos from '../components/BarriosSeguidos'
 
 function Perfil() {
   const { user, profile, setProfile } = useAuth()
@@ -242,6 +244,26 @@ function Perfil() {
                   {guardando ? 'Guardando...' : 'Guardar cambios'}
                 </button>
               </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="row g-4 mt-1">
+        <div className="col-lg-7">
+          <div className="card h-100">
+            <div className="card-body">
+              <p className="line-label">Insignias</p>
+              <Insignias />
+            </div>
+          </div>
+        </div>
+
+        <div className="col-lg-5">
+          <div className="card h-100">
+            <div className="card-body">
+              <p className="line-label">Barrios que seguís</p>
+              <BarriosSeguidos usuarioId={user?.id} />
             </div>
           </div>
         </div>

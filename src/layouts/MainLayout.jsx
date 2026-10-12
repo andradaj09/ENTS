@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { logoutUser } from '../services/authService'
@@ -52,6 +52,9 @@ function MainLayout() {
     <>
       <FondoAnimado fijo suave />
 
+      {/* Accesibilidad: con teclado, el primer Tab permite saltar el menú */}
+      <a className="skip-link" href="#contenido">Saltar al contenido</a>
+
       <header className="topbar">
         <div className="topbar-fila">
           <div className="topbar-pill">
@@ -64,6 +67,7 @@ function MainLayout() {
               className="icon-btn"
               onClick={toggleMenu}
               aria-label="Abrir o cerrar el menú"
+              aria-expanded={menuAbierto}
             >
               <Icon name={menuAbierto ? 'close' : 'menu'} size={24} />
             </button>
@@ -121,6 +125,17 @@ function MainLayout() {
             Perfil
           </NavLink>
 
+          {(profile?.rol === 'funcionario' || profile?.rol === 'admin') && (
+            <>
+              <p className="side-label">Gestión</p>
+
+              <NavLink className={sideLinkClass} to="/bandeja">
+                <Icon name="list" size={22} />
+                Bandeja del área
+              </NavLink>
+            </>
+          )}
+
           {profile?.rol === 'admin' && (
             <>
               <p className="side-label">Administración</p>
@@ -157,10 +172,13 @@ function MainLayout() {
 
         </aside>
 
-        <main className="app-main">
+        <main className="app-main" id="contenido" tabIndex={-1}>
           {/* key: cada página vuelve a animar su entrada al navegar */}
           <div className="page-enter" key={location.pathname}>
-            <Outlet />
+            {/* Mientras se descarga una página, el menú y la barra siguen visibles */}
+            <Suspense fallback={<div className="cargando-pagina" role="status">Cargando...</div>}>
+              <Outlet />
+            </Suspense>
           </div>
         </main>
       </div>

@@ -15,6 +15,12 @@ import { CENTRO_CORDOBA, MAPA_BASE, ubicacionPeticion } from '../utils/ubicacion
 import { areasDeBarrios, clasesEscala, colorPara, SIN_DATOS } from '../utils/zonasMapa'
 import Icon from '../components/Icon'
 import OpcionesBarrios from '../components/OpcionesBarrios'
+import { useAuth } from '../contexts/AuthContext'
+import {
+  dejarDeSeguirBarrio,
+  getBarriosSeguidos,
+  seguirBarrio,
+} from '../services/participacionService'
 
 // Qué mide el color de cada barrio en la vista por zonas
 const METRICAS = {
@@ -81,7 +87,9 @@ function ControlVista({ puntos, seleccion }) {
 }
 
 function Mapa() {
+  const { user } = useAuth()
   const [peticiones, setPeticiones] = useState([])
+  const [seguidos, setSeguidos] = useState([])
   const [zonas, setZonas] = useState([])
   const [zonaFiltro, setZonaFiltro] = useState('todas')
   const [seleccionId, setSeleccionId] = useState(null)
@@ -102,6 +110,9 @@ function Mapa() {
 
         setPeticiones(peticionesData)
         setZonas(zonasData)
+
+        // Opcional: si falla, el botón "Seguir" simplemente arranca vacío
+        getBarriosSeguidos().then(setSeguidos).catch(() => {})
       } catch (err) {
         console.error('Error cargando el mapa:', err)
         setError('No se pudieron cargar las peticiones del mapa.')
@@ -159,8 +170,28 @@ function Mapa() {
     ...[...resumenBarrios.values()].map((r) => r[metrica])
   ), [resumenBarrios, metrica])
 
+  // Barrios sin datos: gris neutro que se distinga del fondo en cada tema
+  const sinDatos = document.documentElement.dataset.tema === 'oscuro' ? '#383835' : SIN_DATOS
+
   const escala = clasesEscala(maximoMetrica, METRICAS[metrica].enteros)
   const mostrarPines = vista === 'puntos' || zonaFiltro !== 'todas'
+
+  const siguiendo = seguidos.includes(zonaFiltro)
+
+  // Seguir el barrio elegido: llegan avisos de cada petición nueva que se publique ahí
+  const alternarSeguir = async () => {
+    try {
+      if (siguiendo) {
+        await dejarDeSeguirBarrio(user.id, zonaFiltro)
+        setSeguidos((actuales) => actuales.filter((id) => id !== zonaFiltro))
+      } else {
+        await seguirBarrio(user.id, zonaFiltro)
+        setSeguidos((actuales) => [...actuales, zonaFiltro])
+      }
+    } catch (err) {
+      console.error('Error siguiendo barrio:', err)
+    }
+  }
 
   const seleccion = puntos.find((p) => p.id === seleccionId) ?? null
 
@@ -199,7 +230,7 @@ function Mapa() {
                 positions={contorno}
                 pathOptions={{
                   ...borde,
-                  fillColor: colorPara(valor, maximoMetrica, METRICAS[metrica].enteros),
+                  fillColor: valor ? colorPara(valor, maximoMetrica, METRICAS[metrica].enteros) : sinDatos,
                   fillOpacity: zonaFiltro === 'todas' || elegida ? 0.62 : 0.25,
                 }}
                 eventHandlers={{
@@ -269,7 +300,7 @@ function Mapa() {
 
               <div className="mapa-escala">
                 <span className="mapa-escala-paso">
-                  <i style={{ background: SIN_DATOS }} /> 0
+                  <i style={{ background: sinDatos }} /> 0
                 </span>
                 {escala.map((clase) => (
                   <span className="mapa-escala-paso" key={clase.color}>
@@ -298,6 +329,18 @@ function Mapa() {
             <span className="eyebrow">Problemáticas</span>
             <h1>{puntos.length} en el mapa</h1>
           </div>
+
+          {zonaFiltro !== 'todas' && user && (
+            <button
+              type="button"
+              className={`btn btn-sm ${siguiendo ? 'btn-dark' : 'btn-ghost'}`}
+              onClick={alternarSeguir}
+              aria-pressed={siguiendo}
+            >
+              <Icon name={siguiendo ? 'check' : 'bell'} size={14} className="me-1" />
+              {siguiendo ? 'Siguiendo' : 'Seguir barrio'}
+            </button>
+          )}
 
           <select
             className="form-select form-select-sm"

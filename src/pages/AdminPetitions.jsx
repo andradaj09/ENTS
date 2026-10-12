@@ -7,10 +7,15 @@ import {
 } from '../services/petitionService'
 import { tiempoRelativo } from '../utils/format'
 import GaleriaFotos from '../components/GaleriaFotos'
+import Icon from '../components/Icon'
+import { Link } from 'react-router-dom'
+import { borrarComentario, getComentariosARevisar, moderarComentario } from '../services/participacionService'
+import { describirAlertas } from '../utils/moderacion'
 
 function AdminPetitions() {
   const [peticiones, setPeticiones] = useState([])
   const [solicitudes, setSolicitudes] = useState([])
+  const [comentarios, setComentarios] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [procesando, setProcesando] = useState(null)
@@ -18,13 +23,16 @@ function AdminPetitions() {
   useEffect(() => {
     const cargar = async () => {
       try {
-        const [peticionesData, solicitudesData] = await Promise.all([
+        const [peticionesData, solicitudesData, comentariosData] = await Promise.all([
           getPeticionesPendientes(),
           getSolicitudesFuncionario(),
+          getComentariosARevisar(),
         ])
 
-        setPeticiones(peticionesData)
+        // Las que la revisión automática marcó van primero
+        setPeticiones([...peticionesData].sort((a, b) => (b.alertas?.length ?? 0) - (a.alertas?.length ?? 0)))
         setSolicitudes(solicitudesData)
+        setComentarios(comentariosData)
       } catch (err) {
         console.error('Error cargando moderación:', err)
         setError('No se pudo cargar el panel de moderación.')
@@ -70,6 +78,21 @@ function AdminPetitions() {
     } catch (err) {
       console.error('Error resolviendo solicitud:', err)
       setError('No se pudo resolver la solicitud.')
+    } finally {
+      setProcesando(null)
+    }
+  }
+
+  // Comentarios: volver a mostrar (descarta las denuncias) o borrar
+  const resolverComentario = async (comentario, accion) => {
+    try {
+      setProcesando(`comentario-${comentario.id}`)
+      if (accion === 'mostrar') await moderarComentario(comentario.id, false)
+      else await borrarComentario(comentario.id)
+      setComentarios((actuales) => actuales.filter((c) => c.id !== comentario.id))
+    } catch (err) {
+      console.error('Error moderando comentario:', err)
+      setError('No se pudo moderar el comentario.')
     } finally {
       setProcesando(null)
     }
@@ -193,8 +216,16 @@ function AdminPetitions() {
               </span>
             </div>
 
+            {peticion.alertas?.length > 0 && (
+              <div className="alerta-automatica">
+                <Icon name="alert" size={16} />
+                Revisión automática: tiene {describirAlertas(peticion.alertas)}.
+                Revisala antes de publicar (podés editarla desde su página).
+              </div>
+            )}
+
             <h3 className="card-big mb-3">
-              {peticion.titulo}
+              <Link to={`/peticiones/${peticion.id}`}>{peticion.titulo}</Link>
             </h3>
 
             <p className="card-text text-muted">
@@ -237,6 +268,42 @@ function AdminPetitions() {
 
             </div>
 
+          </div>
+        </div>
+      ))}
+
+      {/* ---------- Comentarios ocultos o denunciados ---------- */}
+
+      <p className="line-label mt-5">
+        Comentarios a revisar ({comentarios.length})
+      </p>
+
+      {comentarios.length === 0 && (
+        <p className="text-muted small">No hay comentarios ocultos ni denunciados.</p>
+      )}
+
+      {comentarios.map((c) => (
+        <div className="card mb-3" key={c.id}>
+          <div className="card-body">
+            <p className="small text-muted mb-1">
+              En <Link to={`/peticiones/${c.peticion_id}`}>{c.titulo}</Link> · {c.autor} · {tiempoRelativo(c.fecha)}
+            </p>
+            <p className="mb-2">{c.texto}</p>
+            <p className="small mb-3" style={{ color: '#b0412e' }}>
+              {c.denuncias > 0 && `${c.denuncias} denuncia${c.denuncias === 1 ? '' : 's'}`}
+              {c.denuncias > 0 && c.alertas?.length > 0 && ' · '}
+              {c.alertas?.length > 0 && `Revisión automática: ${describirAlertas(c.alertas)}`}
+            </p>
+            <div className="d-flex gap-2">
+              <button className="btn btn-ghost btn-sm" disabled={procesando === `comentario-${c.id}`}
+                onClick={() => resolverComentario(c, 'mostrar')}>
+                Está bien, mostrar
+              </button>
+              <button className="btn btn-outline-danger btn-sm" disabled={procesando === `comentario-${c.id}`}
+                onClick={() => resolverComentario(c, 'borrar')}>
+                Borrar
+              </button>
+            </div>
           </div>
         </div>
       ))}

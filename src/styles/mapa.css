@@ -446,3 +446,5 @@
   color: #0b0b0b;
   font-size: 0.85rem;
 }
+
+.mapa-lista-head > .btn { justify-self: start; }

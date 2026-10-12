@@ -1,0 +1,293 @@
+/* ==========================================================
+   Modo oscuro: se activa con <html data-tema="oscuro">.
+   Redefine las variables del tema y corrige los lugares que usan
+   blanco fijo. Los elementos "píldora negra" pasan a ser claros.
+   ========================================================== */
+
+:root[data-tema='oscuro'] {
+  color-scheme: dark;
+
+  --ents-bg: #121311;
+  --ents-panel-2: rgba(255, 255, 255, 0.04);
+  --ents-white: #24251f;
+  --ents-ink: #f1efe8;
+  --ents-muted: #aeaca3;
+  --ents-muted-2: #84827a;
+  --ents-line: rgba(255, 255, 255, 0.08);
+  --ents-line-strong: rgba(255, 255, 255, 0.16);
+  --ents-blue-strong: #6da7ec;
+
+  --glass-bg: linear-gradient(160deg, rgba(40, 41, 37, 0.86), rgba(28, 29, 26, 0.78));
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    0 4px 14px rgba(0, 0, 0, 0.25);
+  --glass-panel: linear-gradient(160deg, rgba(34, 35, 31, 0.92), rgba(25, 26, 23, 0.86));
+  --glass-inner: rgba(255, 255, 255, 0.045);
+  --glass-inner-hover: rgba(255, 255, 255, 0.08);
+
+  --bs-body-bg: var(--ents-bg);
+  --bs-body-color: var(--ents-ink);
+  --bs-emphasis-color: var(--ents-ink);
+  --bs-secondary-color: var(--ents-muted);
+  --bs-border-color: var(--ents-line-strong);
+  --bs-link-color: var(--ents-ink);
+  --bs-link-color-rgb: 241, 239, 232;
+  --bs-link-hover-color: #9ec5f4;
+  --bs-heading-color: var(--ents-ink);
+  --bs-tertiary-bg: #1b1c19;
+}
+
+/* Fondo animado más apagado */
+[data-tema='oscuro'] .fondo-blob { opacity: 0.22; }
+[data-tema='oscuro'] .fondo-grid,
+[data-tema='oscuro'] .fondo-figura { opacity: 0.35; }
+
+/* ---------- "Píldoras negras" → claras con texto oscuro ---------- */
+
+[data-tema='oscuro'] .side-link.active,
+[data-tema='oscuro'] .chip-filter button.active,
+[data-tema='oscuro'] .icon-chip.dark,
+[data-tema='oscuro'] .mapa-vista button.active,
+[data-tema='oscuro'] .aviso-privado,
+[data-tema='oscuro'] .chips-barrios li,
+[data-tema='oscuro'] .etapas li.actual .etapa-punto {
+  background: var(--ents-ink);
+  border-color: var(--ents-ink);
+  color: #121311;
+}
+
+[data-tema='oscuro'] .chips-barrios button {
+  background: rgba(0, 0, 0, 0.12);
+  color: #121311;
+}
+
+[data-tema='oscuro'] .btn-dark,
+[data-tema='oscuro'] .btn-primary {
+  --bs-btn-color: #121311;
+  --bs-btn-hover-color: #121311;
+  --bs-btn-active-color: #121311;
+  --bs-btn-active-bg: #ffffff;
+  --bs-btn-disabled-color: #3a3b36;
+  --bs-btn-disabled-bg: #8d8b83;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.4);
+}
+
+[data-tema='oscuro'] .btn-ghost,
+[data-tema='oscuro'] .btn-outline-secondary,
+[data-tema='oscuro'] .btn-outline-primary,
+[data-tema='oscuro'] .btn-outline-light {
+  --bs-btn-border-color: rgba(255, 255, 255, 0.14);
+  --bs-btn-hover-color: #121311;
+  --bs-btn-active-color: #121311;
+  --bs-btn-active-bg: #ffffff;
+}
+
+/* ---------- Barra superior y paneles ---------- */
+
+[data-tema='oscuro'] .topbar-pill,
+[data-tema='oscuro'] .topbar-burbuja {
+  background: linear-gradient(160deg, rgba(38, 39, 35, 0.97), rgba(28, 29, 26, 0.95));
+}
+
+[data-tema='oscuro'] .menu-usuario-panel,
+[data-tema='oscuro'] .notif-panel {
+  background: rgba(30, 31, 28, 0.97);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+}
+
+[data-tema='oscuro'] .card {
+  --bs-card-border-color: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+}
+
+[data-tema='oscuro'] .row .card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Superficies que eran blanco translúcido */
+[data-tema='oscuro'] :is(
+  .menu-usuario-opcion:hover, .icon-btn:hover, .side-link:hover, .side-note, .aside-head,
+  .feed-item:hover, .empty-state, .selector-fotos-agregar, .usuarios-buscador, .usuario-actividad,
+  .avatar-anonimo, .moderador-barra, .historial li, .comentarios li, .similares a,
+  .comunidad-barrio, .bar-row-boton:hover, .comunidad-buscador, .segmento, .resultado:hover,
+  .selector-ubicacion, .perfil-foto-cargando, .selector-foto-portada, .zone-level-0
+) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-tema='oscuro'] :is(
+  .usuarios-buscador:focus-within, .comunidad-barrio:focus-within, .comunidad-buscador:focus-within,
+  .similares a:hover, .selector-fotos-agregar.arrastrando, .mapa-tarjeta.activa
+) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-tema='oscuro'] .chip-filter button {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- Formularios, badges y alertas ---------- */
+
+[data-tema='oscuro'] .form-control,
+[data-tema='oscuro'] .form-select {
+  border-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--ents-ink);
+}
+
+[data-tema='oscuro'] .form-control:focus,
+[data-tema='oscuro'] .form-select:focus {
+  border-color: var(--ents-ink);
+  background-color: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+}
+
+[data-tema='oscuro'] .form-control::placeholder { color: var(--ents-muted-2); }
+
+[data-tema='oscuro'] .form-select {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23f1efe8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+[data-tema='oscuro'] .form-select option,
+[data-tema='oscuro'] .form-select optgroup {
+  background: #1e1f1c;
+  color: var(--ents-ink);
+}
+
+[data-tema='oscuro'] .badge.bg-primary,
+[data-tema='oscuro'] .badge.text-bg-primary {
+  background-color: rgba(57, 135, 229, 0.2) !important;
+  color: #9ec5f4 !important;
+}
+
+[data-tema='oscuro'] .badge.bg-secondary,
+[data-tema='oscuro'] .badge.text-bg-secondary,
+[data-tema='oscuro'] .badge.text-bg-light,
+[data-tema='oscuro'] .seguimiento-badge {
+  background-color: rgba(255, 255, 255, 0.07) !important;
+  color: var(--ents-ink) !important;
+}
+
+[data-tema='oscuro'] .seguimiento-badge.etapa-resuelta {
+  background-color: #0ca30c !important;
+  color: #fff !important;
+}
+
+[data-tema='oscuro'] .alert-danger {
+  --bs-alert-color: #f3b4a6;
+  --bs-alert-bg: rgba(208, 59, 59, 0.16);
+  --bs-alert-border-color: rgba(208, 59, 59, 0.35);
+}
+
+[data-tema='oscuro'] .alert-success {
+  --bs-alert-color: #a6dfba;
+  --bs-alert-bg: rgba(12, 163, 12, 0.14);
+  --bs-alert-border-color: rgba(12, 163, 12, 0.3);
+}
+
+[data-tema='oscuro'] .alert-info {
+  --bs-alert-bg: rgba(255, 255, 255, 0.05);
+}
+
+[data-tema='oscuro'] .alerta-automatica {
+  background: rgba(236, 131, 90, 0.16);
+  color: #f1b79f;
+}
+
+[data-tema='oscuro'] .comentarios .comentario-estado { color: #f1b79f; }
+
+/* ---------- Prioridad, seguimiento y gráficos ---------- */
+
+[data-tema='oscuro'] .meta-firmas { background: rgba(255, 255, 255, 0.1); }
+
+/* En oscuro, el nivel "Nueva" usa un gris que se ve sobre el fondo */
+[data-tema='oscuro'] .prioridad-nueva,
+[data-tema='oscuro'] .bandeja-lista li[style*='#e1e0d9'] {
+  --prioridad: #4a4b45 !important;
+  --prioridad-texto: #f1efe8 !important;
+}
+
+[data-tema='oscuro'] .prioridad-leyenda li:last-child i { background: #4a4b45 !important; }
+
+[data-tema='oscuro'] .etapa-punto {
+  background: #1e1f1c;
+}
+
+[data-tema='oscuro'] .similares {
+  border-color: rgba(109, 167, 236, 0.3);
+  background: rgba(57, 135, 229, 0.12);
+}
+
+[data-tema='oscuro'] .insignias li.lograda {
+  border-color: rgba(109, 167, 236, 0.35);
+  background: rgba(57, 135, 229, 0.14);
+}
+
+[data-tema='oscuro'] .insignia-icono { background: rgba(255, 255, 255, 0.08); }
+
+[data-tema='oscuro'] .estadisticas {
+  --serie-1: #3987e5;
+  --serie-2: #d95926;
+  --ink-1: #ffffff;
+  --ink-2: #c3c2b7;
+  --ink-muted: #898781;
+  --guia: #2c2c2a;
+  --pista: rgba(255, 255, 255, 0.05);
+}
+
+[data-tema='oscuro'] .columnas-plot { border-bottom-color: #383835; }
+
+[data-tema='oscuro'] .grafico-tooltip,
+[data-tema='oscuro'] .mapa-tooltip {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: #1e1f1c;
+  color: #c3c2b7;
+}
+
+[data-tema='oscuro'] .grafico-tooltip strong,
+[data-tema='oscuro'] .mapa-tooltip strong { color: #fff; }
+
+[data-tema='oscuro'] .grafico-toggle { border-color: rgba(255, 255, 255, 0.16); }
+
+[data-tema='oscuro'] .table {
+  --bs-table-color: var(--ents-ink);
+  --bs-table-border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- Mapa ---------- */
+
+[data-tema='oscuro'] .mapa-leaflet { background: #1b1c19; }
+
+[data-tema='oscuro'] .mapa-leaflet .leaflet-tile-pane,
+[data-tema='oscuro'] .selector-ubicacion-mapa .leaflet-tile-pane {
+  filter: grayscale(1) invert(0.92) contrast(0.85) brightness(0.9);
+}
+
+[data-tema='oscuro'] .mapa-leyenda {
+  background: rgba(30, 31, 28, 0.92);
+}
+
+[data-tema='oscuro'] .mapa-leaflet .leaflet-control-zoom a,
+[data-tema='oscuro'] .mapa-leaflet .leaflet-control-attribution {
+  background: rgba(30, 31, 28, 0.92);
+  color: var(--ents-ink);
+}
+
+[data-tema='oscuro'] .mapa-leaflet .leaflet-control-attribution a { color: #9ec5f4; }
+
+[data-tema='oscuro'] .mapa-vista { background: rgba(255, 255, 255, 0.08); }
+[data-tema='oscuro'] .mapa-vista button { color: var(--ents-muted); }
+
+[data-tema='oscuro'] .check-list li::before {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23121311' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5'/%3E%3C/svg%3E")
+    center / 11px no-repeat,
+    var(--ents-ink);
+}
+
+[data-tema='oscuro'] .cta-green {
+  border-color: rgba(93, 187, 138, 0.3);
+  background: rgba(93, 187, 138, 0.12);
+}

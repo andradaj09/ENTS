@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import { useAuth } from './contexts/AuthContext'
@@ -6,25 +7,31 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import RoleRoute from './routes/RoleRoute'
 import Home from './pages/Home'
 import AuthPage from './pages/AuthPage'
-import RestablecerPassword from './pages/RestablecerPassword'
-import Privacidad from './pages/Privacidad'
-import Dashboard from './pages/Dashboard'
-import CreatePetition from './pages/CreatePetition'
-import PetitionDetail from './pages/PetitionDetail'
-import AdminPetitions from './pages/AdminPetitions'
-import Mapa from './pages/Mapa'
-import Comunidad from './pages/Comunidad'
-import Eventos from './pages/Eventos'
-import Perfil from './pages/Perfil'
-import Usuarios from './pages/Usuarios'
-import Estadisticas from './pages/Estadisticas'
-import EstadisticasAdmin from './pages/EstadisticasAdmin'
+
+// El inicio y el acceso cargan de entrada; el resto de las páginas se
+// descarga recién cuando se visita (el primer ingreso es más liviano).
+// El mapa, por ejemplo, trae Leaflet solo si alguien lo abre.
+const RestablecerPassword = lazy(() => import('./pages/RestablecerPassword'))
+const Privacidad = lazy(() => import('./pages/Privacidad'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const CreatePetition = lazy(() => import('./pages/CreatePetition'))
+const PetitionDetail = lazy(() => import('./pages/PetitionDetail'))
+const AdminPetitions = lazy(() => import('./pages/AdminPetitions'))
+const Mapa = lazy(() => import('./pages/Mapa'))
+const Comunidad = lazy(() => import('./pages/Comunidad'))
+const Eventos = lazy(() => import('./pages/Eventos'))
+const Perfil = lazy(() => import('./pages/Perfil'))
+const Usuarios = lazy(() => import('./pages/Usuarios'))
+const Estadisticas = lazy(() => import('./pages/Estadisticas'))
+const EstadisticasAdmin = lazy(() => import('./pages/EstadisticasAdmin'))
+const Bandeja = lazy(() => import('./pages/Bandeja'))
 
 function App() {
   const { profile } = useAuth()
 
   return (
     <BrowserRouter>
+      <Suspense fallback={<div className="cargando-pagina" role="status">Cargando...</div>}>
       <Routes>
         {/* Acceso: pantalla completa, fuera del dashboard */}
         <Route path="/login" element={<AuthPage />} />
@@ -74,6 +81,15 @@ function App() {
             <Route path="/estadisticas" element={<Estadisticas />} />
 
             <Route
+              path="/bandeja"
+              element={
+                <RoleRoute allowedRoles={['funcionario', 'admin']}>
+                  <Bandeja />
+                </RoleRoute>
+              }
+            />
+
+            <Route
               path="/admin/estadisticas"
               element={
                 <RoleRoute allowedRoles={['admin']}>
@@ -93,6 +109,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }

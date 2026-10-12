@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getEstadisticasAdmin, getEstadisticasPublicas } from '../services/petitionService'
+import { getEstadisticasAdmin, getEstadisticasPublicas, getPeticionesParaReporte } from '../services/petitionService'
+import { descargarCSV, fechaArchivo } from '../utils/exportar'
+import { nombreEtapa, prioridadPorFirmas } from '../utils/prioridad'
 import { nombreRol } from '../utils/roles'
 import { fechaCorta, numero, tiempoRelativo } from '../utils/format'
 import { Barras, BarrasApiladas, Columnas, Proporcion, TarjetaGrafico, Tile } from '../components/Graficos'
@@ -30,6 +32,47 @@ function EstadisticasAdmin() {
   const [datos, setDatos] = useState(null)
   const [publicas, setPublicas] = useState(null)
   const [error, setError] = useState('')
+  const [exportando, setExportando] = useState(false)
+
+  // Excel: todas las peticiones con su barrio, área, etapa y prioridad
+  const exportarPeticiones = async () => {
+    setExportando(true)
+
+    try {
+      const filas = (await getPeticionesParaReporte()).map((p) => [
+        p.id,
+        p.titulo,
+        p.categorias?.nombre,
+        p.categorias?.areas?.nombre,
+        p.zonas?.nombre,
+        p.zonas?.localidad,
+        p.estado,
+        p.estado === 'publicada' ? nombreEtapa(p.seguimiento) : '',
+        prioridadPorFirmas(p.firmas_count).corto,
+        p.firmas_count,
+        p.score_urgencia,
+        new Date(p.created_at).toLocaleDateString('es-AR'),
+        p.elevada_at ? new Date(p.elevada_at).toLocaleDateString('es-AR') : '',
+      ])
+
+      descargarCSV(`ents-peticiones-${fechaArchivo()}.csv`, [
+        'ID', 'Título', 'Categoría', 'Área', 'Barrio', 'Localidad', 'Estado', 'Etapa',
+        'Prioridad', 'Firmas', 'Urgencia', 'Creada', 'Elevada',
+      ], filas)
+    } catch (err) {
+      console.error('Error exportando:', err)
+      setError('No se pudo generar el reporte.')
+    } finally {
+      setExportando(false)
+    }
+  }
+
+  // Resumen por barrio (lo mismo que ven los gráficos, en una planilla)
+  const exportarBarrios = () => {
+    descargarCSV(`ents-barrios-${fechaArchivo()}.csv`,
+      ['Barrio', 'Peticiones activas', 'Firmas', 'Urgencia promedio'],
+      (publicas?.por_barrio ?? []).map((b) => [b.nombre, b.cantidad, b.firmas, b.urgencia_promedio]))
+  }
 
   useEffect(() => {
     Promise.all([getEstadisticasAdmin(), getEstadisticasPublicas()])
@@ -83,10 +126,24 @@ function EstadisticasAdmin() {
           </p>
         </div>
 
-        <span className="aviso-privado">
-          <Icon name="lock" size={14} />
-          Información reservada
-        </span>
+        <div className="d-flex flex-wrap gap-2 align-items-center no-imprimir">
+          <span className="aviso-privado">
+            <Icon name="lock" size={14} />
+            Información reservada
+          </span>
+          <button className="btn btn-ghost btn-sm" onClick={exportarPeticiones} disabled={exportando}>
+            <Icon name="file" size={14} className="me-1" />
+            {exportando ? 'Generando...' : 'Peticiones (Excel)'}
+          </button>
+          <button className="btn btn-ghost btn-sm" onClick={exportarBarrios}>
+            <Icon name="map" size={14} className="me-1" />
+            Barrios (Excel)
+          </button>
+          <button className="btn btn-dark btn-sm" onClick={() => window.print()}>
+            <Icon name="steps" size={14} className="me-1" />
+            Imprimir / PDF
+          </button>
+        </div>
       </div>
 
       <div className="tiles">

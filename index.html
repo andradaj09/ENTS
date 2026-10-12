@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="theme-color" content="#efece2" />
+    <meta name="description" content="Peticiones vecinales de Córdoba: pedí, firmá y seguí cómo se resuelven los problemas de tu barrio." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="ENTS" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,6 +17,16 @@
       rel="stylesheet"
     />
     <title>Everyone Needs To Smile</title>
+    <script>
+      // Tema antes de pintar: el elegido o, si no hay, el del sistema
+      (function () {
+        var tema = null
+        try { tema = localStorage.getItem('ents-tema') } catch (e) {}
+        if (!tema) tema = matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro'
+        document.documentElement.dataset.tema = tema
+        if (tema === 'oscuro') document.querySelector('meta[name=theme-color]').setAttribute('content', '#121311')
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

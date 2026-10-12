@@ -1,5 +1,6 @@
 import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { getUsuariosAdmin } from '../services/petitionService'
+import { asignarArea, getAreas } from '../services/participacionService'
 import { normalizar } from '../utils/clasificador'
 import { nombreRol } from '../utils/roles'
 import { tiempoRelativo } from '../utils/format'
@@ -25,8 +26,26 @@ function Usuarios() {
   const [error, setError] = useState('')
   const [busqueda, setBusqueda] = useState('')
   const [filtroRol, setFiltroRol] = useState('todos')
+  const [areas, setAreas] = useState([])
 
   const busquedaDiferida = normalizar(useDeferredValue(busqueda).trim())
+
+  useEffect(() => {
+    getAreas().then(setAreas).catch((err) => console.error('Error cargando áreas:', err))
+  }, [])
+
+  // El área define qué peticiones ve y responde el funcionario en su bandeja
+  const cambiarArea = async (usuario, valor) => {
+    const areaId = valor ? Number(valor) : null
+
+    try {
+      await asignarArea(usuario.id, areaId)
+      setUsuarios((actuales) => actuales.map((u) => (u.id === usuario.id ? { ...u, area_id: areaId } : u)))
+    } catch (err) {
+      console.error('Error asignando área:', err)
+      setError('No se pudo asignar el área.')
+    }
+  }
 
   useEffect(() => {
     getUsuariosAdmin()
@@ -127,6 +146,21 @@ function Usuarios() {
                     <span>
                       {[usuario.cargo, usuario.organizacion].filter(Boolean).join(' · ')}
                     </span>
+                  </div>
+                )}
+
+                {usuario.rol === 'funcionario' && (
+                  <div className="info-row align-items-center">
+                    <span>Área</span>
+                    <select
+                      className="form-select form-select-sm w-auto"
+                      value={usuario.area_id ?? ''}
+                      onChange={(e) => cambiarArea(usuario, e.target.value)}
+                      aria-label={`Área de ${usuario.nombre}`}
+                    >
+                      <option value="">Todas las áreas</option>
+                      {areas.map((a) => <option key={a.id} value={a.id}>{a.nombre}</option>)}
+                    </select>
                   </div>
                 )}
 

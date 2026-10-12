@@ -217,11 +217,12 @@ function CreatePetition() {
           <form onSubmit={handleSubmit}>
 
             <div className="mb-3">
-              <label className="form-label">
+              <label className="form-label" htmlFor="peticion-titulo">
                 Título
               </label>
 
               <input
+                id="peticion-titulo"
                 type="text"
                 name="titulo"
                 className="form-control"
@@ -234,11 +235,12 @@ function CreatePetition() {
             </div>
 
             <div className="mb-4">
-              <label className="form-label">
+              <label className="form-label" htmlFor="peticion-descripcion">
                 Descripción
               </label>
 
               <textarea
+                id="peticion-descripcion"
                 name="descripcion"
                 className="form-control"
                 rows="5"

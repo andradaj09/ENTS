@@ -1,0 +1,22 @@
+{
+  "name": "ENTS — Everyone Needs To Smile",
+  "short_name": "ENTS",
+  "description": "Peticiones vecinales de Córdoba: pedí, firmá y seguí cómo se resuelven los problemas de tu barrio.",
+  "lang": "es-AR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#efece2",
+  "theme_color": "#efece2",
+  "categories": ["social", "government"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Nueva petición", "url": "/peticiones/nueva", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Mapa vecinal", "url": "/mapa", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

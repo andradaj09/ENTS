@@ -580,3 +580,22 @@ export async function resolverSolicitudFuncionario(usuarioId, aprobar) {
     throw error
   }
 }
+
+// ---------- Reportes (solo admins: el resto no ve peticiones ajenas sin publicar) ----------
+
+export async function getPeticionesParaReporte() {
+  const { data, error } = await supabase
+    .from('peticiones')
+    .select(`
+      ${COLUMNAS_PETICION},
+      categorias ( nombre, areas ( nombre ) ),
+      zonas ( nombre, localidad )
+    `)
+    .order('firmas_count', { ascending: false })
+
+  if (error) {
+    throw error
+  }
+
+  return data
+}
