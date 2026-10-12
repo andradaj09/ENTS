@@ -1,8 +1,8 @@
 // Service worker de ENTS: permite instalar la app y abrirla aunque la red
 // falle. Los datos (Supabase) siempre van a la red; solo se guardan los
 // archivos de la app.
-const VERSION = 'ents-v1'
-const BASICOS = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg', '/icons/icon-192.png']
+const VERSION = 'ents-v2'
+const BASICOS = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg', '/logo.svg', '/icons/icon-192.png']
 
 self.addEventListener('install', (evento) => {
   evento.waitUntil(caches.open(VERSION).then((cache) => cache.addAll(BASICOS)))

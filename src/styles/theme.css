@@ -429,11 +429,11 @@ hr {
   color: var(--ents-ink);
 }
 
-.topbar-brand svg {
+.topbar-brand .logo-ents {
   transition: transform 0.5s var(--ease-rebote);
 }
 
-.topbar-brand:hover svg {
+.topbar-brand:hover .logo-ents {
   transform: rotate(-12deg) scale(1.08);
 }
 
@@ -3012,4 +3012,10 @@ a.event-item:hover {
   background: rgba(57, 135, 229, 0.12);
   font-size: 0.78rem;
   line-height: 1.4;
+}
+
+.logo-ents {
+  display: block;
+  flex: none;
+  user-select: none;
 }
