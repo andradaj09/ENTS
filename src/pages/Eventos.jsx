@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import {
   createEvento,
@@ -36,6 +37,27 @@ function Eventos() {
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState('')
   const [errorForm, setErrorForm] = useState('')
+  const [publicado, setPublicado] = useState('')
+
+  const location = useLocation()
+  const formularioRef = useRef(null)
+
+  // "Crear evento" del inicio lleva a /eventos#nuevo-evento: se va directo al formulario
+  useEffect(() => {
+    if (esAdmin && location.hash === '#nuevo-evento') {
+      formularioRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      formularioRef.current?.querySelector('input')?.focus({ preventScroll: true })
+    }
+  }, [esAdmin, location.hash])
+
+  // Solo fechas futuras: la agenda muestra eventos desde ahora en adelante.
+  // Formato local "AAAA-MM-DDTHH:MM" que pide el campo datetime-local.
+  const [minimoFecha] = useState(() => {
+    const ahora = new Date()
+    return new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 16)
+  })
 
   useEffect(() => {
     const cargar = async () => {
@@ -69,6 +91,7 @@ function Eventos() {
     e.preventDefault()
 
     setErrorForm('')
+    setPublicado('')
     setGuardando(true)
 
     try {
@@ -82,6 +105,7 @@ function Eventos() {
       })
 
       setEventos(await getProximosEventos())
+      setPublicado(`"${form.titulo.trim()}" ya aparece en la agenda.`)
       setForm(formVacio)
     } catch (err) {
       console.error('Error creando evento:', err)
@@ -162,14 +186,23 @@ function Eventos() {
           ))}
         </div>
 
+        {/* En celular el formulario va primero; en pantallas grandes, a la derecha */}
         {esAdmin && (
-          <div className="col-lg-5">
+          <div
+            className="col-lg-5 order-first order-lg-last"
+            id="nuevo-evento"
+            ref={formularioRef}
+          >
             <div className="card">
               <div className="card-body">
                 <p className="line-label">Nuevo evento</p>
 
                 {errorForm && (
                   <div className="alert alert-danger">{errorForm}</div>
+                )}
+
+                {publicado && (
+                  <div className="alert alert-success">{publicado}</div>
                 )}
 
                 <form onSubmit={handleSubmit}>
@@ -193,6 +226,7 @@ function Eventos() {
                       name="fecha"
                       value={form.fecha}
                       onChange={handleChange}
+                      min={minimoFecha}
                       required
                     />
                   </div>

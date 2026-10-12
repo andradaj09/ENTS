@@ -1221,6 +1221,20 @@ a.event-item:hover {
   font-size: 0.8rem;
 }
 
+.eventos-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.eventos-acciones .btn {
+  display: inline-flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
 .cta-green {
   display: flex;
   align-items: center;

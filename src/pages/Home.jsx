@@ -6,6 +6,7 @@ import {
   getProximosEventos,
 } from '../services/petitionService'
 import { capitalizar, claseUrgencia, tiempoRelativo, UMBRAL_URGENTE } from '../utils/format'
+import { esAdmin } from '../utils/roles'
 import Icon from '../components/Icon'
 import HeroArt from '../components/HeroArt'
 import PalabraRotativa from '../components/PalabraRotativa'
@@ -203,15 +204,29 @@ function Home() {
               </Link>
             ))}
 
-            <Link className="cta-green mt-3" to="/peticiones/nueva">
-              <Icon name="flag" size={22} />
-              <div>
-                <strong>Tu voz cuenta</strong>
-                <span>Hacé tu pedido, mejorá tu barrio.</span>
-              </div>
-              <Icon name="chevron" />
-            </Link>
+            <div className="eventos-acciones">
+              <Link className="btn btn-ghost btn-sm" to="/eventos">
+                Ver agenda
+              </Link>
+
+              {esAdmin(profile) && (
+                <Link className="btn btn-dark btn-sm" to="/eventos#nuevo-evento">
+                  <Icon name="plus" size={14} className="me-1" />
+                  Crear evento
+                </Link>
+              )}
+            </div>
           </div>
+
+          {/* Separado de los eventos: este acceso crea una petición, no un evento */}
+          <Link className="panel cta-green" to="/peticiones/nueva">
+            <Icon name="flag" size={22} />
+            <div>
+              <strong>Tu voz cuenta</strong>
+              <span>Hacé tu pedido, mejorá tu barrio.</span>
+            </div>
+            <Icon name="chevron" />
+          </Link>
 
         </aside>
       </div>
