@@ -2994,3 +2994,22 @@ a.event-item:hover {
 .topbar {
   background: linear-gradient(to bottom, var(--ents-bg) 55%, transparent);
 }
+
+.menu-usuario-nuevo {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #1c5cab;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.menu-usuario-ayuda {
+  margin: 0 6px 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(57, 135, 229, 0.12);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
