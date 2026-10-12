@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ENTS — Project Charter</title>
+<link rel="stylesheet" href="estilos.css">
+<style>
+  @page { @top-right { content: "ENTS · Project Charter (Acta de constitución)"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; } }
+</style>
+</head>
+<body>
+
+<!-- ===================== CARÁTULA ===================== -->
+<section class="caratula">
+  <div>
+    <div class="inst">Instituto Cervantes</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:14pt">
+      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
+      <div>
+        <div class="tipo">Entregable 1 de 7</div>
+        <h1 class="titulo">Project Charter</h1>
+        <div class="sub">Acta de constitución del proyecto ENTS — Everyone Needs To Smile</div>
+      </div>
+    </div>
+    <div class="franja"></div>
+    <table>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Código del documento</td><td>ENTS-GP-01</td></tr>
+      <tr><td>Versión</td><td>2.0</td></tr>
+      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
+    <table>
+      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
+      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== HISTORIAL ===================== -->
+<h1 class="salto">Historial de revisión</h1>
+<table>
+  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <tbody>
+    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Acta original del proyecto de donaciones solidarias.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Reescritura completa para el sistema de peticiones vecinales: propósito, objetivos, alcance, hitos, riesgos, presupuesto e interesados.</td></tr>
+    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<h2>Contenido</h2>
+<ol>
+  <li>Información general del proyecto</li>
+  <li>Propósito y justificación</li>
+  <li>Descripción del proyecto y del producto</li>
+  <li>Objetivos y criterios de éxito</li>
+  <li>Requisitos de alto nivel</li>
+  <li>Alcance preliminar</li>
+  <li>Entregables principales</li>
+  <li>Supuestos y restricciones</li>
+  <li>Riesgos iniciales</li>
+  <li>Cronograma de hitos</li>
+  <li>Presupuesto y recursos</li>
+  <li>Interesados</li>
+  <li>Equipo, roles y autoridad</li>
+  <li>Aprobación</li>
+</ol>
+
+<!-- ===================== 1 ===================== -->
+<h1 class="salto">1. Información general del proyecto</h1>
+<table class="ficha">
+  <tbody>
+    <tr><td>Nombre del proyecto</td><td>ENTS — Everyone Needs To Smile</td></tr>
+    <tr><td>Descripción breve</td><td>Plataforma web de peticiones vecinales con procesamiento de datos y medición de impacto para Córdoba y Villa Allende.</td></tr>
+    <tr><td>Organización</td><td>Instituto Cervantes — Cátedra Práctica Profesionalizante</td></tr>
+    <tr><td>Patrocinador</td><td>Docente de la cátedra, Ing. Loza</td></tr>
+    <tr><td>Director del proyecto</td><td><span class="completar">[integrante designado]</span></td></tr>
+    <tr><td>Equipo</td><td>Jiménez, Ignacio · Andrada, Juan Pablo · Patrón, Máximo</td></tr>
+    <tr><td>Fecha de inicio</td><td><span class="completar">[__/__/____]</span> (reorientación del proyecto)</td></tr>
+    <tr><td>Fecha estimada de cierre</td><td><span class="completar">[__/__/____]</span> (entrega y defensa)</td></tr>
+    <tr><td>Producto publicado</td><td>https://entscordoba.netlify.app</td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 2 ===================== -->
+<h1>2. Propósito y justificación</h1>
+<h2>2.1 Problema</h2>
+<p>En los barrios de Córdoba los mismos problemas —baches, falta de alumbrado, basurales, inseguridad, falta de atención sanitaria— se reclaman una y otra vez, de manera individual y por canales dispersos. El vecino no sabe si alguien recibió su reclamo ni qué pasó con él; los organismos públicos y las organizaciones sociales no cuentan con información ordenada por zona, urgencia y apoyo vecinal para decidir qué atender primero ni para rendir cuentas de lo realizado.</p>
+<h2>2.2 Justificación</h2>
+<p>La primera versión del proyecto proponía una plataforma de donaciones. Durante el análisis se concluyó que el módulo de pagos implicaba integraciones con pasarelas, obligaciones legales y trazabilidad de fondos desproporcionadas para el equipo y el plazo, y que el mayor valor estaba en <b>ordenar y procesar la demanda vecinal</b>. Por eso el proyecto se reorienta hacia un sistema de peticiones ciudadanas que:</p>
+<ul>
+  <li>concentra los reclamos de un barrio en peticiones únicas, apoyadas con firmas;</li>
+  <li>las procesa automáticamente (categoría, barrio, score de urgencia, detección de similares);</li>
+  <li>las pone a disposición de las áreas del municipio para que respondan y registren el avance;</li>
+  <li>genera reportes para organismos y ONG, y estadísticas públicas para la comunidad.</li>
+</ul>
+<p>La reorientación conserva lo ya trabajado —encuesta y estudio de necesidades, análisis socioeconómico de Córdoba, arquitectura en capas, base de datos SQL, autenticación y seguridad, enfoque de evaluación de impacto— y reemplaza el módulo de pagos por el módulo de reportes.</p>
+
+<!-- ===================== 3 ===================== -->
+<h1>3. Descripción del proyecto y del producto</h1>
+<p>El proyecto consiste en analizar, diseñar, desarrollar, probar, publicar y documentar una aplicación web —instalable en el celular— con las siguientes capacidades:</p>
+<table>
+  <thead><tr><th style="width:28%">Módulo</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td>Cuentas y roles</td><td>Registro e ingreso (correo o Google), recuperación de contraseña; roles de vecino, funcionario por área, administrador y dueño.</td></tr>
+    <tr><td>Peticiones</td><td>Alta con texto, hasta 3 fotos y ubicación; moderación previa a la publicación.</td></tr>
+    <tr><td>Procesamiento automático</td><td>Categoría según el texto, barrio según la ubicación, score de urgencia de 0 a 100, detección de peticiones similares y revisión de datos personales y lenguaje.</td></tr>
+    <tr><td>Firmas y prioridad</td><td>Firma única por persona; prioridad por cantidad de firmas; elevación automática al área al llegar a 50.</td></tr>
+    <tr><td>Seguimiento</td><td>Cinco etapas (recibida, en revisión, derivada, en obra, resuelta) con respuesta oficial y foto; notificaciones a autor y firmantes.</td></tr>
+    <tr><td>Comunidad</td><td>Mapa por barrios, muro vecinal, agenda de eventos, comentarios anónimos y barrios seguidos.</td></tr>
+    <tr><td>Reportes</td><td>Estadísticas públicas anónimas, panel analítico y exportación a Excel y PDF.</td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 4 ===================== -->
+<h1>4. Objetivos y criterios de éxito</h1>
+<h2>4.1 Objetivo general</h2>
+<p>Poner en funcionamiento una plataforma web que permita a los vecinos de Córdoba y Villa Allende visibilizar, apoyar y seguir la resolución de los problemas de su barrio, y que procese esa información para que los organismos prioricen y registren su respuesta.</p>
+<h2>4.2 Objetivos específicos medibles</h2>
+<table>
+  <thead><tr><th style="width:5%">#</th><th>Objetivo</th><th style="width:30%">Indicador</th><th style="width:20%">Meta</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Publicar la plataforma accesible desde la web y como app instalable.</td><td>Sitio en línea con HTTPS y manifiesto de app</td><td>Disponible al cierre</td></tr>
+    <tr><td>2</td><td>Clasificar automáticamente cada petición nueva.</td><td>% de peticiones con categoría, barrio y score asignados</td><td>100%</td></tr>
+    <tr><td>3</td><td>Cubrir el territorio de Córdoba y Villa Allende.</td><td>Barrios cargados con ubicación</td><td>≥ 100 barrios</td></tr>
+    <tr><td>4</td><td>Completar el ciclo de la petición.</td><td>Etapas de seguimiento operativas</td><td>5 de 5</td></tr>
+    <tr><td>5</td><td>Garantizar la privacidad entre vecinos.</td><td>Pruebas de permisos por rol aprobadas</td><td>100%</td></tr>
+    <tr><td>6</td><td>Asegurar la calidad del código.</td><td>Pruebas automáticas aprobadas antes de publicar</td><td>100%</td></tr>
+    <tr><td>7</td><td>Entregar la documentación de gestión.</td><td>Entregables completos</td><td>7 de 7</td></tr>
+  </tbody>
+</table>
+<h2>4.3 Criterios de éxito del proyecto</h2>
+<ul>
+  <li>El ciclo completo —pedir, firmar, priorizar, responder y resolver— funciona de punta a punta en el sitio publicado.</li>
+  <li>Ningún vecino puede ver la identidad de otro ni datos personales ajenos.</li>
+  <li>La documentación cumple la estructura exigida por la cátedra y es aprobada por el docente.</li>
+</ul>
+
+<!-- ===================== 5 ===================== -->
+<h1>5. Requisitos de alto nivel</h1>
+<div class="dos-col">
+  <div class="tarjeta">
+    <h4>Funcionales</h4>
+    <ul>
+      <li>Crear, moderar, firmar y comentar peticiones.</li>
+      <li>Asignar categoría, barrio y urgencia automáticamente.</li>
+      <li>Avisar peticiones similares antes de crear una nueva.</li>
+      <li>Registrar respuestas oficiales por área.</li>
+      <li>Notificar novedades a los interesados.</li>
+      <li>Mostrar mapa por barrios y estadísticas.</li>
+      <li>Exportar reportes para organismos.</li>
+    </ul>
+  </div>
+  <div class="tarjeta">
+    <h4>No funcionales</h4>
+    <ul>
+      <li>Privacidad: anonimato entre vecinos.</li>
+      <li>Seguridad: reglas aplicadas en la base de datos, HTTPS.</li>
+      <li>Usabilidad: español, adaptable a celular, modo oscuro.</li>
+      <li>Accesibilidad: teclado, contraste, movimiento reducido.</li>
+      <li>Rendimiento: carga por partes, fluidez en celulares.</li>
+      <li>Mantenibilidad: pruebas automáticas y esquema versionado.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== 6 ===================== -->
+<h1>6. Alcance preliminar</h1>
+<div class="dos-col">
+  <div class="tarjeta">
+    <h4>Dentro del alcance</h4>
+    <ul>
+      <li>Aplicación web e instalable (PWA).</li>
+      <li>Base de datos con reglas de seguridad por fila.</li>
+      <li>Procesamiento automático de peticiones.</li>
+      <li>Seguimiento, notificaciones y comentarios.</li>
+      <li>Mapa, comunidad y eventos.</li>
+      <li>Estadísticas, panel analítico y exportes.</li>
+      <li>Documentación y presentación del proyecto.</li>
+    </ul>
+  </div>
+  <div class="tarjeta">
+    <h4>Fuera del alcance</h4>
+    <ul>
+      <li>Pagos, donaciones o recaudación dentro de la plataforma.</li>
+      <li>Integración con sistemas internos del municipio.</li>
+      <li>Notificaciones por correo o SMS.</li>
+      <li>Aplicaciones nativas para tiendas.</li>
+      <li>Polígonos oficiales de los barrios.</li>
+    </ul>
+  </div>
+</div>
+<p>El detalle completo se desarrolla en el Entregable 2, Declaración de alcance.</p>
+
+<!-- ===================== 7 ===================== -->
+<h1>7. Entregables principales</h1>
+<table>
+  <thead><tr><th style="width:5%">#</th><th style="width:34%">Entregable</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Aplicación web publicada</td><td>Sitio en producción con todos los módulos del alcance.</td></tr>
+    <tr><td>2</td><td>Base de datos documentada</td><td>Esquema SQL completo y reproducible, con políticas y funciones.</td></tr>
+    <tr><td>3</td><td>Repositorio de código</td><td>Código fuente versionado, con instrucciones de instalación y pruebas.</td></tr>
+    <tr><td>4</td><td>Entregables de gestión</td><td>Project Charter, declaración de alcance, EDT, lista y diccionario de actividades, plan de comunicación y Gantt.</td></tr>
+    <tr><td>5</td><td>Documentación técnica</td><td>Requerimientos, arquitectura, modelo de datos, seguridad, pruebas e implementación.</td></tr>
+    <tr><td>6</td><td>Presentación</td><td>Exposición del proyecto para la defensa.</td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 8 ===================== -->
+<h1>8. Supuestos y restricciones</h1>
+<h2>8.1 Supuestos</h2>
+<ul>
+  <li>Los vecinos cuentan con un celular o computadora con conexión a internet y un navegador actualizado.</li>
+  <li>Los servicios en la nube elegidos (GitHub, Supabase, Netlify, OpenStreetMap) mantienen sus planes gratuitos durante el proyecto.</li>
+  <li>Para la operación real, los organismos designan funcionarios por área que responden las peticiones.</li>
+  <li>Los integrantes del equipo mantienen su disponibilidad durante el ciclo lectivo.</li>
+</ul>
+<h2>8.2 Restricciones</h2>
+<ul>
+  <li><b>Tiempo:</b> el proyecto debe entregarse dentro del calendario de la cátedra.</li>
+  <li><b>Equipo:</b> tres integrantes con dedicación parcial.</li>
+  <li><b>Presupuesto:</b> sin financiamiento; solo herramientas y servicios gratuitos.</li>
+  <li><b>Técnicas:</b> sin acceso a sistemas internos del municipio; límites de uso de los planes gratuitos.</li>
+  <li><b>Legales:</b> cumplimiento de la Ley 25.326 de Protección de Datos Personales; publicación de una política de privacidad.</li>
+</ul>
+
+<!-- ===================== 9 ===================== -->
+<h1>9. Riesgos iniciales</h1>
+<table>
+  <thead><tr><th style="width:4%">#</th><th style="width:30%">Riesgo</th><th style="width:11%">Prob.</th><th style="width:11%">Impacto</th><th>Respuesta planificada</th></tr></thead>
+  <tbody>
+    <tr><td>R1</td><td>Baja participación de vecinos al inicio</td><td><span class="nivel media">Media</span></td><td><span class="nivel alta">Alto</span></td><td>Prueba piloto en un barrio, difusión en redes y app instalable de uso simple.</td></tr>
+    <tr><td>R2</td><td>Publicación de datos personales o contenido ofensivo</td><td><span class="nivel media">Media</span></td><td><span class="nivel alta">Alto</span></td><td>Moderación previa, revisión automática de textos, denuncias y ocultamiento automático.</td></tr>
+    <tr><td>R3</td><td>Acceso indebido a identidades o datos</td><td><span class="nivel baja">Baja</span></td><td><span class="nivel alta">Alto</span></td><td>Reglas de seguridad en la base (RLS, permisos por columna) y pruebas por rol.</td></tr>
+    <tr><td>R4</td><td>Superar los límites de los planes gratuitos</td><td><span class="nivel baja">Baja</span></td><td><span class="nivel media">Medio</span></td><td>Compresión de fotos, monitoreo de uso y plan de migración a un plan pago.</td></tr>
+    <tr><td>R5</td><td>Caída o cambio de un servicio externo</td><td><span class="nivel baja">Baja</span></td><td><span class="nivel media">Medio</span></td><td>Esquema SQL versionado para recrear la base; código desacoplado del proveedor de publicación.</td></tr>
+    <tr><td>R6</td><td>Indisponibilidad de un integrante</td><td><span class="nivel media">Media</span></td><td><span class="nivel media">Medio</span></td><td>Documentación del repositorio, revisión cruzada y tareas repartidas en sprints cortos.</td></tr>
+    <tr><td>R7</td><td>Cambios de alcance tardíos</td><td><span class="nivel media">Media</span></td><td><span class="nivel media">Medio</span></td><td>Control de cambios con aprobación del docente (ver Plan de comunicación).</td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 10 ===================== -->
+<h1>10. Cronograma de hitos</h1>
+<table>
+  <thead><tr><th style="width:5%">#</th><th>Hito</th><th style="width:24%">Fecha</th><th style="width:18%">Estado</th></tr></thead>
+  <tbody>
+    <tr><td>H1</td><td>Reorientación del proyecto aprobada</td><td><span class="completar">[__/__/____]</span></td><td>Cumplido</td></tr>
+    <tr><td>H2</td><td>Project Charter y alcance aprobados</td><td><span class="completar">[__/__/____]</span></td><td><span class="completar">[estado]</span></td></tr>
+    <tr><td>H3</td><td>Diseño de arquitectura y base de datos</td><td><span class="completar">[__/__/____]</span></td><td>Cumplido</td></tr>
+    <tr><td>H4</td><td>Primera versión funcional: autenticación, peticiones, firmas y moderación</td><td>04/10/2026</td><td>Cumplido</td></tr>
+    <tr><td>H5</td><td>Roles, anonimato e ingreso con Google</td><td>11/10/2026</td><td>Cumplido</td></tr>
+    <tr><td>H6</td><td>Procesamiento automático, seguimiento y reportes</td><td>12/10/2026</td><td>Cumplido</td></tr>
+    <tr><td>H7</td><td>Calidad: pruebas, accesibilidad, app instalable y rendimiento</td><td>12/10/2026</td><td>Cumplido</td></tr>
+    <tr><td>H8</td><td>Documentación y presentación completas</td><td><span class="completar">[__/__/____]</span></td><td>En curso</td></tr>
+    <tr><td>H9</td><td>Entrega y defensa</td><td><span class="completar">[__/__/____]</span></td><td>Pendiente</td></tr>
+  </tbody>
+</table>
+<p class="pie">Las fechas de H4 a H7 corresponden a las versiones registradas en el repositorio del proyecto.</p>
+
+<!-- ===================== 11 ===================== -->
+<h1>11. Presupuesto y recursos</h1>
+<h2>11.1 Recursos tecnológicos</h2>
+<table>
+  <thead><tr><th style="width:26%">Recurso</th><th>Uso</th><th style="width:22%">Costo</th></tr></thead>
+  <tbody>
+    <tr><td>GitHub</td><td>Repositorio privado y control de versiones</td><td>Plan gratuito — $0</td></tr>
+    <tr><td>Supabase</td><td>Base de datos PostgreSQL, autenticación y almacenamiento de fotos</td><td>Plan gratuito — $0</td></tr>
+    <tr><td>Netlify</td><td>Publicación del sitio con HTTPS</td><td>Plan gratuito — $0</td></tr>
+    <tr><td>OpenStreetMap</td><td>Mapas y ubicación de barrios</td><td>Gratuito — $0</td></tr>
+    <tr><td>Google Cloud (OAuth)</td><td>Ingreso con cuenta de Google</td><td>Gratuito — $0</td></tr>
+    <tr><td>Herramientas de desarrollo</td><td>Node.js, React, Vite, editor de código</td><td>Código abierto — $0</td></tr>
+  </tbody>
+</table>
+<h2>11.2 Recursos humanos</h2>
+<table>
+  <thead><tr><th>Concepto</th><th style="width:22%">Cantidad</th><th style="width:22%">Total</th></tr></thead>
+  <tbody>
+    <tr><td>Horas de trabajo por integrante</td><td><span class="completar">[__] h</span></td><td><span class="completar">[__] h</span></td></tr>
+    <tr><td>Integrantes</td><td>3</td><td>—</td></tr>
+    <tr><td>Valor hora de referencia (estimación académica)</td><td><span class="completar">$[____]</span></td><td><span class="completar">$[____]</span></td></tr>
+  </tbody>
+</table>
+<div class="nota">El costo monetario directo del proyecto es $0 gracias a los planes gratuitos. El costo en horas de trabajo se incluye como referencia: completar con las horas registradas por el equipo.</div>
+
+<!-- ===================== 12 ===================== -->
+<h1>12. Interesados</h1>
+<table>
+  <thead><tr><th style="width:22%">Interesado</th><th style="width:28%">Rol en el proyecto</th><th>Interés / expectativa</th><th style="width:10%">Influencia</th></tr></thead>
+  <tbody>
+    <tr><td>Docente (Ing. Loza)</td><td>Patrocinador; aprueba alcance y entregables</td><td>Cumplimiento de objetivos académicos y de la metodología</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td>Equipo de proyecto</td><td>Planifica, desarrolla y documenta</td><td>Entregar un producto funcional y aprobar la materia</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td>Vecinos de Córdoba y Villa Allende</td><td>Usuarios principales</td><td>Que sus reclamos se vean, se atiendan y se resuelvan</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td>Áreas del municipio y funcionarios</td><td>Usuarios que responden</td><td>Información priorizada por zona y urgencia</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td>ONG y organizaciones sociales</td><td>Destinatarios de reportes</td><td>Datos para orientar su trabajo territorial</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td>Instituto Cervantes</td><td>Institución</td><td>Calidad de la formación y de los proyectos</td><td><span class="nivel media">Media</span></td></tr>
+  </tbody>
+</table>
+
+<!-- ===================== 13 ===================== -->
+<h1>13. Equipo, roles y autoridad</h1>
+<table>
+  <thead><tr><th style="width:28%">Integrante</th><th style="width:30%">Rol</th><th>Responsabilidades principales</th></tr></thead>
+  <tbody>
+    <tr><td>Jiménez, Ignacio</td><td><span class="completar">[rol]</span></td><td><span class="completar">[responsabilidades]</span></td></tr>
+    <tr><td>Andrada, Juan Pablo</td><td><span class="completar">[rol]</span></td><td><span class="completar">[responsabilidades]</span></td></tr>
+    <tr><td>Patrón, Máximo</td><td><span class="completar">[rol]</span></td><td><span class="completar">[responsabilidades]</span></td></tr>
+  </tbody>
+</table>
+<p class="pie">Roles sugeridos: director del proyecto, responsable de desarrollo y base de datos, responsable de diseño y experiencia de usuario, responsable de calidad y documentación.</p>
+<h2>13.1 Autoridad del director del proyecto</h2>
+<ul>
+  <li>Asignar y redistribuir tareas entre los integrantes dentro de cada sprint.</li>
+  <li>Priorizar el product backlog dentro del alcance aprobado.</li>
+  <li>Aprobar la publicación de nuevas versiones del sitio.</li>
+  <li>Escalar al docente los cambios de alcance, plazo o riesgos críticos.</li>
+</ul>
+
+<!-- ===================== 14 ===================== -->
+<h1>14. Aprobación</h1>
+<p>Con la firma de este documento se autoriza formalmente el inicio del proyecto ENTS con el propósito, los objetivos, el alcance preliminar y los recursos aquí descritos.</p>
+<div class="firmas">
+  <div class="firma"><b>Ing. Loza</b>Docente — Patrocinador<br>Fecha: ___/___/______</div>
+  <div class="firma"><b><span class="completar">[Director del proyecto]</span></b>Director del proyecto<br>Fecha: ___/___/______</div>
+  <div class="firma"><b>Jiménez, Ignacio</b>Integrante<br>Fecha: ___/___/______</div>
+  <div class="firma"><b>Andrada, Juan Pablo</b>Integrante<br>Fecha: ___/___/______</div>
+  <div class="firma"><b>Patrón, Máximo</b>Integrante<br>Fecha: ___/___/______</div>
+</div>
+
+</body>
+</html>

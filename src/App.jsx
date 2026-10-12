@@ -25,6 +25,7 @@ const Usuarios = lazy(() => import('./pages/Usuarios'))
 const Estadisticas = lazy(() => import('./pages/Estadisticas'))
 const EstadisticasAdmin = lazy(() => import('./pages/EstadisticasAdmin'))
 const Bandeja = lazy(() => import('./pages/Bandeja'))
+const Documentos = lazy(() => import('./pages/Documentos'))
 
 function App() {
   const { profile } = useAuth()
@@ -79,6 +80,9 @@ function App() {
             />
 
             <Route path="/estadisticas" element={<Estadisticas />} />
+
+            {/* Solo el dueño del proyecto (la página y el almacenamiento lo verifican) */}
+            <Route path="/documentos" element={<Documentos />} />
 
             <Route
               path="/bandeja"

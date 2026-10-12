@@ -151,3 +151,50 @@ export const soyDueno = () => rpc('soy_dueno')
 
 export const cambiarRol = (usuarioId, rol) =>
   rpc('cambiar_rol', { p_usuario: usuarioId, p_rol: rol })
+
+// ---------- Documentos del proyecto (bucket privado; solo el dueño) ----------
+
+const BUCKET_DOCUMENTOS = 'documentos'
+
+export async function listarDocumentos() {
+  const { data, error } = await supabase.storage
+    .from(BUCKET_DOCUMENTOS)
+    .list('', { sortBy: { column: 'name', order: 'asc' } })
+
+  if (error) {
+    throw error
+  }
+
+  return data.filter((archivo) => archivo.name.toLowerCase().endsWith('.pdf'))
+}
+
+export async function subirDocumento(archivo) {
+  const { error } = await supabase.storage
+    .from(BUCKET_DOCUMENTOS)
+    .upload(archivo.name, archivo, { contentType: 'application/pdf', upsert: true })
+
+  if (error) {
+    throw error
+  }
+}
+
+// Enlace temporal (5 minutos): el archivo nunca queda público
+export async function enlaceDocumento(nombre) {
+  const { data, error } = await supabase.storage
+    .from(BUCKET_DOCUMENTOS)
+    .createSignedUrl(nombre, 300)
+
+  if (error) {
+    throw error
+  }
+
+  return data.signedUrl
+}
+
+export async function borrarDocumento(nombre) {
+  const { error } = await supabase.storage.from(BUCKET_DOCUMENTOS).remove([nombre])
+
+  if (error) {
+    throw error
+  }
+}

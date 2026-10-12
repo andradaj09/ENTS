@@ -1,0 +1,55 @@
+/* Estilo común de los entregables de gestión de ENTS (impresión A4) */
+@page {
+  size: A4;
+  margin: 22mm 20mm 20mm 20mm;
+  @bottom-center { content: "Página " counter(page); font: 8.5pt 'Segoe UI', Arial, sans-serif; color: #6b6a64; }
+}
+@page :first { @bottom-center { content: none; } @top-right { content: none; } }
+
+:root { --azul: #1c5cab; --marino: #0d366b; --celeste: #cde2fb; --tinta: #14213d; --gris: #4a5568; --linea: #d9d7cf; --crema: #f6f4ee; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 10.5pt/1.55 'Segoe UI', Arial, sans-serif; color: var(--tinta); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+h1, h2, h3, h4 { color: var(--marino); line-height: 1.25; break-after: avoid; }
+h1 { font-size: 17pt; margin: 20pt 0 8pt; padding-bottom: 5pt; border-bottom: 2.5pt solid var(--azul); }
+.salto { break-before: page; margin-top: 0; }
+h2 { font-size: 13.5pt; margin: 16pt 0 6pt; }
+h3 { font-size: 11.5pt; margin: 12pt 0 4pt; }
+h4 { font-size: 10.5pt; margin: 8pt 0 2pt; }
+p { margin: 0 0 7pt; text-align: justify; }
+ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
+li { margin-bottom: 2pt; }
+
+table { width: 100%; border-collapse: collapse; margin: 6pt 0 12pt; font-size: 9pt; }
+tr { break-inside: avoid; }
+th { background: var(--marino); color: #fff; text-align: left; font-weight: 600; padding: 4pt 6pt; }
+td { border-bottom: 0.6pt solid var(--linea); padding: 4pt 6pt; vertical-align: top; }
+tbody tr:nth-child(even) td { background: #f7f6f2; }
+table.ficha td:first-child { width: 30%; font-weight: 600; color: var(--marino); background: #f2f7fd !important; }
+
+.completar { background: #fff1c2; padding: 0 3pt; border-radius: 2pt; }
+.nota { background: #fff7e6; border-left: 3pt solid #eda100; padding: 6pt 9pt; margin: 6pt 0 10pt; font-size: 9.5pt; }
+.pie { font-size: 8.5pt; color: var(--gris); text-align: center; margin-top: 4pt; }
+.dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+.tarjeta { border: 0.8pt solid var(--linea); border-radius: 5pt; padding: 7pt 9pt; break-inside: avoid; }
+.tarjeta h4 { margin-top: 0; }
+
+.nivel { display: inline-block; padding: 0 5pt; border-radius: 8pt; font-size: 8pt; font-weight: 600; }
+.nivel.alta { background: #fbe0d4; color: #8a3418; }
+.nivel.media { background: #fdefc8; color: #6b4d00; }
+.nivel.baja { background: #d8efe2; color: #1f5f3f; }
+
+/* Carátula */
+.caratula { height: 253mm; display: flex; flex-direction: column; justify-content: space-between; }
+.caratula .inst { font-size: 12pt; font-weight: 600; color: var(--marino); letter-spacing: 1pt; text-transform: uppercase; }
+.caratula .tipo { font-size: 11pt; font-weight: 600; color: var(--azul); letter-spacing: 1.5pt; text-transform: uppercase; margin-bottom: 6pt; }
+.caratula .titulo { font-size: 28pt; font-weight: 800; color: var(--marino); line-height: 1.1; margin: 0; border: 0; break-before: auto; padding: 0; }
+.caratula .sub { font-size: 12.5pt; color: var(--gris); margin-top: 6pt; }
+.caratula .franja { height: 6pt; background: linear-gradient(90deg, var(--marino), var(--azul), #9ec5f4); border-radius: 3pt; margin: 14pt 0; }
+.caratula table td { border: 0; padding: 3pt 0; font-size: 10.5pt; background: none !important; }
+.caratula table td:first-child { width: 44mm; color: var(--gris); }
+
+/* Firmas */
+.firmas { display: grid; grid-template-columns: 1fr 1fr; gap: 26pt 30pt; margin-top: 30pt; break-inside: avoid; }
+.firma { border-top: 0.8pt solid var(--tinta); padding-top: 4pt; font-size: 9pt; }
+.firma b { display: block; color: var(--marino); }

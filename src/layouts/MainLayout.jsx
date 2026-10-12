@@ -7,12 +7,14 @@ import Logo from '../components/Logo'
 import MenuUsuario from '../components/MenuUsuario'
 import FondoAnimado from '../components/FondoAnimado'
 import NotificacionesMenu from '../components/NotificacionesMenu'
+import { useEsDueno } from '../hooks/useEsDueno'
 
 const sideLinkClass = ({ isActive }) =>
   `side-link${isActive ? ' active' : ''}`
 
 function MainLayout() {
   const { user, profile } = useAuth()
+  const { esDueno } = useEsDueno(user?.id)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -155,6 +157,13 @@ function MainLayout() {
                 Panel analítico
               </NavLink>
             </>
+          )}
+
+          {esDueno && (
+            <NavLink className={sideLinkClass} to="/documentos">
+              <Icon name="lock" size={22} />
+              Documentos
+            </NavLink>
           )}
 
           <p className="side-label">Cuenta</p>
