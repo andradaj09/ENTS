@@ -26,6 +26,10 @@ function FondoAnimado({ fijo = false, suave = false }) {
   // Paralaje: las figuras siguen levemente al puntero (sin re-render).
   // Se actualiza como máximo una vez por fotograma.
   useEffect(() => {
+    // En pantallas táctiles no hay puntero que seguir: el dedo dispararía
+    // este efecto en cada desplazamiento y frenaría el scroll
+    if (window.matchMedia('(hover: none)').matches) return
+
     let cuadro = null
     let ultimoEvento = null
 

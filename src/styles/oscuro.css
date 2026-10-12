@@ -312,3 +312,15 @@
     border-color: rgba(255, 255, 255, 0.08);
   }
 }
+
+@media (hover: none), (max-width: 767.98px) {
+  [data-tema='oscuro'] .panel,
+  [data-tema='oscuro'] .app-main .page-enter > .container {
+    background: rgba(30, 31, 28, 0.94);
+  }
+
+  [data-tema='oscuro'] .panel,
+  [data-tema='oscuro'] .card {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  }
+}

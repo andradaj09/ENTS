@@ -3039,3 +3039,63 @@ a.event-item:hover {
     box-shadow: 0 24px 60px rgba(40, 32, 10, 0.22);
   }
 }
+
+/* ==========================================================
+   Rendimiento en celulares y tablets (pantallas táctiles)
+   El fondo queda quieto (mismos colores, sin movimiento), se apagan las
+   animaciones que no terminan nunca y el desenfoque de vidrio, que en
+   GPUs de celular obligan a recomponer capas enormes en cada cuadro.
+   ========================================================== */
+@media (hover: none), (max-width: 767.98px) {
+  .fondo-blob,
+  .fondo-grid,
+  .fondo-figura,
+  .hero-art .art-pieza,
+  .hero-art .art-cruz,
+  .hero-art .art-trazo,
+  .brillo-borde::before,
+  .dot-red,
+  .notif-contador {
+    animation: none !important;
+    will-change: auto;
+  }
+
+  /* Fondo más simple: dos manchas de color quietas y sin grilla ni figuras */
+  .fondo-grid,
+  .fondo-figura,
+  .blob-3,
+  .blob-4 {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Sin desenfoque, los paneles necesitan un poco más de cuerpo */
+  .panel,
+  .app-main .page-enter > .container {
+    background: rgba(255, 255, 255, 0.88);
+  }
+
+  /* Sombras más livianas */
+  .panel,
+  .card,
+  .app-main .page-enter > .container {
+    box-shadow: 0 6px 18px rgba(40, 32, 10, 0.08);
+  }
+
+  /* Las tarjetas fuera de la pantalla no se dibujan hasta acercarse */
+  #peticiones .row > *,
+  .mapa-tarjetas > *,
+  .bandeja-lista > li {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 420px;
+  }
+
+  .mapa-tarjetas > * { contain-intrinsic-size: auto 260px; }
+  .bandeja-lista > li { contain-intrinsic-size: auto 80px; }
+}
