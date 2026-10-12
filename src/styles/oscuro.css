@@ -299,3 +299,5 @@
     background: rgba(26, 27, 24, 0.97);
   }
 }
+
+[data-tema='oscuro'] .interruptor:not(.encendido) { background: rgba(255, 255, 255, 0.18); }

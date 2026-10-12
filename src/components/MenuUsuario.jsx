@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { logoutUser } from '../services/authService'
 import { nombreRol } from '../utils/roles'
+import { aplicarTema, temaActual } from '../utils/tema'
 import Avatar from './Avatar'
 import Icon from './Icon'
 
@@ -11,6 +12,13 @@ function MenuUsuario({ user, profile }) {
   const navigate = useNavigate()
   const [abierto, setAbierto] = useState(false)
   const [saliendo, setSaliendo] = useState(false)
+  const [oscuro, setOscuro] = useState(() => temaActual() === 'oscuro')
+
+  // Interruptor de modo oscuro (queda guardado en este navegador)
+  const alternarTema = () => {
+    aplicarTema(oscuro ? 'claro' : 'oscuro')
+    setOscuro(!oscuro)
+  }
 
   const contenedorRef = useRef(null)
 
@@ -80,6 +88,19 @@ function MenuUsuario({ user, profile }) {
             <Icon name="file" size={18} />
             Mis solicitudes
           </Link>
+
+          <button
+            type="button"
+            className="menu-usuario-opcion menu-usuario-tema"
+            role="switch"
+            aria-checked={oscuro}
+            onClick={alternarTema}
+          >
+            Modo oscuro
+            <span className={`interruptor${oscuro ? ' encendido' : ''}`} aria-hidden="true">
+              <span />
+            </span>
+          </button>
 
           <button
             type="button"
