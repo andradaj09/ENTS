@@ -301,3 +301,14 @@
 }
 
 [data-tema='oscuro'] .interruptor:not(.encendido) { background: rgba(255, 255, 255, 0.18); }
+
+/* Celular: mismos paneles, sólidos en oscuro */
+@media (max-width: 767.98px) {
+  [data-tema='oscuro'] .notif-panel,
+  [data-tema='oscuro'] .menu-usuario-panel,
+  [data-tema='oscuro'] .sidebar,
+  [data-tema='oscuro'] .app-grid.sidebar-collapsed .sidebar {
+    background: #1e1f1c;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+}

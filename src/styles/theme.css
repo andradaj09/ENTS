@@ -3019,3 +3019,23 @@ a.event-item:hover {
   flex: none;
   user-select: none;
 }
+
+/* ---------- Celular: menús desplegables con fondo sólido ----------
+   En el celular el desenfoque no alcanza a tapar lo que hay detrás
+   (mapa, tarjetas), así que los paneles que se despliegan van en blanco. */
+@media (max-width: 767.98px) {
+  .notif-panel,
+  .menu-usuario-panel,
+  .sidebar,
+  .app-grid.sidebar-collapsed .sidebar {
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .notif-panel,
+  .menu-usuario-panel {
+    border-color: rgba(18, 18, 18, 0.08);
+    box-shadow: 0 24px 60px rgba(40, 32, 10, 0.22);
+  }
+}
