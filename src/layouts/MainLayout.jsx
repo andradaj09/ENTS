@@ -6,6 +6,7 @@ import Icon from '../components/Icon'
 import Logo from '../components/Logo'
 import MenuUsuario from '../components/MenuUsuario'
 import FondoAnimado from '../components/FondoAnimado'
+import BotonTema from '../components/BotonTema'
 import NotificacionesMenu from '../components/NotificacionesMenu'
 
 const sideLinkClass = ({ isActive }) =>
@@ -75,6 +76,7 @@ function MainLayout() {
 
           {/* Campana y avatar: burbujas separadas a la derecha de la píldora */}
           <div className="topbar-burbujas">
+            <BotonTema />
             {user && <NotificacionesMenu usuarioId={user.id} />}
 
             <MenuUsuario user={user} profile={profile} />
