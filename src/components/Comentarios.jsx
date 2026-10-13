@@ -85,6 +85,7 @@ function Comentarios({ peticion, usuarioId, esModerador }) {
       setComentarios((actuales) => actuales.filter((c) => c.id !== comentario.id))
     } catch (err) {
       console.error('Error borrando comentario:', err)
+      setAviso({ tipo: 'danger', texto: 'No se pudo borrar el comentario.' })
     }
   }
 

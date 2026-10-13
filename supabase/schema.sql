@@ -9,7 +9,7 @@
 -- anonimato_total_y_vista_admin, perfil_desde_google,
 -- estadisticas_y_categorias, mas_barrios_cordoba_y_villa_allende,
 -- seguimiento_notificaciones_comentarios_areas y sus correcciones, score_urgencia_automatico,
--- dueno_cambia_roles, documentos_privados_dueno, cinco_roles_moderador_y_area, permisos_por_panel).
+-- dueno_cambia_roles, documentos_privados_dueno, cinco_roles_moderador_y_area, permisos_por_panel, borrar_comentario_rpc).
 -- Este archivo es la versión final
 -- consolidada, para recrear la base en otro proyecto:
 -- Supabase → SQL Editor → New query → pegar todo → Run.
@@ -2723,3 +2723,33 @@ drop policy if exists "Dueño borra documentos" on storage.objects;
 create policy "Dueño borra documentos" on storage.objects
   for delete to authenticated
   using (bucket_id = 'documentos' and (select privado.tiene_permiso('documentos', 'modificar')));
+
+-- =====================================================================
+-- 19. Borrar comentarios por función
+-- =====================================================================
+-- La tabla comentarios no tiene política de lectura (se lee con
+-- comentarios_peticion), así que un DELETE directo no encontraba la fila y
+-- no borraba nada. Esta función verifica autor o permiso de moderación.
+create or replace function public.borrar_comentario(p_comentario bigint)
+returns void
+language plpgsql security definer set search_path = ''
+as $$
+declare
+  autor uuid;
+begin
+  select usuario_id into autor from public.comentarios where id = p_comentario;
+
+  if not found then
+    raise exception 'El comentario no existe' using errcode = 'P0002';
+  end if;
+
+  if autor is distinct from auth.uid() and not privado.puede_moderar() then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  delete from public.comentarios where id = p_comentario;
+end;
+$$;
+
+revoke execute on function public.borrar_comentario(bigint) from public, anon;
+grant execute on function public.borrar_comentario(bigint) to authenticated;

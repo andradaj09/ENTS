@@ -61,13 +61,10 @@ export async function crearComentario({ peticionId, usuarioId, texto }) {
   }
 }
 
-export async function borrarComentario(comentarioId) {
-  const { error } = await supabase.from('comentarios').delete().eq('id', comentarioId)
-
-  if (error) {
-    throw error
-  }
-}
+// Por función de la base: verifica autor o permiso de moderación y, si no
+// puede borrar, devuelve un error en lugar de no hacer nada en silencio
+export const borrarComentario = (comentarioId) =>
+  rpc('borrar_comentario', { p_comentario: Number(comentarioId) })
 
 export async function denunciarComentario({ comentarioId, usuarioId, motivo }) {
   const { error } = await supabase
