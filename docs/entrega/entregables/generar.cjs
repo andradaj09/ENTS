@@ -29,41 +29,51 @@ const fmt = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(1).replace('.', 
 const nivel = (p) => `<span class="nivel ${p === 'Alta' || p === 'Alto' ? 'alta' : p === 'Media' || p === 'Medio' ? 'media' : 'baja'}">${p}</span>`
 
 // ---------------- Piezas comunes ----------------
-const AUTORES = `
-    <table>
-      ${Object.values(EQUIPO).map((p) => `<tr><td>${p.nombre}</td><td>Legajo ${p.legajo}</td></tr>`).join('')}
-    </table>`
+// Anillos concéntricos del logo, como marca de agua de la portada
+const ANILLOS = `<svg class="portada-anillos" viewBox="0 0 200 200" aria-hidden="true">
+  ${[92, 76, 61, 47, 34, 22].map((r, i) => `<ellipse cx="${100 + i * 1.6}" cy="${100 - i * 1.2}" rx="${r}" ry="${r * 0.9}" transform="rotate(${-18 + i * 9} 100 100)" fill="none" stroke="#fff" stroke-width="${3.4 - i * 0.3}"/>`).join('')}
+</svg>`
 
-function caratula({ numero, titulo, subtitulo, codigo, total = 7 }) {
+// Portada a página completa; la usan los entregables y la documentación general
+function portada({ tipo, titulo, subtitulo, datos, logo = '../../../public/logo.svg' }) {
   return `
-<section class="caratula">
-  <div>
-    <div class="inst">Instituto Cervantes</div>
-    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: ${CARRERA} · Cátedra: Práctica Profesionalizante</div>
-  </div>
-  <div>
-    <div style="display:flex;align-items:center;gap:14pt">
-      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
-      <div>
-        ${numero ? `<div class="tipo">Entregable ${numero} de ${total}</div>` : '<div class="tipo">Entregables de gestión</div>'}
-        <h1 class="titulo">${titulo}</h1>
-        <div class="sub">${subtitulo}</div>
-      </div>
+<section class="portada">
+  <div class="portada-arriba">
+    ${ANILLOS}
+    <div class="portada-inst">Instituto Cervantes<small>Carrera ${CARRERA} · Cátedra Práctica Profesionalizante</small></div>
+    <div class="portada-centro">
+      <div class="portada-logo"><img src="${logo}" alt=""></div>
+      <div class="portada-tipo">${tipo}</div>
+      <h1 class="portada-titulo">${titulo}</h1>
+      <div class="portada-sub">${subtitulo}</div>
     </div>
-    <div class="franja"></div>
-    <table>
-      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba y Villa Allende</td></tr>
-      <tr><td>Docente</td><td>Ing. Loza</td></tr>
-      <tr><td>Director del proyecto</td><td>${DIRECTOR}</td></tr>
-      <tr><td>Código del documento</td><td>${codigo}</td></tr>
-      <tr><td>Versión</td><td>${VERSION}</td></tr>
-      <tr><td>Sitio publicado</td><td>entscordoba.netlify.app</td></tr>
-    </table>
   </div>
-  <div>
-    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>${AUTORES}
+  <div class="portada-abajo">
+    <div class="portada-datos">
+      ${datos.map(([k, v]) => `<div class="portada-dato"><small>${k}</small><span>${v}</span></div>`).join('')}
+    </div>
+    <div class="portada-autores">
+      <small>Autores</small>
+      <div>${Object.values(EQUIPO).map((p) => `<div class="portada-autor"><b>${p.nombre}</b><span>Legajo ${p.legajo}</span></div>`).join('')}</div>
+    </div>
   </div>
 </section>`
+}
+
+function caratula({ numero, titulo, subtitulo, codigo, total = 7 }) {
+  return portada({
+    tipo: numero ? `Entregable ${numero} de ${total}` : 'Entregables de gestión',
+    titulo,
+    subtitulo,
+    datos: [
+      ['Proyecto', 'ENTS — Peticiones vecinales'],
+      ['Docente', 'Ing. Loza'],
+      ['Director del proyecto', DIRECTOR],
+      ['Código', codigo],
+      ['Versión', VERSION],
+      ['Sitio publicado', 'entscordoba.netlify.app'],
+    ],
+  })
 }
 
 function historial(detalleV2, detalleV3) {
@@ -82,7 +92,18 @@ function historial(detalleV2, detalleV3) {
 
 const DETALLE_V3 = 'Revisión integral para la entrega: glosario de siglas y términos, propósito y guía de lectura, responsables y horas estimadas, roles actualizados (moderador y permisos por panel) y eliminación de todos los campos pendientes.'
 
-const indice = (items) => `<h2>Contenido</h2><ol class="indice">${items.map((i) => `<li>${i}</li>`).join('')}</ol>`
+// Índice en tarjetas: el glosario no lleva número; las secciones, el suyo
+const indice = (items) => {
+  let n = 0
+  return `<div class="toc-titulo salto">Contenido</div><ol class="toc">${items.map((i) => (i === 'Glosario'
+    ? '<li class="toc-glosario"><span>G</span>Glosario</li>'
+    : `<li><span>${++n}</span>${i}</li>`)).join('')}</ol>`
+}
+
+// Número de sección en un chip: <h1>3. Título</h1> → <h1><span class="num">3</span>Título</h1>
+const chips = (html) => html.replace(/<h1([^>]*)>(\d+)\.\s+/g, '<h1$1><span class="num">$2</span>')
+
+const FUENTES = '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">'
 
 const tabla = (cabeceras, filas, anchos = [], clase = '') => `
 <table${clase ? ` class="${clase}"` : ''}>
@@ -114,14 +135,14 @@ function glosarioDe(html, titulo = 'Glosario') {
   }
   usados.sort((a, b) => a[0].localeCompare(b[0], 'es', { sensitivity: 'base' }))
   return `
-<h1 class="salto">${titulo}</h1>
+<h1>${titulo}</h1>
 <p>Siglas y términos que se usan en este documento, ordenados alfabéticamente. Cada uno se explica en lenguaje simple para que el documento pueda leerse sin conocimientos técnicos previos.</p>
 ${tabla(['Término', 'Significado'], usados.map(([t, d]) => [`<b>${t}</b>`, d]), ['26%'], 'glosario')}`
 }
 
 const firmas = (personas) => `
 <div class="firmas">
-  ${personas.map(([n, rol]) => `<div class="firma"><b>${n}</b>${rol}<br>Firma y fecha: ______________________</div>`).join('')}
+  ${personas.map(([n, rol]) => `<div class="firma">Firma y aclaración<b>${n}</b>${rol} · Fecha: ____ / ____ / ________</div>`).join('')}
 </div>`
 
 const FIRMAS_TODOS = [['Ing. Loza', 'Docente — Patrocinador'], [DIRECTOR, 'Director del proyecto'], [nombre('MP'), 'Integrante del equipo'], [nombre('IJ'), 'Integrante del equipo']]
@@ -143,14 +164,15 @@ function documento({ archivo, titulo, encabezado, portada, contenido, estiloExtr
 <head>
 <meta charset="utf-8">
 <title>ENTS — ${titulo}</title>
+${FUENTES}
 <link rel="stylesheet" href="estilos.css">
 <style>
-  @page { @top-right { content: "${encabezado}"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; } }
+  @page { @top-left { content: "${encabezado}"; } }
 ${estiloExtra}
 </style>
 </head>
 <body>
-${cuerpo}
+${chips(cuerpo)}
 </body>
 </html>
 `,
@@ -909,17 +931,17 @@ const combinado = `<!doctype html>
 <head>
 <meta charset="utf-8">
 <title>ENTS — Entregables de gestión (completo)</title>
+${FUENTES}
 <link rel="stylesheet" href="estilos.css">
 <style>
-  @page { @top-right { content: "ENTS · Entregables de gestión del proyecto"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; } }
+  @page { @top-left { content: "ENTS · Entregables de gestión del proyecto"; } }
   .caratula { break-before: page; }
   .caratula:first-of-type { break-before: auto; }
 ${estilosCombinados}
 </style>
 </head>
 <body>
-${portadaCombinado}
-${DOCS.map((d) => conGlosario(d.portada, d.contenido)).join('\n')}
+${chips(portadaCombinado + '\n' + DOCS.map((d) => conGlosario(d.portada, d.contenido)).join('\n'))}
 </body>
 </html>
 `
@@ -927,6 +949,36 @@ fs.writeFileSync(path.join(AQUI, '00_entregables_completos.html'), combinado)
 console.log('escrito 00_entregables_completos.html')
 console.log('Duración total:', DURACION_TOTAL, 'días · ruta crítica:', RUTA.join(' → '))
 console.log('Horas:', JSON.stringify(HORAS), 'reuniones por persona:', HORAS_REUNIONES)
+
+// ---------------- Diseño de la documentación general ----------------
+// Misma portada, tipografía, encabezados y estilos que los entregables.
+// Se puede ejecutar todas las veces que haga falta: cada paso es idempotente.
+{
+  const ARCHIVO_DOC = path.join(AQUI, '..', 'documentacion.html')
+  let doc = fs.readFileSync(ARCHIVO_DOC, 'utf8').split('\r').join('')
+  const portadaDoc = portada({
+    tipo: 'Documentación del trabajo práctico',
+    titulo: 'Everyone Needs To Smile',
+    subtitulo: 'Plataforma de peticiones vecinales con procesamiento de datos y medición de impacto',
+    logo: '../../public/logo.svg',
+    datos: [
+      ['Cátedra', 'Práctica Profesionalizante'],
+      ['Docente', 'Ing. Loza'],
+      ['Director del proyecto', DIRECTOR],
+      ['Contenido', 'Documentación y entregables'],
+      ['Versión', VERSION],
+      ['Sitio publicado', 'entscordoba.netlify.app'],
+    ],
+  })
+  doc = doc.replace(/<section class="(caratula|portada)">[\s\S]*?<\/section>/, portadaDoc.trim())
+  // Las reglas de página propias se reemplazan por las comunes
+  doc = doc.replace(/  @page \{\n[\s\S]*?\n  \}\n  @page :first \{[^\n]*\}\n/, '')
+  if (!doc.includes('entregables/estilos.css')) {
+    doc = doc.replace('</head>', `${FUENTES}\n<link rel="stylesheet" href="entregables/estilos.css">\n<style>\n  @page { @top-left { content: "ENTS · Documentación del trabajo práctico"; } }\n  h1 { break-before: page; }\n  .portada + h1 { break-before: auto; }\n</style>\n</head>`)
+  }
+  fs.writeFileSync(ARCHIVO_DOC, chips(doc))
+  console.log('documentacion.html con el diseño común')
+}
 
 // Datos para la documentación general (misma información)
 fs.writeFileSync(path.join(AQUI, '_gantt_fragmento.json'), JSON.stringify({ graficoGantt, estiloGantt, DURACION_TOTAL, SEMANAS, RUTA }))

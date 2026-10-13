@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <title>ENTS — Plan de comunicación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="estilos.css">
 <style>
-  @page { @top-right { content: "ENTS · Plan de comunicación"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; } }
+  @page { @top-left { content: "ENTS · Plan de comunicación"; } }
 
   .matriz { display: grid; grid-template-columns: 26pt 1fr 1fr; grid-template-rows: 1fr 1fr 18pt; gap: 4pt; height: 210pt; break-inside: avoid; margin: 6pt 0 12pt; }
   .cuad { border-radius: 5pt; padding: 7pt 9pt; font-size: 8.8pt; }
@@ -21,35 +22,27 @@
 </head>
 <body>
 
-<section class="caratula">
-  <div>
-    <div class="inst">Instituto Cervantes</div>
-    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: Analista Programador · Cátedra: Práctica Profesionalizante</div>
-  </div>
-  <div>
-    <div style="display:flex;align-items:center;gap:14pt">
-      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
-      <div>
-        <div class="tipo">Entregable 6 de 7</div>
-        <h1 class="titulo">Plan de comunicación</h1>
-        <div class="sub">Gestión de las comunicaciones del proyecto ENTS</div>
-      </div>
+<section class="portada">
+  <div class="portada-arriba">
+    <svg class="portada-anillos" viewBox="0 0 200 200" aria-hidden="true">
+  <ellipse cx="100" cy="100" rx="92" ry="82.8" transform="rotate(-18 100 100)" fill="none" stroke="#fff" stroke-width="3.4"/><ellipse cx="101.6" cy="98.8" rx="76" ry="68.4" transform="rotate(-9 100 100)" fill="none" stroke="#fff" stroke-width="3.1"/><ellipse cx="103.2" cy="97.6" rx="61" ry="54.9" transform="rotate(0 100 100)" fill="none" stroke="#fff" stroke-width="2.8"/><ellipse cx="104.8" cy="96.4" rx="47" ry="42.300000000000004" transform="rotate(9 100 100)" fill="none" stroke="#fff" stroke-width="2.5"/><ellipse cx="106.4" cy="95.2" rx="34" ry="30.6" transform="rotate(18 100 100)" fill="none" stroke="#fff" stroke-width="2.2"/><ellipse cx="108" cy="94" rx="22" ry="19.8" transform="rotate(27 100 100)" fill="none" stroke="#fff" stroke-width="1.9"/>
+</svg>
+    <div class="portada-inst">Instituto Cervantes<small>Carrera Analista Programador · Cátedra Práctica Profesionalizante</small></div>
+    <div class="portada-centro">
+      <div class="portada-logo"><img src="../../../public/logo.svg" alt=""></div>
+      <div class="portada-tipo">Entregable 6 de 7</div>
+      <h1 class="portada-titulo">Plan de comunicación</h1>
+      <div class="portada-sub">Gestión de las comunicaciones del proyecto ENTS</div>
     </div>
-    <div class="franja"></div>
-    <table>
-      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba y Villa Allende</td></tr>
-      <tr><td>Docente</td><td>Ing. Loza</td></tr>
-      <tr><td>Director del proyecto</td><td>Andrada, Juan Pablo</td></tr>
-      <tr><td>Código del documento</td><td>ENTS-GP-06</td></tr>
-      <tr><td>Versión</td><td>3.0</td></tr>
-      <tr><td>Sitio publicado</td><td>entscordoba.netlify.app</td></tr>
-    </table>
   </div>
-  <div>
-    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
-    <table>
-      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr><tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr><tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
-    </table>
+  <div class="portada-abajo">
+    <div class="portada-datos">
+      <div class="portada-dato"><small>Proyecto</small><span>ENTS — Peticiones vecinales</span></div><div class="portada-dato"><small>Docente</small><span>Ing. Loza</span></div><div class="portada-dato"><small>Director del proyecto</small><span>Andrada, Juan Pablo</span></div><div class="portada-dato"><small>Código</small><span>ENTS-GP-06</span></div><div class="portada-dato"><small>Versión</small><span>3.0</span></div><div class="portada-dato"><small>Sitio publicado</small><span>entscordoba.netlify.app</span></div>
+    </div>
+    <div class="portada-autores">
+      <small>Autores</small>
+      <div><div class="portada-autor"><b>Andrada, Juan Pablo</b><span>Legajo 27318</span></div><div class="portada-autor"><b>Patrón, Máximo</b><span>Legajo 27311</span></div><div class="portada-autor"><b>Jiménez, Ignacio</b><span>Legajo 28177</span></div></div>
+    </div>
   </div>
 </section>
 <h1 class="salto">Historial de revisión</h1>
@@ -63,7 +56,7 @@
 </table>
 <p class="pie">(*) La versión 1.0 se elaboró durante el Sprint 0, antes de que el equipo usara control de versiones, por lo que su fecha y hora exactas no quedaron registradas. Desde la versión 2.0, cada cambio se registra con fecha, hora y autor.</p>
 
-<h2>Contenido</h2><ol class="indice"><li>Glosario</li><li>Objetivo</li><li>Interesados</li><li>Matriz de poder e interés</li><li>Matriz de comunicaciones</li><li>Reuniones</li><li>Canales y herramientas</li><li>Flujo de la comunicación</li><li>Escalamiento y gestión de cambios</li><li>Convenciones del equipo</li><li>Plantilla de minuta</li></ol>
+<div class="toc-titulo salto">Contenido</div><ol class="toc"><li class="toc-glosario"><span>G</span>Glosario</li><li><span>1</span>Objetivo</li><li><span>2</span>Interesados</li><li><span>3</span>Matriz de poder e interés</li><li><span>4</span>Matriz de comunicaciones</li><li><span>5</span>Reuniones</li><li><span>6</span>Canales y herramientas</li><li><span>7</span>Flujo de la comunicación</li><li><span>8</span>Escalamiento y gestión de cambios</li><li><span>9</span>Convenciones del equipo</li><li><span>10</span>Plantilla de minuta</li></ol>
 
 <div class="guia">
   <p><b>Qué es este documento.</b> El plan de comunicación define qué información se intercambia en el proyecto, quién la envía, quién la recibe, por qué canal, con qué frecuencia y en qué formato.</p>
@@ -73,17 +66,17 @@
 
 
 
-<h1 class="salto">Glosario</h1>
+<h1>Glosario</h1>
 <p>Siglas y términos que se usan en este documento, ordenados alfabéticamente. Cada uno se explica en lenguaje simple para que el documento pueda leerse sin conocimientos técnicos previos.</p>
 
 <table class="glosario">
   <thead><tr><th style="width:26%">Término</th><th>Significado</th></tr></thead>
   <tbody><tr><td><b>Administrador</b></td><td>Rol que modera, gestiona usuarios y áreas, y accede al panel analítico.</td></tr><tr><td><b>Anonimato</b></td><td>Regla por la que un vecino nunca ve quién creó o firmó una petición.</td></tr><tr><td><b>Área</b></td><td>Dependencia del municipio responsable de un grupo de categorías (por ejemplo, Salud u Obras públicas).</td></tr><tr><td><b>Bandeja</b></td><td>Pantalla donde cada funcionario ve las peticiones de su área ordenadas por prioridad para responderlas.</td></tr><tr><td><b>Barrio (zona)</b></td><td>Cada uno de los 111 barrios de Córdoba y Villa Allende cargados en el sistema con su ubicación.</td></tr><tr><td><b>Código del documento (ENTS-GP)</b></td><td>Identificador de cada entregable: ENTS-GP-01 a ENTS-GP-07 (GP = gestión del proyecto).</td></tr><tr><td><b>Commit</b></td><td>Cada cambio guardado en el repositorio, con autor, fecha y descripción.</td></tr><tr><td><b>CSV / Excel</b></td><td>Formatos de planilla de cálculo usados para exportar reportes.</td></tr><tr><td><b>Día hábil</b></td><td>Día de trabajo del equipo (lunes a viernes, sin feriados). Las duraciones del cronograma se expresan en días hábiles.</td></tr><tr><td><b>Dueño (CEO)</b></td><td>Cuenta única del responsable del proyecto: además de administrar, cambia roles y define los permisos de cada rol.</td></tr><tr><td><b>EDT / WBS</b></td><td>Estructura de desglose del trabajo (en inglés, Work Breakdown Structure): descomposición jerárquica del proyecto en entregables y paquetes de trabajo.</td></tr><tr><td><b>Elevación</b></td><td>Aviso automático a los funcionarios del área cuando una petición alcanza 50 firmas.</td></tr><tr><td><b>Entregable</b></td><td>Resultado verificable que produce el proyecto (un documento, un módulo del sistema, una presentación).</td></tr><tr><td><b>ENTS</b></td><td>Everyone Needs To Smile ("Todos necesitan sonreír"): nombre del proyecto y de la plataforma.</td></tr><tr><td><b>Firma</b></td><td>Apoyo de un vecino a una petición publicada. Cada persona puede firmar una sola vez y retirar su firma.</td></tr><tr><td><b>Funcionario</b></td><td>Rol de un empleado del municipio: responde las peticiones de su área. Lo aprueba un administrador.</td></tr><tr><td><b>GitHub</b></td><td>Plataforma donde se guarda el código con su historial de cambios (repositorio).</td></tr><tr><td><b>HTTPS</b></td><td>Protocolo de comunicación cifrado entre el navegador y el servidor.</td></tr><tr><td><b>HU</b></td><td>Historia de usuario: necesidad escrita desde el punto de vista del usuario con la forma "Como [rol], quiero [acción] para [beneficio]". Se numeran HU01, HU02…</td></tr><tr><td><b>Interesado</b></td><td>Persona u organización afectada por el proyecto o que influye en él (en inglés, stakeholder).</td></tr><tr><td><b>Matriz de poder e interés</b></td><td>Cuadro que clasifica a los interesados según su poder sobre el proyecto y su interés en él, para decidir cómo comunicarse con cada uno.</td></tr><tr><td><b>Minuta</b></td><td>Registro escrito de una reunión: temas, decisiones y tareas asignadas.</td></tr><tr><td><b>Moderación</b></td><td>Revisión de las peticiones y comentarios para que no se publique contenido ofensivo ni datos personales.</td></tr><tr><td><b>Moderador</b></td><td>Rol que revisa peticiones, comentarios y publicaciones; no administra usuarios.</td></tr><tr><td><b>Netlify</b></td><td>Servicio que publica el sitio web con HTTPS cada vez que se actualiza el repositorio.</td></tr><tr><td><b>ONG</b></td><td>Organización no gubernamental: organización social sin fines de lucro.</td></tr><tr><td><b>Panel analítico</b></td><td>Pantalla de administración con indicadores de uso, moderación y participación, exportable a Excel y PDF.</td></tr><tr><td><b>Paquete de trabajo</b></td><td>Último nivel de la EDT: un entregable concreto que se puede asignar, estimar y verificar.</td></tr><tr><td><b>PDF</b></td><td>Formato de documento portable que se ve igual en cualquier dispositivo.</td></tr><tr><td><b>Permisos por panel</b></td><td>Configuración que define, para cada rol, qué paneles puede ver y en cuáles puede modificar. Solo la cambia el dueño.</td></tr><tr><td><b>Petición</b></td><td>Pedido que un vecino publica sobre un problema de su barrio (por ejemplo, un bache o falta de alumbrado).</td></tr><tr><td><b>Prioridad por firmas</b></td><td>Nivel de una petición según su cantidad de firmas: nueva (0–4), baja (5–9), media (10–19), alta (20–49) y máxima (50 o más).</td></tr><tr><td><b>Product backlog</b></td><td>Lista priorizada de todo lo que hay que construir en el producto, expresada en historias de usuario.</td></tr><tr><td><b>Project Charter</b></td><td>Acta de constitución: documento que autoriza formalmente el proyecto y fija su propósito, objetivos y recursos.</td></tr><tr><td><b>Prueba automática</b></td><td>Programa que verifica que una parte del código da el resultado esperado, sin intervención manual.</td></tr><tr><td><b>Pull Request (PR)</b></td><td>Pedido para integrar los cambios de una rama a la principal, que otro integrante revisa antes de aceptar.</td></tr><tr><td><b>Rama (branch)</b></td><td>Copia paralela del código para trabajar un cambio sin afectar la versión principal (main).</td></tr><tr><td><b>Repositorio</b></td><td>Lugar donde se guarda el código fuente con todo su historial de versiones.</td></tr><tr><td><b>Retrospectiva</b></td><td>Reunión al final de cada sprint para analizar qué mejorar en la forma de trabajar.</td></tr><tr><td><b>Riesgo</b></td><td>Evento incierto que, si ocurre, afecta al proyecto. Se evalúa por su probabilidad y su impacto.</td></tr><tr><td><b>Rol (rango)</b></td><td>Tipo de cuenta que define qué puede hacer cada usuario: vecino, funcionario, moderador, administrador o dueño.</td></tr><tr><td><b>Score de urgencia</b></td><td>Puntaje de 0 a 100 que calcula el sistema según la gravedad de la categoría, palabras de riesgo, firmas, velocidad de apoyo y fotos.</td></tr><tr><td><b>Seguimiento</b></td><td>Etapas por las que pasa una petición publicada: recibida, en revisión, derivada, en obra y resuelta.</td></tr><tr><td><b>Sprint</b></td><td>Ciclo de trabajo de duración fija (en este proyecto, 2 semanas) al final del cual se muestra un avance funcionando.</td></tr><tr><td><b>Vecino</b></td><td>Rol base: crea, firma y comenta peticiones. Para los demás vecinos es anónimo.</td></tr><tr><td><b>Versión del documento</b></td><td>Número que cambia con cada modificación registrada en el historial de revisión (1.0, 2.0, 3.0).</td></tr></tbody>
 </table>
-<h1 class="salto">1. Objetivo</h1>
+<h1 class="salto"><span class="num">1</span>Objetivo</h1>
 <p>Que cada interesado reciba la información que necesita, en el momento oportuno y por el canal adecuado, evitando tanto la falta de información como el exceso de mensajes.</p>
 
-<h1>2. Interesados</h1>
+<h1><span class="num">2</span>Interesados</h1>
 <p>Para cada interesado se indica qué necesita saber, cuánto poder tiene sobre el proyecto, cuánto le interesa y la estrategia de comunicación resultante (explicada en la sección 3).</p>
 
 <table>
@@ -91,7 +84,7 @@
   <tbody><tr><td>Docente (Ing. Loza)</td><td>Avance, cambios de alcance y entregables</td><td><span class="nivel alta">Alto</span></td><td><span class="nivel alta">Alto</span></td><td>Gestionar de cerca</td></tr><tr><td>Equipo de proyecto</td><td>Tareas, bloqueos y decisiones técnicas</td><td><span class="nivel alta">Alto</span></td><td><span class="nivel alta">Alto</span></td><td>Gestionar de cerca</td></tr><tr><td>Áreas del municipio y funcionarios</td><td>Peticiones de su área, prioridad y elevaciones</td><td><span class="nivel alta">Alto</span></td><td><span class="nivel media">Medio</span></td><td>Mantener satisfechos</td></tr><tr><td>Vecinos</td><td>Estado de sus peticiones y de su barrio</td><td><span class="nivel baja">Bajo</span></td><td><span class="nivel alta">Alto</span></td><td>Mantener informados</td></tr><tr><td>ONG y organizaciones sociales</td><td>Reportes por zona y urgencia</td><td><span class="nivel baja">Bajo</span></td><td><span class="nivel media">Medio</span></td><td>Mantener informados</td></tr><tr><td>Instituto Cervantes</td><td>Resultados del proyecto</td><td><span class="nivel media">Medio</span></td><td><span class="nivel baja">Bajo</span></td><td>Monitorear</td></tr></tbody>
 </table>
 
-<h1>3. Matriz de poder e interés</h1>
+<h1><span class="num">3</span>Matriz de poder e interés</h1>
 <p>La matriz ubica a cada interesado según su poder (eje vertical) y su interés (eje horizontal). Cada cuadrante define una estrategia: <b>gestionar de cerca</b> (comunicación frecuente y participación en decisiones), <b>mantener satisfechos</b> (información relevante sin saturar), <b>mantener informados</b> (avisos regulares) y <b>monitorear</b> (comunicación mínima).</p>
 <div class="matriz">
   <div class="eje-y">Poder →</div>
@@ -103,14 +96,14 @@
 </div>
 <p class="pie">Figura 1. Matriz de poder e interés.</p>
 
-<h1>4. Matriz de comunicaciones</h1>
+<h1><span class="num">4</span>Matriz de comunicaciones</h1>
 
 <table>
   <thead><tr><th style="width:19%">Qué se comunica</th><th style="width:11%">Emisor</th><th style="width:12%">Receptor</th><th style="width:21%">Canal</th><th style="width:17%">Frecuencia</th><th>Formato</th></tr></thead>
   <tbody><tr><td>Avance y bloqueos</td><td>Cada integrante</td><td>Equipo</td><td>Reunión de seguimiento + WhatsApp</td><td>Lunes, miércoles y viernes</td><td>Oral / mensaje</td></tr><tr><td>Planificación del sprint</td><td>Andrada</td><td>Equipo</td><td>Google Meet + Trello</td><td>Inicio de cada sprint (cada 2 semanas)</td><td>Backlog priorizado en Trello</td></tr><tr><td>Cambios de código</td><td>Integrante</td><td>Equipo</td><td>GitHub: rama + Pull Request</td><td>Por cada cambio</td><td>Descripción del Pull Request</td></tr><tr><td>Publicación de versiones</td><td>Andrada</td><td>Equipo</td><td>Netlify (automática) + aviso por WhatsApp</td><td>Por cada versión</td><td>Mensaje con el resumen</td></tr><tr><td>Minutas de reunión</td><td>Jiménez</td><td>Equipo</td><td>Trello (tarjeta de la reunión)</td><td>Después de cada reunión</td><td>Minuta (sección 10)</td></tr><tr><td>Revisión del sprint</td><td>Equipo</td><td>Docente</td><td>Clase presencial con demostración</td><td>Fin de cada sprint</td><td>Demostración del sitio</td></tr><tr><td>Cambios de alcance</td><td>Andrada</td><td>Docente</td><td>Reunión + correo electrónico</td><td>Cuando ocurren</td><td>Pedido de cambio</td></tr><tr><td>Entregables de gestión</td><td>Equipo</td><td>Docente</td><td>Correo electrónico (PDF)</td><td>Según calendario de la cátedra</td><td>Documento PDF</td></tr><tr><td>Estado de las peticiones</td><td>Plataforma</td><td>Vecinos</td><td>Avisos en la app</td><td>Automática, en cada novedad</td><td>Notificación</td></tr><tr><td>Respuestas oficiales</td><td>Funcionarios</td><td>Vecinos</td><td>Seguimiento de la petición</td><td>Por cada actualización</td><td>Mensaje + foto</td></tr><tr><td>Peticiones elevadas</td><td>Plataforma</td><td>Funcionarios</td><td>Aviso + bandeja del área</td><td>Al llegar a 50 firmas</td><td>Notificación</td></tr><tr><td>Reportes de problemáticas</td><td>Administración</td><td>Organismos y ONG</td><td>Exportes Excel / PDF por correo</td><td>Mensual</td><td>Reporte</td></tr></tbody>
 </table>
 
-<h1>5. Reuniones</h1>
+<h1><span class="num">5</span>Reuniones</h1>
 <p>El proyecto se organiza en 5 sprints de 2 semanas. Cada sprint empieza con una planificación y termina con una revisión ante el docente y una retrospectiva del equipo.</p>
 
 <table>
@@ -119,14 +112,14 @@
 </table>
 <p>Tiempo total estimado en reuniones por integrante: <b>15,4 h</b> a lo largo del proyecto.</p>
 
-<h1>6. Canales y herramientas</h1>
+<h1><span class="num">6</span>Canales y herramientas</h1>
 
 <table>
   <thead><tr><th style="width:28%">Canal</th><th>Uso</th></tr></thead>
   <tbody><tr><td>WhatsApp (grupo del equipo)</td><td>Coordinación diaria, avisos rápidos y bloqueos.</td></tr><tr><td>Trello</td><td>Product backlog, tareas de cada sprint y su estado; minutas de las reuniones.</td></tr><tr><td>Google Meet</td><td>Reuniones de seguimiento y planificación cuando no son presenciales.</td></tr><tr><td>Clases presenciales</td><td>Revisiones de sprint y consultas con el docente.</td></tr><tr><td>GitHub</td><td>Código, Pull Requests, revisión entre integrantes e historial de cambios.</td></tr><tr><td>Correo electrónico</td><td>Comunicaciones formales con el docente y entrega de documentos.</td></tr><tr><td>Plataforma ENTS</td><td>Comunicación con vecinos y funcionarios: avisos, seguimiento y comentarios.</td></tr></tbody>
 </table>
 
-<h1>7. Flujo de la comunicación</h1>
+<h1><span class="num">7</span>Flujo de la comunicación</h1>
 <div class="flujo">
   <div class="fila">
     <div class="caja"><b>Vecinos</b><br>peticiones, firmas, comentarios</div><div class="flecha">⇄</div>
@@ -142,7 +135,7 @@
 </div>
 <p class="pie">Figura 2. Arriba, la comunicación de la plataforma en uso; abajo, la comunicación interna del proyecto. Las flechas dobles indican ida y vuelta.</p>
 
-<h1>8. Escalamiento y gestión de cambios</h1>
+<h1><span class="num">8</span>Escalamiento y gestión de cambios</h1>
 <p>Escalar un problema es llevarlo al nivel siguiente cuando no se puede resolver en el actual.</p>
 <ol>
   <li><b>Nivel 1 — Integrante:</b> resuelve el problema dentro de su tarea; si no puede en 1 día hábil, lo avisa en el grupo.</li>
@@ -150,10 +143,10 @@
   <li><b>Nivel 3 — Docente:</b> los cambios de alcance, de fechas de entrega o los riesgos críticos se presentan al docente con su impacto (procedimiento del Entregable 2, sección 12).</li>
 </ol>
 
-<h1>9. Convenciones del equipo</h1>
+<h1><span class="num">9</span>Convenciones del equipo</h1>
 <ul><li><b>Ramas:</b> la rama principal (<code>main</code>) es la versión publicada; cada cambio se hace en una rama propia y se integra con un Pull Request.</li><li><b>Mensajes de commit:</b> en español y describiendo el cambio (por ejemplo, "Score de urgencia calculado automáticamente").</li><li><b>Antes de integrar:</b> revisión del código por otro integrante, pruebas automáticas aprobadas y compilación sin errores.</li><li><b>Documentos:</b> cada modificación se registra en el historial de revisión con versión, fecha, hora y autor.</li></ul>
 
-<h1>10. Plantilla de minuta de reunión</h1>
+<h1><span class="num">10</span>Plantilla de minuta de reunión</h1>
 <p>La completa Jiménez, Ignacio después de cada reunión y queda guardada en Trello.</p>
 <table class="ficha"><tbody>
   <tr><td>Fecha y hora</td><td>&nbsp;</td></tr>

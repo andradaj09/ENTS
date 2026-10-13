@@ -1,67 +1,113 @@
-/* Estilo común de los entregables de gestión de ENTS (impresión A4) */
+/* =====================================================================
+   Estilo de los documentos de ENTS (impresión A4)
+   Identidad de la app: Plus Jakarta Sans, azules de ENTS y anillos del logo.
+   ===================================================================== */
 @page {
   size: A4;
-  margin: 22mm 20mm 20mm 20mm;
-  @bottom-center { content: "Página " counter(page); font: 8.5pt 'Segoe UI', Arial, sans-serif; color: #6b6a64; }
+  margin: 24mm 18mm 20mm 18mm;
+  @top-left { content: "ENTS — Everyone Needs To Smile"; font: 600 7.5pt 'Plus Jakarta Sans', 'Segoe UI', sans-serif; color: #1c5cab; vertical-align: bottom; padding-bottom: 5mm; }
+  @top-right { content: "Instituto Cervantes · Práctica Profesionalizante"; font: 7.5pt 'Plus Jakarta Sans', 'Segoe UI', sans-serif; color: #9a988f; vertical-align: bottom; padding-bottom: 5mm; }
+  @bottom-left { content: "ENTS · entscordoba.netlify.app"; font: 7.5pt 'Plus Jakarta Sans', 'Segoe UI', sans-serif; color: #9a988f; vertical-align: top; padding-top: 4mm; }
+  @bottom-right { content: "Página " counter(page) " de " counter(pages); font: 600 7.5pt 'Plus Jakarta Sans', 'Segoe UI', sans-serif; color: #0d366b; vertical-align: top; padding-top: 4mm; }
 }
-@page :first { @bottom-center { content: none; } @top-right { content: none; } }
+@page :first { margin: 0; @top-left { content: none; } @top-right { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
+/* Las portadas (también las internas del documento combinado) van sin márgenes ni encabezados */
+@page portada { margin: 0; @top-left { content: none; } @top-right { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
+.portada { page: portada; }
 
-:root { --azul: #1c5cab; --marino: #0d366b; --celeste: #cde2fb; --tinta: #14213d; --gris: #4a5568; --linea: #d9d7cf; --crema: #f6f4ee; }
+:root {
+  --marino: #0d366b; --azul: #1c5cab; --azul-2: #3987e5; --celeste: #9ec5f4; --celeste-2: #e6f0fc;
+  --tinta: #14213d; --gris: #5a6274; --linea: #e3e1d9; --crema: #f7f5ef; --naranja: #eb6834;
+}
 * { box-sizing: border-box; }
-body { margin: 0; font: 10.5pt/1.55 'Segoe UI', Arial, sans-serif; color: var(--tinta); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font: 9.8pt/1.6 'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif; color: var(--tinta); }
 
-h1, h2, h3, h4 { color: var(--marino); line-height: 1.25; break-after: avoid; }
-h1 { font-size: 17pt; margin: 20pt 0 8pt; padding-bottom: 5pt; border-bottom: 2.5pt solid var(--azul); }
+/* ---------- Títulos ---------- */
+h1, h2, h3, h4 { color: var(--marino); line-height: 1.25; break-after: avoid; font-weight: 800; letter-spacing: -0.01em; }
+h1 { font-size: 17pt; margin: 22pt 0 10pt; padding-bottom: 7pt; border-bottom: 1pt solid var(--linea); display: flex; align-items: center; gap: 9pt; }
+h1 .num { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 25pt; height: 25pt; padding: 0 5pt; border-radius: 7pt; background: linear-gradient(135deg, var(--azul-2), var(--marino)); color: #fff; font-size: 11pt; font-weight: 800; }
 .salto { break-before: page; margin-top: 0; }
-h2 { font-size: 13.5pt; margin: 16pt 0 6pt; }
-h3 { font-size: 11.5pt; margin: 12pt 0 4pt; }
-h4 { font-size: 10.5pt; margin: 8pt 0 2pt; }
+h2 { font-size: 12.5pt; margin: 16pt 0 6pt; padding-left: 8pt; border-left: 3pt solid var(--azul-2); }
+h3 { font-size: 11pt; margin: 12pt 0 4pt; color: var(--azul); }
+h4 { font-size: 10pt; margin: 6pt 0 3pt; }
 p { margin: 0 0 7pt; text-align: justify; }
-ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
-li { margin-bottom: 2pt; }
+ul, ol { margin: 0 0 8pt; padding-left: 16pt; }
+li { margin-bottom: 2.5pt; }
+li::marker { color: var(--azul-2); }
+b, strong { font-weight: 700; color: #0f2a52; }
+code { font-family: Consolas, 'Courier New', monospace; font-size: 8.6pt; background: var(--celeste-2); padding: 0 3pt; border-radius: 3pt; }
 
-table { width: 100%; border-collapse: collapse; margin: 6pt 0 12pt; font-size: 9pt; }
+/* ---------- Tablas ---------- */
+table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 6pt 0 13pt; font-size: 8.7pt; border: 0.7pt solid var(--linea); border-radius: 6pt; overflow: hidden; }
 tr { break-inside: avoid; }
-th { background: var(--marino); color: #fff; text-align: left; font-weight: 600; padding: 4pt 6pt; }
-td { border-bottom: 0.6pt solid var(--linea); padding: 4pt 6pt; vertical-align: top; }
-tbody tr:nth-child(even) td { background: #f7f6f2; }
-table.ficha td:first-child { width: 30%; font-weight: 600; color: var(--marino); background: #f2f7fd !important; }
+th { background: var(--marino); color: #fff; text-align: left; font-weight: 700; padding: 5pt 7pt; font-size: 8.4pt; letter-spacing: 0.01em; }
+td { border-top: 0.6pt solid var(--linea); padding: 4.5pt 7pt; vertical-align: top; }
+tbody tr:first-child td { border-top: 0; }
+tbody tr:nth-child(even) td { background: #faf9f5; }
+table.ficha td:first-child { width: 30%; font-weight: 700; color: var(--marino); background: #f0f6fd !important; }
+table.ficha thead th { background: linear-gradient(90deg, var(--marino), var(--azul)); font-size: 9.4pt; }
+table.glosario td { padding: 3.5pt 7pt; }
+table.glosario td:first-child { background: #f0f6fd !important; }
+table.glosario td:first-child b { color: var(--marino); }
 
-.completar { background: #fff1c2; padding: 0 3pt; border-radius: 2pt; }
-.nota { background: #fff7e6; border-left: 3pt solid #eda100; padding: 6pt 9pt; margin: 6pt 0 10pt; font-size: 9.5pt; }
-.pie { font-size: 8.5pt; color: var(--gris); text-align: center; margin-top: 4pt; }
-.dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
-.tarjeta { border: 0.8pt solid var(--linea); border-radius: 5pt; padding: 7pt 9pt; break-inside: avoid; }
+/* ---------- Bloques ---------- */
+.nota { background: #fff8e8; border: 0.7pt solid #f3dfae; border-left: 3pt solid #eda100; border-radius: 5pt; padding: 7pt 10pt; margin: 6pt 0 11pt; font-size: 9pt; }
+.pie { font-size: 8pt; color: var(--gris); text-align: center; margin-top: 4pt; }
+.sec { color: var(--gris); font-size: 0.9em; font-weight: 400; }
+.dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; margin-bottom: 10pt; }
+.tarjeta { border: 0.7pt solid var(--linea); border-top: 3pt solid var(--azul-2); border-radius: 6pt; padding: 8pt 11pt; break-inside: avoid; background: #fff; }
 .tarjeta h4 { margin-top: 0; }
+.ruta { font-weight: 700; color: #8a3418; background: #fdf0e8; border: 0.7pt solid #f6d3c0; border-radius: 6pt; padding: 7pt 10pt; text-align: left; letter-spacing: 0.01em; }
 
-.nivel { display: inline-block; padding: 0 5pt; border-radius: 8pt; font-size: 8pt; font-weight: 600; }
+.guia { position: relative; background: linear-gradient(135deg, #f0f6fd, #fbfdff); border: 0.7pt solid #cfe0f6; border-radius: 8pt; padding: 22pt 13pt 9pt; margin: 12pt 0 8pt; font-size: 9.4pt; break-inside: avoid; }
+.guia::before { content: "GUÍA DE LECTURA"; position: absolute; top: 8pt; left: 13pt; font-size: 7pt; font-weight: 800; letter-spacing: 0.14em; color: var(--azul-2); }
+.guia p { margin-bottom: 5pt; }
+
+.nivel { display: inline-block; padding: 0.5pt 6pt; border-radius: 8pt; font-size: 7.6pt; font-weight: 700; white-space: nowrap; }
 .nivel.alta { background: #fbe0d4; color: #8a3418; }
 .nivel.media { background: #fdefc8; color: #6b4d00; }
 .nivel.baja { background: #d8efe2; color: #1f5f3f; }
 
-/* Carátula */
-.caratula { height: 253mm; display: flex; flex-direction: column; justify-content: space-between; }
-.caratula .inst { font-size: 12pt; font-weight: 600; color: var(--marino); letter-spacing: 1pt; text-transform: uppercase; }
-.caratula .tipo { font-size: 11pt; font-weight: 600; color: var(--azul); letter-spacing: 1.5pt; text-transform: uppercase; margin-bottom: 6pt; }
-.caratula .titulo { font-size: 28pt; font-weight: 800; color: var(--marino); line-height: 1.1; margin: 0; border: 0; break-before: auto; padding: 0; }
-.caratula .sub { font-size: 12.5pt; color: var(--gris); margin-top: 6pt; }
-.caratula .franja { height: 6pt; background: linear-gradient(90deg, var(--marino), var(--azul), #9ec5f4); border-radius: 3pt; margin: 14pt 0; }
-.caratula table td { border: 0; padding: 3pt 0; font-size: 10.5pt; background: none !important; }
-.caratula table td:first-child { width: 44mm; color: var(--gris); }
+/* ---------- Índice ---------- */
+.toc-titulo { font-size: 17pt; font-weight: 800; color: var(--marino); margin: 0 0 10pt; border: 0; padding: 0; display: block; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 4pt 12pt; margin: 0 0 12pt; padding: 0; list-style: none; }
+.toc li { display: flex; align-items: center; gap: 7pt; padding: 4pt 7pt; border-radius: 5pt; background: #faf9f5; border: 0.6pt solid var(--linea); margin: 0; font-size: 9pt; font-weight: 600; break-inside: avoid; }
+.toc li span { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 17pt; height: 17pt; border-radius: 5pt; background: var(--celeste-2); color: var(--azul); font-size: 8pt; font-weight: 800; }
+.toc li.toc-glosario span { background: var(--marino); color: #fff; }
 
-/* Firmas */
-.firmas { display: grid; grid-template-columns: 1fr 1fr; gap: 26pt 30pt; margin-top: 30pt; break-inside: avoid; }
-.firma { border-top: 0.8pt solid var(--tinta); padding-top: 4pt; font-size: 9pt; }
-.firma b { display: block; color: var(--marino); }
+/* ---------- Portada (página completa) ---------- */
+.portada { height: 297mm; width: 210mm; display: flex; flex-direction: column; break-after: page; overflow: hidden; }
+.portada-arriba { position: relative; flex: 1.55; background: radial-gradient(120% 90% at 85% 15%, #2f7bd6 0%, #1c5cab 35%, #0d366b 75%, #0a2a54 100%); color: #fff; padding: 22mm 20mm 16mm; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+.portada-anillos { position: absolute; right: -38mm; top: -30mm; width: 150mm; height: 150mm; opacity: 0.16; }
+.portada-inst { font-size: 8.5pt; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #cfe0f6; position: relative; }
+.portada-inst small { display: block; font-weight: 500; letter-spacing: 0.04em; text-transform: none; font-size: 9pt; margin-top: 3pt; color: #e6f0fc; }
+.portada-centro { position: relative; }
+.portada-logo { width: 54pt; height: 54pt; border-radius: 14pt; background: #fff; padding: 5pt; box-shadow: 0 6pt 18pt rgba(0, 0, 0, 0.25); margin-bottom: 16pt; }
+.portada-logo img { width: 100%; height: 100%; border-radius: 10pt; display: block; }
+.portada-tipo { display: inline-block; font-size: 8pt; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; background: rgba(255, 255, 255, 0.14); border: 0.7pt solid rgba(255, 255, 255, 0.3); padding: 3pt 9pt; border-radius: 20pt; margin-bottom: 10pt; }
+.portada-titulo { font-size: 38pt; font-weight: 800; line-height: 1.05; margin: 0 0 8pt; color: #fff; border: 0; padding: 0; display: block; letter-spacing: -0.02em; }
+.portada-sub { font-size: 12pt; color: #dbe8f8; max-width: 140mm; line-height: 1.45; }
+.portada-abajo { flex: 1; background: var(--crema); padding: 14mm 20mm 16mm; display: flex; flex-direction: column; justify-content: space-between; }
+.portada-datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9pt; }
+.portada-dato { background: #fff; border: 0.7pt solid var(--linea); border-radius: 8pt; padding: 9pt 11pt; }
+.portada-dato small { display: block; font-size: 6.8pt; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--azul-2); margin-bottom: 2pt; }
+.portada-dato span { font-size: 10pt; font-weight: 600; color: var(--marino); }
+.portada-autores small { display: block; font-size: 6.8pt; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gris); margin-bottom: 5pt; }
+.portada-autores > div { display: flex; gap: 8pt; }
+.portada-autor { flex: 1; border-left: 2.5pt solid var(--azul-2); padding: 1pt 0 1pt 8pt; }
+.portada-autor b { display: block; font-size: 10.5pt; color: var(--marino); white-space: nowrap; }
+.portada-autor span { display: block; font-size: 8.5pt; color: var(--gris); }
 
-/* Guía de lectura al comienzo de cada entregable */
-.guia { background: #f2f7fd; border: 0.8pt solid #cde2fb; border-left: 3pt solid var(--azul); border-radius: 4pt; padding: 8pt 11pt; margin: 10pt 0 6pt; font-size: 9.8pt; break-inside: avoid; }
-.guia p { margin-bottom: 5pt; }
-/* Glosario */
-table.glosario td { padding: 3pt 6pt; }
-table.glosario td:first-child { color: var(--marino); }
-/* Índice, ruta crítica y textos secundarios */
-ol.indice li { margin-bottom: 1pt; }
-.ruta { font-weight: 600; color: var(--marino); background: #fdf0e8; border-radius: 4pt; padding: 5pt 8pt; text-align: left; }
-.sec { color: var(--gris); font-size: 0.9em; }
-code { font-family: Consolas, 'Courier New', monospace; font-size: 8.8pt; }
+/* ---------- Firmas ---------- */
+.firmas { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; margin-top: 18pt; break-inside: avoid; }
+.firma { border: 0.7pt solid var(--linea); border-radius: 7pt; padding: 34pt 11pt 9pt; font-size: 8.6pt; background: linear-gradient(#fff 0 62%, #faf9f5 62%); position: relative; }
+.firma::before { content: ""; position: absolute; left: 11pt; right: 11pt; top: 30pt; border-top: 0.8pt solid var(--tinta); }
+.firma b { display: block; color: var(--marino); font-size: 9.4pt; margin-top: 4pt; }
+
+/* Índice de la documentación general (con subsecciones) */
+nav.indice > ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 5pt; }
+nav.indice > ol > li > a { display: block; padding: 5pt 10pt; background: #faf9f5; border: 0.6pt solid var(--linea); border-radius: 6pt; font-weight: 700; color: var(--marino); text-decoration: none; }
+nav.indice ol ol { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 3pt 12pt; padding: 6pt 4pt 2pt 12pt; margin: 0; }
+nav.indice ol ol li { border-left: 2pt solid var(--celeste); padding-left: 7pt; margin: 0; }
+nav.indice ol ol a { font-size: 8.8pt; font-weight: 500; color: var(--tinta); text-decoration: none; }

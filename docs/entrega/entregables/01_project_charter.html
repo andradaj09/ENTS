@@ -3,43 +3,36 @@
 <head>
 <meta charset="utf-8">
 <title>ENTS — Project Charter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="estilos.css">
 <style>
-  @page { @top-right { content: "ENTS · Project Charter (Acta de constitución)"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; } }
+  @page { @top-left { content: "ENTS · Project Charter (Acta de constitución)"; } }
 
 </style>
 </head>
 <body>
 
-<section class="caratula">
-  <div>
-    <div class="inst">Instituto Cervantes</div>
-    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: Analista Programador · Cátedra: Práctica Profesionalizante</div>
-  </div>
-  <div>
-    <div style="display:flex;align-items:center;gap:14pt">
-      <img src="../../../public/logo.svg" alt="" style="width:62pt;height:62pt;border-radius:12pt">
-      <div>
-        <div class="tipo">Entregable 1 de 7</div>
-        <h1 class="titulo">Project Charter</h1>
-        <div class="sub">Acta de constitución del proyecto ENTS — Everyone Needs To Smile</div>
-      </div>
+<section class="portada">
+  <div class="portada-arriba">
+    <svg class="portada-anillos" viewBox="0 0 200 200" aria-hidden="true">
+  <ellipse cx="100" cy="100" rx="92" ry="82.8" transform="rotate(-18 100 100)" fill="none" stroke="#fff" stroke-width="3.4"/><ellipse cx="101.6" cy="98.8" rx="76" ry="68.4" transform="rotate(-9 100 100)" fill="none" stroke="#fff" stroke-width="3.1"/><ellipse cx="103.2" cy="97.6" rx="61" ry="54.9" transform="rotate(0 100 100)" fill="none" stroke="#fff" stroke-width="2.8"/><ellipse cx="104.8" cy="96.4" rx="47" ry="42.300000000000004" transform="rotate(9 100 100)" fill="none" stroke="#fff" stroke-width="2.5"/><ellipse cx="106.4" cy="95.2" rx="34" ry="30.6" transform="rotate(18 100 100)" fill="none" stroke="#fff" stroke-width="2.2"/><ellipse cx="108" cy="94" rx="22" ry="19.8" transform="rotate(27 100 100)" fill="none" stroke="#fff" stroke-width="1.9"/>
+</svg>
+    <div class="portada-inst">Instituto Cervantes<small>Carrera Analista Programador · Cátedra Práctica Profesionalizante</small></div>
+    <div class="portada-centro">
+      <div class="portada-logo"><img src="../../../public/logo.svg" alt=""></div>
+      <div class="portada-tipo">Entregable 1 de 7</div>
+      <h1 class="portada-titulo">Project Charter</h1>
+      <div class="portada-sub">Acta de constitución del proyecto ENTS — Everyone Needs To Smile</div>
     </div>
-    <div class="franja"></div>
-    <table>
-      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba y Villa Allende</td></tr>
-      <tr><td>Docente</td><td>Ing. Loza</td></tr>
-      <tr><td>Director del proyecto</td><td>Andrada, Juan Pablo</td></tr>
-      <tr><td>Código del documento</td><td>ENTS-GP-01</td></tr>
-      <tr><td>Versión</td><td>3.0</td></tr>
-      <tr><td>Sitio publicado</td><td>entscordoba.netlify.app</td></tr>
-    </table>
   </div>
-  <div>
-    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
-    <table>
-      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr><tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr><tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
-    </table>
+  <div class="portada-abajo">
+    <div class="portada-datos">
+      <div class="portada-dato"><small>Proyecto</small><span>ENTS — Peticiones vecinales</span></div><div class="portada-dato"><small>Docente</small><span>Ing. Loza</span></div><div class="portada-dato"><small>Director del proyecto</small><span>Andrada, Juan Pablo</span></div><div class="portada-dato"><small>Código</small><span>ENTS-GP-01</span></div><div class="portada-dato"><small>Versión</small><span>3.0</span></div><div class="portada-dato"><small>Sitio publicado</small><span>entscordoba.netlify.app</span></div>
+    </div>
+    <div class="portada-autores">
+      <small>Autores</small>
+      <div><div class="portada-autor"><b>Andrada, Juan Pablo</b><span>Legajo 27318</span></div><div class="portada-autor"><b>Patrón, Máximo</b><span>Legajo 27311</span></div><div class="portada-autor"><b>Jiménez, Ignacio</b><span>Legajo 28177</span></div></div>
+    </div>
   </div>
 </section>
 <h1 class="salto">Historial de revisión</h1>
@@ -53,7 +46,7 @@
 </table>
 <p class="pie">(*) La versión 1.0 se elaboró durante el Sprint 0, antes de que el equipo usara control de versiones, por lo que su fecha y hora exactas no quedaron registradas. Desde la versión 2.0, cada cambio se registra con fecha, hora y autor.</p>
 
-<h2>Contenido</h2><ol class="indice"><li>Glosario</li><li>Información general del proyecto</li><li>Propósito y justificación</li><li>Descripción del proyecto y del producto</li><li>Objetivos y criterios de éxito</li><li>Requisitos de alto nivel</li><li>Alcance preliminar</li><li>Entregables principales</li><li>Supuestos y restricciones</li><li>Riesgos iniciales</li><li>Cronograma de hitos</li><li>Presupuesto y recursos</li><li>Interesados</li><li>Equipo, roles y autoridad</li><li>Aprobación</li></ol>
+<div class="toc-titulo salto">Contenido</div><ol class="toc"><li class="toc-glosario"><span>G</span>Glosario</li><li><span>1</span>Información general del proyecto</li><li><span>2</span>Propósito y justificación</li><li><span>3</span>Descripción del proyecto y del producto</li><li><span>4</span>Objetivos y criterios de éxito</li><li><span>5</span>Requisitos de alto nivel</li><li><span>6</span>Alcance preliminar</li><li><span>7</span>Entregables principales</li><li><span>8</span>Supuestos y restricciones</li><li><span>9</span>Riesgos iniciales</li><li><span>10</span>Cronograma de hitos</li><li><span>11</span>Presupuesto y recursos</li><li><span>12</span>Interesados</li><li><span>13</span>Equipo, roles y autoridad</li><li><span>14</span>Aprobación</li></ol>
 
 <div class="guia">
   <p><b>Qué es este documento.</b> El Project Charter (acta de constitución) es el documento que autoriza formalmente el inicio del proyecto. Resume por qué se hace, qué se espera lograr, con qué recursos y bajo qué condiciones.</p>
@@ -63,14 +56,14 @@
 
 
 
-<h1 class="salto">Glosario</h1>
+<h1>Glosario</h1>
 <p>Siglas y términos que se usan en este documento, ordenados alfabéticamente. Cada uno se explica en lenguaje simple para que el documento pueda leerse sin conocimientos técnicos previos.</p>
 
 <table class="glosario">
   <thead><tr><th style="width:26%">Término</th><th>Significado</th></tr></thead>
   <tbody><tr><td><b>Accesibilidad</b></td><td>Posibilidad de que cualquier persona, incluso con discapacidad, use el sistema (teclado, contraste, lectores de pantalla).</td></tr><tr><td><b>Actividad</b></td><td>Trabajo concreto que produce un entregable. Se identifica con un código A1, A2…</td></tr><tr><td><b>Administrador</b></td><td>Rol que modera, gestiona usuarios y áreas, y accede al panel analítico.</td></tr><tr><td><b>Anonimato</b></td><td>Regla por la que un vecino nunca ve quién creó o firmó una petición.</td></tr><tr><td><b>Área</b></td><td>Dependencia del municipio responsable de un grupo de categorías (por ejemplo, Salud u Obras públicas).</td></tr><tr><td><b>Barrio (zona)</b></td><td>Cada uno de los 111 barrios de Córdoba y Villa Allende cargados en el sistema con su ubicación.</td></tr><tr><td><b>Código del documento (ENTS-GP)</b></td><td>Identificador de cada entregable: ENTS-GP-01 a ENTS-GP-07 (GP = gestión del proyecto).</td></tr><tr><td><b>Control de cambios</b></td><td>Procedimiento para proponer, evaluar y aprobar cambios al alcance aprobado.</td></tr><tr><td><b>CSV / Excel</b></td><td>Formatos de planilla de cálculo usados para exportar reportes.</td></tr><tr><td><b>Día hábil</b></td><td>Día de trabajo del equipo (lunes a viernes, sin feriados). Las duraciones del cronograma se expresan en días hábiles.</td></tr><tr><td><b>Diagrama de Gantt</b></td><td>Gráfico que muestra cada actividad como una barra a lo largo del tiempo.</td></tr><tr><td><b>Dueño (CEO)</b></td><td>Cuenta única del responsable del proyecto: además de administrar, cambia roles y define los permisos de cada rol.</td></tr><tr><td><b>EDT / WBS</b></td><td>Estructura de desglose del trabajo (en inglés, Work Breakdown Structure): descomposición jerárquica del proyecto en entregables y paquetes de trabajo.</td></tr><tr><td><b>Elevación</b></td><td>Aviso automático a los funcionarios del área cuando una petición alcanza 50 firmas.</td></tr><tr><td><b>Entregable</b></td><td>Resultado verificable que produce el proyecto (un documento, un módulo del sistema, una presentación).</td></tr><tr><td><b>ENTS</b></td><td>Everyone Needs To Smile ("Todos necesitan sonreír"): nombre del proyecto y de la plataforma.</td></tr><tr><td><b>Firma</b></td><td>Apoyo de un vecino a una petición publicada. Cada persona puede firmar una sola vez y retirar su firma.</td></tr><tr><td><b>Funcionario</b></td><td>Rol de un empleado del municipio: responde las peticiones de su área. Lo aprueba un administrador.</td></tr><tr><td><b>GitHub</b></td><td>Plataforma donde se guarda el código con su historial de cambios (repositorio).</td></tr><tr><td><b>Hito</b></td><td>Momento clave del proyecto sin duración (por ejemplo, "primera versión funcional"). Se dibuja con un rombo.</td></tr><tr><td><b>HTTPS</b></td><td>Protocolo de comunicación cifrado entre el navegador y el servidor.</td></tr><tr><td><b>HU</b></td><td>Historia de usuario: necesidad escrita desde el punto de vista del usuario con la forma "Como [rol], quiero [acción] para [beneficio]". Se numeran HU01, HU02…</td></tr><tr><td><b>Interesado</b></td><td>Persona u organización afectada por el proyecto o que influye en él (en inglés, stakeholder).</td></tr><tr><td><b>JavaScript</b></td><td>Lenguaje de programación de las páginas web; en él está escrita la aplicación.</td></tr><tr><td><b>Ley 25.326</b></td><td>Ley argentina de Protección de los Datos Personales.</td></tr><tr><td><b>Minuta</b></td><td>Registro escrito de una reunión: temas, decisiones y tareas asignadas.</td></tr><tr><td><b>Moderación</b></td><td>Revisión de las peticiones y comentarios para que no se publique contenido ofensivo ni datos personales.</td></tr><tr><td><b>Moderador</b></td><td>Rol que revisa peticiones, comentarios y publicaciones; no administra usuarios.</td></tr><tr><td><b>Modo oscuro</b></td><td>Esquema de colores con fondo oscuro que reduce el brillo de la pantalla.</td></tr><tr><td><b>Netlify</b></td><td>Servicio que publica el sitio web con HTTPS cada vez que se actualiza el repositorio.</td></tr><tr><td><b>Node.js</b></td><td>Entorno que ejecuta JavaScript fuera del navegador; se usa para desarrollar y compilar la aplicación.</td></tr><tr><td><b>OAuth</b></td><td>Protocolo que permite ingresar con una cuenta de otro servicio (en ENTS, Google) sin compartir la contraseña.</td></tr><tr><td><b>ONG</b></td><td>Organización no gubernamental: organización social sin fines de lucro.</td></tr><tr><td><b>OpenStreetMap</b></td><td>Mapa colaborativo y gratuito del que se obtienen el mapa de fondo y la ubicación de los barrios.</td></tr><tr><td><b>Panel analítico</b></td><td>Pantalla de administración con indicadores de uso, moderación y participación, exportable a Excel y PDF.</td></tr><tr><td><b>Paquete de trabajo</b></td><td>Último nivel de la EDT: un entregable concreto que se puede asignar, estimar y verificar.</td></tr><tr><td><b>Patrocinador</b></td><td>Interesado que autoriza el proyecto y aprueba sus entregables; en este caso, el docente de la cátedra.</td></tr><tr><td><b>PDF</b></td><td>Formato de documento portable que se ve igual en cualquier dispositivo.</td></tr><tr><td><b>Permisos por panel</b></td><td>Configuración que define, para cada rol, qué paneles puede ver y en cuáles puede modificar. Solo la cambia el dueño.</td></tr><tr><td><b>Petición</b></td><td>Pedido que un vecino publica sobre un problema de su barrio (por ejemplo, un bache o falta de alumbrado).</td></tr><tr><td><b>PostgreSQL</b></td><td>Motor de base de datos relacional de código abierto que usa ENTS.</td></tr><tr><td><b>Prioridad por firmas</b></td><td>Nivel de una petición según su cantidad de firmas: nueva (0–4), baja (5–9), media (10–19), alta (20–49) y máxima (50 o más).</td></tr><tr><td><b>Product backlog</b></td><td>Lista priorizada de todo lo que hay que construir en el producto, expresada en historias de usuario.</td></tr><tr><td><b>Project Charter</b></td><td>Acta de constitución: documento que autoriza formalmente el proyecto y fija su propósito, objetivos y recursos.</td></tr><tr><td><b>Prueba automática</b></td><td>Programa que verifica que una parte del código da el resultado esperado, sin intervención manual.</td></tr><tr><td><b>Pull Request (PR)</b></td><td>Pedido para integrar los cambios de una rama a la principal, que otro integrante revisa antes de aceptar.</td></tr><tr><td><b>PWA</b></td><td>Progressive Web App (aplicación web progresiva): sitio web que se puede instalar en el celular y abrir como una aplicación.</td></tr><tr><td><b>Rama (branch)</b></td><td>Copia paralela del código para trabajar un cambio sin afectar la versión principal (main).</td></tr><tr><td><b>React</b></td><td>Biblioteca de JavaScript con la que se construye la interfaz de ENTS.</td></tr><tr><td><b>Repositorio</b></td><td>Lugar donde se guarda el código fuente con todo su historial de versiones.</td></tr><tr><td><b>Restricción</b></td><td>Límite que el proyecto no puede superar (plazo, presupuesto, equipo, normas).</td></tr><tr><td><b>RF</b></td><td>Requisito funcional: algo que el sistema debe hacer (por ejemplo, "crear peticiones con fotos"). Se numeran RF01, RF02…</td></tr><tr><td><b>Riesgo</b></td><td>Evento incierto que, si ocurre, afecta al proyecto. Se evalúa por su probabilidad y su impacto.</td></tr><tr><td><b>RLS</b></td><td>Row Level Security (seguridad por fila): reglas de la base de datos que deciden qué filas puede ver o modificar cada usuario.</td></tr><tr><td><b>RNF</b></td><td>Requisito no funcional: una cualidad que el sistema debe cumplir (seguridad, rendimiento, accesibilidad…). Se numeran RNF01, RNF02…</td></tr><tr><td><b>Rol (rango)</b></td><td>Tipo de cuenta que define qué puede hacer cada usuario: vecino, funcionario, moderador, administrador o dueño.</td></tr><tr><td><b>Score de urgencia</b></td><td>Puntaje de 0 a 100 que calcula el sistema según la gravedad de la categoría, palabras de riesgo, firmas, velocidad de apoyo y fotos.</td></tr><tr><td><b>Seguimiento</b></td><td>Etapas por las que pasa una petición publicada: recibida, en revisión, derivada, en obra y resuelta.</td></tr><tr><td><b>SMS</b></td><td>Mensaje de texto por celular.</td></tr><tr><td><b>Sprint</b></td><td>Ciclo de trabajo de duración fija (en este proyecto, 2 semanas) al final del cual se muestra un avance funcionando.</td></tr><tr><td><b>SQL</b></td><td>Lenguaje estándar para definir y consultar bases de datos relacionales.</td></tr><tr><td><b>Supabase</b></td><td>Servicio en la nube que provee la base de datos PostgreSQL, la autenticación y el almacenamiento de archivos.</td></tr><tr><td><b>Supuesto</b></td><td>Condición que se da por cierta para planificar, aunque no esté comprobada.</td></tr><tr><td><b>Vecino</b></td><td>Rol base: crea, firma y comenta peticiones. Para los demás vecinos es anónimo.</td></tr><tr><td><b>Versión del documento</b></td><td>Número que cambia con cada modificación registrada en el historial de revisión (1.0, 2.0, 3.0).</td></tr><tr><td><b>Vite</b></td><td>Herramienta que compila y sirve la aplicación durante el desarrollo.</td></tr></tbody>
 </table>
-<h1 class="salto">1. Información general del proyecto</h1>
+<h1 class="salto"><span class="num">1</span>Información general del proyecto</h1>
 <table class="ficha"><tbody>
   <tr><td>Nombre del proyecto</td><td>ENTS — Everyone Needs To Smile</td></tr>
   <tr><td>Descripción breve</td><td>Plataforma web de peticiones vecinales para Córdoba y Villa Allende que procesa automáticamente los reclamos (categoría, barrio, urgencia y similares) y mide su resolución.</td></tr>
@@ -83,7 +76,7 @@
   <tr><td>Producto publicado</td><td>https://entscordoba.netlify.app</td></tr>
 </tbody></table>
 
-<h1>2. Propósito y justificación</h1>
+<h1><span class="num">2</span>Propósito y justificación</h1>
 <h2>2.1 Problema</h2>
 <p>En los barrios de Córdoba los mismos problemas —baches, falta de alumbrado, basurales, inseguridad, falta de atención sanitaria— se reclaman una y otra vez, de manera individual y por canales dispersos. El vecino no sabe si alguien recibió su reclamo ni qué pasó con él, y los organismos públicos y las organizaciones sociales no cuentan con información ordenada por zona, urgencia y apoyo vecinal para decidir qué atender primero ni para rendir cuentas de lo realizado.</p>
 <h2>2.2 Justificación de la reorientación</h2>
@@ -91,7 +84,7 @@
 <ul><li>concentra los reclamos de un barrio en peticiones únicas, apoyadas con firmas;</li><li>las procesa automáticamente: categoría, barrio, score de urgencia y detección de peticiones similares;</li><li>las pone a disposición de las áreas del municipio para que respondan y registren el avance;</li><li>genera reportes para organismos y ONG, y estadísticas públicas para la comunidad.</li></ul>
 <p>La reorientación conserva lo ya trabajado —encuesta y estudio de necesidades, análisis socioeconómico de Córdoba, arquitectura en capas, base de datos SQL, autenticación y seguridad, y enfoque de evaluación de impacto— y reemplaza el módulo de pagos por el de reportes.</p>
 
-<h1>3. Descripción del proyecto y del producto</h1>
+<h1><span class="num">3</span>Descripción del proyecto y del producto</h1>
 <p>El proyecto consiste en analizar, diseñar, desarrollar, probar, publicar y documentar una aplicación web, instalable en el celular, compuesta por los siguientes módulos:</p>
 
 <table>
@@ -99,7 +92,7 @@
   <tbody><tr><td>Cuentas y roles</td><td>Registro e ingreso con correo o Google y recuperación de contraseña. Cinco roles: vecino, funcionario (por área), moderador, administrador y dueño. El dueño define qué paneles ve y modifica cada rol.</td></tr><tr><td>Peticiones</td><td>Alta con texto, hasta 3 fotos y ubicación; moderación previa a la publicación.</td></tr><tr><td>Procesamiento automático</td><td>Categoría según el texto, barrio según la ubicación, score de urgencia de 0 a 100, detección de peticiones similares y revisión de datos personales y lenguaje ofensivo.</td></tr><tr><td>Firmas y prioridad</td><td>Una firma por persona; cinco niveles de prioridad según las firmas; elevación automática al área al llegar a 50.</td></tr><tr><td>Seguimiento</td><td>Cinco etapas (recibida, en revisión, derivada, en obra, resuelta) con respuesta oficial y foto; avisos al autor y a los firmantes.</td></tr><tr><td>Comunidad</td><td>Mapa por barrios, muro vecinal, agenda de eventos, comentarios anónimos y barrios seguidos.</td></tr><tr><td>Reportes</td><td>Estadísticas públicas anónimas, panel analítico y exportación a Excel y PDF.</td></tr></tbody>
 </table>
 
-<h1>4. Objetivos y criterios de éxito</h1>
+<h1><span class="num">4</span>Objetivos y criterios de éxito</h1>
 <h2>4.1 Objetivo general</h2>
 <p>Poner en funcionamiento una plataforma web que permita a los vecinos de Córdoba y Villa Allende visibilizar, apoyar y seguir la resolución de los problemas de su barrio, y que procese esa información para que los organismos prioricen y registren su respuesta.</p>
 <h2>4.2 Objetivos específicos medibles</h2>
@@ -112,35 +105,35 @@
 <h2>4.3 Criterios de éxito del proyecto</h2>
 <ul><li>El ciclo completo —pedir, firmar, priorizar, responder y resolver— funciona de punta a punta en el sitio publicado.</li><li>Ningún vecino puede ver la identidad de otro vecino ni datos personales ajenos.</li><li>La documentación cumple la estructura exigida por la cátedra y es aprobada por el docente.</li></ul>
 
-<h1>5. Requisitos de alto nivel</h1>
+<h1><span class="num">5</span>Requisitos de alto nivel</h1>
 <p>Los requisitos funcionales describen lo que el sistema hace; los no funcionales, las cualidades con que lo hace. Aquí se enumeran en forma resumida; el Entregable 2 los detalla y numera (RF01 a RF20 y RNF01 a RNF08).</p>
 <div class="dos-col">
   <div class="tarjeta"><h4>Funcionales</h4><ul><li>Crear, moderar, firmar y comentar peticiones.</li><li>Asignar categoría, barrio y urgencia automáticamente.</li><li>Avisar peticiones similares antes de crear una nueva.</li><li>Registrar respuestas oficiales por área.</li><li>Notificar novedades a los interesados.</li><li>Mostrar mapa por barrios y estadísticas.</li><li>Exportar reportes para organismos.</li><li>Administrar roles y permisos por panel.</li></ul></div>
   <div class="tarjeta"><h4>No funcionales</h4><ul><li>Privacidad: anonimato entre vecinos.</li><li>Seguridad: reglas aplicadas en la base de datos y HTTPS.</li><li>Usabilidad: español, adaptable a celular y modo oscuro.</li><li>Accesibilidad: teclado, contraste y movimiento reducido.</li><li>Rendimiento: carga por partes y fluidez en celulares.</li><li>Mantenibilidad: pruebas automáticas y esquema versionado.</li></ul></div>
 </div>
 
-<h1>6. Alcance preliminar</h1>
+<h1><span class="num">6</span>Alcance preliminar</h1>
 <div class="dos-col">
   <div class="tarjeta"><h4>Dentro del alcance</h4><ul><li>Aplicación web e instalable (PWA).</li><li>Base de datos con reglas de seguridad por fila.</li><li>Procesamiento automático de peticiones.</li><li>Seguimiento, notificaciones y comentarios.</li><li>Mapa, comunidad y eventos.</li><li>Estadísticas, panel analítico y exportes.</li><li>Roles y permisos por panel.</li><li>Documentación y presentación del proyecto.</li></ul></div>
   <div class="tarjeta"><h4>Fuera del alcance</h4><ul><li>Pagos, donaciones o recaudación dentro de la plataforma.</li><li>Integración con sistemas internos del municipio.</li><li>Notificaciones por correo o SMS.</li><li>Aplicaciones nativas para las tiendas de Android o iOS.</li><li>Límites oficiales (polígonos) de cada barrio.</li></ul></div>
 </div>
 <p>El detalle completo, con los motivos de cada exclusión, está en el Entregable 2.</p>
 
-<h1>7. Entregables principales</h1>
+<h1><span class="num">7</span>Entregables principales</h1>
 
 <table>
   <thead><tr><th style="width:5%">#</th><th style="width:30%">Entregable</th><th>Descripción</th></tr></thead>
   <tbody><tr><td>1</td><td>Aplicación web publicada</td><td>Sitio en producción con todos los módulos del alcance.</td></tr><tr><td>2</td><td>Base de datos documentada</td><td>Esquema SQL completo y reproducible, con políticas y funciones.</td></tr><tr><td>3</td><td>Repositorio de código</td><td>Código fuente versionado, con instrucciones de instalación y pruebas.</td></tr><tr><td>4</td><td>Entregables de gestión</td><td>Project Charter, declaración de alcance, EDT, lista y diccionario de actividades, plan de comunicación y diagrama de Gantt.</td></tr><tr><td>5</td><td>Documentación técnica</td><td>Requerimientos, arquitectura, modelo de datos, seguridad, pruebas e implementación.</td></tr><tr><td>6</td><td>Presentación</td><td>Exposición del proyecto para la defensa, con su guion.</td></tr></tbody>
 </table>
 
-<h1>8. Supuestos y restricciones</h1>
+<h1><span class="num">8</span>Supuestos y restricciones</h1>
 <p>Un <b>supuesto</b> es una condición que se da por cierta para planificar; si deja de cumplirse, se convierte en un riesgo. Una <b>restricción</b> es un límite que el proyecto no puede superar.</p>
 <h2>8.1 Supuestos</h2>
 <ul><li>Los vecinos cuentan con un celular o computadora con conexión a internet y un navegador actualizado.</li><li>Los servicios en la nube elegidos (GitHub, Supabase, Netlify, OpenStreetMap) mantienen sus planes gratuitos durante el proyecto.</li><li>Para la operación real, los organismos designan funcionarios por área que responden las peticiones.</li><li>Los integrantes del equipo mantienen su disponibilidad durante el ciclo lectivo.</li></ul>
 <h2>8.2 Restricciones</h2>
 <ul><li><b>Tiempo:</b> el proyecto se entrega dentro del calendario de la cátedra.</li><li><b>Equipo:</b> tres integrantes con dedicación parcial (ver sección 11.2).</li><li><b>Presupuesto:</b> sin financiamiento; solo herramientas y servicios gratuitos.</li><li><b>Técnicas:</b> sin acceso a los sistemas internos del municipio; límites de uso de los planes gratuitos.</li><li><b>Legales:</b> cumplimiento de la Ley 25.326 de Protección de Datos Personales y publicación de una política de privacidad.</li></ul>
 
-<h1>9. Riesgos iniciales</h1>
+<h1><span class="num">9</span>Riesgos iniciales</h1>
 <p>Cada riesgo se evalúa con dos escalas. <b>Probabilidad:</b> baja (es poco probable que ocurra), media (puede ocurrir) o alta (es probable que ocurra). <b>Impacto:</b> bajo (molestia menor), medio (atrasa o reduce una funcionalidad) o alto (compromete un objetivo del proyecto). La respuesta es la acción planificada para reducirlo.</p>
 
 <table>
@@ -148,7 +141,7 @@
   <tbody><tr><td>R1</td><td>Baja participación de vecinos al inicio</td><td><span class="nivel media">Media</span></td><td><span class="nivel alta">Alto</span></td><td>Prueba piloto en un barrio, difusión en redes y app instalable de uso simple.</td><td>Jiménez</td></tr><tr><td>R2</td><td>Publicación de datos personales o contenido ofensivo</td><td><span class="nivel media">Media</span></td><td><span class="nivel alta">Alto</span></td><td>Moderación previa, revisión automática de textos, denuncias y ocultamiento automático.</td><td>Andrada</td></tr><tr><td>R3</td><td>Acceso indebido a identidades o datos</td><td><span class="nivel baja">Baja</span></td><td><span class="nivel alta">Alto</span></td><td>Reglas de seguridad en la base (RLS y permisos por columna) y pruebas por rol.</td><td>Patrón</td></tr><tr><td>R4</td><td>Superar los límites de los planes gratuitos</td><td><span class="nivel baja">Baja</span></td><td><span class="nivel media">Medio</span></td><td>Compresión de fotos, control del uso y plan de migración a un plan pago.</td><td>Patrón</td></tr><tr><td>R5</td><td>Caída o cambio de un servicio externo</td><td><span class="nivel baja">Baja</span></td><td><span class="nivel media">Medio</span></td><td>Esquema SQL versionado para recrear la base; código independiente del proveedor de publicación.</td><td>Andrada</td></tr><tr><td>R6</td><td>Indisponibilidad de un integrante</td><td><span class="nivel media">Media</span></td><td><span class="nivel media">Medio</span></td><td>Repositorio documentado, revisión cruzada y tareas repartidas en sprints cortos.</td><td>Andrada</td></tr><tr><td>R7</td><td>Cambios de alcance tardíos</td><td><span class="nivel media">Media</span></td><td><span class="nivel media">Medio</span></td><td>Control de cambios con aprobación del docente (Entregable 2, sección 10).</td><td>Andrada</td></tr></tbody>
 </table>
 
-<h1>10. Cronograma de hitos</h1>
+<h1><span class="num">10</span>Cronograma de hitos</h1>
 <p>Un hito marca un momento clave del proyecto. La columna "Semana" indica en qué semana del cronograma planificado (Entregable 7) se alcanza; la columna "Estado" indica si ya se cumplió y, cuando corresponde, la fecha real registrada en el repositorio.</p>
 
 <table>
@@ -156,7 +149,7 @@
   <tbody><tr><td>H1</td><td>Reorientación del proyecto aprobada</td><td>S1</td><td>Cumplido</td></tr><tr><td>H2</td><td>Project Charter y alcance aprobados</td><td>S2</td><td>Cumplido (versión 2.0 de los entregables)</td></tr><tr><td>H3</td><td>Diseño completo: arquitectura, datos, seguridad e interfaz</td><td>S4</td><td>Cumplido</td></tr><tr><td>H4</td><td>Primera versión funcional: autenticación, peticiones, firmas y moderación</td><td>S6</td><td>Cumplido el 04/10/2026</td></tr><tr><td>H5</td><td>Procesamiento automático, seguimiento y reportes</td><td>S8</td><td>Cumplido el 12/10/2026</td></tr><tr><td>H6</td><td>Producto completo y probado</td><td>S9</td><td>Cumplido el 12/10/2026</td></tr><tr><td>H7</td><td>Documentación y presentación completas</td><td>S10</td><td>Cumplido (versión 3.0)</td></tr><tr><td>H8</td><td>Entrega y defensa</td><td>S10</td><td>Pendiente: fecha a definir por la cátedra</td></tr></tbody>
 </table>
 
-<h1>11. Presupuesto y recursos</h1>
+<h1><span class="num">11</span>Presupuesto y recursos</h1>
 <h2>11.1 Recursos tecnológicos</h2>
 
 <table>
@@ -172,7 +165,7 @@
 </table>
 <div class="nota">El costo monetario directo del proyecto es $0 gracias a los planes gratuitos. Como se trata de un proyecto académico sin remuneración, el esfuerzo del equipo se expresa en horas y no se le asigna un valor en dinero.</div>
 
-<h1>12. Interesados</h1>
+<h1><span class="num">12</span>Interesados</h1>
 <p>Un interesado es cualquier persona u organización afectada por el proyecto o con influencia sobre él. La influencia indica cuánto puede modificar el rumbo del proyecto.</p>
 
 <table>
@@ -180,7 +173,7 @@
   <tbody><tr><td>Docente (Ing. Loza)</td><td>Patrocinador; aprueba el alcance y los entregables</td><td>Cumplimiento de los objetivos académicos y de la metodología</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>Equipo de proyecto</td><td>Planifica, desarrolla y documenta</td><td>Entregar un producto funcional y aprobar la materia</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>Vecinos de Córdoba y Villa Allende</td><td>Usuarios principales</td><td>Que sus reclamos se vean, se atiendan y se resuelvan</td><td><span class="nivel media">Media</span></td></tr><tr><td>Áreas del municipio y funcionarios</td><td>Usuarios que responden</td><td>Información priorizada por zona y urgencia</td><td><span class="nivel alta">Alta</span></td></tr><tr><td>ONG y organizaciones sociales</td><td>Destinatarios de reportes</td><td>Datos para orientar su trabajo territorial</td><td><span class="nivel media">Media</span></td></tr><tr><td>Instituto Cervantes</td><td>Institución educativa</td><td>Calidad de la formación y de los proyectos</td><td><span class="nivel media">Media</span></td></tr></tbody>
 </table>
 
-<h1>13. Equipo, roles y autoridad</h1>
+<h1><span class="num">13</span>Equipo, roles y autoridad</h1>
 
 <table>
   <thead><tr><th style="width:22%">Integrante</th><th style="width:24%">Rol</th><th>Responsabilidades principales</th></tr></thead>
@@ -189,11 +182,11 @@
 <h2>13.1 Autoridad del director del proyecto</h2>
 <ul><li>Asignar y redistribuir tareas entre los integrantes dentro de cada sprint.</li><li>Priorizar el product backlog dentro del alcance aprobado.</li><li>Aprobar la publicación de nuevas versiones del sitio.</li><li>Escalar al docente los cambios de alcance o de plazo y los riesgos críticos.</li></ul>
 
-<h1>14. Aprobación</h1>
+<h1><span class="num">14</span>Aprobación</h1>
 <p>Con la firma de este documento se autoriza formalmente el proyecto ENTS con el propósito, los objetivos, el alcance preliminar y los recursos aquí descritos.</p>
 
 <div class="firmas">
-  <div class="firma"><b>Ing. Loza</b>Docente — Patrocinador<br>Firma y fecha: ______________________</div><div class="firma"><b>Andrada, Juan Pablo</b>Director del proyecto<br>Firma y fecha: ______________________</div><div class="firma"><b>Patrón, Máximo</b>Integrante del equipo<br>Firma y fecha: ______________________</div><div class="firma"><b>Jiménez, Ignacio</b>Integrante del equipo<br>Firma y fecha: ______________________</div>
+  <div class="firma">Firma y aclaración<b>Ing. Loza</b>Docente — Patrocinador · Fecha: ____ / ____ / ________</div><div class="firma">Firma y aclaración<b>Andrada, Juan Pablo</b>Director del proyecto · Fecha: ____ / ____ / ________</div><div class="firma">Firma y aclaración<b>Patrón, Máximo</b>Integrante del equipo · Fecha: ____ / ____ / ________</div><div class="firma">Firma y aclaración<b>Jiménez, Ignacio</b>Integrante del equipo · Fecha: ____ / ____ / ________</div>
 </div>
 
 </body>

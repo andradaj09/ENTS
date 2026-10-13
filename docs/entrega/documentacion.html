@@ -4,13 +4,6 @@
 <meta charset="utf-8">
 <title>ENTS — Documentación del Trabajo Práctico</title>
 <style>
-  @page {
-    size: A4;
-    margin: 22mm 20mm 20mm 20mm;
-    @bottom-center { content: counter(page); font: 9pt 'Segoe UI', Arial, sans-serif; color: #6b6a64; }
-    @top-right { content: "ENTS — Everyone Needs To Smile"; font: 8pt 'Segoe UI', Arial, sans-serif; color: #9a988f; }
-  }
-  @page :first { @bottom-center { content: none; } @top-right { content: none; } }
 
   :root { --azul: #1c5cab; --marino: #0d366b; --celeste: #cde2fb; --tinta: #14213d; --gris: #4a5568; --linea: #d9d7cf; --crema: #f6f4ee; }
   * { box-sizing: border-box; }
@@ -104,40 +97,38 @@
   .g-leyenda i.rombo { width: 7pt; height: 7pt; background: #0d366b; transform: rotate(45deg); border-radius: 0; }
   .g-leyenda i.corte { width: 0; height: 10pt; border-left: 1.2pt solid #b9b6aa; border-radius: 0; }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="entregables/estilos.css">
+<style>
+  @page { @top-left { content: "ENTS · Documentación del trabajo práctico"; } }
+  h1 { break-before: page; }
+  .portada + h1 { break-before: auto; }
+</style>
 </head>
 <body>
 
 <!-- ===================== CARÁTULA ===================== -->
-<section class="caratula">
-  <div>
-    <div class="inst">Instituto Cervantes</div>
-    <div style="font-size:11pt;color:#4a5568;margin-top:3pt">Carrera: Analista Programador</div>
-  </div>
-  <div>
-    <div style="display:flex;align-items:center;gap:14pt">
-      <img src="../../public/logo.svg" alt="" style="width:64pt;height:64pt;border-radius:12pt">
-      <div>
-        <h1 class="titulo">Everyone Needs To Smile</h1>
-        <div class="sub">Plataforma de peticiones vecinales con procesamiento de datos y medición de impacto</div>
-      </div>
+<section class="portada">
+  <div class="portada-arriba">
+    <svg class="portada-anillos" viewBox="0 0 200 200" aria-hidden="true">
+  <ellipse cx="100" cy="100" rx="92" ry="82.8" transform="rotate(-18 100 100)" fill="none" stroke="#fff" stroke-width="3.4"/><ellipse cx="101.6" cy="98.8" rx="76" ry="68.4" transform="rotate(-9 100 100)" fill="none" stroke="#fff" stroke-width="3.1"/><ellipse cx="103.2" cy="97.6" rx="61" ry="54.9" transform="rotate(0 100 100)" fill="none" stroke="#fff" stroke-width="2.8"/><ellipse cx="104.8" cy="96.4" rx="47" ry="42.300000000000004" transform="rotate(9 100 100)" fill="none" stroke="#fff" stroke-width="2.5"/><ellipse cx="106.4" cy="95.2" rx="34" ry="30.6" transform="rotate(18 100 100)" fill="none" stroke="#fff" stroke-width="2.2"/><ellipse cx="108" cy="94" rx="22" ry="19.8" transform="rotate(27 100 100)" fill="none" stroke="#fff" stroke-width="1.9"/>
+</svg>
+    <div class="portada-inst">Instituto Cervantes<small>Carrera Analista Programador · Cátedra Práctica Profesionalizante</small></div>
+    <div class="portada-centro">
+      <div class="portada-logo"><img src="../../public/logo.svg" alt=""></div>
+      <div class="portada-tipo">Documentación del trabajo práctico</div>
+      <h1 class="portada-titulo">Everyone Needs To Smile</h1>
+      <div class="portada-sub">Plataforma de peticiones vecinales con procesamiento de datos y medición de impacto</div>
     </div>
-    <div class="franja"></div>
-    <table>
-      <tr><td>Cátedra</td><td>Práctica Profesionalizante</td></tr>
-      <tr><td>Docente</td><td>Ing. Loza</td></tr>
-      <tr><td>Empresa / proyecto</td><td>ENTS — Everyone Needs To Smile</td></tr>
-      <tr><td>Trabajo práctico</td><td>Documentación del proyecto y entregables de gestión</td></tr>
-      <tr><td>Director del proyecto</td><td>Andrada, Juan Pablo</td></tr>
-    </table>
   </div>
-  <div>
-    <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
-    <table>
-      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
-      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
-      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
-    </table>
-    <div style="font-size:9pt;color:#6b6a64;margin-top:8pt">Sitio publicado: entscordoba.netlify.app</div>
+  <div class="portada-abajo">
+    <div class="portada-datos">
+      <div class="portada-dato"><small>Cátedra</small><span>Práctica Profesionalizante</span></div><div class="portada-dato"><small>Docente</small><span>Ing. Loza</span></div><div class="portada-dato"><small>Director del proyecto</small><span>Andrada, Juan Pablo</span></div><div class="portada-dato"><small>Contenido</small><span>Documentación y entregables</span></div><div class="portada-dato"><small>Versión</small><span>3.0</span></div><div class="portada-dato"><small>Sitio publicado</small><span>entscordoba.netlify.app</span></div>
+    </div>
+    <div class="portada-autores">
+      <small>Autores</small>
+      <div><div class="portada-autor"><b>Andrada, Juan Pablo</b><span>Legajo 27318</span></div><div class="portada-autor"><b>Patrón, Máximo</b><span>Legajo 27311</span></div><div class="portada-autor"><b>Jiménez, Ignacio</b><span>Legajo 28177</span></div></div>
+    </div>
   </div>
 </section>
 
@@ -285,14 +276,14 @@
 </table>
 
 <!-- ===================== 1. INTRODUCCIÓN ===================== -->
-<h1 id="introduccion">1. Introducción</h1>
+<h1 id="introduccion"><span class="num">1</span>Introducción</h1>
 <p>Everyone Needs To Smile (ENTS) es una plataforma web en la que los vecinos de la ciudad de Córdoba y de Villa Allende publican problemas de su barrio —salud, seguridad, infraestructura, servicios, vivienda, ambiente, entre otros—, los apoyan con su firma y siguen cómo los resuelven los organismos responsables.</p>
 <p>El proyecto nació como una plataforma solidaria de donaciones. Durante el análisis, el equipo concluyó que el módulo de pagos agregaba complejidad desproporcionada (integración con pasarelas, cumplimiento legal y trazabilidad de fondos) frente al valor que aportaba. Por eso se reorientó hacia un <b>sistema de peticiones ciudadanas con medición de impacto</b>: no un formulario de reclamos, sino un sistema que procesa los datos —clasificación automática por categoría y zona, score de urgencia, detección de peticiones similares y reportes exportables— para que los organismos sepan qué atender primero y puedan registrar la respuesta, cerrando el ciclo.</p>
 <p>Este documento presenta los entregables de gestión del proyecto actualizados al nuevo alcance (Project Charter, declaración de alcance, EDT, lista y diccionario de actividades, plan de comunicación y diagrama de Gantt) y la documentación técnica del sistema efectivamente implementado y publicado: requerimientos, arquitectura, modelo de datos, algoritmos de procesamiento, seguridad, pruebas y ambiente de implementación.</p>
 <p>Consideramos que el trabajo es relevante porque convierte reclamos dispersos en información ordenada por barrio, urgencia y apoyo vecinal, que tanto la comunidad como las áreas del municipio pueden consultar, priorizar y responder.</p>
 
 <!-- ===================== 2. OBJETIVOS ===================== -->
-<h1 id="objetivos">2. Objetivos</h1>
+<h1 id="objetivos"><span class="num">2</span>Objetivos</h1>
 <h2>2.1 Objetivo general</h2>
 <p>Desarrollar y poner en funcionamiento una plataforma web de peticiones vecinales para Córdoba y Villa Allende que permita a los vecinos visibilizar problemáticas de su barrio, apoyarlas con firmas y seguir su resolución, y que procese esa información para que los organismos públicos y las organizaciones sociales prioricen y registren su respuesta.</p>
 <h2>2.2 Objetivos específicos</h2>
@@ -308,7 +299,7 @@
 </ol>
 
 <!-- ===================== 3. CONTENIDO ===================== -->
-<h1 id="contenido">3. Contenido del trabajo práctico</h1>
+<h1 id="contenido"><span class="num">3</span>Contenido del trabajo práctico</h1>
 
 <h2 id="contexto">3.1 Contexto, estudio de necesidades y reorientación</h2>
 <h3>Análisis socioeconómico de Córdoba y encuesta</h3>
@@ -927,7 +918,7 @@
 <p><b>Ambientes:</b> desarrollo local (<code>npm run dev</code>) conectado a la base en la nube; producción en Netlify, que publica automáticamente cada versión de la rama principal del repositorio. El esquema completo de la base se versiona en <code>supabase/schema.sql</code> para poder recrearla.</p>
 
 <!-- ===================== 4. BIBLIOGRAFÍA ===================== -->
-<h1 id="bibliografia">4. Bibliografía</h1>
+<h1 id="bibliografia"><span class="num">4</span>Bibliografía</h1>
 <table>
   <thead><tr><th>Obra</th><th style="width:22%">Autor</th><th style="width:12%">Edición</th><th style="width:20%">Editorial</th></tr></thead>
   <tbody>
@@ -941,7 +932,7 @@
 </table>
 
 <!-- ===================== 5. FUENTES ===================== -->
-<h1 id="fuentes">5. Fuentes de información</h1>
+<h1 id="fuentes"><span class="num">5</span>Fuentes de información</h1>
 <ul>
   <li>Docentes de la cátedra Práctica Profesionalizante del Instituto Cervantes.</li>
   <li>Documentación previa del equipo: presentación "Everyone Needs To Smile", entregables de gestión y documento de Práctica Profesionalizante (versión de donaciones).</li>
@@ -951,7 +942,7 @@
 </ul>
 
 <!-- ===================== 6. ANEXO ===================== -->
-<h1 id="anexo">6. Anexo</h1>
+<h1 id="anexo"><span class="num">6</span>Anexo</h1>
 <h2>A. Hitos reales del repositorio</h2>
 <table>
   <thead><tr><th style="width:16%">Fecha</th><th>Entrega</th></tr></thead>
