@@ -53,3 +53,15 @@ table.ficha td:first-child { width: 30%; font-weight: 600; color: var(--marino);
 .firmas { display: grid; grid-template-columns: 1fr 1fr; gap: 26pt 30pt; margin-top: 30pt; break-inside: avoid; }
 .firma { border-top: 0.8pt solid var(--tinta); padding-top: 4pt; font-size: 9pt; }
 .firma b { display: block; color: var(--marino); }
+
+/* Guía de lectura al comienzo de cada entregable */
+.guia { background: #f2f7fd; border: 0.8pt solid #cde2fb; border-left: 3pt solid var(--azul); border-radius: 4pt; padding: 8pt 11pt; margin: 10pt 0 6pt; font-size: 9.8pt; break-inside: avoid; }
+.guia p { margin-bottom: 5pt; }
+/* Glosario */
+table.glosario td { padding: 3pt 6pt; }
+table.glosario td:first-child { color: var(--marino); }
+/* Índice, ruta crítica y textos secundarios */
+ol.indice li { margin-bottom: 1pt; }
+.ruta { font-weight: 600; color: var(--marino); background: #fdf0e8; border-radius: 4pt; padding: 5pt 8pt; text-align: left; }
+.sec { color: var(--gris); font-size: 0.9em; }
+code { font-family: Consolas, 'Courier New', monospace; font-size: 8.8pt; }

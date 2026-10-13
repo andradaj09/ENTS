@@ -32,6 +32,10 @@
   pre { font: 8.2pt/1.45 Consolas, 'Courier New', monospace; background: var(--crema); border: 0.6pt solid var(--linea); border-radius: 4pt; padding: 8pt; white-space: pre-wrap; break-inside: avoid; }
   .nota { background: #fff7e6; border-left: 3pt solid #eda100; padding: 6pt 9pt; margin: 6pt 0 10pt; font-size: 9.5pt; }
   .completar { background: #fff1c2; padding: 0 3pt; border-radius: 2pt; }
+  .nivel { display: inline-block; padding: 0 5pt; border-radius: 8pt; font-size: 8pt; font-weight: 600; }
+  .nivel.alta { background: #fbe0d4; color: #8a3418; } .nivel.media { background: #fdefc8; color: #6b4d00; } .nivel.baja { background: #d8efe2; color: #1f5f3f; }
+  .sec { color: var(--gris); font-size: 0.9em; }
+  table.glosario td { padding: 3pt 6pt; } table.glosario td:first-child { color: var(--marino); }
   .figura { break-inside: avoid; margin: 8pt 0 12pt; text-align: center; }
   .figura figcaption, .pie { font-size: 8.5pt; color: var(--gris); text-align: center; margin-top: 4pt; }
   .dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
@@ -80,14 +84,16 @@
   .der { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6pt; }
 
   .gantt { border: 0.8pt solid #d9d7cf; border-radius: 5pt; padding: 6pt 8pt; break-inside: avoid; }
-  .g-fila { display: grid; grid-template-columns: 62mm 1fr; align-items: center; min-height: 15pt; border-bottom: 0.5pt solid #eceae3; }
-  .g-nombre { font-size: 7.6pt; padding-right: 6pt; line-height: 1.2; }
+  .g-fila { display: grid; grid-template-columns: 66mm 1fr; align-items: center; min-height: 15pt; border-bottom: 0.5pt solid #eceae3; }
+  .g-nombre { font-size: 7.4pt; padding-right: 6pt; line-height: 1.2; }
   .g-pista { position: relative; height: 15pt; }
   .g-linea { position: absolute; top: 0; bottom: 0; border-left: 0.5pt solid #e1e0d9; }
+  .g-linea.g-sprint { border-left: 0.9pt solid #b9b6aa; }
   .g-barra { position: absolute; top: 3.5pt; height: 8pt; border-radius: 2pt; }
   .g-holgura { position: absolute; top: 6pt; height: 3pt; background: repeating-linear-gradient(90deg, #9ec5f4 0 3pt, transparent 3pt 5pt); }
   .g-hito { position: absolute; top: 3pt; width: 9pt; height: 9pt; background: #0d366b; transform: translateX(-4.5pt) rotate(45deg); }
   .g-cabecera { background: #0d366b; color: #fff; font-weight: 600; border-radius: 3pt; }
+  .g-cabecera.g-sub { background: #1c5cab; margin-top: 2pt; }
   .g-cabecera .g-nombre { padding-left: 4pt; font-size: 8pt; }
   .g-semana { position: absolute; top: 3pt; text-align: center; font-size: 7.6pt; }
   .g-separador { font-size: 8pt; font-weight: 700; color: #0d366b; padding: 5pt 0 2pt; }
@@ -96,6 +102,7 @@
   .g-leyenda i { width: 14pt; height: 7pt; border-radius: 2pt; display: inline-block; }
   .g-leyenda i.rayas { height: 3pt; background: repeating-linear-gradient(90deg, #9ec5f4 0 3pt, transparent 3pt 5pt); }
   .g-leyenda i.rombo { width: 7pt; height: 7pt; background: #0d366b; transform: rotate(45deg); border-radius: 0; }
+  .g-leyenda i.corte { width: 0; height: 10pt; border-left: 1.2pt solid #b9b6aa; border-radius: 0; }
 </style>
 </head>
 <body>
@@ -104,7 +111,7 @@
 <section class="caratula">
   <div>
     <div class="inst">Instituto Cervantes</div>
-    <div style="font-size:11pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span></div>
+    <div style="font-size:11pt;color:#4a5568;margin-top:3pt">Carrera: Analista Programador</div>
   </div>
   <div>
     <div style="display:flex;align-items:center;gap:14pt">
@@ -120,7 +127,7 @@
       <tr><td>Docente</td><td>Ing. Loza</td></tr>
       <tr><td>Empresa / proyecto</td><td>ENTS — Everyone Needs To Smile</td></tr>
       <tr><td>Trabajo práctico</td><td>Documentación del proyecto y entregables de gestión</td></tr>
-      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+      <tr><td>Director del proyecto</td><td>Andrada, Juan Pablo</td></tr>
     </table>
   </div>
   <div>
@@ -137,20 +144,20 @@
 <!-- ===================== HISTORIAL DE REVISIÓN ===================== -->
 <h1 id="historial">Historial de revisión</h1>
 <table>
-  <thead><tr><th style="width:11%">Versión</th><th style="width:20%">Fecha y hora</th><th style="width:22%">Autor</th><th>Detalle de la modificación</th></tr></thead>
+  <thead><tr><th style="width:9%">Versión</th><th style="width:18%">Fecha y hora</th><th style="width:20%">Autor</th><th>Detalle de la modificación</th></tr></thead>
   <tbody>
-    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Propuesta original: plataforma solidaria de donaciones (Project Charter, alcance, EDT, plan de comunicación, Gantt, product backlog, arquitectura).</td></tr>
-    <tr><td>2.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Reorientación del proyecto: se reemplaza el módulo de pagos y donaciones por un sistema de peticiones con clasificación automática, firmas, score de urgencia, detección de similares y reportes.</td></tr>
-    <tr><td>2.1</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Actualización de todos los entregables al nuevo alcance y documentación del sistema implementado (arquitectura, modelo de datos, seguridad, pruebas).</td></tr>
-    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+    <tr><td>1.0</td><td>Sprint 0 (*)</td><td>Equipo</td><td>Propuesta original: plataforma solidaria de donaciones (Project Charter, alcance, EDT, plan de comunicación, Gantt, product backlog y arquitectura).</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 16:42</td><td>Andrada, Juan Pablo</td><td>Reorientación del proyecto: el módulo de pagos y donaciones se reemplaza por un sistema de peticiones con clasificación automática, firmas, score de urgencia, detección de similares y reportes. Documentación del sistema implementado.</td></tr>
+    <tr><td>3.0</td><td>12/10/2026 21:32</td><td>Andrada, Juan Pablo</td><td>Revisión integral para la entrega: glosario al comienzo, responsables y horas, rol moderador y permisos por panel, requisitos e historias de usuario con trazabilidad, sprints en el Gantt y eliminación de todos los campos pendientes.</td></tr>
   </tbody>
 </table>
-<p class="pie">Cada integrante que modifique el documento agrega una fila con la versión, la fecha y hora, su nombre y el cambio realizado.</p>
+<p class="pie">(*) La versión 1.0 se elaboró durante el Sprint 0, antes de que el equipo usara control de versiones, por lo que su fecha y hora exactas no quedaron registradas. Desde la versión 2.0, cada cambio se registra con fecha, hora y autor.</p>
 
 <!-- ===================== ÍNDICE ===================== -->
 <h1 id="indice">Tabla de contenido</h1>
 <nav class="indice">
 <ol>
+  <li><a href="#glosario">Glosario</a></li>
   <li><a href="#introduccion">1. Introducción</a></li>
   <li><a href="#objetivos">2. Objetivos</a></li>
   <li><a href="#contenido">3. Contenido del trabajo práctico</a>
@@ -178,6 +185,104 @@
   <li><a href="#anexo">6. Anexo</a></li>
 </ol>
 </nav>
+
+<!-- ===================== GLOSARIO ===================== -->
+<h1 id="glosario">Glosario</h1>
+<p>Siglas y términos que se usan en este documento, ordenados alfabéticamente. Cada uno se explica en lenguaje simple para que el documento pueda leerse sin conocimientos técnicos previos.</p>
+<table class="glosario">
+  <thead><tr><th style="width:26%">Término</th><th>Significado</th></tr></thead>
+  <tbody>
+    <tr><td><b>Accesibilidad</b></td><td>Posibilidad de que cualquier persona, incluso con discapacidad, use el sistema (teclado, contraste, lectores de pantalla).</td></tr>
+    <tr><td><b>Actividad</b></td><td>Trabajo concreto que produce un entregable. Se identifica con un código A1, A2…</td></tr>
+    <tr><td><b>Administrador</b></td><td>Rol que modera, gestiona usuarios y áreas, y accede al panel analítico.</td></tr>
+    <tr><td><b>Anonimato</b></td><td>Regla por la que un vecino nunca ve quién creó o firmó una petición.</td></tr>
+    <tr><td><b>API</b></td><td>Interfaz de programación: conjunto de operaciones que un sistema ofrece a otros programas.</td></tr>
+    <tr><td><b>Área</b></td><td>Dependencia del municipio responsable de un grupo de categorías (por ejemplo, Salud u Obras públicas).</td></tr>
+    <tr><td><b>Bandeja</b></td><td>Pantalla donde cada funcionario ve las peticiones de su área ordenadas por prioridad para responderlas.</td></tr>
+    <tr><td><b>Barrio (zona)</b></td><td>Cada uno de los 111 barrios de Córdoba y Villa Allende cargados en el sistema con su ubicación.</td></tr>
+    <tr><td><b>Bootstrap</b></td><td>Biblioteca de estilos para construir interfaces adaptables a celular.</td></tr>
+    <tr><td><b>CDN</b></td><td>Red de distribución de contenido: servidores repartidos que entregan el sitio desde el lugar más cercano al usuario.</td></tr>
+    <tr><td><b>Criterio de aceptación</b></td><td>Condición verificable que debe cumplirse para dar por terminado un requisito, historia o actividad.</td></tr>
+    <tr><td><b>CSV / Excel</b></td><td>Formatos de planilla de cálculo usados para exportar reportes.</td></tr>
+    <tr><td><b>Dependencia fin-comienzo</b></td><td>Tipo de relación en la que una actividad empieza cuando terminan todas sus predecesoras.</td></tr>
+    <tr><td><b>DER</b></td><td>Diagrama entidad-relación: dibujo de las tablas de la base y cómo se relacionan.</td></tr>
+    <tr><td><b>Día hábil</b></td><td>Día de trabajo del equipo (lunes a viernes, sin feriados). Las duraciones del cronograma se expresan en días hábiles.</td></tr>
+    <tr><td><b>Diagrama de Gantt</b></td><td>Gráfico que muestra cada actividad como una barra a lo largo del tiempo.</td></tr>
+    <tr><td><b>Disparador (trigger)</b></td><td>Función que la base ejecuta sola cuando ocurre un cambio (por ejemplo, recalcular el score al recibir una firma).</td></tr>
+    <tr><td><b>Dueño (CEO)</b></td><td>Cuenta única del responsable del proyecto: además de administrar, cambia roles y define los permisos de cada rol.</td></tr>
+    <tr><td><b>EDT / WBS</b></td><td>Estructura de desglose del trabajo (en inglés, Work Breakdown Structure): descomposición jerárquica del proyecto en entregables y paquetes de trabajo.</td></tr>
+    <tr><td><b>Elevación</b></td><td>Aviso automático a los funcionarios del área cuando una petición alcanza 50 firmas.</td></tr>
+    <tr><td><b>Entregable</b></td><td>Resultado verificable que produce el proyecto (un documento, un módulo del sistema, una presentación).</td></tr>
+    <tr><td><b>ENTS</b></td><td>Everyone Needs To Smile ("Todos necesitan sonreír"): nombre del proyecto y de la plataforma.</td></tr>
+    <tr><td><b>Firma</b></td><td>Apoyo de un vecino a una petición publicada. Cada persona puede firmar una sola vez y retirar su firma.</td></tr>
+    <tr><td><b>FK</b></td><td>Foreign key (clave foránea): columna que apunta a la clave primaria de otra tabla y crea la relación entre ambas.</td></tr>
+    <tr><td><b>Funcionario</b></td><td>Rol de un empleado del municipio: responde las peticiones de su área. Lo aprueba un administrador.</td></tr>
+    <tr><td><b>GitHub</b></td><td>Plataforma donde se guarda el código con su historial de cambios (repositorio).</td></tr>
+    <tr><td><b>Hito</b></td><td>Momento clave del proyecto sin duración (por ejemplo, "primera versión funcional"). Se dibuja con un rombo.</td></tr>
+    <tr><td><b>Holgura</b></td><td>Días que una actividad puede atrasarse sin atrasar la fecha de fin del proyecto.</td></tr>
+    <tr><td><b>HTTPS</b></td><td>Protocolo de comunicación cifrado entre el navegador y el servidor.</td></tr>
+    <tr><td><b>HU</b></td><td>Historia de usuario: necesidad escrita desde el punto de vista del usuario con la forma "Como [rol], quiero [acción] para [beneficio]". Se numeran HU01, HU02…</td></tr>
+    <tr><td><b>ID</b></td><td>Identificador: código único de cada elemento de una lista (por ejemplo, RF01, HU03 o A7).</td></tr>
+    <tr><td><b>Interesado</b></td><td>Persona u organización afectada por el proyecto o que influye en él (en inglés, stakeholder).</td></tr>
+    <tr><td><b>JavaScript</b></td><td>Lenguaje de programación de las páginas web; en él está escrita la aplicación.</td></tr>
+    <tr><td><b>Leaflet</b></td><td>Biblioteca que dibuja mapas interactivos en la web.</td></tr>
+    <tr><td><b>Ley 25.326</b></td><td>Ley argentina de Protección de los Datos Personales.</td></tr>
+    <tr><td><b>Lint</b></td><td>Revisión automática del código que detecta errores y malas prácticas (en ENTS, con oxlint).</td></tr>
+    <tr><td><b>MDN Web Docs</b></td><td>Documentación de referencia de tecnologías web publicada por Mozilla.</td></tr>
+    <tr><td><b>Moderación</b></td><td>Revisión de las peticiones y comentarios para que no se publique contenido ofensivo ni datos personales.</td></tr>
+    <tr><td><b>Moderador</b></td><td>Rol que revisa peticiones, comentarios y publicaciones; no administra usuarios.</td></tr>
+    <tr><td><b>Modo oscuro</b></td><td>Esquema de colores con fondo oscuro que reduce el brillo de la pantalla.</td></tr>
+    <tr><td><b>MVC</b></td><td>Modelo-vista-controlador: forma de separar el sistema en datos (modelo), pantallas (vista) y lógica que los conecta (controlador).</td></tr>
+    <tr><td><b>Netlify</b></td><td>Servicio que publica el sitio web con HTTPS cada vez que se actualiza el repositorio.</td></tr>
+    <tr><td><b>Node.js</b></td><td>Entorno que ejecuta JavaScript fuera del navegador; se usa para desarrollar y compilar la aplicación.</td></tr>
+    <tr><td><b>Nominatim</b></td><td>Servicio de búsqueda de OpenStreetMap que convierte nombres de lugares en coordenadas.</td></tr>
+    <tr><td><b>OAuth</b></td><td>Protocolo que permite ingresar con una cuenta de otro servicio (en ENTS, Google) sin compartir la contraseña.</td></tr>
+    <tr><td><b>ONG</b></td><td>Organización no gubernamental: organización social sin fines de lucro.</td></tr>
+    <tr><td><b>OpenStreetMap</b></td><td>Mapa colaborativo y gratuito del que se obtienen el mapa de fondo y la ubicación de los barrios.</td></tr>
+    <tr><td><b>Panel analítico</b></td><td>Pantalla de administración con indicadores de uso, moderación y participación, exportable a Excel y PDF.</td></tr>
+    <tr><td><b>Paquete de trabajo</b></td><td>Último nivel de la EDT: un entregable concreto que se puede asignar, estimar y verificar.</td></tr>
+    <tr><td><b>PDF</b></td><td>Formato de documento portable que se ve igual en cualquier dispositivo.</td></tr>
+    <tr><td><b>Permisos por panel</b></td><td>Configuración que define, para cada rol, qué paneles puede ver y en cuáles puede modificar. Solo la cambia el dueño.</td></tr>
+    <tr><td><b>Petición</b></td><td>Pedido que un vecino publica sobre un problema de su barrio (por ejemplo, un bache o falta de alumbrado).</td></tr>
+    <tr><td><b>pg_trgm</b></td><td>Extensión de PostgreSQL que compara textos por trigramas (grupos de 3 letras) para encontrar peticiones parecidas.</td></tr>
+    <tr><td><b>PK</b></td><td>Primary key (clave primaria): columna que identifica cada fila de una tabla en forma única.</td></tr>
+    <tr><td><b>PMBOK</b></td><td>Guía de los fundamentos para la dirección de proyectos del Project Management Institute; base de la metodología de los entregables.</td></tr>
+    <tr><td><b>PostgreSQL</b></td><td>Motor de base de datos relacional de código abierto que usa ENTS.</td></tr>
+    <tr><td><b>Predecesora / sucesora</b></td><td>Una actividad predecesora debe terminar antes de que empiece su sucesora.</td></tr>
+    <tr><td><b>Prioridad por firmas</b></td><td>Nivel de una petición según su cantidad de firmas: nueva (0–4), baja (5–9), media (10–19), alta (20–49) y máxima (50 o más).</td></tr>
+    <tr><td><b>Product backlog</b></td><td>Lista priorizada de todo lo que hay que construir en el producto, expresada en historias de usuario.</td></tr>
+    <tr><td><b>Project Charter</b></td><td>Acta de constitución: documento que autoriza formalmente el proyecto y fija su propósito, objetivos y recursos.</td></tr>
+    <tr><td><b>Prueba automática</b></td><td>Programa que verifica que una parte del código da el resultado esperado, sin intervención manual.</td></tr>
+    <tr><td><b>Pull Request (PR)</b></td><td>Pedido para integrar los cambios de una rama a la principal, que otro integrante revisa antes de aceptar.</td></tr>
+    <tr><td><b>PWA</b></td><td>Progressive Web App (aplicación web progresiva): sitio web que se puede instalar en el celular y abrir como una aplicación.</td></tr>
+    <tr><td><b>Rama (branch)</b></td><td>Copia paralela del código para trabajar un cambio sin afectar la versión principal (main).</td></tr>
+    <tr><td><b>React</b></td><td>Biblioteca de JavaScript con la que se construye la interfaz de ENTS.</td></tr>
+    <tr><td><b>Repositorio</b></td><td>Lugar donde se guarda el código fuente con todo su historial de versiones.</td></tr>
+    <tr><td><b>Restricción</b></td><td>Límite que el proyecto no puede superar (plazo, presupuesto, equipo, normas).</td></tr>
+    <tr><td><b>Retrospectiva</b></td><td>Reunión al final de cada sprint para analizar qué mejorar en la forma de trabajar.</td></tr>
+    <tr><td><b>RF</b></td><td>Requisito funcional: algo que el sistema debe hacer (por ejemplo, "crear peticiones con fotos"). Se numeran RF01, RF02…</td></tr>
+    <tr><td><b>Riesgo</b></td><td>Evento incierto que, si ocurre, afecta al proyecto. Se evalúa por su probabilidad y su impacto.</td></tr>
+    <tr><td><b>RLS</b></td><td>Row Level Security (seguridad por fila): reglas de la base de datos que deciden qué filas puede ver o modificar cada usuario.</td></tr>
+    <tr><td><b>RNF</b></td><td>Requisito no funcional: una cualidad que el sistema debe cumplir (seguridad, rendimiento, accesibilidad…). Se numeran RNF01, RNF02…</td></tr>
+    <tr><td><b>Rol (rango)</b></td><td>Tipo de cuenta que define qué puede hacer cada usuario: vecino, funcionario, moderador, administrador o dueño.</td></tr>
+    <tr><td><b>RPC</b></td><td>Remote Procedure Call: función de la base de datos que la aplicación invoca para operaciones sensibles, verificando el rol adentro de la base.</td></tr>
+    <tr><td><b>Ruta crítica</b></td><td>Secuencia de actividades sin holgura: si una se atrasa, se atrasa todo el proyecto.</td></tr>
+    <tr><td><b>Score de urgencia</b></td><td>Puntaje de 0 a 100 que calcula el sistema según la gravedad de la categoría, palabras de riesgo, firmas, velocidad de apoyo y fotos.</td></tr>
+    <tr><td><b>Scrum</b></td><td>Marco de trabajo ágil que organiza el desarrollo en ciclos cortos (sprints) con reuniones de planificación, revisión y retrospectiva.</td></tr>
+    <tr><td><b>Seguimiento</b></td><td>Etapas por las que pasa una petición publicada: recibida, en revisión, derivada, en obra y resuelta.</td></tr>
+    <tr><td><b>Service worker</b></td><td>Programa que el navegador ejecuta en segundo plano y permite que la app abra aun con mala conexión.</td></tr>
+    <tr><td><b>SMS</b></td><td>Mensaje de texto por celular.</td></tr>
+    <tr><td><b>Sprint</b></td><td>Ciclo de trabajo de duración fija (en este proyecto, 2 semanas) al final del cual se muestra un avance funcionando.</td></tr>
+    <tr><td><b>SQL</b></td><td>Lenguaje estándar para definir y consultar bases de datos relacionales.</td></tr>
+    <tr><td><b>Supabase</b></td><td>Servicio en la nube que provee la base de datos PostgreSQL, la autenticación y el almacenamiento de archivos.</td></tr>
+    <tr><td><b>Supuesto</b></td><td>Condición que se da por cierta para planificar, aunque no esté comprobada.</td></tr>
+    <tr><td><b>Vecino</b></td><td>Rol base: crea, firma y comenta peticiones. Para los demás vecinos es anónimo.</td></tr>
+    <tr><td><b>Versión del documento</b></td><td>Número que cambia con cada modificación registrada en el historial de revisión (1.0, 2.0, 3.0).</td></tr>
+    <tr><td><b>Vite</b></td><td>Herramienta que compila y sirve la aplicación durante el desarrollo.</td></tr>
+    <tr><td><b>Vitest</b></td><td>Herramienta con la que se escriben y ejecutan las pruebas automáticas.</td></tr>
+    <tr><td><b>WCAG</b></td><td>Web Content Accessibility Guidelines: pautas internacionales de accesibilidad web del W3C.</td></tr>
+  </tbody>
+</table>
 
 <!-- ===================== 1. INTRODUCCIÓN ===================== -->
 <h1 id="introduccion">1. Introducción</h1>
@@ -208,7 +313,7 @@
 <h2 id="contexto">3.1 Contexto, estudio de necesidades y reorientación</h2>
 <h3>Análisis socioeconómico de Córdoba y encuesta</h3>
 <p>El equipo realizó previamente un análisis socioeconómico de la ciudad de Córdoba y una encuesta de necesidades a vecinos. Ambos se mantienen como base del proyecto, ya que justifican las categorías de problemáticas, el foco en el nivel de barrio y la necesidad de un canal ordenado de reclamos.</p>
-<div class="nota">Incorporar aquí los resultados del análisis socioeconómico y de la encuesta del equipo (preguntas, cantidad de respuestas y principales hallazgos). No se reproducen en esta versión para no alterar los datos originales.</div>
+<p>El cuestionario, las respuestas y el análisis completos forman parte de la versión 1.0 del proyecto (documento "Everyone Needs To Smile", Sprint 0). De ellos se tomaron tres conclusiones que guían esta versión: los problemas se viven y se reclaman a nivel de barrio; los vecinos no saben qué pasa con sus reclamos; y los mismos temas —salud, seguridad, infraestructura, servicios y ambiente— se repiten en distintas zonas. Esas conclusiones dan origen a las 16 categorías de petición, al enfoque por barrio y al seguimiento visible de cada respuesta.</p>
 <h3>Necesidades detectadas</h3>
 <ul>
   <li><b>Vecinos:</b> no tienen un canal único para reclamar ni saben si alguien atiende su pedido; reclaman en forma individual y sin seguimiento.</li>
@@ -244,8 +349,8 @@
     <tr><td><b>Alcance (resumen)</b></td><td>Registro e ingreso; peticiones con fotos y ubicación; firmas; procesamiento automático; mapa por barrios; comunidad y eventos; seguimiento y notificaciones; moderación; roles; estadísticas y reportes. Ver 3.3.</td></tr>
     <tr><td><b>Entregables principales</b></td><td>Aplicación web publicada; base de datos con esquema documentado; repositorio de código; documentación del proyecto; presentación.</td></tr>
     <tr><td><b>Interesados</b></td><td>Vecinos de Córdoba y Villa Allende; áreas del municipio y funcionarios; ONG y organizaciones sociales; docente de la cátedra; equipo de desarrollo.</td></tr>
-    <tr><td><b>Equipo</b></td><td>Jiménez, Ignacio · Andrada, Juan Pablo · Patrón, Máximo</td></tr>
-    <tr><td><b>Recursos</b></td><td>Humanos: 3 integrantes. Tecnológicos: GitHub (repositorio), Supabase (base de datos, autenticación y archivos), Netlify (publicación), OpenStreetMap (mapas), planes gratuitos. Costo monetario directo: sin costo con los planes gratuitos actuales.</td></tr>
+    <tr><td><b>Equipo</b></td><td>Andrada, Juan Pablo: director del proyecto · análisis, diseño y desarrollo<br>Patrón, Máximo: configuración inicial · desarrollo y calidad<br>Jiménez, Ignacio: relevamiento y comunicación con interesados</td></tr>
+    <tr><td><b>Recursos</b></td><td>Humanos: 3 integrantes, ≈ 300 horas estimadas en actividades (ver Entregable 1, sección 11.2). Tecnológicos: GitHub (repositorio), Supabase (base de datos, autenticación y archivos), Netlify (publicación), OpenStreetMap (mapas), planes gratuitos. Costo monetario directo: sin costo con los planes gratuitos actuales.</td></tr>
     <tr><td><b>Hitos</b></td><td>Reorientación aprobada · Diseño de datos · Primera versión funcional · Sistema de roles y anonimato · Procesamiento y reportes · Calidad (pruebas, rendimiento) · Entrega final.</td></tr>
     <tr><td><b>Riesgos principales</b></td><td>Baja participación de vecinos al inicio · Contenido inapropiado o con datos personales · Límites de los planes gratuitos · Dependencia de servicios externos · Disponibilidad del equipo.</td></tr>
     <tr><td><b>Supuestos</b></td><td>Los usuarios cuentan con acceso a internet y un navegador moderno; los organismos designan funcionarios para responder.</td></tr>
@@ -273,7 +378,7 @@
       <li>Notificaciones dentro de la app y barrios seguidos.</li>
       <li>Mapa por barrios, comunidad vecinal y agenda de eventos.</li>
       <li>Estadísticas públicas, panel analítico y exportación a Excel y PDF.</li>
-      <li>Roles: vecino, funcionario por área, administrador y dueño.</li>
+      <li>Roles: vecino, funcionario por área, moderador, administrador y dueño, con permisos por panel definidos por el dueño.</li>
     </ul>
   </div>
   <div class="tarjeta">
@@ -314,33 +419,32 @@
 </div>
 
 <h2 id="actividades">3.5 Lista de actividades</h2>
-<p>Duraciones en días hábiles de trabajo del equipo. Las predecesoras indican qué actividad debe terminar antes de empezar la siguiente.</p>
+<p>Duraciones en días hábiles de trabajo del equipo. Las predecesoras indican qué actividades deben terminar antes de empezar la siguiente (dependencia fin-comienzo). En negrita, las actividades de la ruta crítica. Entre paréntesis, los integrantes que participan junto al responsable.</p>
 <table>
-  <thead><tr><th style="width:7%">ID</th><th>Actividad</th><th style="width:9%">EDT</th><th style="width:9%">Duración</th><th style="width:14%">Predecesoras</th><th style="width:13%">Responsable</th></tr></thead>
+  <thead><tr><th style="width:6%">ID</th><th>Actividad</th><th style="width:10%">EDT</th><th style="width:8%">Duración</th><th style="width:12%">Predecesoras</th><th style="width:19%">Responsable</th></tr></thead>
   <tbody>
-    <tr><td>A1</td><td>Analizar la propuesta de reorientación y redefinir el proyecto</td><td>1.1.1</td><td>3</td><td>—</td><td>Equipo</td></tr>
-    <tr><td>A2</td><td>Redactar Project Charter y declaración de alcance</td><td>1.1.1–1.1.2</td><td>3</td><td>A1</td><td>Equipo</td></tr>
-    <tr><td>A3</td><td>Definir plan de comunicación y cronograma</td><td>1.1.3–1.1.4</td><td>2</td><td>A2</td><td>Equipo</td></tr>
-    <tr><td>A4</td><td>Revisar encuesta y análisis socioeconómico</td><td>1.2.1–1.2.2</td><td>3</td><td>A1</td><td>Equipo</td></tr>
-    <tr><td>A5</td><td>Relevar requerimientos y armar product backlog</td><td>1.2.3–1.2.4</td><td>4</td><td>A2, A4</td><td>Equipo</td></tr>
-    <tr><td>A6</td><td>Diseñar arquitectura y elegir tecnologías</td><td>1.3.1</td><td>3</td><td>A5, A3</td><td>Equipo</td></tr>
-    <tr><td>A7</td><td>Diseñar modelo de datos y reglas de seguridad</td><td>1.3.2, 1.3.4</td><td>4</td><td>A6</td><td>Equipo</td></tr>
-    <tr><td>A8</td><td>Diseñar interfaz y navegación</td><td>1.3.3</td><td>4</td><td>A5</td><td>Equipo</td></tr>
-    <tr><td>A9</td><td>Configurar repositorio, base de datos y publicación</td><td>1.6.1–1.6.2</td><td>2</td><td>A6</td><td>Equipo</td></tr>
-    <tr><td>A10</td><td>Desarrollar autenticación, roles y anonimato</td><td>1.4.1</td><td>5</td><td>A7, A9</td><td>Equipo</td></tr>
-    <tr><td>A11</td><td>Desarrollar peticiones, fotos, firmas y moderación</td><td>1.4.2, 1.4.7</td><td>6</td><td>A10, A8</td><td>Equipo</td></tr>
-    <tr><td>A12</td><td>Desarrollar clasificación, barrio, score y similares</td><td>1.4.3</td><td>5</td><td>A11</td><td>Equipo</td></tr>
-    <tr><td>A13</td><td>Desarrollar mapa por barrios, comunidad y eventos</td><td>1.4.4</td><td>5</td><td>A11</td><td>Equipo</td></tr>
-    <tr><td>A14</td><td>Desarrollar seguimiento, notificaciones y comentarios</td><td>1.4.5</td><td>5</td><td>A11</td><td>Equipo</td></tr>
-    <tr><td>A15</td><td>Desarrollar estadísticas, panel analítico y exportes</td><td>1.4.6</td><td>4</td><td>A12, A13</td><td>Equipo</td></tr>
-    <tr><td>A16</td><td>Pruebas automáticas y pruebas de permisos por rol</td><td>1.5.1–1.5.2</td><td>4</td><td>A12, A14, A15</td><td>Equipo</td></tr>
-    <tr><td>A17</td><td>Accesibilidad, modo oscuro, app instalable y rendimiento</td><td>1.5.3, 1.6.3</td><td>4</td><td>A15</td><td>Equipo</td></tr>
-    <tr><td>A18</td><td>Redactar documentación</td><td>1.7.1</td><td>5</td><td>A16, A17</td><td>Equipo</td></tr>
-    <tr><td>A19</td><td>Preparar presentación</td><td>1.7.2</td><td>2</td><td>A18</td><td>Equipo</td></tr>
-    <tr><td>A20</td><td>Entrega y defensa</td><td>1.7.3</td><td>1</td><td>A19</td><td>Equipo</td></tr>
+    <tr><td><b>A1</b></td><td>Analizar la propuesta de reorientación y redefinir el proyecto</td><td>1.1.1</td><td>3</td><td>—</td><td>Andrada (Patrón, Jiménez)</td></tr>
+    <tr><td><b>A2</b></td><td>Redactar Project Charter y declaración de alcance</td><td>1.1.1, 1.1.2</td><td>3</td><td>A1</td><td>Andrada (Jiménez)</td></tr>
+    <tr><td>A3</td><td>Definir plan de comunicación y cronograma</td><td>1.1.3, 1.1.4</td><td>2</td><td>A2</td><td>Jiménez (Andrada)</td></tr>
+    <tr><td><b>A4</b></td><td>Revisar encuesta y análisis socioeconómico</td><td>1.2.1, 1.2.2</td><td>3</td><td>A1</td><td>Jiménez</td></tr>
+    <tr><td><b>A5</b></td><td>Relevar requerimientos y armar product backlog</td><td>1.2.3, 1.2.4</td><td>4</td><td>A2, A4</td><td>Andrada (Jiménez)</td></tr>
+    <tr><td><b>A6</b></td><td>Diseñar arquitectura y elegir tecnologías</td><td>1.3.1</td><td>3</td><td>A5, A3</td><td>Andrada (Patrón)</td></tr>
+    <tr><td><b>A7</b></td><td>Diseñar modelo de datos y reglas de seguridad</td><td>1.3.2, 1.3.4</td><td>4</td><td>A6</td><td>Andrada</td></tr>
+    <tr><td>A8</td><td>Diseñar interfaz y navegación</td><td>1.3.3</td><td>4</td><td>A5</td><td>Andrada (Jiménez)</td></tr>
+    <tr><td>A9</td><td>Configurar repositorio, base de datos y publicación</td><td>1.6.1, 1.6.2</td><td>2</td><td>A6</td><td>Patrón</td></tr>
+    <tr><td><b>A10</b></td><td>Desarrollar autenticación, roles y anonimato</td><td>1.4.1</td><td>5</td><td>A7, A9</td><td>Patrón (Andrada)</td></tr>
+    <tr><td><b>A11</b></td><td>Desarrollar peticiones, fotos, firmas y moderación</td><td>1.4.2, 1.4.7</td><td>6</td><td>A10, A8</td><td>Patrón (Andrada)</td></tr>
+    <tr><td><b>A12</b></td><td>Desarrollar clasificación, barrio, score y similares</td><td>1.4.3</td><td>5</td><td>A11</td><td>Andrada</td></tr>
+    <tr><td><b>A13</b></td><td>Desarrollar mapa por barrios, comunidad y eventos</td><td>1.4.4</td><td>5</td><td>A11</td><td>Andrada</td></tr>
+    <tr><td>A14</td><td>Desarrollar seguimiento, notificaciones y comentarios</td><td>1.4.5</td><td>5</td><td>A11</td><td>Andrada</td></tr>
+    <tr><td><b>A15</b></td><td>Desarrollar estadísticas, panel analítico y exportes</td><td>1.4.6</td><td>4</td><td>A12, A13</td><td>Andrada</td></tr>
+    <tr><td><b>A16</b></td><td>Pruebas automáticas y pruebas de permisos por rol</td><td>1.5.1, 1.5.2</td><td>4</td><td>A12, A14, A15</td><td>Patrón (Andrada)</td></tr>
+    <tr><td><b>A17</b></td><td>Accesibilidad, modo oscuro, app instalable y rendimiento</td><td>1.5.3, 1.6.3</td><td>4</td><td>A15</td><td>Andrada (Patrón)</td></tr>
+    <tr><td><b>A18</b></td><td>Redactar documentación</td><td>1.7.1</td><td>5</td><td>A16, A17</td><td>Andrada (Jiménez)</td></tr>
+    <tr><td><b>A19</b></td><td>Preparar presentación</td><td>1.7.2</td><td>2</td><td>A18</td><td>Jiménez (Andrada, Patrón)</td></tr>
+    <tr><td><b>A20</b></td><td>Entrega y defensa</td><td>1.7.3</td><td>1</td><td>A19</td><td>Andrada (Patrón, Jiménez)</td></tr>
   </tbody>
 </table>
-<div class="nota">Completar la columna "Responsable" con el integrante a cargo de cada actividad según la distribución real del equipo.</div>
 
 <h2 id="diccionario">3.6 Diccionario de actividades</h2>
 <table>
@@ -371,14 +475,14 @@
 <table>
   <thead><tr><th style="width:20%">Qué se comunica</th><th style="width:14%">Emisor</th><th style="width:16%">Receptor</th><th style="width:22%">Canal</th><th style="width:13%">Frecuencia</th><th>Propósito</th></tr></thead>
   <tbody>
-    <tr><td>Avance y tareas del sprint</td><td>Equipo</td><td>Equipo</td><td>Reunión breve + grupo de mensajería</td><td>2 veces por semana</td><td>Coordinar y destrabar tareas</td></tr>
+    <tr><td>Avance y tareas del sprint</td><td>Equipo</td><td>Equipo</td><td>Reunión de seguimiento + WhatsApp</td><td>Lunes, miércoles y viernes</td><td>Coordinar y destrabar tareas</td></tr>
     <tr><td>Cambios de código</td><td>Integrante</td><td>Equipo</td><td>GitHub (ramas y Pull Requests)</td><td>Por cambio</td><td>Revisión antes de publicar</td></tr>
-    <tr><td>Planificación de sprint</td><td>Equipo</td><td>Equipo</td><td>Tablero de tareas</td><td>Inicio de sprint</td><td>Priorizar el backlog</td></tr>
+    <tr><td>Planificación de sprint</td><td>Equipo</td><td>Equipo</td><td>Google Meet + Trello</td><td>Inicio de sprint (cada 2 semanas)</td><td>Priorizar el backlog</td></tr>
     <tr><td>Revisión de sprint</td><td>Equipo</td><td>Docente</td><td>Clase / demostración</td><td>Fin de sprint</td><td>Validar avances</td></tr>
     <tr><td>Cambios de alcance</td><td>Equipo</td><td>Docente</td><td>Reunión + documento</td><td>Cuando ocurren</td><td>Aprobar reorientaciones</td></tr>
     <tr><td>Novedades de la plataforma</td><td>Plataforma</td><td>Vecinos</td><td>Notificaciones en la app</td><td>Automática</td><td>Informar estado de peticiones</td></tr>
     <tr><td>Respuestas oficiales</td><td>Funcionarios</td><td>Vecinos</td><td>Seguimiento de la petición</td><td>Por actualización</td><td>Cerrar el ciclo de la petición</td></tr>
-    <tr><td>Reportes de problemáticas</td><td>Administración</td><td>Organismos y ONG</td><td>Exportes Excel / PDF</td><td>Periódica</td><td>Priorizar y rendir cuentas</td></tr>
+    <tr><td>Reportes de problemáticas</td><td>Administración</td><td>Organismos y ONG</td><td>Exportes Excel / PDF por correo</td><td>Mensual</td><td>Priorizar y rendir cuentas</td></tr>
   </tbody>
 </table>
 <div class="figura diagrama">
@@ -392,7 +496,7 @@
     <div class="caja"><b>Organismos / ONG</b><br>reportes exportables</div>
   </div>
   <div class="fila" style="margin-top:8pt">
-    <div class="caja"><b>Equipo</b><br>mensajería, GitHub, tablero</div>
+    <div class="caja"><b>Equipo</b><br>WhatsApp, GitHub, Trello</div>
     <div class="flecha">⇄</div>
     <div class="caja"><b>Docente</b><br>revisiones de sprint</div>
   </div>
@@ -400,170 +504,154 @@
 </div>
 
 <h2 id="gantt">3.8 Diagrama de Gantt</h2>
-<p>Cronograma de 49 días hábiles (≈ 10 semanas) calculado a partir de la lista de actividades; en naranja, la ruta crítica. Las fechas reales de cada entrega de código figuran en el Anexo B.</p>
+<p>Cronograma de 49 días hábiles (≈ 10 semanas) calculado a partir de la lista de actividades; en naranja, la ruta crítica. Las barras muestran el responsable de cada actividad y las líneas más marcadas, el comienzo de cada sprint de 2 semanas. Las fechas reales de cada entrega de código figuran en el Anexo A.</p>
 
 <div class="gantt">
   <div class="g-fila g-cabecera">
-    <div class="g-nombre">Actividad</div>
+    <div class="g-nombre">Sprint</div>
+    <div class="g-pista"><span class="g-semana" style="left:0.000%;width:20.000%">Sprint 1</span><span class="g-semana" style="left:20.000%;width:20.000%">Sprint 2</span><span class="g-semana" style="left:40.000%;width:20.000%">Sprint 3</span><span class="g-semana" style="left:60.000%;width:20.000%">Sprint 4</span><span class="g-semana" style="left:80.000%;width:18.000%">Sprint 5</span></div>
+  </div>
+  <div class="g-fila g-cabecera g-sub">
+    <div class="g-nombre">Actividad · responsable</div>
     <div class="g-pista"><span class="g-semana" style="left:0.000%;width:10.000%">S1</span><span class="g-semana" style="left:10.000%;width:10.000%">S2</span><span class="g-semana" style="left:20.000%;width:10.000%">S3</span><span class="g-semana" style="left:30.000%;width:10.000%">S4</span><span class="g-semana" style="left:40.000%;width:10.000%">S5</span><span class="g-semana" style="left:50.000%;width:10.000%">S6</span><span class="g-semana" style="left:60.000%;width:10.000%">S7</span><span class="g-semana" style="left:70.000%;width:10.000%">S8</span><span class="g-semana" style="left:80.000%;width:10.000%">S9</span><span class="g-semana" style="left:90.000%;width:10.000%">S10</span></div>
   </div>
   
   <div class="g-fila">
-    <div class="g-nombre"><b>A1</b> Analizar la propuesta de reorientación y redefinir el proyecto</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A1</b> Analizar la propuesta de reorientación y redefinir el proyecto <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:0.000%;width:6.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A2</b> Redactar Project Charter y declaración de alcance</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A2</b> Redactar Project Charter y declaración de alcance <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:6.000%;width:6.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre">A3 Definir plan de comunicación y cronograma</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre">A3 Definir plan de comunicación y cronograma <span class="sec">· Jiménez</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:12.000%;width:4.000%;background:#3987e5"></span>
       <span class="g-holgura" style="left:16.000%;width:4.000%"></span>
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A4</b> Revisar encuesta y análisis socioeconómico</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A4</b> Revisar encuesta y análisis socioeconómico <span class="sec">· Jiménez</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:6.000%;width:6.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A5</b> Relevar requerimientos y armar product backlog</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A5</b> Relevar requerimientos y armar product backlog <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:12.000%;width:8.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A6</b> Diseñar arquitectura y elegir tecnologías</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A6</b> Diseñar arquitectura y elegir tecnologías <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:20.000%;width:6.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A7</b> Diseñar modelo de datos y reglas de seguridad</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A7</b> Diseñar modelo de datos y reglas de seguridad <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:26.000%;width:8.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre">A8 Diseñar interfaz y navegación</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre">A8 Diseñar interfaz y navegación <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:20.000%;width:8.000%;background:#3987e5"></span>
       <span class="g-holgura" style="left:28.000%;width:16.000%"></span>
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre">A9 Configurar repositorio, base de datos y publicación</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre">A9 Configurar repositorio, base de datos y publicación <span class="sec">· Patrón</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:26.000%;width:4.000%;background:#3987e5"></span>
       <span class="g-holgura" style="left:30.000%;width:4.000%"></span>
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A10</b> Desarrollar autenticación, roles y anonimato</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A10</b> Desarrollar autenticación, roles y anonimato <span class="sec">· Patrón</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:34.000%;width:10.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A11</b> Desarrollar peticiones, fotos, firmas y moderación</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A11</b> Desarrollar peticiones, fotos, firmas y moderación <span class="sec">· Patrón</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:44.000%;width:12.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A12</b> Desarrollar clasificación, barrio, score y similares</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A12</b> Desarrollar clasificación, barrio, score y similares <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:56.000%;width:10.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A13</b> Desarrollar mapa por barrios, comunidad y eventos</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A13</b> Desarrollar mapa por barrios, comunidad y eventos <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:56.000%;width:10.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre">A14 Desarrollar seguimiento, notificaciones y comentarios</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre">A14 Desarrollar seguimiento, notificaciones y comentarios <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:56.000%;width:10.000%;background:#3987e5"></span>
       <span class="g-holgura" style="left:66.000%;width:8.000%"></span>
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A15</b> Desarrollar estadísticas, panel analítico y exportes</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A15</b> Desarrollar estadísticas, panel analítico y exportes <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:66.000%;width:8.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A16</b> Pruebas automáticas y pruebas de permisos por rol</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A16</b> Pruebas automáticas y pruebas de permisos por rol <span class="sec">· Patrón</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:74.000%;width:8.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A17</b> Accesibilidad, modo oscuro, app instalable y rendimiento</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A17</b> Accesibilidad, modo oscuro, app instalable y rendimiento <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:74.000%;width:8.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A18</b> Redactar documentación</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A18</b> Redactar documentación <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:82.000%;width:10.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A19</b> Preparar presentación</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A19</b> Preparar presentación <span class="sec">· Jiménez</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:92.000%;width:4.000%;background:#eb6834"></span>
       
     </div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre"><b>A20</b> Entrega y defensa</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
+    <div class="g-nombre"><b>A20</b> Entrega y defensa <span class="sec">· Andrada</span></div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
       <span class="g-barra" style="left:96.000%;width:2.000%;background:#eb6834"></span>
       
     </div>
@@ -571,39 +659,36 @@
   <div class="g-separador">Hitos</div>
   
   <div class="g-fila">
-    <div class="g-nombre">◆ Charter y alcance aprobados</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
-      <span class="g-hito" style="left:12.000%"></span>
-    </div>
+    <div class="g-nombre">◆ H1 Reorientación del proyecto aprobada</div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i><span class="g-hito" style="left:6.000%"></span></div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre">◆ Diseño completo</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
-      <span class="g-hito" style="left:34.000%"></span>
-    </div>
+    <div class="g-nombre">◆ H2 Project Charter y alcance aprobados</div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i><span class="g-hito" style="left:12.000%"></span></div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre">◆ Primera versión funcional</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
-      <span class="g-hito" style="left:56.000%"></span>
-    </div>
+    <div class="g-nombre">◆ H3 Diseño completo: arquitectura, datos, seguridad e interfaz</div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i><span class="g-hito" style="left:34.000%"></span></div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre">◆ Producto completo y probado</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
-      <span class="g-hito" style="left:82.000%"></span>
-    </div>
+    <div class="g-nombre">◆ H4 Primera versión funcional: autenticación, peticiones, firmas y moderación</div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i><span class="g-hito" style="left:56.000%"></span></div>
   </div>
   <div class="g-fila">
-    <div class="g-nombre">◆ Entrega y defensa</div>
-    <div class="g-pista">
-      <i class="g-linea" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i>
-      <span class="g-hito" style="left:98.000%"></span>
-    </div>
+    <div class="g-nombre">◆ H5 Procesamiento automático, seguimiento y reportes</div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i><span class="g-hito" style="left:74.000%"></span></div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ H6 Producto completo y probado</div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i><span class="g-hito" style="left:82.000%"></span></div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ H7 Documentación y presentación completas</div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i><span class="g-hito" style="left:96.000%"></span></div>
+  </div>
+  <div class="g-fila">
+    <div class="g-nombre">◆ H8 Entrega y defensa</div>
+    <div class="g-pista"><i class="g-linea g-sprint" style="left:0.000%"></i><i class="g-linea" style="left:10.000%"></i><i class="g-linea g-sprint" style="left:20.000%"></i><i class="g-linea" style="left:30.000%"></i><i class="g-linea g-sprint" style="left:40.000%"></i><i class="g-linea" style="left:50.000%"></i><i class="g-linea g-sprint" style="left:60.000%"></i><i class="g-linea" style="left:70.000%"></i><i class="g-linea g-sprint" style="left:80.000%"></i><i class="g-linea" style="left:90.000%"></i><span class="g-hito" style="left:98.000%"></span></div>
   </div>
 </div>
 <div class="g-leyenda">
@@ -611,65 +696,74 @@
   <span><i style="background:#3987e5"></i>Actividad con holgura</span>
   <span><i class="rayas"></i>Holgura disponible</span>
   <span><i class="rombo"></i>Hito</span>
+  <span><i class="corte"></i>Comienzo de sprint</span>
 </div>
 <p class="pie">Ruta crítica: A1 → A2 → A4 → A5 → A6 → A7 → A10 → A11 → A12 → A13 → A15 → A16 → A17 → A18 → A19 → A20.</p>
 
 <h2 id="backlog">3.9 Requerimientos y product backlog</h2>
-<h3>Requerimientos funcionales</h3>
+<h3>Requerimientos funcionales (RF)</h3>
+<p>Describen lo que el sistema debe hacer. Prioridad <b>Alta</b> = imprescindible para que el sistema cumpla su propósito; <b>Media</b> = aporta valor importante; <b>Baja</b> = mejora deseable que se construye al final.</p>
 <table>
-  <thead><tr><th style="width:9%">ID</th><th>Requerimiento</th></tr></thead>
+  <thead><tr><th style="width:8%">ID</th><th>Requerimiento</th><th style="width:11%">Prioridad</th></tr></thead>
   <tbody>
-    <tr><td>RF01</td><td>Registrar usuarios con correo y contraseña o con Google; recuperar la contraseña por correo.</td></tr>
-    <tr><td>RF02</td><td>Elegir el tipo de cuenta al registrarse (vecino o funcionario, este último sujeto a aprobación).</td></tr>
-    <tr><td>RF03</td><td>Crear peticiones con título, descripción, hasta 3 fotos y ubicación en el mapa.</td></tr>
-    <tr><td>RF04</td><td>Sugerir automáticamente la categoría según el texto y el barrio según la ubicación.</td></tr>
-    <tr><td>RF05</td><td>Calcular automáticamente el score de urgencia de cada petición.</td></tr>
-    <tr><td>RF06</td><td>Advertir peticiones similares antes de crear una nueva.</td></tr>
-    <tr><td>RF07</td><td>Moderar las peticiones antes de publicarlas (aprobar, rechazar, editar, eliminar).</td></tr>
-    <tr><td>RF08</td><td>Firmar y retirar la firma de una petición publicada; ordenar por prioridad según firmas.</td></tr>
-    <tr><td>RF09</td><td>Elevar automáticamente al área correspondiente las peticiones que alcanzan 50 firmas.</td></tr>
-    <tr><td>RF10</td><td>Registrar respuestas oficiales y la etapa de seguimiento (recibida → resuelta) con foto.</td></tr>
-    <tr><td>RF11</td><td>Notificar a autor y firmantes de cada novedad; permitir seguir barrios.</td></tr>
-    <tr><td>RF12</td><td>Comentar en forma anónima, denunciar comentarios y moderarlos.</td></tr>
-    <tr><td>RF13</td><td>Mostrar el mapa por barrios coloreado por peticiones, firmas o urgencia.</td></tr>
-    <tr><td>RF14</td><td>Ofrecer estadísticas públicas anónimas y un panel analítico para administradores.</td></tr>
-    <tr><td>RF15</td><td>Exportar reportes de peticiones y barrios a Excel y PDF.</td></tr>
-    <tr><td>RF16</td><td>Asignar áreas a funcionarios y mostrarles una bandeja de su área.</td></tr>
-    <tr><td>RF17</td><td>Permitir solo al dueño del proyecto cambiar el rol de las cuentas.</td></tr>
-    <tr><td>RF18</td><td>Publicar en el muro vecinal y consultar la agenda de eventos por barrio.</td></tr>
+    <tr><td><b>RF01</b></td><td>Registrar usuarios con correo y contraseña o con Google, y recuperar la contraseña por correo.</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td><b>RF02</b></td><td>Elegir el tipo de cuenta al registrarse: vecino o funcionario (esta última queda sujeta a aprobación).</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td><b>RF03</b></td><td>Crear peticiones con título, descripción, hasta 3 fotos y ubicación en el mapa.</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td><b>RF04</b></td><td>Sugerir automáticamente la categoría según el texto y el barrio según la ubicación.</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td><b>RF05</b></td><td>Calcular automáticamente el score de urgencia (0 a 100) de cada petición.</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td><b>RF06</b></td><td>Advertir peticiones similares antes de crear una nueva.</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td><b>RF07</b></td><td>Moderar las peticiones antes de publicarlas: aprobar, rechazar, editar o eliminar.</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td><b>RF08</b></td><td>Firmar una petición publicada y retirar la firma; ordenar el inicio por prioridad según las firmas.</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td><b>RF09</b></td><td>Elevar automáticamente al área correspondiente las peticiones que alcanzan 50 firmas.</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td><b>RF10</b></td><td>Registrar respuestas oficiales y la etapa de seguimiento, con foto opcional.</td><td><span class="nivel alta">Alta</span></td></tr>
+    <tr><td><b>RF11</b></td><td>Notificar al autor y a los firmantes cada novedad, y permitir seguir barrios.</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td><b>RF12</b></td><td>Comentar en forma anónima, denunciar comentarios y moderarlos.</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td><b>RF13</b></td><td>Mostrar el mapa por barrios coloreado por cantidad de peticiones, firmas o urgencia.</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td><b>RF14</b></td><td>Ofrecer estadísticas públicas anónimas y un panel analítico para administradores.</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td><b>RF15</b></td><td>Exportar reportes de peticiones y barrios a Excel y PDF.</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td><b>RF16</b></td><td>Asignar un área a cada funcionario y mostrarle una bandeja con las peticiones de esa área.</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td><b>RF17</b></td><td>Permitir solo al dueño del proyecto cambiar el rol de las cuentas.</td><td><span class="nivel baja">Baja</span></td></tr>
+    <tr><td><b>RF18</b></td><td>Publicar en el muro vecinal y consultar la agenda de eventos por barrio.</td><td><span class="nivel baja">Baja</span></td></tr>
+    <tr><td><b>RF19</b></td><td>Permitir solo al dueño definir qué paneles ve y modifica cada rol (permisos por panel).</td><td><span class="nivel baja">Baja</span></td></tr>
+    <tr><td><b>RF20</b></td><td>Permitir a los moderadores revisar peticiones pendientes, comentarios denunciados y publicaciones.</td><td><span class="nivel media">Media</span></td></tr>
   </tbody>
 </table>
-<h3>Requerimientos no funcionales</h3>
+<h3>Requerimientos no funcionales (RNF)</h3>
+<p>Describen cualidades que el sistema debe tener, independientemente de lo que hace.</p>
 <table>
-  <thead><tr><th style="width:9%">ID</th><th>Requerimiento</th></tr></thead>
+  <thead><tr><th style="width:9%">ID</th><th style="width:16%">Atributo</th><th>Requerimiento</th></tr></thead>
   <tbody>
-    <tr><td>RNF01</td><td>Privacidad: anonimato entre vecinos; identidades visibles solo para funcionarios y administradores.</td></tr>
-    <tr><td>RNF02</td><td>Seguridad: reglas de acceso aplicadas en la base de datos, comunicación por HTTPS.</td></tr>
-    <tr><td>RNF03</td><td>Usabilidad: interfaz en español, adaptable a celular, modo claro y oscuro.</td></tr>
-    <tr><td>RNF04</td><td>Accesibilidad: navegación con teclado, foco visible, respeto de movimiento reducido, tablas alternativas a los gráficos.</td></tr>
-    <tr><td>RNF05</td><td>Rendimiento: carga por partes de cada página y animaciones reducidas en celulares.</td></tr>
-    <tr><td>RNF06</td><td>Disponibilidad: aplicación instalable (PWA) que abre aun con conexión inestable.</td></tr>
-    <tr><td>RNF07</td><td>Mantenibilidad: código con revisión automática (lint), pruebas automáticas y esquema SQL versionado.</td></tr>
+    <tr><td><b>RNF01</b></td><td>Privacidad</td><td>Anonimato entre vecinos: la identidad del autor y de los firmantes solo la ven los funcionarios del área y los administradores.</td></tr>
+    <tr><td><b>RNF02</b></td><td>Seguridad</td><td>Las reglas de acceso se aplican en la base de datos (RLS), no solo en la pantalla; toda la comunicación usa HTTPS.</td></tr>
+    <tr><td><b>RNF03</b></td><td>Usabilidad</td><td>Interfaz en español, adaptable a celular, con modo claro y oscuro.</td></tr>
+    <tr><td><b>RNF04</b></td><td>Accesibilidad</td><td>Navegación con teclado, foco visible, respeto del movimiento reducido y tablas alternativas a los gráficos (WCAG 2.2).</td></tr>
+    <tr><td><b>RNF05</b></td><td>Rendimiento</td><td>Cada página se descarga recién al visitarla; en celulares se desactivan las animaciones continuas.</td></tr>
+    <tr><td><b>RNF06</b></td><td>Disponibilidad</td><td>Aplicación instalable (PWA) que abre aun con conexión inestable.</td></tr>
+    <tr><td><b>RNF07</b></td><td>Mantenibilidad</td><td>Revisión automática del código (lint), pruebas automáticas y esquema SQL versionado.</td></tr>
+    <tr><td><b>RNF08</b></td><td>Legal</td><td>Política de privacidad publicada y cumplimiento de la Ley 25.326 de Protección de Datos Personales.</td></tr>
   </tbody>
 </table>
 <h3>Product backlog (historias de usuario)</h3>
+<p>Cada historia de usuario (HU) expresa una necesidad con la forma <i>"Como [rol], quiero [acción] para [beneficio]"</i>, con criterios de aceptación verificables. La última columna indica qué requerimientos funcionales la implementan (trazabilidad).</p>
 <table>
-  <thead><tr><th style="width:6%">#</th><th style="width:44%">Historia de usuario</th><th>Criterios de aceptación</th><th style="width:10%">Prioridad</th></tr></thead>
+  <thead><tr><th style="width:7%">ID</th><th style="width:33%">Historia de usuario</th><th>Criterios de aceptación</th><th style="width:10%">Prioridad</th><th style="width:10%">RF</th></tr></thead>
   <tbody>
-    <tr><td>HU1</td><td>Como vecino, quiero registrarme e ingresar (también con Google) para participar en la plataforma.</td><td>Formulario con nombre, apellido, correo y contraseña; mensajes de error en español; recuperación de contraseña.</td><td>Alta</td></tr>
-    <tr><td>HU2</td><td>Como vecino, quiero crear una petición con fotos y ubicación para visibilizar un problema de mi barrio.</td><td>Categoría y barrio sugeridos solos; hasta 3 fotos; queda pendiente de moderación.</td><td>Alta</td></tr>
-    <tr><td>HU3</td><td>Como vecino, quiero ver si ya existe un pedido parecido para firmarlo en lugar de repetirlo.</td><td>Se muestran hasta 3 similares mientras escribo, con barrio, firmas y distancia.</td><td>Alta</td></tr>
-    <tr><td>HU4</td><td>Como vecino, quiero firmar una petición para darle más prioridad.</td><td>Una firma por persona; puedo retirarla; el orden y el color de prioridad se actualizan.</td><td>Alta</td></tr>
-    <tr><td>HU5</td><td>Como administrador, quiero moderar las peticiones antes de publicarlas.</td><td>Aprobar, rechazar, editar o eliminar; alertas automáticas visibles.</td><td>Alta</td></tr>
-    <tr><td>HU6</td><td>Como funcionario, quiero ver las peticiones de mi área ordenadas por prioridad y responderlas.</td><td>Bandeja filtrada por área; respuesta con etapa, mensaje y foto.</td><td>Alta</td></tr>
-    <tr><td>HU7</td><td>Como vecino, quiero seguir el avance de una petición hasta que se resuelva.</td><td>Línea de tiempo con 5 etapas y respuestas oficiales; aviso en cada cambio.</td><td>Alta</td></tr>
-    <tr><td>HU8</td><td>Como vecino, quiero ver en un mapa los problemas por barrio.</td><td>Mapa con 111 barrios coloreados; filtro y botón para seguir un barrio.</td><td>Media</td></tr>
-    <tr><td>HU9</td><td>Como organismo, quiero reportes de qué se pide, dónde y con qué urgencia.</td><td>Estadísticas por categoría, barrio y semana; exportes a Excel y PDF.</td><td>Media</td></tr>
-    <tr><td>HU10</td><td>Como vecino, quiero comentar en forma anónima para aportar datos.</td><td>Se bloquean datos personales; denuncia y ocultamiento con 3 denuncias.</td><td>Media</td></tr>
-    <tr><td>HU11</td><td>Como vecino, quiero gestionar mi perfil y ver mis logros.</td><td>Edición de nombre y foto; insignias; barrios seguidos.</td><td>Baja</td></tr>
-    <tr><td>HU12</td><td>Como dueño del proyecto, quiero asignar el rol de cada cuenta.</td><td>Solo el dueño ve y puede usar el selector de rol.</td><td>Baja</td></tr>
+    <tr><td><b>HU01</b></td><td>Como <b>vecino</b>, quiero registrarme e ingresar, también con Google para participar en la plataforma.</td><td>Formulario con nombre, apellido, correo y contraseña; errores en español; recuperación de contraseña por correo.</td><td><span class="nivel alta">Alta</span></td><td>RF01, RF02</td></tr>
+    <tr><td><b>HU02</b></td><td>Como <b>vecino</b>, quiero crear una petición con fotos y ubicación para visibilizar un problema de mi barrio.</td><td>Categoría y barrio sugeridos automáticamente; hasta 3 fotos; queda pendiente hasta que se modere.</td><td><span class="nivel alta">Alta</span></td><td>RF03, RF04, RF05</td></tr>
+    <tr><td><b>HU03</b></td><td>Como <b>vecino</b>, quiero ver si ya existe un pedido parecido para firmarlo en lugar de repetirlo.</td><td>Mientras escribo se muestran hasta 3 peticiones similares, con barrio, firmas y distancia.</td><td><span class="nivel alta">Alta</span></td><td>RF06</td></tr>
+    <tr><td><b>HU04</b></td><td>Como <b>vecino</b>, quiero firmar una petición para darle más prioridad.</td><td>Una firma por persona; puedo retirarla; el orden y el color de prioridad se actualizan.</td><td><span class="nivel alta">Alta</span></td><td>RF08, RF09</td></tr>
+    <tr><td><b>HU05</b></td><td>Como <b>moderador</b>, quiero revisar las peticiones antes de publicarlas para evitar contenido indebido o con datos personales.</td><td>Aprobar, rechazar, editar o eliminar; las alertas automáticas se muestran primero.</td><td><span class="nivel alta">Alta</span></td><td>RF07, RF20</td></tr>
+    <tr><td><b>HU06</b></td><td>Como <b>funcionario</b>, quiero ver las peticiones de mi área ordenadas por prioridad y responderlas para atender primero lo más urgente.</td><td>Bandeja filtrada por área; respuesta con etapa, mensaje y foto.</td><td><span class="nivel alta">Alta</span></td><td>RF10, RF16</td></tr>
+    <tr><td><b>HU07</b></td><td>Como <b>vecino</b>, quiero seguir el avance de una petición hasta que se resuelva para saber que mi reclamo fue atendido.</td><td>Línea de tiempo con 5 etapas y respuestas oficiales; aviso en cada cambio.</td><td><span class="nivel alta">Alta</span></td><td>RF10, RF11</td></tr>
+    <tr><td><b>HU08</b></td><td>Como <b>vecino</b>, quiero ver en un mapa los problemas de cada barrio para conocer qué pasa en mi zona.</td><td>Mapa con 111 barrios coloreados; filtro por barrio y opción de seguirlo.</td><td><span class="nivel media">Media</span></td><td>RF11, RF13</td></tr>
+    <tr><td><b>HU09</b></td><td>Como <b>organismo</b>, quiero obtener reportes de qué se pide, dónde y con qué urgencia para decidir qué atender y rendir cuentas.</td><td>Estadísticas por categoría, barrio y semana; exportes a Excel y PDF.</td><td><span class="nivel media">Media</span></td><td>RF14, RF15</td></tr>
+    <tr><td><b>HU10</b></td><td>Como <b>vecino</b>, quiero comentar en forma anónima para aportar datos sobre un problema.</td><td>Se bloquean teléfonos, correos y documentos; un comentario con 3 denuncias se oculta.</td><td><span class="nivel media">Media</span></td><td>RF12</td></tr>
+    <tr><td><b>HU11</b></td><td>Como <b>vecino</b>, quiero participar del muro vecinal y de la agenda de eventos para organizarme con mis vecinos.</td><td>Publicaciones y eventos filtrados por barrio.</td><td><span class="nivel baja">Baja</span></td><td>RF18</td></tr>
+    <tr><td><b>HU12</b></td><td>Como <b>dueño</b>, quiero asignar el rol de cada cuenta para controlar quién modera, responde o administra.</td><td>Solo el dueño ve y usa el selector de rol; la base lo vuelve a verificar.</td><td><span class="nivel baja">Baja</span></td><td>RF17</td></tr>
+    <tr><td><b>HU13</b></td><td>Como <b>dueño</b>, quiero definir qué paneles ve y modifica cada rol para adaptar los accesos sin cambiar el código.</td><td>Pantalla "Permisos" con cada rol y sus paneles; interruptores de ver y modificar que se guardan al instante.</td><td><span class="nivel baja">Baja</span></td><td>RF19</td></tr>
   </tbody>
 </table>
+<p class="pie">Todos los requerimientos funcionales están cubiertos por al menos una historia de usuario (detalle en el Entregable 2, sección 6).</p>
 
 <h2 id="arquitectura">3.10 Arquitectura del sistema</h2>
 <p>Se mantiene la separación en capas del diseño original (modelo-vista-controlador), pero se simplifica la infraestructura: en lugar de un backend propio en Node.js/C# con MySQL, Docker y Heroku, se utiliza un <b>backend como servicio</b> (Supabase, sobre PostgreSQL) que provee base de datos, autenticación, almacenamiento de archivos y una API generada a partir del esquema. Esto reduce la infraestructura a mantener y concentra la lógica de negocio crítica en la base de datos, donde no puede ser alterada desde el navegador.</p>
@@ -685,7 +779,7 @@
 <table>
   <thead><tr><th style="width:24%">Paquete</th><th>Contenido</th></tr></thead>
   <tbody>
-    <tr><td><code>src/pages</code></td><td>Una pantalla por archivo: Inicio, Mapa, Comunidad, Eventos, Petición, Nueva petición, Bandeja, Estadísticas, Moderación, Usuarios, Perfil, Acceso.</td></tr>
+    <tr><td><code>src/pages</code></td><td>Una pantalla por archivo: Inicio, Mapa, Comunidad, Eventos, Petición, Nueva petición, Bandeja, Estadísticas, Moderación, Usuarios, Perfil, Documentos, Permisos y Acceso.</td></tr>
     <tr><td><code>src/components</code></td><td>Piezas reutilizables: tarjeta de petición, seguimiento, comentarios, gráficos, selectores de fotos y ubicación, menús.</td></tr>
     <tr><td><code>src/services</code></td><td>Acceso a datos: peticiones, participación (seguimiento, comentarios, roles) y autenticación.</td></tr>
     <tr><td><code>src/utils</code></td><td>Lógica pura y probada: prioridad, clasificador, barrios, moderación, exportación, zonas del mapa.</td></tr>
@@ -708,7 +802,7 @@
 </div>
 
 <h2 id="datos">3.11 Modelo de datos</h2>
-<p>Base relacional en PostgreSQL con 13 tablas. Todas tienen seguridad por fila activada.</p>
+<p>Base relacional en PostgreSQL con 14 tablas. Todas tienen seguridad por fila activada.</p>
 <div class="figura">
 <div class="der">
   <div class="entidad"><div class="nom">profiles</div><div class="cols">id (PK, = usuario)<br>nombre, apellido<br>rol, rol_solicitado<br>cargo, organizacion<br>avatar_url<br>area_id (FK areas)</div></div>
@@ -723,6 +817,7 @@
   <div class="entidad"><div class="nom">denuncias</div><div class="cols">id (PK)<br>comentario_id (FK)<br>usuario_id (FK)<br>motivo</div></div>
   <div class="entidad"><div class="nom">notificaciones</div><div class="cols">id (PK)<br>usuario_id (FK)<br>tipo, mensaje, leida<br>peticion_id (FK)</div></div>
   <div class="entidad"><div class="nom">publicaciones / eventos</div><div class="cols">muro vecinal y agenda<br>usuario o creador (FK)<br>zona_id (FK)</div></div>
+  <div class="entidad"><div class="nom">permisos_panel</div><div class="cols">rol (PK)<br>panel (PK)<br>ver, modificar<br><i>solo la edita el dueño</i></div></div>
 </div>
 <figcaption>Figura 4. Diagrama entidad-relación (simplificado). Relaciones principales: una petición pertenece a un usuario, una categoría y un barrio; tiene muchas firmas, actualizaciones y comentarios; cada categoría pertenece a un área.</figcaption>
 </div>
@@ -771,19 +866,21 @@
 
 <h2 id="seguridad">3.13 Autenticación, roles y seguridad</h2>
 <table>
-  <thead><tr><th style="width:18%">Rol</th><th>Permisos</th></tr></thead>
+  <thead><tr><th style="width:18%">Rol</th><th>Qué puede hacer (configuración inicial)</th></tr></thead>
   <tbody>
-    <tr><td>Vecino</td><td>Crear, firmar y comentar peticiones; seguir barrios; ver estadísticas públicas. Anónimo para los demás vecinos.</td></tr>
-    <tr><td>Funcionario</td><td>Ver autor y firmantes; responder y cambiar la etapa de las peticiones de su área. Lo aprueba un administrador.</td></tr>
-    <tr><td>Administrador</td><td>Moderar peticiones y comentarios, asignar áreas, ver el directorio de usuarios y el panel analítico.</td></tr>
-    <tr><td>Dueño</td><td>Único que puede cambiar el rol de las cuentas.</td></tr>
+    <tr><td>Vecino</td><td>Crear, firmar y comentar peticiones; seguir barrios; publicar en el muro; ver mapa, eventos y estadísticas públicas. Es anónimo para los demás vecinos.</td></tr>
+    <tr><td>Funcionario</td><td>Todo lo del vecino, más la bandeja de su área: ve autor y firmantes, responde y cambia la etapa de las peticiones de su área. Lo aprueba un administrador.</td></tr>
+    <tr><td>Moderador</td><td>Todo lo del vecino, más revisar peticiones pendientes, comentarios denunciados y publicaciones del muro. No administra usuarios ni ve el panel analítico.</td></tr>
+    <tr><td>Administrador</td><td>Todo lo del moderador y del funcionario (en todas las áreas), más el directorio de usuarios, la asignación de áreas, la agenda de eventos y el panel analítico.</td></tr>
+    <tr><td>Dueño (CEO)</td><td>Una única cuenta de administrador que además cambia el rol de cada cuenta, define los permisos por panel y accede a los documentos privados del proyecto.</td></tr>
   </tbody>
 </table>
+<p><b>Permisos por panel.</b> La tabla anterior describe la configuración inicial. Desde la pantalla "Permisos", el dueño decide para cada rol y cada panel (mis solicitudes, mapa, comunidad, estadísticas, eventos, perfil, bandeja, moderación, usuarios, panel analítico y documentos) si puede verlo y si puede modificar en él. La configuración se guarda en la tabla <code>permisos_panel</code> y la base de datos la aplica en sus reglas y funciones, por lo que no alcanza con ocultar un botón en la pantalla.</p>
 <ul>
   <li><b>Autenticación:</b> correo y contraseña o Google (OAuth); recuperación de contraseña por correo; sesiones gestionadas por Supabase Auth.</li>
   <li><b>Seguridad por fila (RLS):</b> cada tabla define quién puede leer, crear, modificar o borrar cada fila.</li>
   <li><b>Anonimato por columna:</b> la columna del autor de una petición no es legible para los vecinos; las identidades solo se obtienen mediante funciones que verifican el rol.</li>
-  <li><b>Funciones seguras:</b> las operaciones sensibles (responder, moderar, cambiar rol, estadísticas de administración) verifican el rol dentro de la base.</li>
+  <li><b>Funciones seguras:</b> las operaciones sensibles (responder, moderar, cambiar rol o permisos, estadísticas de administración) verifican el rol y los permisos por panel dentro de la base.</li>
   <li><b>Validaciones del servidor:</b> el score, la etapa inicial y las alertas los fija la base, aunque el cliente intente enviar otros valores.</li>
   <li><b>Transporte:</b> toda la comunicación usa HTTPS.</li>
 </ul>
@@ -806,7 +903,7 @@
 
 <h2 id="calidad">3.15 Pruebas y calidad</h2>
 <ul>
-  <li><b>Pruebas automáticas:</b> 43 pruebas con Vitest sobre prioridad, orden del inicio, clasificación, detección de barrio, moderación de textos, áreas del mapa y exportación. Las pruebas detectaron y permitieron corregir un error real en la detección de lenguaje ofensivo.</li>
+  <li><b>Pruebas automáticas:</b> 49 pruebas con Vitest sobre prioridad, orden del inicio, clasificación, detección de barrio, moderación de textos, áreas del mapa, exportación y permisos de cada rol. Las pruebas detectaron y permitieron corregir un error real en la detección de lenguaje ofensivo.</li>
   <li><b>Pruebas de permisos:</b> escenarios por rol ejecutados en la base de datos.</li>
   <li><b>Revisión de código:</b> oxlint sin errores y compilación de producción antes de cada publicación.</li>
   <li><b>Accesibilidad:</b> enlace para saltar al contenido, foco visible, etiquetas asociadas a los campos, contraste en modo claro y oscuro, versión en tabla de cada gráfico y respeto de la preferencia de movimiento reducido.</li>
@@ -855,35 +952,23 @@
 
 <!-- ===================== 6. ANEXO ===================== -->
 <h1 id="anexo">6. Anexo</h1>
-<h2>A. Glosario</h2>
-<table>
-  <tbody>
-    <tr><td style="width:24%"><b>Petición</b></td><td>Pedido de un vecino sobre un problema de su barrio.</td></tr>
-    <tr><td><b>Firma</b></td><td>Apoyo de un vecino a una petición; cada persona firma una sola vez.</td></tr>
-    <tr><td><b>Score de urgencia</b></td><td>Puntaje de 0 a 100 calculado automáticamente según gravedad, riesgo, apoyo y evidencia.</td></tr>
-    <tr><td><b>Elevación</b></td><td>Aviso automático al área cuando una petición alcanza 50 firmas.</td></tr>
-    <tr><td><b>RLS</b></td><td>Row Level Security: reglas de la base que deciden qué filas puede ver o modificar cada usuario.</td></tr>
-    <tr><td><b>RPC</b></td><td>Función de la base de datos invocada desde la aplicación.</td></tr>
-    <tr><td><b>PWA</b></td><td>Aplicación web progresiva: sitio que se puede instalar como app.</td></tr>
-  </tbody>
-</table>
-<h2>B. Hitos reales del repositorio</h2>
+<h2>A. Hitos reales del repositorio</h2>
 <table>
   <thead><tr><th style="width:16%">Fecha</th><th>Entrega</th></tr></thead>
   <tbody>
     <tr><td>04/10/2026</td><td>Configuración inicial del proyecto; autenticación, peticiones, firmas y moderación.</td></tr>
     <tr><td>11/10/2026</td><td>Panel vecinal conectado a Supabase; roles y anonimato; ingreso con Google y recuperación de contraseña; política de privacidad.</td></tr>
-    <tr><td>12/10/2026</td><td>Estadísticas y mapa por barrios; 111 barrios; prioridad por firmas, seguimiento, comentarios y notificaciones; bandeja por área, exportes, PWA, modo oscuro y pruebas; cambio de roles; rendimiento en celulares; score de urgencia automático.</td></tr>
+    <tr><td>12/10/2026</td><td>Estadísticas y mapa por barrios; 111 barrios; prioridad por firmas, seguimiento, comentarios y notificaciones; bandeja por área, exportes, PWA, modo oscuro y pruebas; cambio de roles; rendimiento en celulares; score de urgencia automático; rol moderador y permisos por panel definidos por el dueño.</td></tr>
   </tbody>
 </table>
-<h2>C. Fórmula del score de urgencia (extracto del esquema)</h2>
+<h2>B. Fórmula del score de urgencia (extracto del esquema)</h2>
 <pre>gravedad  := peso_urgencia_de_la_categoria * 35 / 30;          -- hasta 35
 riesgo    := least(8 * palabras_de_riesgo_encontradas, 30);    -- hasta 30
 apoyo     := least(20, 20 * ln(1 + firmas) / ln(51));          -- hasta 20
 velocidad := least(10, 2 * firmas_de_los_ultimos_7_dias);      -- hasta 10
 evidencia := case when tiene_fotos then 5 else 0 end;          -- 5
 score     := least(100, round(gravedad + riesgo + apoyo + velocidad + evidencia));</pre>
-<h2>D. Puesta en marcha local</h2>
+<h2>C. Puesta en marcha local</h2>
 <pre>git clone https://github.com/andradaj09/ENTS.git
 cd ENTS
 npm install
@@ -891,7 +976,7 @@ npm install
 npm run dev        # http://localhost:5173
 npm test           # pruebas automáticas
 npm run build      # versión de producción</pre>
-<h2>E. Enlaces</h2>
+<h2>D. Enlaces</h2>
 <ul>
   <li>Aplicación publicada: https://entscordoba.netlify.app</li>
   <li>Repositorio (privado): https://github.com/andradaj09/ENTS</li>

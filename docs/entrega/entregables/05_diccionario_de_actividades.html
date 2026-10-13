@@ -11,11 +11,10 @@
 </head>
 <body>
 
-
 <section class="caratula">
   <div>
     <div class="inst">Instituto Cervantes</div>
-    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: <span class="completar">[completar]</span> · Cátedra: Práctica Profesionalizante</div>
+    <div style="font-size:10.5pt;color:#4a5568;margin-top:3pt">Carrera: Analista Programador · Cátedra: Práctica Profesionalizante</div>
   </div>
   <div>
     <div style="display:flex;align-items:center;gap:14pt">
@@ -28,274 +27,336 @@
     </div>
     <div class="franja"></div>
     <table>
-      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba</td></tr>
+      <tr><td>Proyecto</td><td>ENTS — Plataforma de peticiones vecinales de Córdoba y Villa Allende</td></tr>
       <tr><td>Docente</td><td>Ing. Loza</td></tr>
+      <tr><td>Director del proyecto</td><td>Andrada, Juan Pablo</td></tr>
       <tr><td>Código del documento</td><td>ENTS-GP-05</td></tr>
-      <tr><td>Versión</td><td>2.0</td></tr>
-      <tr><td>Fecha de entrega</td><td><span class="completar">[__/__/____]</span></td></tr>
+      <tr><td>Versión</td><td>3.0</td></tr>
+      <tr><td>Sitio publicado</td><td>entscordoba.netlify.app</td></tr>
     </table>
   </div>
   <div>
     <div style="font-size:10pt;color:#4a5568;margin-bottom:4pt">Autores</div>
     <table>
-      <tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
-      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr>
-      <tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr>
+      <tr><td>Andrada, Juan Pablo</td><td>Legajo 27318</td></tr><tr><td>Patrón, Máximo</td><td>Legajo 27311</td></tr><tr><td>Jiménez, Ignacio</td><td>Legajo 28177</td></tr>
     </table>
   </div>
 </section>
-
 <h1 class="salto">Historial de revisión</h1>
 <table>
-  <thead><tr><th style="width:11%">Versión</th><th style="width:22%">Fecha y hora</th><th style="width:22%">Autor</th><th>Modificación</th></tr></thead>
+  <thead><tr><th style="width:9%">Versión</th><th style="width:19%">Fecha y hora</th><th style="width:20%">Autor</th><th>Modificación</th></tr></thead>
   <tbody>
-    <tr><td>1.0</td><td><span class="completar">[fecha] [hh:mm]</span></td><td>Equipo</td><td>Versión original del proyecto de donaciones solidarias.</td></tr>
-    <tr><td>2.0</td><td>12/10/2026 <span class="completar">[hh:mm]</span></td><td>Andrada, Juan Pablo</td><td>Nuevo diccionario con una ficha por cada una de las 20 actividades del sistema de peticiones.</td></tr>
-    <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+    <tr><td>1.0</td><td>Sprint 0 (*)</td><td>Equipo</td><td>Versión original, para la propuesta de plataforma solidaria de donaciones.</td></tr>
+    <tr><td>2.0</td><td>12/10/2026 16:41</td><td>Andrada, Juan Pablo</td><td>Nuevo diccionario con una ficha por cada una de las 20 actividades del sistema de peticiones.</td></tr>
+    <tr><td>3.0</td><td>12/10/2026 21:32</td><td>Andrada, Juan Pablo</td><td>Revisión integral para la entrega: glosario de siglas y términos, propósito y guía de lectura, responsables y horas estimadas, roles actualizados (moderador y permisos por panel) y eliminación de todos los campos pendientes. Cada ficha suma descripción, responsable, semana y sprint.</td></tr>
   </tbody>
 </table>
-<h2>Contenido</h2>
-<p>Cada ficha describe una actividad de la lista (Entregable 4): el paquete de la EDT al que pertenece, el entregable que produce, los recursos que usa, su duración y ubicación en el cronograma, sus dependencias y el criterio con el que se acepta como terminada.</p>
-<h1 class="salto">Fichas de actividades</h1>
+<p class="pie">(*) La versión 1.0 se elaboró durante el Sprint 0, antes de que el equipo usara control de versiones, por lo que su fecha y hora exactas no quedaron registradas. Desde la versión 2.0, cada cambio se registra con fecha, hora y autor.</p>
+
+<h2>Contenido</h2><ol class="indice"><li>Glosario</li><li>Cómo leer las fichas</li><li>Fichas de actividades</li></ol>
+
+<div class="guia">
+  <p><b>Qué es este documento.</b> El diccionario de actividades contiene una ficha por cada actividad de la lista, con toda la información necesaria para ejecutarla y controlarla.</p>
+  <p><b>Para qué sirve.</b> Evita ambigüedades: el responsable sabe exactamente qué hacer, con qué recursos, en qué plazo y cómo se verifica que terminó.</p>
+  <p style="margin:0"><b>Relación con los demás entregables.</b> Amplía cada fila de la lista de actividades (Entregable 4). Las duraciones y dependencias son las mismas que se dibujan en el Gantt (Entregable 7).</p>
+</div>
+
+
+
+<h1 class="salto">Glosario</h1>
+<p>Siglas y términos que se usan en este documento, ordenados alfabéticamente. Cada uno se explica en lenguaje simple para que el documento pueda leerse sin conocimientos técnicos previos.</p>
+
+<table class="glosario">
+  <thead><tr><th style="width:26%">Término</th><th>Significado</th></tr></thead>
+  <tbody><tr><td><b>Accesibilidad</b></td><td>Posibilidad de que cualquier persona, incluso con discapacidad, use el sistema (teclado, contraste, lectores de pantalla).</td></tr><tr><td><b>Actividad</b></td><td>Trabajo concreto que produce un entregable. Se identifica con un código A1, A2…</td></tr><tr><td><b>Administrador</b></td><td>Rol que modera, gestiona usuarios y áreas, y accede al panel analítico.</td></tr><tr><td><b>Anonimato</b></td><td>Regla por la que un vecino nunca ve quién creó o firmó una petición.</td></tr><tr><td><b>Área</b></td><td>Dependencia del municipio responsable de un grupo de categorías (por ejemplo, Salud u Obras públicas).</td></tr><tr><td><b>Bandeja</b></td><td>Pantalla donde cada funcionario ve las peticiones de su área ordenadas por prioridad para responderlas.</td></tr><tr><td><b>Barrio (zona)</b></td><td>Cada uno de los 111 barrios de Córdoba y Villa Allende cargados en el sistema con su ubicación.</td></tr><tr><td><b>Código del documento (ENTS-GP)</b></td><td>Identificador de cada entregable: ENTS-GP-01 a ENTS-GP-07 (GP = gestión del proyecto).</td></tr><tr><td><b>Criterio de aceptación</b></td><td>Condición verificable que debe cumplirse para dar por terminado un requisito, historia o actividad.</td></tr><tr><td><b>CSV / Excel</b></td><td>Formatos de planilla de cálculo usados para exportar reportes.</td></tr><tr><td><b>DER</b></td><td>Diagrama entidad-relación: dibujo de las tablas de la base y cómo se relacionan.</td></tr><tr><td><b>Día hábil</b></td><td>Día de trabajo del equipo (lunes a viernes, sin feriados). Las duraciones del cronograma se expresan en días hábiles.</td></tr><tr><td><b>Diagrama de Gantt</b></td><td>Gráfico que muestra cada actividad como una barra a lo largo del tiempo.</td></tr><tr><td><b>Disparador (trigger)</b></td><td>Función que la base ejecuta sola cuando ocurre un cambio (por ejemplo, recalcular el score al recibir una firma).</td></tr><tr><td><b>Dueño (CEO)</b></td><td>Cuenta única del responsable del proyecto: además de administrar, cambia roles y define los permisos de cada rol.</td></tr><tr><td><b>EDT / WBS</b></td><td>Estructura de desglose del trabajo (en inglés, Work Breakdown Structure): descomposición jerárquica del proyecto en entregables y paquetes de trabajo.</td></tr><tr><td><b>Elevación</b></td><td>Aviso automático a los funcionarios del área cuando una petición alcanza 50 firmas.</td></tr><tr><td><b>Entregable</b></td><td>Resultado verificable que produce el proyecto (un documento, un módulo del sistema, una presentación).</td></tr><tr><td><b>ENTS</b></td><td>Everyone Needs To Smile ("Todos necesitan sonreír"): nombre del proyecto y de la plataforma.</td></tr><tr><td><b>Firma</b></td><td>Apoyo de un vecino a una petición publicada. Cada persona puede firmar una sola vez y retirar su firma.</td></tr><tr><td><b>Funcionario</b></td><td>Rol de un empleado del municipio: responde las peticiones de su área. Lo aprueba un administrador.</td></tr><tr><td><b>GitHub</b></td><td>Plataforma donde se guarda el código con su historial de cambios (repositorio).</td></tr><tr><td><b>Holgura</b></td><td>Días que una actividad puede atrasarse sin atrasar la fecha de fin del proyecto.</td></tr><tr><td><b>HTTPS</b></td><td>Protocolo de comunicación cifrado entre el navegador y el servidor.</td></tr><tr><td><b>HU</b></td><td>Historia de usuario: necesidad escrita desde el punto de vista del usuario con la forma "Como [rol], quiero [acción] para [beneficio]". Se numeran HU01, HU02…</td></tr><tr><td><b>Interesado</b></td><td>Persona u organización afectada por el proyecto o que influye en él (en inglés, stakeholder).</td></tr><tr><td><b>JavaScript</b></td><td>Lenguaje de programación de las páginas web; en él está escrita la aplicación.</td></tr><tr><td><b>Leaflet</b></td><td>Biblioteca que dibuja mapas interactivos en la web.</td></tr><tr><td><b>Moderación</b></td><td>Revisión de las peticiones y comentarios para que no se publique contenido ofensivo ni datos personales.</td></tr><tr><td><b>Moderador</b></td><td>Rol que revisa peticiones, comentarios y publicaciones; no administra usuarios.</td></tr><tr><td><b>Modo oscuro</b></td><td>Esquema de colores con fondo oscuro que reduce el brillo de la pantalla.</td></tr><tr><td><b>Netlify</b></td><td>Servicio que publica el sitio web con HTTPS cada vez que se actualiza el repositorio.</td></tr><tr><td><b>OpenStreetMap</b></td><td>Mapa colaborativo y gratuito del que se obtienen el mapa de fondo y la ubicación de los barrios.</td></tr><tr><td><b>Panel analítico</b></td><td>Pantalla de administración con indicadores de uso, moderación y participación, exportable a Excel y PDF.</td></tr><tr><td><b>Paquete de trabajo</b></td><td>Último nivel de la EDT: un entregable concreto que se puede asignar, estimar y verificar.</td></tr><tr><td><b>PDF</b></td><td>Formato de documento portable que se ve igual en cualquier dispositivo.</td></tr><tr><td><b>Permisos por panel</b></td><td>Configuración que define, para cada rol, qué paneles puede ver y en cuáles puede modificar. Solo la cambia el dueño.</td></tr><tr><td><b>Petición</b></td><td>Pedido que un vecino publica sobre un problema de su barrio (por ejemplo, un bache o falta de alumbrado).</td></tr><tr><td><b>pg_trgm</b></td><td>Extensión de PostgreSQL que compara textos por trigramas (grupos de 3 letras) para encontrar peticiones parecidas.</td></tr><tr><td><b>PMBOK</b></td><td>Guía de los fundamentos para la dirección de proyectos del Project Management Institute; base de la metodología de los entregables.</td></tr><tr><td><b>PostgreSQL</b></td><td>Motor de base de datos relacional de código abierto que usa ENTS.</td></tr><tr><td><b>Predecesora / sucesora</b></td><td>Una actividad predecesora debe terminar antes de que empiece su sucesora.</td></tr><tr><td><b>Prioridad por firmas</b></td><td>Nivel de una petición según su cantidad de firmas: nueva (0–4), baja (5–9), media (10–19), alta (20–49) y máxima (50 o más).</td></tr><tr><td><b>Product backlog</b></td><td>Lista priorizada de todo lo que hay que construir en el producto, expresada en historias de usuario.</td></tr><tr><td><b>Project Charter</b></td><td>Acta de constitución: documento que autoriza formalmente el proyecto y fija su propósito, objetivos y recursos.</td></tr><tr><td><b>Prueba automática</b></td><td>Programa que verifica que una parte del código da el resultado esperado, sin intervención manual.</td></tr><tr><td><b>Pull Request (PR)</b></td><td>Pedido para integrar los cambios de una rama a la principal, que otro integrante revisa antes de aceptar.</td></tr><tr><td><b>PWA</b></td><td>Progressive Web App (aplicación web progresiva): sitio web que se puede instalar en el celular y abrir como una aplicación.</td></tr><tr><td><b>Rama (branch)</b></td><td>Copia paralela del código para trabajar un cambio sin afectar la versión principal (main).</td></tr><tr><td><b>React</b></td><td>Biblioteca de JavaScript con la que se construye la interfaz de ENTS.</td></tr><tr><td><b>Repositorio</b></td><td>Lugar donde se guarda el código fuente con todo su historial de versiones.</td></tr><tr><td><b>Restricción</b></td><td>Límite que el proyecto no puede superar (plazo, presupuesto, equipo, normas).</td></tr><tr><td><b>RF</b></td><td>Requisito funcional: algo que el sistema debe hacer (por ejemplo, "crear peticiones con fotos"). Se numeran RF01, RF02…</td></tr><tr><td><b>Riesgo</b></td><td>Evento incierto que, si ocurre, afecta al proyecto. Se evalúa por su probabilidad y su impacto.</td></tr><tr><td><b>RNF</b></td><td>Requisito no funcional: una cualidad que el sistema debe cumplir (seguridad, rendimiento, accesibilidad…). Se numeran RNF01, RNF02…</td></tr><tr><td><b>Rol (rango)</b></td><td>Tipo de cuenta que define qué puede hacer cada usuario: vecino, funcionario, moderador, administrador o dueño.</td></tr><tr><td><b>Ruta crítica</b></td><td>Secuencia de actividades sin holgura: si una se atrasa, se atrasa todo el proyecto.</td></tr><tr><td><b>Score de urgencia</b></td><td>Puntaje de 0 a 100 que calcula el sistema según la gravedad de la categoría, palabras de riesgo, firmas, velocidad de apoyo y fotos.</td></tr><tr><td><b>Seguimiento</b></td><td>Etapas por las que pasa una petición publicada: recibida, en revisión, derivada, en obra y resuelta.</td></tr><tr><td><b>Service worker</b></td><td>Programa que el navegador ejecuta en segundo plano y permite que la app abra aun con mala conexión.</td></tr><tr><td><b>Sprint</b></td><td>Ciclo de trabajo de duración fija (en este proyecto, 2 semanas) al final del cual se muestra un avance funcionando.</td></tr><tr><td><b>SQL</b></td><td>Lenguaje estándar para definir y consultar bases de datos relacionales.</td></tr><tr><td><b>Supabase</b></td><td>Servicio en la nube que provee la base de datos PostgreSQL, la autenticación y el almacenamiento de archivos.</td></tr><tr><td><b>Supuesto</b></td><td>Condición que se da por cierta para planificar, aunque no esté comprobada.</td></tr><tr><td><b>Vecino</b></td><td>Rol base: crea, firma y comenta peticiones. Para los demás vecinos es anónimo.</td></tr><tr><td><b>Versión del documento</b></td><td>Número que cambia con cada modificación registrada en el historial de revisión (1.0, 2.0, 3.0).</td></tr><tr><td><b>Vitest</b></td><td>Herramienta con la que se escriben y ejecutan las pruebas automáticas.</td></tr></tbody>
+</table>
+<h1 class="salto">1. Cómo leer las fichas</h1>
+
+<table>
+  <thead><tr><th style="width:26%">Campo</th><th>Significado</th></tr></thead>
+  <tbody><tr><td>Descripción</td><td>Qué trabajo se realiza en la actividad.</td></tr><tr><td>Paquete de la EDT</td><td>Paquete de trabajo del Entregable 3 que la actividad produce.</td></tr><tr><td>Entregable</td><td>Resultado concreto que deja la actividad al terminar.</td></tr><tr><td>Responsable</td><td>Integrante a cargo y quienes participan.</td></tr><tr><td>Recursos</td><td>Herramientas, servicios o información que se necesitan.</td></tr><tr><td>Duración y ubicación</td><td>Días hábiles que dura y en qué días, semanas y sprint del cronograma se realiza.</td></tr><tr><td>Holgura</td><td>Días que puede atrasarse sin atrasar el proyecto.</td></tr><tr><td>Predecesoras / sucesoras</td><td>Qué actividades deben terminar antes y cuáles esperan a que esta termine.</td></tr><tr><td>Criterio de aceptación</td><td>Condición que debe cumplirse para darla por terminada.</td></tr></tbody>
+</table>
+
+<h1 class="salto">2. Fichas de actividades</h1>
 
 <table class="ficha">
-  <thead><tr><th colspan="2">A1 · Analizar la propuesta de reorientación y redefinir el proyecto</th></tr></thead>
+  <thead><tr><th colspan="2">A1 · Analizar la propuesta de reorientación y redefinir el proyecto · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.1.1</td></tr>
+    <tr><td>Descripción</td><td>Revisar la propuesta original de donaciones, identificar qué partes se conservan y cuáles se reemplazan, y acordar con el docente el nuevo enfoque de peticiones vecinales.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.1.1 Project Charter</td></tr>
     <tr><td>Entregable</td><td>Propuesta de reorientación aprobada</td></tr>
-    <tr><td>Recursos</td><td>Equipo completo; documentación previa</td></tr>
-    <tr><td>Duración</td><td>3 días hábiles (día 0 a 3) · holgura 0 · <b>crítica</b></td></tr>
-    <tr><td>Predecesoras / sucesoras</td><td>— / A2, A4</td></tr>
-    <tr><td>Criterio de aceptación</td><td>El equipo y el docente acuerdan el nuevo enfoque</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo · participan: Patrón, Máximo; Jiménez, Ignacio</td></tr>
+    <tr><td>Recursos</td><td>Equipo completo; documentación de la versión 1.0</td></tr>
+    <tr><td>Duración y ubicación</td><td>3 días hábiles · del día 0 al 3 · semana 1 · sprint 1</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>ninguna (inicia el proyecto) / A2, A4</td></tr>
+    <tr><td>Criterio de aceptación</td><td>El equipo y el docente acuerdan por escrito el nuevo enfoque.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A2 · Redactar Project Charter y declaración de alcance</th></tr></thead>
+  <thead><tr><th colspan="2">A2 · Redactar Project Charter y declaración de alcance · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.1.1–1.1.2</td></tr>
-    <tr><td>Entregable</td><td>Project Charter y Declaración de alcance</td></tr>
-    <tr><td>Recursos</td><td>Equipo; plantillas de gestión</td></tr>
-    <tr><td>Duración</td><td>3 días hábiles (día 3 a 6) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Descripción</td><td>Escribir el acta de constitución (propósito, objetivos, riesgos, recursos) y la declaración de alcance (requisitos, entregables, exclusiones).</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.1.1 Project Charter; 1.1.2 Declaración de alcance</td></tr>
+    <tr><td>Entregable</td><td>Entregables 1 y 2</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo · participan: Jiménez, Ignacio</td></tr>
+    <tr><td>Recursos</td><td>Plantillas de gestión; Guía del PMBOK</td></tr>
+    <tr><td>Duración y ubicación</td><td>3 días hábiles · del día 3 al 6 · semana 1 a 2 · sprint 1</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A1 / A3, A5</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Documentos completos y aprobados por el docente</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Documentos completos y aprobados por el docente.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
   <thead><tr><th colspan="2">A3 · Definir plan de comunicación y cronograma</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.1.3–1.1.4</td></tr>
-    <tr><td>Entregable</td><td>Plan de comunicación y cronograma base</td></tr>
-    <tr><td>Recursos</td><td>Equipo</td></tr>
-    <tr><td>Duración</td><td>2 días hábiles (día 6 a 8) · holgura 2</td></tr>
+    <tr><td>Descripción</td><td>Identificar interesados, definir canales, frecuencias y reuniones, y armar el cronograma inicial con sus dependencias.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.1.3 Plan de comunicación; 1.1.4 Cronograma (Gantt)</td></tr>
+    <tr><td>Entregable</td><td>Entregables 6 y 7 (versión inicial)</td></tr>
+    <tr><td>Responsable</td><td>Jiménez, Ignacio · participan: Andrada, Juan Pablo</td></tr>
+    <tr><td>Recursos</td><td>Trello; planilla de cálculo</td></tr>
+    <tr><td>Duración y ubicación</td><td>2 días hábiles · del día 6 al 8 · semana 2 · sprint 1</td></tr>
+    <tr><td>Holgura</td><td>2 días</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A2 / A6</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Canales, frecuencias y responsables definidos</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Canales, frecuencias, responsables y fechas relativas definidos.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A4 · Revisar encuesta y análisis socioeconómico</th></tr></thead>
+  <thead><tr><th colspan="2">A4 · Revisar encuesta y análisis socioeconómico · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.2.1–1.2.2</td></tr>
+    <tr><td>Descripción</td><td>Releer los resultados de la encuesta a vecinos y el análisis socioeconómico de Córdoba de la versión 1.0, y vincular cada necesidad detectada con una categoría de petición.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.2.1 Estudio de necesidades y encuesta; 1.2.2 Análisis socioeconómico</td></tr>
     <tr><td>Entregable</td><td>Informe de necesidades actualizado</td></tr>
+    <tr><td>Responsable</td><td>Jiménez, Ignacio</td></tr>
     <tr><td>Recursos</td><td>Resultados de la encuesta; análisis previo</td></tr>
-    <tr><td>Duración</td><td>3 días hábiles (día 3 a 6) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Duración y ubicación</td><td>3 días hábiles · del día 3 al 6 · semana 1 a 2 · sprint 1</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A1 / A5</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Necesidades vinculadas a las categorías del sistema</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Cada necesidad queda asociada a al menos una categoría del sistema.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A5 · Relevar requerimientos y armar product backlog</th></tr></thead>
+  <thead><tr><th colspan="2">A5 · Relevar requerimientos y armar product backlog · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.2.3–1.2.4</td></tr>
-    <tr><td>Entregable</td><td>Requerimientos y product backlog priorizado</td></tr>
-    <tr><td>Recursos</td><td>Equipo; tablero de tareas</td></tr>
-    <tr><td>Duración</td><td>4 días hábiles (día 6 a 10) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Descripción</td><td>Redactar los requisitos funcionales y no funcionales y las historias de usuario con sus criterios de aceptación, y ordenarlas por prioridad.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.2.3 Requerimientos; 1.2.4 Product backlog</td></tr>
+    <tr><td>Entregable</td><td>Lista de RF y RNF; product backlog priorizado</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo · participan: Jiménez, Ignacio</td></tr>
+    <tr><td>Recursos</td><td>Trello</td></tr>
+    <tr><td>Duración y ubicación</td><td>4 días hábiles · del día 6 al 10 · semana 2 · sprint 1</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A2, A4 / A6, A8</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Cada requerimiento trazable a una historia de usuario</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Cada requisito funcional es trazable a al menos una historia de usuario.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A6 · Diseñar arquitectura y elegir tecnologías</th></tr></thead>
+  <thead><tr><th colspan="2">A6 · Diseñar arquitectura y elegir tecnologías · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.3.1</td></tr>
-    <tr><td>Entregable</td><td>Documento de arquitectura y despliegue</td></tr>
-    <tr><td>Recursos</td><td>Equipo; documentación de las tecnologías</td></tr>
-    <tr><td>Duración</td><td>3 días hábiles (día 10 a 13) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Descripción</td><td>Definir las capas del sistema, los servicios en la nube y las herramientas, priorizando opciones gratuitas y conocidas por el equipo.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.3.1 Arquitectura</td></tr>
+    <tr><td>Entregable</td><td>Documento de arquitectura y diagrama de despliegue</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo · participan: Patrón, Máximo</td></tr>
+    <tr><td>Recursos</td><td>Documentación oficial de las tecnologías</td></tr>
+    <tr><td>Duración y ubicación</td><td>3 días hábiles · del día 10 al 13 · semana 3 · sprint 2</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A5, A3 / A7, A9</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Cubre todos los requerimientos con servicios gratuitos</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>La arquitectura cubre todos los RF y RNF usando solo servicios gratuitos.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A7 · Diseñar modelo de datos y reglas de seguridad</th></tr></thead>
+  <thead><tr><th colspan="2">A7 · Diseñar modelo de datos y reglas de seguridad · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.3.2, 1.3.4</td></tr>
+    <tr><td>Descripción</td><td>Diseñar las tablas, relaciones y restricciones de la base, y las reglas que definen qué puede ver y hacer cada rol.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.3.2 Modelo de datos; 1.3.4 Seguridad y roles</td></tr>
     <tr><td>Entregable</td><td>DER, esquema SQL y políticas de acceso</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo</td></tr>
     <tr><td>Recursos</td><td>Supabase; PostgreSQL</td></tr>
-    <tr><td>Duración</td><td>4 días hábiles (día 13 a 17) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Duración y ubicación</td><td>4 días hábiles · del día 13 al 17 · semana 3 a 4 · sprint 2</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A6 / A10</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Esquema reproducible y reglas por rol definidas</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>El esquema se puede recrear completo y las reglas por rol están definidas.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
   <thead><tr><th colspan="2">A8 · Diseñar interfaz y navegación</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.3.3</td></tr>
-    <tr><td>Entregable</td><td>Prototipo de pantallas y estilo visual</td></tr>
-    <tr><td>Recursos</td><td>Editor de diseño; equipo</td></tr>
-    <tr><td>Duración</td><td>4 días hábiles (día 10 a 14) · holgura 8</td></tr>
+    <tr><td>Descripción</td><td>Diseñar las pantallas principales, el estilo visual y el recorrido de cada tipo de usuario, recogiendo la opinión de vecinos de prueba.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.3.3 Interfaz y navegación</td></tr>
+    <tr><td>Entregable</td><td>Prototipo de pantallas y mapa del sitio</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo · participan: Jiménez, Ignacio</td></tr>
+    <tr><td>Recursos</td><td>Figma; equipo</td></tr>
+    <tr><td>Duración y ubicación</td><td>4 días hábiles · del día 10 al 14 · semana 3 · sprint 2</td></tr>
+    <tr><td>Holgura</td><td>8 días</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A5 / A11</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Flujos principales aprobados por el equipo</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Los flujos principales de cada rol están aprobados por el equipo.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
   <thead><tr><th colspan="2">A9 · Configurar repositorio, base de datos y publicación</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.6.1–1.6.2</td></tr>
-    <tr><td>Entregable</td><td>Repositorio, proyecto Supabase y sitio en Netlify</td></tr>
+    <tr><td>Descripción</td><td>Crear el repositorio en GitHub, el proyecto en Supabase y el sitio en Netlify, conectados para que cada versión se publique sola.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.6.1 Base de datos en la nube; 1.6.2 Publicación web</td></tr>
+    <tr><td>Entregable</td><td>Repositorio, base en la nube y sitio publicado</td></tr>
+    <tr><td>Responsable</td><td>Patrón, Máximo</td></tr>
     <tr><td>Recursos</td><td>GitHub; Supabase; Netlify</td></tr>
-    <tr><td>Duración</td><td>2 días hábiles (día 13 a 15) · holgura 2</td></tr>
+    <tr><td>Duración y ubicación</td><td>2 días hábiles · del día 13 al 15 · semana 3 · sprint 2</td></tr>
+    <tr><td>Holgura</td><td>2 días</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A6 / A10</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Cada cambio en la rama principal se publica solo</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Un cambio en la rama principal se publica automáticamente.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A10 · Desarrollar autenticación, roles y anonimato</th></tr></thead>
+  <thead><tr><th colspan="2">A10 · Desarrollar autenticación, roles y anonimato · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.4.1</td></tr>
+    <tr><td>Descripción</td><td>Programar el registro, el ingreso con correo o Google, la recuperación de contraseña, los roles y el anonimato entre vecinos.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.4.1 Autenticación y roles</td></tr>
     <tr><td>Entregable</td><td>Módulo de cuentas y roles</td></tr>
+    <tr><td>Responsable</td><td>Patrón, Máximo · participan: Andrada, Juan Pablo</td></tr>
     <tr><td>Recursos</td><td>React; Supabase Auth</td></tr>
-    <tr><td>Duración</td><td>5 días hábiles (día 17 a 22) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Duración y ubicación</td><td>5 días hábiles · del día 17 al 22 · semana 4 a 5 · sprint 2</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A7, A9 / A11</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Registro, ingreso con Google, recuperación y roles operativos</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Registro, ingreso, recuperación y roles funcionan en el sitio publicado.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A11 · Desarrollar peticiones, fotos, firmas y moderación</th></tr></thead>
+  <thead><tr><th colspan="2">A11 · Desarrollar peticiones, fotos, firmas y moderación · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.4.2, 1.4.7</td></tr>
+    <tr><td>Descripción</td><td>Programar el alta de peticiones con fotos y ubicación, la firma única por persona y la moderación previa a la publicación.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.4.2 Peticiones y firmas; 1.4.7 Moderación</td></tr>
     <tr><td>Entregable</td><td>Módulo de peticiones y moderación</td></tr>
-    <tr><td>Recursos</td><td>React; Supabase; Storage</td></tr>
-    <tr><td>Duración</td><td>6 días hábiles (día 22 a 28) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Responsable</td><td>Patrón, Máximo · participan: Andrada, Juan Pablo</td></tr>
+    <tr><td>Recursos</td><td>React; Supabase Storage</td></tr>
+    <tr><td>Duración y ubicación</td><td>6 días hábiles · del día 22 al 28 · semana 5 a 6 · sprint 3</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A10, A8 / A12, A13, A14</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Alta con fotos y ubicación; una firma por persona; moderación previa</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Alta con fotos y ubicación; una firma por persona; nada se publica sin aprobación.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A12 · Desarrollar clasificación, barrio, score y similares</th></tr></thead>
+  <thead><tr><th colspan="2">A12 · Desarrollar clasificación, barrio, score y similares · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.4.3</td></tr>
+    <tr><td>Descripción</td><td>Programar la sugerencia de categoría, la detección del barrio, el score de urgencia y la búsqueda de peticiones similares.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.4.3 Procesamiento automático</td></tr>
     <tr><td>Entregable</td><td>Procesamiento automático</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo</td></tr>
     <tr><td>Recursos</td><td>PostgreSQL (pg_trgm); OpenStreetMap</td></tr>
-    <tr><td>Duración</td><td>5 días hábiles (día 28 a 33) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Duración y ubicación</td><td>5 días hábiles · del día 28 al 33 · semana 6 a 7 · sprint 3</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A11 / A15, A16</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Casos de prueba de cada algoritmo resueltos correctamente</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Los casos de prueba de cada algoritmo dan el resultado esperado.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A13 · Desarrollar mapa por barrios, comunidad y eventos</th></tr></thead>
+  <thead><tr><th colspan="2">A13 · Desarrollar mapa por barrios, comunidad y eventos · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.4.4</td></tr>
+    <tr><td>Descripción</td><td>Programar el mapa con los 111 barrios, el muro vecinal y la agenda de eventos, con filtro por barrio.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.4.4 Mapa y comunidad</td></tr>
     <tr><td>Entregable</td><td>Mapa, muro vecinal y agenda</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo</td></tr>
     <tr><td>Recursos</td><td>Leaflet; OpenStreetMap</td></tr>
-    <tr><td>Duración</td><td>5 días hábiles (día 28 a 33) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Duración y ubicación</td><td>5 días hábiles · del día 28 al 33 · semana 6 a 7 · sprint 3</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A11 / A15</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Filtros por barrio operativos en las tres pantallas</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>El filtro por barrio funciona en las tres pantallas.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
   <thead><tr><th colspan="2">A14 · Desarrollar seguimiento, notificaciones y comentarios</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.4.5</td></tr>
+    <tr><td>Descripción</td><td>Programar las cinco etapas de seguimiento con respuesta oficial, los avisos dentro de la app y los comentarios anónimos con denuncias.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.4.5 Seguimiento y avisos</td></tr>
     <tr><td>Entregable</td><td>Seguimiento, avisos y comentarios</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo</td></tr>
     <tr><td>Recursos</td><td>Supabase (disparadores y funciones)</td></tr>
-    <tr><td>Duración</td><td>5 días hábiles (día 28 a 33) · holgura 4</td></tr>
+    <tr><td>Duración y ubicación</td><td>5 días hábiles · del día 28 al 33 · semana 6 a 7 · sprint 3</td></tr>
+    <tr><td>Holgura</td><td>4 días</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A11 / A16</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Cada cambio de etapa notifica a autor y firmantes</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Cada cambio de etapa genera un aviso al autor y a los firmantes.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A15 · Desarrollar estadísticas, panel analítico y exportes</th></tr></thead>
+  <thead><tr><th colspan="2">A15 · Desarrollar estadísticas, panel analítico y exportes · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.4.6</td></tr>
-    <tr><td>Entregable</td><td>Paneles y reportes Excel/PDF</td></tr>
+    <tr><td>Descripción</td><td>Programar las estadísticas públicas, el panel analítico, la bandeja por área y la exportación de reportes a Excel y PDF.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.4.6 Reportes</td></tr>
+    <tr><td>Entregable</td><td>Paneles y reportes</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo</td></tr>
     <tr><td>Recursos</td><td>React; funciones de estadísticas</td></tr>
-    <tr><td>Duración</td><td>4 días hábiles (día 33 a 37) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Duración y ubicación</td><td>4 días hábiles · del día 33 al 37 · semana 7 a 8 · sprint 4</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A12, A13 / A16, A17</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Los datos de los paneles coinciden con la base</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Los números de los paneles coinciden con los datos de la base.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A16 · Pruebas automáticas y pruebas de permisos por rol</th></tr></thead>
+  <thead><tr><th colspan="2">A16 · Pruebas automáticas y pruebas de permisos por rol · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.5.1–1.5.2</td></tr>
+    <tr><td>Descripción</td><td>Escribir y ejecutar las pruebas automáticas del código y simular cada rol en la base para verificar que nadie accede a lo que no le corresponde.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.5.1 Pruebas automáticas; 1.5.2 Pruebas de permisos</td></tr>
     <tr><td>Entregable</td><td>Suite de pruebas y reporte de permisos</td></tr>
+    <tr><td>Responsable</td><td>Patrón, Máximo · participan: Andrada, Juan Pablo</td></tr>
     <tr><td>Recursos</td><td>Vitest; consultas por rol</td></tr>
-    <tr><td>Duración</td><td>4 días hábiles (día 37 a 41) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Duración y ubicación</td><td>4 días hábiles · del día 37 al 41 · semana 8 a 9 · sprint 4</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A12, A14, A15 / A18</td></tr>
-    <tr><td>Criterio de aceptación</td><td>100% de las pruebas aprobadas</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>El 100% de las pruebas se aprueba.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A17 · Accesibilidad, modo oscuro, app instalable y rendimiento</th></tr></thead>
+  <thead><tr><th colspan="2">A17 · Accesibilidad, modo oscuro, app instalable y rendimiento · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.5.3, 1.6.3</td></tr>
-    <tr><td>Entregable</td><td>App instalable, accesible y fluida en celular</td></tr>
-    <tr><td>Recursos</td><td>Service worker; manifiesto; CSS</td></tr>
-    <tr><td>Duración</td><td>4 días hábiles (día 37 a 41) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Descripción</td><td>Agregar navegación con teclado y modo oscuro, convertir el sitio en app instalable y optimizar su fluidez en celulares.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.5.3 Accesibilidad y rendimiento; 1.6.3 App instalable</td></tr>
+    <tr><td>Entregable</td><td>App instalable, accesible y fluida</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo · participan: Patrón, Máximo</td></tr>
+    <tr><td>Recursos</td><td>Service worker; manifiesto web</td></tr>
+    <tr><td>Duración y ubicación</td><td>4 días hábiles · del día 37 al 41 · semana 8 a 9 · sprint 4</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A15 / A18</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Navegable con teclado; instalable; sin animaciones pesadas en celular</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Se navega con teclado, se instala en el celular y no hay animaciones pesadas en celular.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A18 · Redactar documentación</th></tr></thead>
+  <thead><tr><th colspan="2">A18 · Redactar documentación · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.7.1</td></tr>
-    <tr><td>Entregable</td><td>Documentación del proyecto y entregables de gestión</td></tr>
+    <tr><td>Descripción</td><td>Redactar la documentación del trabajo práctico y actualizar los siete entregables de gestión al sistema implementado.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.7.1 Documentación</td></tr>
+    <tr><td>Entregable</td><td>Documentación general y entregables de gestión</td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo · participan: Jiménez, Ignacio</td></tr>
     <tr><td>Recursos</td><td>Equipo</td></tr>
-    <tr><td>Duración</td><td>5 días hábiles (día 41 a 46) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Duración y ubicación</td><td>5 días hábiles · del día 41 al 46 · semana 9 a 10 · sprint 5</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A16, A17 / A19</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Cumple la estructura exigida por la cátedra</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Cumple la estructura pedida por la cátedra y no deja términos sin explicar.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A19 · Preparar presentación</th></tr></thead>
+  <thead><tr><th colspan="2">A19 · Preparar presentación · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.7.2</td></tr>
-    <tr><td>Entregable</td><td>Presentación para la defensa</td></tr>
+    <tr><td>Descripción</td><td>Armar la presentación para la defensa, repartir las partes de la exposición y ensayarla.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.7.2 Presentación</td></tr>
+    <tr><td>Entregable</td><td>Presentación y guion de la defensa</td></tr>
+    <tr><td>Responsable</td><td>Jiménez, Ignacio · participan: Andrada, Juan Pablo; Patrón, Máximo</td></tr>
     <tr><td>Recursos</td><td>Equipo</td></tr>
-    <tr><td>Duración</td><td>2 días hábiles (día 46 a 48) · holgura 0 · <b>crítica</b></td></tr>
+    <tr><td>Duración y ubicación</td><td>2 días hábiles · del día 46 al 48 · semana 10 · sprint 5</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
     <tr><td>Predecesoras / sucesoras</td><td>A18 / A20</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Ensayada y dentro del tiempo asignado</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Criterio de aceptación</td><td>Ensayada completa dentro del tiempo asignado.</td></tr>
   </tbody>
 </table>
 <table class="ficha">
-  <thead><tr><th colspan="2">A20 · Entrega y defensa</th></tr></thead>
+  <thead><tr><th colspan="2">A20 · Entrega y defensa · crítica</th></tr></thead>
   <tbody>
-    <tr><td>Paquete de la EDT</td><td>1.7.3</td></tr>
+    <tr><td>Descripción</td><td>Entregar la documentación y defender el proyecto ante la cátedra con una demostración del sitio publicado.</td></tr>
+    <tr><td>Paquete de la EDT</td><td>1.7.3 Entrega y defensa</td></tr>
     <tr><td>Entregable</td><td>Proyecto entregado y defendido</td></tr>
-    <tr><td>Recursos</td><td>Equipo completo</td></tr>
-    <tr><td>Duración</td><td>1 días hábiles (día 48 a 49) · holgura 0 · <b>crítica</b></td></tr>
-    <tr><td>Predecesoras / sucesoras</td><td>A19 / —</td></tr>
-    <tr><td>Criterio de aceptación</td><td>Aprobación del docente</td></tr>
-    <tr><td>Responsable</td><td><span class="completar">[asignar]</span></td></tr>
+    <tr><td>Responsable</td><td>Andrada, Juan Pablo · participan: Patrón, Máximo; Jiménez, Ignacio</td></tr>
+    <tr><td>Recursos</td><td>Equipo completo; sitio publicado</td></tr>
+    <tr><td>Duración y ubicación</td><td>1 días hábiles · del día 48 al 49 · semana 10 · sprint 5</td></tr>
+    <tr><td>Holgura</td><td>0 días: actividad crítica</td></tr>
+    <tr><td>Predecesoras / sucesoras</td><td>A19 / ninguna (cierra el proyecto)</td></tr>
+    <tr><td>Criterio de aceptación</td><td>Aprobación del docente.</td></tr>
   </tbody>
 </table>
 
