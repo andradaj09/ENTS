@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>ENTS — Explicación del código</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="entregables/estilos.css">
+<style>
+  @page { @top-left { content: "ENTS · Explicación del código"; } }
+  td code, li code, p code { white-space: nowrap; }
+  td:first-child code { white-space: normal; }
+  .arq { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8pt; margin: 8pt 0 6pt; break-inside: avoid; }
+  .capa { border: 0.7pt solid var(--linea); border-top: 3pt solid var(--azul-2); border-radius: 7pt; padding: 8pt 10pt; background: #fff; font-size: 8.6pt; }
+  .capa:nth-child(2) { border-top-color: var(--azul); }
+  .capa:nth-child(3) { border-top-color: var(--marino); }
+  .capa small { display: block; font-size: 6.8pt; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--azul-2); }
+  .capa b { display: block; font-size: 10.5pt; color: var(--marino); margin: 1pt 0 4pt; }
+  .capa ul { margin: 0; padding-left: 12pt; }
+  .flechas { display: flex; justify-content: space-around; font-size: 8pt; color: var(--gris); margin-bottom: 12pt; }
+  .pasos { counter-reset: paso; list-style: none; padding: 0; }
+  .pasos li { counter-increment: paso; position: relative; padding: 6pt 10pt 6pt 34pt; margin-bottom: 5pt; background: #faf9f5; border: 0.6pt solid var(--linea); border-radius: 6pt; break-inside: avoid; }
+  .pasos li::before { content: counter(paso); position: absolute; left: 9pt; top: 6pt; width: 17pt; height: 17pt; border-radius: 5pt; background: var(--azul); color: #fff; font-size: 8.5pt; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+
+<section class="portada">
+  <div class="portada-arriba">
+    <svg class="portada-anillos" viewBox="0 0 200 200" aria-hidden="true">
+      <ellipse cx="100" cy="100" rx="92" ry="82.8" transform="rotate(-18 100 100)" fill="none" stroke="#fff" stroke-width="3.4"/><ellipse cx="101.6" cy="98.8" rx="76" ry="68.4" transform="rotate(-9 100 100)" fill="none" stroke="#fff" stroke-width="3.1"/><ellipse cx="103.2" cy="97.6" rx="61" ry="54.9" transform="rotate(0 100 100)" fill="none" stroke="#fff" stroke-width="2.8"/><ellipse cx="104.8" cy="96.4" rx="47" ry="42.3" transform="rotate(9 100 100)" fill="none" stroke="#fff" stroke-width="2.5"/><ellipse cx="106.4" cy="95.2" rx="34" ry="30.6" transform="rotate(18 100 100)" fill="none" stroke="#fff" stroke-width="2.2"/><ellipse cx="108" cy="94" rx="22" ry="19.8" transform="rotate(27 100 100)" fill="none" stroke="#fff" stroke-width="1.9"/>
+    </svg>
+    <div class="portada-inst">Instituto Cervantes<small>Carrera Analista Programador · Cátedra Práctica Profesionalizante</small></div>
+    <div class="portada-centro">
+      <div class="portada-logo"><img src="../../public/logo.svg" alt=""></div>
+      <div class="portada-tipo">Documentación técnica</div>
+      <h1 class="portada-titulo">Explicación del código</h1>
+      <div class="portada-sub">Qué hace cada carpeta, archivo y pieza de la plataforma ENTS, y cómo se conectan entre sí</div>
+    </div>
+  </div>
+  <div class="portada-abajo">
+    <div class="portada-datos">
+      <div class="portada-dato"><small>Proyecto</small><span>ENTS — Peticiones vecinales</span></div>
+      <div class="portada-dato"><small>Docente</small><span>Ing. Loza</span></div>
+      <div class="portada-dato"><small>Director del proyecto</small><span>Andrada, Juan Pablo</span></div>
+      <div class="portada-dato"><small>Repositorio</small><span>github.com/andradaj09/ENTS</span></div>
+      <div class="portada-dato"><small>Tamaño</small><span>≈ 60 archivos de código · 14 tablas</span></div>
+      <div class="portada-dato"><small>Sitio publicado</small><span>entscordoba.netlify.app</span></div>
+    </div>
+    <div class="portada-autores">
+      <small>Autores</small>
+      <div><div class="portada-autor"><b>Andrada, Juan Pablo</b><span>Legajo 27318</span></div><div class="portada-autor"><b>Patrón, Máximo</b><span>Legajo 27311</span></div><div class="portada-autor"><b>Jiménez, Ignacio</b><span>Legajo 28177</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="toc-titulo">Contenido</div>
+<ol class="toc">
+  <li><span>1</span>Panorama general</li>
+  <li><span>2</span>Archivos de la raíz</li>
+  <li><span>3</span>Carpeta public/</li>
+  <li><span>4</span>Arranque y estructura de src/</li>
+  <li><span>5</span>Páginas (src/pages)</li>
+  <li><span>6</span>Componentes (src/components)</li>
+  <li><span>7</span>Servicios (src/services)</li>
+  <li><span>8</span>Hooks y utilidades</li>
+  <li><span>9</span>Estilos (src/styles)</li>
+  <li><span>10</span>Base de datos (supabase/schema.sql)</li>
+  <li><span>11</span>Documentación (docs/)</li>
+  <li><span>12</span>Cómo se conecta todo: crear una petición</li>
+  <li><span>13</span>Cosas sobrantes detectadas</li>
+</ol>
+
+<div class="guia">
+  <p><b>Qué es este documento.</b> Un recorrido por todo el código de ENTS: cada carpeta, cada archivo y qué responsabilidad cumple dentro del sistema.</p>
+  <p><b>Para qué sirve.</b> Para que cualquier integrante o docente entienda dónde está cada cosa y cómo fluye la información, sin tener que leer el código línea por línea.</p>
+  <p style="margin:0"><b>Cómo leerlo.</b> Va de lo general a lo particular: primero la arquitectura, después cada carpeta y al final un ejemplo completo de cómo trabajan juntas todas las piezas.</p>
+</div>
+
+<!-- ============ 1 ============ -->
+<h1 class="salto"><span class="num">1</span>Panorama general</h1>
+<p>ENTS es una aplicación web organizada en <b>tres capas</b>:</p>
+<div class="arq">
+  <div class="capa"><small>Vista</small><b>Lo que se ve</b><ul><li><code>src/pages</code></li><li><code>src/components</code></li><li><code>src/styles</code></li></ul>Pantallas en React que el navegador descarga desde Netlify.</div>
+  <div class="capa"><small>Controlador</small><b>La lógica que conecta</b><ul><li><code>src/services</code></li><li><code>src/hooks</code></li><li><code>src/utils</code></li></ul>Piden y mandan datos a la base; cálculos que corren en el navegador.</div>
+  <div class="capa"><small>Modelo</small><b>Datos y reglas</b><ul><li><code>supabase/schema.sql</code></li><li>PostgreSQL en Supabase</li></ul>Tablas, permisos, cálculos automáticos y avisos.</div>
+</div>
+<div class="flechas"><span>navegador → Netlify (HTTPS)</span><span>servicios → Supabase (API + RPC)</span><span>disparadores → notificaciones</span></div>
+<div class="nota"><b>Decisión central del proyecto:</b> las reglas importantes viven en la base de datos, no en la pantalla. Quién puede ver o borrar algo, el score de urgencia, los avisos y la elevación a las 50 firmas los decide PostgreSQL, así nadie puede saltarlas manipulando el navegador. La pantalla solo esconde lo que la base igual rechazaría.</div>
+
+<!-- ============ 2 ============ -->
+<h1><span class="num">2</span>Archivos de la raíz (configuración)</h1>
+<table>
+  <thead><tr><th style="width:24%">Archivo</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>package.json</code></td><td>Lista de dependencias y comandos: <code>npm run dev</code> (desarrollo), <code>build</code> (versión de producción), <code>test</code> (pruebas) y <code>lint</code> (revisión del código).</td></tr>
+    <tr><td><code>package-lock.json</code></td><td>Versiones exactas instaladas de cada dependencia (lo genera npm automáticamente).</td></tr>
+    <tr><td><code>vite.config.js</code></td><td>Configura Vite, la herramienta que compila la aplicación, con el plugin de React.</td></tr>
+    <tr><td><code>index.html</code></td><td>La única página HTML. Carga la fuente Plus Jakarta Sans y el manifiesto de la app, y trae un pequeño script que aplica el modo oscuro <i>antes</i> de dibujar (así no parpadea). En <code>&lt;div id="root"&gt;</code> se monta React.</td></tr>
+    <tr><td><code>netlify.toml</code></td><td>Le indica a Netlify cómo compilar (<code>npm run build</code>, Node 22); hace que cualquier ruta (<code>/mapa</code>, <code>/peticiones/12</code>) sirva <code>index.html</code>, porque las rutas las maneja React; y evita guardar en caché <code>sw.js</code>.</td></tr>
+    <tr><td><code>.oxlintrc.json</code></td><td>Reglas del revisor automático de código (oxlint), por ejemplo las reglas de los hooks de React.</td></tr>
+    <tr><td><code>.env.example</code></td><td>Plantilla de variables de entorno: URL de Supabase y su clave pública. El <code>.env</code> real nunca se sube al repositorio.</td></tr>
+    <tr><td><code>.gitignore</code></td><td>Lo que Git ignora: <code>node_modules</code>, <code>dist</code>, <code>.env</code>, etc.</td></tr>
+    <tr><td><code>README.md</code></td><td>Explicación del proyecto y pasos para instalarlo y ejecutarlo.</td></tr>
+  </tbody>
+</table>
+
+<!-- ============ 3 ============ -->
+<h1><span class="num">3</span>Carpeta public/ (archivos que se sirven tal cual)</h1>
+<table>
+  <thead><tr><th style="width:24%">Archivo</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>manifest.webmanifest</code></td><td>Convierte el sitio en una app instalable: nombre "ENTS", colores, íconos y accesos directos a "Nueva petición" y "Mapa vecinal".</td></tr>
+    <tr><td><code>sw.js</code></td><td>El <i>service worker</i>, un programa en segundo plano. Guarda en caché los archivos de la app para que abra aunque falle la red: las páginas se piden primero a la red y los archivos con hash (<code>/assets</code>) se toman de la caché. Los datos de Supabase nunca se guardan en caché.</td></tr>
+    <tr><td><code>logo.svg</code> / <code>favicon.svg</code></td><td>El logo de anillos concéntricos.</td></tr>
+    <tr><td><code>icons/</code></td><td>Íconos PNG para la app instalada en el celular.</td></tr>
+  </tbody>
+</table>
+
+<!-- ============ 4 ============ -->
+<h1 class="salto"><span class="num">4</span>Arranque y estructura de src/</h1>
+<table>
+  <thead><tr><th style="width:27%">Archivo</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>main.jsx</code></td><td>Punto de entrada. Carga Bootstrap y los estilos globales, registra el service worker, empieza a escuchar el aviso de "app instalable" y monta <code>&lt;App&gt;</code> dentro de <code>&lt;AuthProvider&gt;</code>.</td></tr>
+    <tr><td><code>supabase/client.js</code></td><td>Crea la única conexión con Supabase usando las variables del <code>.env</code>. Todos los servicios la importan.</td></tr>
+    <tr><td><code>contexts/AuthContext.jsx</code></td><td>Guarda la sesión y la comparte con toda la app: <code>user</code> (la cuenta), <code>profile</code> (nombre, rol, área…) y <code>loading</code>. Escucha cuando alguien entra o sale y, si llega un enlace de recuperación de contraseña, lleva a <code>/restablecer</code>. Se lee con <code>useAuth()</code>.</td></tr>
+    <tr><td><code>App.jsx</code></td><td>El mapa de rutas (React Router). Rutas públicas: <code>/login</code>, <code>/registro</code>, <code>/recuperar</code>, <code>/restablecer</code> y <code>/privacidad</code>. El resto exige sesión. Casi todas las páginas se cargan "perezosas" (<code>lazy</code>): se descargan recién al visitarlas.</td></tr>
+    <tr><td><code>routes/ProtectedRoute.jsx</code></td><td>Si no hay sesión, manda al login y recuerda a qué página se quería ir.</td></tr>
+    <tr><td><code>routes/PanelRoute.jsx</code></td><td>Si el rol no tiene permiso para ver ese panel (según la tabla de permisos), manda al inicio.</td></tr>
+    <tr><td><code>layouts/MainLayout.jsx</code></td><td>El marco de la app: barra superior (logo, campana, avatar), menú lateral fijo armado según los permisos de cada rol, fondo animado y el espacio donde aparece cada página. En el celular, el menú se abre como un cajón.</td></tr>
+  </tbody>
+</table>
+
+<!-- ============ 5 ============ -->
+<h1><span class="num">5</span>Páginas (src/pages)</h1>
+<p>Cada archivo es una pantalla completa de la aplicación.</p>
+<table>
+  <thead><tr><th style="width:21%">Archivo</th><th style="width:17%">Ruta</th><th>Qué hace</th><th style="width:15%">Quién lo ve</th></tr></thead>
+  <tbody>
+    <tr><td><code>AuthPage.jsx</code></td><td>/login, /registro, /recuperar</td><td>Una pantalla con tres modos: ingresar (correo o Google), registrarse (vecino o funcionario) y pedir el correo de recuperación. Traduce los errores al español.</td><td>Público</td></tr>
+    <tr><td><code>RestablecerPassword.jsx</code></td><td>/restablecer</td><td>Elegir una contraseña nueva desde el enlace del correo.</td><td>Desde el correo</td></tr>
+    <tr><td><code>Privacidad.jsx</code></td><td>/privacidad</td><td>Política de privacidad (Google la exige para el ingreso con Google).</td><td>Público</td></tr>
+    <tr><td><code>Home.jsx</code></td><td>/</td><td>Inicio: saludo, accesos rápidos, novedades, próximos eventos y todas las peticiones ordenadas por prioridad, con filtro por categoría.</td><td>Todos</td></tr>
+    <tr><td><code>Dashboard.jsx</code></td><td>/dashboard</td><td>"Mis solicitudes": las peticiones propias en cualquier estado.</td><td>Según permisos</td></tr>
+    <tr><td><code>CreatePetition.jsx</code></td><td>/peticiones/nueva</td><td>Formulario de petición: sugiere categoría y barrio, muestra peticiones parecidas, avisa datos personales o insultos antes de enviar, sube fotos comprimidas y lleva al detalle.</td><td>Con permiso de crear</td></tr>
+    <tr><td><code>PetitionDetail.jsx</code></td><td>/peticiones/:id</td><td>Detalle: fotos, firma, prioridad y meta de 50, línea de seguimiento, comentarios y score de urgencia. Autor y firmantes solo para quien puede verlos; barra de editar o borrar para moderadores.</td><td>Todos</td></tr>
+    <tr><td><code>Mapa.jsx</code></td><td>/mapa</td><td>Mapa con dos vistas: marcadores por petición, o barrios coloreados por cantidad de peticiones, firmas o urgencia. Filtro por barrio y lista lateral.</td><td>Según permisos</td></tr>
+    <tr><td><code>Comunidad.jsx</code></td><td>/comunidad</td><td>Muro vecinal anónimo (publicaciones positivas o negativas por barrio), búsqueda y peticiones del barrio.</td><td>Según permisos</td></tr>
+    <tr><td><code>Eventos.jsx</code></td><td>/eventos</td><td>Agenda de próximos eventos; formulario para crear y borrar si se tiene permiso.</td><td>Según permisos</td></tr>
+    <tr><td><code>Estadisticas.jsx</code></td><td>/estadisticas</td><td>Números públicos y anónimos: peticiones por categoría, barrio, semana y urgencia, con gráficos y tablas.</td><td>Según permisos</td></tr>
+    <tr><td><code>Perfil.jsx</code></td><td>/perfil</td><td>Nombre, foto o avatar predefinido, barrios seguidos, insignias y "lo que podés hacer" según el rol.</td><td>Según permisos</td></tr>
+    <tr><td><code>Bandeja.jsx</code></td><td>/bandeja</td><td>Peticiones del área del funcionario por prioridad, filtros por etapa y resumen del área (sin resolver, urgentes, elevadas, días promedio).</td><td>Funcionario y admin</td></tr>
+    <tr><td><code>AdminPetitions.jsx</code></td><td>/admin/peticiones</td><td>Moderación: peticiones pendientes de aprobar (primero las marcadas), solicitudes de funcionario y comentarios denunciados u ocultos.</td><td>Moderador y admin</td></tr>
+    <tr><td><code>Usuarios.jsx</code></td><td>/admin/usuarios</td><td>Directorio con datos completos, búsqueda, filtros por rol, asignación de área y cambio de rol (este último, solo el dueño).</td><td>Admin</td></tr>
+    <tr><td><code>EstadisticasAdmin.jsx</code></td><td>/admin/estadisticas</td><td>Panel analítico: cuentas, registros por semana, moderación, firmas por día y usuarios más activos; exporta a Excel y PDF.</td><td>Admin</td></tr>
+    <tr><td><code>Documentos.jsx</code></td><td>/documentos</td><td>Documentos privados del trabajo práctico (PDF): abrir, subir y borrar.</td><td>Dueño (o a quien habilite)</td></tr>
+    <tr><td><code>Permisos.jsx</code></td><td>/permisos</td><td>Matriz de rangos por paneles con interruptores de Ver y Modificar.</td><td>Solo el dueño</td></tr>
+  </tbody>
+</table>
+
+<!-- ============ 6 ============ -->
+<h1 class="salto"><span class="num">6</span>Componentes (src/components)</h1>
+<p>Piezas reutilizables que forman las páginas.</p>
+<table>
+  <thead><tr><th style="width:28%">Archivo</th><th>Qué es</th></tr></thead>
+  <tbody>
+    <tr><td><code>Avatar.jsx</code></td><td>Foto, avatar predefinido o iniciales, dentro del anillo del color del rol; etiqueta "CEO" para el dueño.</td></tr>
+    <tr><td><code>avatares.js</code></td><td>Avatares geométricos predefinidos (se guardan como <code>preset:N</code>).</td></tr>
+    <tr><td><code>MenuUsuario.jsx</code></td><td>Menú del avatar: datos de la cuenta, perfil, mis solicitudes, instalar app, modo oscuro y cerrar sesión.</td></tr>
+    <tr><td><code>NotificacionesMenu.jsx</code></td><td>Campana con contador de no leídas y panel de avisos (firmas, hitos, respuestas, comentarios, barrios seguidos).</td></tr>
+    <tr><td><code>PetitionCard.jsx</code></td><td>Tarjeta de una petición: categoría, barrio, firmas, prioridad y urgencia.</td></tr>
+    <tr><td><code>Seguimiento.jsx</code></td><td>Línea de tiempo de 5 etapas con respuestas oficiales; formulario para quien puede responder.</td></tr>
+    <tr><td><code>Comentarios.jsx</code></td><td>Comentarios anónimos: escribir, denunciar y borrar; los moderadores ven autor, alertas y denuncias.</td></tr>
+    <tr><td><code>EditarPeticion.jsx</code></td><td>Ventana para que un moderador corrija una petición.</td></tr>
+    <tr><td><code>PeticionesSimilares.jsx</code></td><td>Mientras se escribe, busca peticiones parecidas para firmarlas en vez de repetirlas.</td></tr>
+    <tr><td><code>SelectorFotos.jsx</code></td><td>Elegir o arrastrar hasta 3 fotos y comprimirlas en el navegador.</td></tr>
+    <tr><td><code>SelectorUbicacion.jsx</code></td><td>Mapa chico para marcar dónde ocurre el problema.</td></tr>
+    <tr><td><code>GaleriaFotos.jsx</code></td><td>Fotos de la petición con visor a pantalla completa.</td></tr>
+    <tr><td><code>Graficos.jsx</code></td><td>Gráficos hechos a mano (barras, columnas, apiladas y tarjetas de números), cada uno con su versión en tabla para accesibilidad.</td></tr>
+    <tr><td><code>BarriosSeguidos.jsx</code></td><td>Elegir los barrios de los que se quieren recibir avisos.</td></tr>
+    <tr><td><code>Insignias.jsx</code></td><td>Logros por participar (primera petición, firmas, etc.).</td></tr>
+    <tr><td><code>OpcionesBarrios.jsx</code></td><td>Opciones del selector de barrios agrupadas por localidad.</td></tr>
+    <tr><td><code>Icon.jsx</code></td><td>Todos los íconos, dibujados con líneas rectas.</td></tr>
+    <tr><td><code>Logo.jsx</code></td><td>El logo de anillos.</td></tr>
+    <tr><td><code>FondoAnimado.jsx</code></td><td>Figuras geométricas que flotan de fondo (quietas en celular, por rendimiento).</td></tr>
+    <tr><td><code>HeroArt.jsx</code></td><td>Ilustración del inicio.</td></tr>
+    <tr><td><code>PalabraRotativa.jsx</code></td><td>"Tu barrio, más cerca / más seguro / más limpio / más unido".</td></tr>
+  </tbody>
+</table>
+
+<!-- ============ 7 ============ -->
+<h1><span class="num">7</span>Servicios (src/services)</h1>
+<p>Ningún componente habla directo con Supabase: toda la comunicación pasa por estos tres archivos.</p>
+<table>
+  <thead><tr><th style="width:26%">Archivo</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>authService.js</code></td><td>Cuentas: registro, ingreso con correo o Google, recuperación y cambio de contraseña, cerrar sesión, editar el perfil y subir el avatar. Traduce los errores de Supabase al español.</td></tr>
+    <tr><td><code>petitionService.js</code></td><td>Lo principal: peticiones (listar, ver, crear con fotos, editar, borrar, moderar), firmas, categorías y barrios (guardados en caché por sesión), notificaciones, eventos, muro, directorio de usuarios, solicitudes de funcionario, estadísticas y reportes. Pide solo las columnas visibles (no <code>*</code>) porque la columna del autor está oculta para preservar el anonimato.</td></tr>
+    <tr><td><code>participacionService.js</code></td><td>Seguimiento, comentarios, búsqueda de similares, barrios seguidos, logros, áreas, roles, documentos privados y permisos por panel. Casi todo llamando a funciones de la base (<code>rpc</code>).</td></tr>
+  </tbody>
+</table>
+
+<!-- ============ 8 ============ -->
+<h1><span class="num">8</span>Hooks y utilidades</h1>
+<h2>8.1 Hooks (src/hooks)</h2>
+<table>
+  <thead><tr><th style="width:26%">Archivo</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>useEsDueno.js</code></td><td>Pregunta una vez a la base si la cuenta es la del dueño y lo recuerda.</td></tr>
+    <tr><td><code>usePermisos.js</code></td><td>Carga una vez qué paneles puede ver y modificar el rol, ofrece <code>puede('bandeja', 'modificar')</code> y se recarga cuando el dueño cambia un permiso.</td></tr>
+  </tbody>
+</table>
+<h2>8.2 Utilidades (src/utils): lógica pura, sin pantallas</h2>
+<table>
+  <thead><tr><th style="width:26%">Archivo</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>clasificador.js</code></td><td>Sugiere la categoría contando raíces de palabras clave; el título vale doble.</td></tr>
+    <tr><td><code>barrios.js</code></td><td>Detecta el barrio más cercano a la ubicación (distancia sobre la Tierra, hasta 3 km).</td></tr>
+    <tr><td><code>zonasMapa.js</code></td><td>Divide la ciudad en áreas por barrio (diagrama de Voronoi con <code>d3-delaunay</code>) y define la escala de azules del mapa.</td></tr>
+    <tr><td><code>prioridad.js</code></td><td>Los 5 niveles de prioridad por firmas, la meta de 50, el orden del inicio y las etapas de seguimiento.</td></tr>
+    <tr><td><code>moderacion.js</code></td><td>Detecta correos, teléfonos, DNI e insultos antes de enviar (la base repite el control).</td></tr>
+    <tr><td><code>roles.js</code></td><td>Nombres de los roles, quién ve identidades y el texto de "lo que podés hacer".</td></tr>
+    <tr><td><code>paneles.js</code></td><td>Lista de los 11 paneles con nombre, ruta, ícono y qué habilita "modificar".</td></tr>
+    <tr><td><code>imagenes.js</code></td><td>Comprime fotos a un máximo de 1600 px en JPEG (≈ 5 MB → ≈ 300 KB).</td></tr>
+    <tr><td><code>ubicacion.js</code></td><td>Centro de Córdoba, mapa base de OpenStreetMap y ubicación aproximada si la petición no trae coordenadas.</td></tr>
+    <tr><td><code>format.js</code></td><td>"Hace 2 h", números con punto de miles y umbrales de urgencia.</td></tr>
+    <tr><td><code>exportar.js</code></td><td>Genera los CSV que Excel abre bien (separador <code>;</code> y acentos).</td></tr>
+    <tr><td><code>tema.js</code></td><td>Modo claro u oscuro, guardado en el navegador.</td></tr>
+    <tr><td><code>instalacion.js</code></td><td>Botón "Instalar app" (Chrome) y ayuda para iPhone.</td></tr>
+  </tbody>
+</table>
+<h2>8.3 Pruebas automáticas (src/utils/__tests__)</h2>
+<p>49 pruebas con Vitest que verifican prioridad, clasificación, barrios, moderación de textos, áreas del mapa, exportación y roles. Se ejecutan con <code>npm test</code> antes de cada publicación.</p>
+
+<!-- ============ 9 ============ -->
+<h1><span class="num">9</span>Estilos (src/styles)</h1>
+<table>
+  <thead><tr><th style="width:26%">Archivo</th><th>Qué cubre</th></tr></thead>
+  <tbody>
+    <tr><td><code>theme.css</code></td><td>La base de todo el diseño: colores, tipografía, barra superior, menú, tarjetas, botones, anillos de rol y ajustes de rendimiento en celular.</td></tr>
+    <tr><td><code>oscuro.css</code></td><td>El modo oscuro; se activa con <code>data-tema="oscuro"</code> en la página.</td></tr>
+    <tr><td><code>auth.css</code></td><td>Pantallas de acceso: login, registro, recuperación y privacidad.</td></tr>
+    <tr><td><code>comunidad.css</code></td><td>El muro vecinal.</td></tr>
+    <tr><td><code>estadisticas.css</code></td><td>Gráficos y paneles de estadísticas.</td></tr>
+    <tr><td><code>mapa.css</code></td><td>El mapa y sus marcadores.</td></tr>
+  </tbody>
+</table>
+
+<!-- ============ 10 ============ -->
+<h1 class="salto"><span class="num">10</span>Base de datos (supabase/schema.sql)</h1>
+<p>Esquema completo y reproducible de PostgreSQL, organizado en 19 secciones que se agregaron en orden a medida que creció el proyecto.</p>
+<h2>10.1 Tablas</h2>
+<table>
+  <thead><tr><th style="width:28%">Tabla</th><th>Qué guarda</th></tr></thead>
+  <tbody>
+    <tr><td><code>profiles</code></td><td>Datos de cada usuario: nombre, rol, área y avatar. Se crea sola al registrarse (disparador sobre la tabla de cuentas de Supabase).</td></tr>
+    <tr><td><code>peticiones</code></td><td>Pedidos: texto, fotos, ubicación, estado, etapa de seguimiento, score, cantidad de firmas, alertas y elevación.</td></tr>
+    <tr><td><code>firmas</code></td><td>Una firma por persona y petición.</td></tr>
+    <tr><td><code>peticion_actualizaciones</code></td><td>Respuestas oficiales del seguimiento.</td></tr>
+    <tr><td><code>categorias</code> / <code>areas</code></td><td>16 categorías agrupadas en las áreas del municipio.</td></tr>
+    <tr><td><code>zonas</code></td><td>Los 111 barrios de Córdoba y Villa Allende con su ubicación.</td></tr>
+    <tr><td><code>comentarios</code> / <code>denuncias</code></td><td>Comentarios anónimos y sus denuncias.</td></tr>
+    <tr><td><code>notificaciones</code></td><td>Los avisos de la campana.</td></tr>
+    <tr><td><code>barrios_seguidos</code></td><td>Barrios que sigue cada persona.</td></tr>
+    <tr><td><code>publicaciones</code> / <code>eventos</code></td><td>Muro vecinal y agenda.</td></tr>
+    <tr><td><code>permisos_panel</code></td><td>Qué ve y modifica cada rol en cada panel.</td></tr>
+  </tbody>
+</table>
+<h2>10.2 Disparadores (se ejecutan solos)</h2>
+<table>
+  <thead><tr><th style="width:28%">Disparador</th><th>Cuándo y qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>preparar_peticion</code></td><td>Al crear o editar una petición: fija la etapa inicial, detecta alertas, asigna el barrio si falta y calcula el score de urgencia.</td></tr>
+    <tr><td><code>contar_firmas</code></td><td>Al firmar o retirar la firma: mantiene el contador al día y recalcula el score.</td></tr>
+    <tr><td><code>aviso_firma</code> / <code>avisos_peticion</code></td><td>Avisan hitos de firmas, la elevación a las 50, los cambios de estado y las novedades en barrios seguidos.</td></tr>
+    <tr><td><code>revisar_comentario</code></td><td>Bloquea datos personales y oculta insultos hasta que un moderador los revise.</td></tr>
+    <tr><td><code>aviso_comentario</code></td><td>Avisa al autor de la petición cuando la comentan.</td></tr>
+    <tr><td><code>contar_denuncias</code></td><td>Con 3 denuncias, el comentario se oculta automáticamente.</td></tr>
+  </tbody>
+</table>
+<h2>10.3 Funciones</h2>
+<ul>
+  <li><b>Esquema <code>privado</code></b> (la app no puede llamarlas directamente): auxiliares como <code>calcular_urgencia</code>, <code>tiene_permiso</code>, <code>es_dueno</code>, <code>barrio_mas_cercano</code> y <code>revisar_texto</code>.</li>
+  <li><b>Esquema <code>public</code></b> (las llama la app): se ejecutan con permisos elevados pero verifican adentro quién llama. Por ejemplo <code>mis_peticiones</code>, <code>identidades_peticion</code>, <code>actualizar_seguimiento</code>, <code>peticiones_similares</code> (compara textos por trigramas), <code>estadisticas_publicas</code>, <code>estadisticas_admin</code>, <code>cambiar_rol</code>, <code>guardar_permiso</code>, <code>mis_permisos</code> y <code>borrar_comentario</code>.</li>
+</ul>
+<h2>10.4 Seguridad</h2>
+<ul>
+  <li><b>RLS (seguridad por fila)</b> en todas las tablas: cada una define quién puede leer, crear, editar o borrar cada fila.</li>
+  <li><b>Anonimato por columna:</b> la columna del autor de una petición no es legible para los vecinos; las identidades solo se obtienen mediante funciones que verifican el rol.</li>
+  <li><b>Archivos:</b> avatares, fotos de peticiones y documentos privados tienen sus propias reglas por carpeta.</li>
+</ul>
+
+<!-- ============ 11 ============ -->
+<h1><span class="num">11</span>Documentación (docs/)</h1>
+<table>
+  <thead><tr><th style="width:36%">Archivo</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>entrega/entregables/datos.cjs</code></td><td>Fuente única de datos: equipo, 20 actividades con ruta crítica, requisitos (RF, RNF), historias de usuario y glosario.</td></tr>
+    <tr><td><code>entrega/entregables/generar.cjs</code></td><td>Arma los 7 entregables, el documento combinado y aplica el diseño a la documentación general.</td></tr>
+    <tr><td><code>entrega/entregables/estilos.css</code></td><td>El diseño de los PDF (portada, índice, tablas, encabezados).</td></tr>
+    <tr><td><code>entrega/actualizar_documentacion.cjs</code></td><td>Rellena la documentación general con los mismos datos de los entregables.</td></tr>
+    <tr><td><code>entrega/documentacion.html</code>, <code>guion_defensa.html</code></td><td>Documentación general del trabajo práctico y guion de la defensa, con sus PDF.</td></tr>
+    <tr><td><code>Propuesta_mejoras_ENTS.pdf</code></td><td>Documento con propuestas de mejora.</td></tr>
+  </tbody>
+</table>
+
+<!-- ============ 12 ============ -->
+<h1 class="salto"><span class="num">12</span>Cómo se conecta todo: crear una petición</h1>
+<p>Este recorrido muestra cómo trabajan juntas las piezas descritas, desde que un vecino escribe hasta que el municipio responde.</p>
+<ol class="pasos">
+  <li><b>Escribir.</b> En <code>CreatePetition.jsx</code>, mientras el vecino escribe, <code>clasificador.js</code> sugiere la categoría y <code>barrios.js</code> el barrio; <code>PeticionesSimilares</code> consulta <code>peticiones_similares</code> en la base y <code>moderacion.js</code> avisa si escribió un teléfono o un insulto.</li>
+  <li><b>Fotos.</b> <code>SelectorFotos</code> y <code>imagenes.js</code> comprimen las fotos en el navegador.</li>
+  <li><b>Enviar.</b> <code>petitionService.createPeticion</code> sube las fotos al almacenamiento de Supabase e inserta la petición.</li>
+  <li><b>La base controla.</b> RLS verifica que sea propia, que quede "pendiente" y que el rol tenga permiso de crear. El disparador <code>preparar_peticion</code> calcula el score, las alertas y el barrio, y <code>avisos_peticion</code> avisa a los moderadores.</li>
+  <li><b>Moderar.</b> Un moderador la aprueba en <code>AdminPetitions</code>: pasa a "publicada" y se avisa a quienes siguen ese barrio.</li>
+  <li><b>Firmar.</b> Cada firma dispara <code>contar_firmas</code>, que recalcula el score y la prioridad; al llegar a 50, el área recibe el aviso de elevación.</li>
+  <li><b>Responder.</b> El funcionario responde desde la <code>Bandeja</code> mediante <code>actualizar_seguimiento</code>, y el autor y los firmantes reciben el aviso en la campana.</li>
+</ol>
+
+<!-- ============ 13 ============ -->
+<h1><span class="num">13</span>Cosas sobrantes detectadas</h1>
+<p>Ninguna afecta el funcionamiento, pero conviene limpiarlas para mantener el código ordenado:</p>
+<table>
+  <thead><tr><th style="width:34%">Elemento</th><th>Situación</th></tr></thead>
+  <tbody>
+    <tr><td><code>react-bootstrap</code> (en package.json)</td><td>Está instalado pero ningún archivo lo usa: Bootstrap se usa solo con sus clases CSS. Se puede quitar.</td></tr>
+    <tr><td><code>src/assets/react.svg</code> y <code>vite.svg</code></td><td>Restos de la plantilla inicial de Vite; no se usan.</td></tr>
+    <tr><td><code>privado.puede_ver_identidades()</code></td><td>Función de la versión de 4 roles que dos funciones antiguas todavía usan. Funciona, pero convive con su reemplazo más nuevo por área (<code>puede_ver_identidades_de</code>).</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>
