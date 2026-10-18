@@ -315,6 +315,9 @@ hr {
   display: inline-block;
   overflow: hidden;
   vertical-align: bottom;
+  /* Espacio para las letras con cola (g, j, q) sin cambiar el alto del renglón */
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
 }
 
 .palabra {

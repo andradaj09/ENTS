@@ -206,7 +206,9 @@ function AuthPage() {
 
         <h1 className="auth-title auth-reveal" style={{ '--i': 2 }}>
           {modo === 'recuperar' ? 'Recuperar contraseña' : (
-            <>Tu barrio, <PalabraRotativa /></>
+            // La palabra va siempre en su propia línea: como cambia de ancho,
+            // si compartiera renglón saltaría de línea y movería el formulario
+            <>Tu barrio,<br /><PalabraRotativa /></>
           )}
         </h1>
 
