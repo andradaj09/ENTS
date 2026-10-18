@@ -316,8 +316,8 @@ hr {
   overflow: hidden;
   vertical-align: bottom;
   /* Espacio para las letras con cola (g, j, q) sin cambiar el alto del renglón */
-  padding-bottom: 0.14em;
-  margin-bottom: -0.14em;
+  padding-bottom: 0.22em;
+  margin-bottom: -0.22em;
 }
 
 .palabra {
@@ -923,36 +923,33 @@ hr {
    Inicio
    ========================================================== */
 
-/* El panel principal se estira hasta la altura de la columna derecha,
-   así no queda espacio vacío debajo */
+/* Inicio compacto: el panel principal ocupa todo el ancho con su propia
+   altura, y novedades y eventos van en una fila debajo (se ven al bajar) */
 .home-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
-  align-items: stretch;
 }
 
 .home-aside {
   display: grid;
-  align-content: start;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: start;
   gap: 16px;
+  scroll-margin-top: 110px;
 }
 
 .hero-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
-  gap: 24px;
-  padding: clamp(28px, 3.5vw, 52px);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  align-items: center;
+  gap: 18px 36px;
+  padding: clamp(24px, 3vw, 40px) clamp(24px, 3vw, 44px) 18px;
 }
 
-/* Título arriba y accesos rápidos abajo, alineados con las estadísticas */
 .hero-texto {
   display: flex;
   flex-direction: column;
-}
-
-.hero-texto .action-list {
-  margin-top: auto;
 }
 
 .eyebrow {
@@ -965,8 +962,8 @@ hr {
 }
 
 .hero-title {
-  margin: 14px 0 18px;
-  font-size: clamp(2.6rem, 4.2vw, 4.8rem);
+  margin: 10px 0 12px;
+  font-size: clamp(2.3rem, 3.5vw, 3.9rem);
   font-weight: 800;
   line-height: 1.02;
   letter-spacing: -0.035em;
@@ -974,9 +971,9 @@ hr {
 
 .hero-sub {
   max-width: 420px;
-  margin-bottom: 32px;
+  margin-bottom: 22px;
   color: var(--ents-muted);
-  font-size: clamp(1.05rem, 1.6vw, 1.45rem);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
   line-height: 1.4;
 }
 
@@ -1046,20 +1043,68 @@ hr {
 .hero-visual {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: center;
+  gap: 14px;
 }
 
-/* La ilustración solo rellena el alto que sobra (no define la altura del panel):
-   la altura la marcan el texto o la columna derecha, la que sea mayor */
+/* Ilustración de alto fijo y moderado: acompaña sin agrandar el panel */
 .hero-art {
-  flex: 1 1 0;
+  flex: none;
   width: 100%;
-  height: 0;
-  min-height: 240px;
-  max-width: 480px;
+  height: clamp(170px, 19vw, 240px);
+  max-width: 420px;
   margin: 0 auto;
   overflow: visible;
+}
+
+/* Accesos rápidos en una grilla de 2×2, más bajos que una lista */
+.action-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 560px;
+}
+
+.action-grid .action-row {
+  gap: 12px;
+  padding: 7px 14px 7px 7px;
+  font-size: 0.95rem;
+}
+
+.action-grid .icon-chip {
+  width: 38px;
+  height: 38px;
+}
+
+/* Invitación a seguir bajando, al pie del panel */
+.hero-bajar {
+  grid-column: 1 / -1;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--ents-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.hero-bajar:hover {
+  background: var(--glass-inner);
+  color: var(--ents-ink);
+}
+
+.hero-bajar .icon {
+  transform: rotate(90deg);
+  animation: bajar-rebota 1.8s ease-in-out infinite;
+}
+
+@keyframes bajar-rebota {
+  0%, 100% { transform: rotate(90deg) translateX(0); }
+  50% { transform: rotate(90deg) translateX(4px); }
 }
 
 /* Cada figura de la ilustración flota a su ritmo */
@@ -2272,15 +2317,6 @@ a.event-item:hover {
    Responsive
    ========================================================== */
 
-@media (max-width: 1439.98px) {
-  .home-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .home-aside {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-}
 
 @media (max-width: 991.98px) {
   .app-grid,
@@ -2325,8 +2361,10 @@ a.event-item:hover {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* En pantallas angostas la ilustración se achica; los números quedan */
   .hero-art {
-    max-width: 320px;
+    height: 150px;
+    max-width: 260px;
   }
 
   .fondo-suave .fondo-figura {
@@ -2335,6 +2373,27 @@ a.event-item:hover {
 }
 
 @media (max-width: 575.98px) {
+  /* Accesos del inicio como tarjetas: ícono arriba y texto abajo */
+  .action-grid .action-row {
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 8px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .action-grid .action-row > .icon:last-child {
+    display: none;
+  }
+
+  /* En el celular la ilustración se oculta: los números quedan a la vista */
+  .hero-art {
+    display: none;
+  }
+
   .topbar-brand {
     font-size: 1rem;
   }
@@ -3057,6 +3116,7 @@ a.event-item:hover {
   .hero-art .art-pieza,
   .hero-art .art-cruz,
   .hero-art .art-trazo,
+  .hero-bajar .icon,
   .brillo-borde::before,
   .dot-red,
   .notif-contador {

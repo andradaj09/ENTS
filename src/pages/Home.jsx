@@ -72,6 +72,11 @@ function Home() {
       : peticiones.filter((p) => p.categorias?.nombre === categoria)
   )
 
+  const irANovedades = () => {
+    const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    document.getElementById('novedades')?.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'start' })
+  }
+
   // La primera (la de más apoyo) se destaca si ya tiene firmas
   const idDestacada = filtradas[0]?.firmas_count > 0 ? filtradas[0].id : null
 
@@ -93,7 +98,7 @@ function Home() {
               Pedí, seguí y hacé crecer nuestra comunidad.
             </p>
 
-            <div className="action-list">
+            <div className="action-list action-grid">
               {/* Cada acceso aparece si el rango tiene permiso para ese panel */}
               {puede('dashboard', 'modificar') && (
                 <Link className="action-row" to="/peticiones/nueva">
@@ -152,9 +157,15 @@ function Home() {
               </div>
             </div>
           </div>
+
+          {/* Invita a seguir bajando: lleva a las novedades y eventos del barrio */}
+          <button type="button" className="hero-bajar" onClick={irANovedades}>
+            Mirá lo que pasa en tu barrio
+            <Icon name="chevron" size={18} />
+          </button>
         </section>
 
-        <aside className="home-aside">
+        <aside className="home-aside" id="novedades">
 
           <div className="panel aside-panel">
             <div className="aside-head">
