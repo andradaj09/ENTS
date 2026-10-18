@@ -5,7 +5,7 @@ import {
   getSolicitudesFuncionario,
   resolverSolicitudFuncionario,
 } from '../services/petitionService'
-import { tiempoRelativo } from '../utils/format'
+import { nivelUrgencia, tiempoRelativo } from '../utils/format'
 import GaleriaFotos from '../components/GaleriaFotos'
 import Icon from '../components/Icon'
 import { Link } from 'react-router-dom'
@@ -117,7 +117,7 @@ function AdminPetitions() {
   return (
     <div className="container py-5">
 
-      <div className="mb-5">
+      <div className="mb-4">
         <span className="eyebrow">Panel de administración</span>
         <h1 className="page-title mt-3">Moderación</h1>
 
@@ -125,6 +125,14 @@ function AdminPetitions() {
           Revisá las peticiones antes de publicarlas y verificá las cuentas
           que piden ser funcionarios.
         </p>
+      </div>
+
+      {/* Resumen de lo que hay para revisar */}
+      <div className="bandeja-resumen mb-5" aria-label="Resumen de moderación">
+        <div><strong>{peticiones.length}</strong><span>Peticiones pendientes</span></div>
+        <div><strong>{peticiones.filter((p) => p.alertas?.length > 0).length}</strong><span>Con alertas automáticas</span></div>
+        <div><strong>{comentarios.length}</strong><span>Comentarios a revisar</span></div>
+        {gestionaUsuarios && <div><strong>{solicitudes.length}</strong><span>Solicitudes de funcionario</span></div>}
       </div>
 
       {!puedeActuar && (
@@ -219,80 +227,80 @@ function AdminPetitions() {
         </div>
       )}
 
-      {peticiones.map((peticion) => (
-        <div
-          className="card mb-4"
-          key={peticion.id}
-        >
-          <div className="card-body">
-
-            <div className="mb-3">
-              <span className="badge text-bg-primary me-2">
-                {peticion.categorias?.nombre}
-              </span>
-
-              <span className="badge text-bg-secondary">
-                {peticion.zonas?.nombre}
-              </span>
+      {/* Cada petición en una fila compacta: fotos chicas, datos y acciones */}
+      <ul className="revision-lista">
+        {peticiones.map((peticion) => (
+          <li className="revision" key={peticion.id}>
+            <div className="revision-fotos">
+              {peticion.fotos?.length > 0 ? (
+                <GaleriaFotos rutas={peticion.fotos} miniaturas />
+              ) : (
+                <span className="revision-sin-fotos">
+                  <Icon name="image" size={20} />
+                  Sin fotos
+                </span>
+              )}
             </div>
 
-            {peticion.alertas?.length > 0 && (
-              <div className="alerta-automatica">
-                <Icon name="alert" size={16} />
-                Revisión automática: tiene {describirAlertas(peticion.alertas)}.
-                Revisala antes de publicar (podés editarla desde su página).
+            <div className="revision-cuerpo">
+              <div className="revision-etiquetas">
+                <span className="etiqueta">{peticion.categorias?.nombre}</span>
+                <span className="etiqueta">{peticion.zonas?.nombre}</span>
+                <span className={`etiqueta urgencia-${nivelUrgencia(peticion.score_urgencia)}`}>
+                  Urgencia {Math.round(peticion.score_urgencia ?? 0)}
+                </span>
+                <span className="revision-fecha">{tiempoRelativo(peticion.created_at)}</span>
               </div>
-            )}
 
-            <h3 className="card-big mb-3">
-              <Link to={`/peticiones/${peticion.id}`}>{peticion.titulo}</Link>
-            </h3>
+              {peticion.alertas?.length > 0 && (
+                <div className="alerta-automatica">
+                  <Icon name="alert" size={16} />
+                  Revisión automática: tiene {describirAlertas(peticion.alertas)}.
+                  Podés editarla desde su página.
+                </div>
+              )}
 
-            <p className="card-text text-muted">
-              {peticion.descripcion}
-            </p>
+              <h3 className="revision-titulo">
+                <Link to={`/peticiones/${peticion.id}`}>{peticion.titulo}</Link>
+              </h3>
 
-            {peticion.fotos?.length > 0 && (
-              <div className="mb-3">
-                <GaleriaFotos rutas={peticion.fotos} />
-              </div>
-            )}
+              <p className="revision-descripcion">{peticion.descripcion}</p>
 
-            <p className="text-muted small">
-              Creada por:{' '}
-              <strong>
-                {peticion.profiles?.nombre}{' '}
-                {peticion.profiles?.apellido}
-              </strong>
-            </p>
-
-            <hr />
-
-            {puedeActuar && (
-            <div className="d-flex gap-2">
-
-              <button
-                className="btn btn-success"
-                onClick={() => cambiarEstado(peticion.id, 'publicada')}
-                disabled={procesando === `peticion-${peticion.id}`}
-              >
-                Aprobar
-              </button>
-
-              <button
-                className="btn btn-danger"
-                onClick={() => cambiarEstado(peticion.id, 'rechazada')}
-                disabled={procesando === `peticion-${peticion.id}`}
-              >
-                Rechazar
-              </button>
-
+              <p className="revision-autor">
+                Creada por {peticion.profiles?.nombre} {peticion.profiles?.apellido}
+              </p>
             </div>
-            )}
 
-          </div>
-        </div>
-      ))}
+            <div className="revision-acciones">
+              {puedeActuar && (
+                <>
+                  <button
+                    className="btn btn-success btn-sm"
+                    onClick={() => cambiarEstado(peticion.id, 'publicada')}
+                    disabled={procesando === `peticion-${peticion.id}`}
+                  >
+                    <Icon name="check" size={16} className="me-1" />
+                    Aprobar
+                  </button>
+
+                  <button
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => cambiarEstado(peticion.id, 'rechazada')}
+                    disabled={procesando === `peticion-${peticion.id}`}
+                  >
+                    <Icon name="close" size={16} className="me-1" />
+                    Rechazar
+                  </button>
+                </>
+              )}
+
+              <Link className="btn btn-ghost btn-sm" to={`/peticiones/${peticion.id}`}>
+                Abrir
+              </Link>
+            </div>
+          </li>
+        ))}
+      </ul>
 
       {/* ---------- Comentarios ocultos o denunciados ---------- */}
 
