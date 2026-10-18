@@ -14,9 +14,10 @@ const {
 
 // ---------------- Datos de la revisión ----------------
 const CARRERA = 'Analista Programador'
-const VERSION = '3.0'
+const VERSION = '4.0'
 const FECHA_V2 = '12/10/2026 16:41'
 const FECHA_V3 = '12/10/2026 21:32'
+const FECHA_V4 = '18/10/2026 16:10'
 
 // Reuniones (estimación del equipo): minutos por persona
 const MIN_SEGUIMIENTO = 15 * 3 * SEMANAS // 3 por semana
@@ -85,12 +86,14 @@ function historial(detalleV2, detalleV3) {
     <tr><td>1.0</td><td>Sprint 0 (*)</td><td>Equipo</td><td>Versión original, para la propuesta de plataforma solidaria de donaciones.</td></tr>
     <tr><td>2.0</td><td>${FECHA_V2}</td><td>${DIRECTOR}</td><td>${detalleV2}</td></tr>
     <tr><td>3.0</td><td>${FECHA_V3}</td><td>${DIRECTOR}</td><td>${detalleV3}</td></tr>
+    <tr><td>4.0</td><td>${FECHA_V4}</td><td>${DIRECTOR}</td><td>${DETALLE_V4}</td></tr>
   </tbody>
 </table>
 <p class="pie">(*) La versión 1.0 se elaboró durante el Sprint 0, antes de que el equipo usara control de versiones, por lo que su fecha y hora exactas no quedaron registradas. Desde la versión 2.0, cada cambio se registra con fecha, hora y autor.</p>`
 }
 
 const DETALLE_V3 = 'Revisión integral para la entrega: glosario de siglas y términos, propósito y guía de lectura, responsables y horas estimadas, roles actualizados (moderador y permisos por panel) y eliminación de todos los campos pendientes.'
+const DETALLE_V4 = 'Barrio del vecino: cada cuenta elige dónde vive y ve primero lo de su barrio (requisitos RF21 y RF22, historia HU14 y nuevos términos del glosario). Se registran los datos de demostración y la limpieza del código.'
 
 // Índice en tarjetas: el glosario no lleva número; las secciones, el suyo
 const indice = (items) => {
@@ -192,7 +195,7 @@ const HITOS = [
   { id: 'H4', nombre: 'Primera versión funcional: autenticación, peticiones, firmas y moderación', dia: porId.get('A11').fin, real: 'Cumplido el 04/10/2026' },
   { id: 'H5', nombre: 'Procesamiento automático, seguimiento y reportes', dia: porId.get('A15').fin, real: 'Cumplido el 12/10/2026' },
   { id: 'H6', nombre: 'Producto completo y probado', dia: Math.max(porId.get('A16').fin, porId.get('A17').fin), real: 'Cumplido el 12/10/2026' },
-  { id: 'H7', nombre: 'Documentación y presentación completas', dia: porId.get('A19').fin, real: 'Cumplido (versión 3.0)' },
+  { id: 'H7', nombre: 'Documentación y presentación completas', dia: porId.get('A19').fin, real: 'Cumplido (versión 4.0)' },
   { id: 'H8', nombre: 'Entrega y defensa', dia: DURACION_TOTAL, real: 'Pendiente: fecha a definir por la cátedra' },
 ]
 const semanaDe = (dia) => Math.max(1, Math.ceil(dia / 5))
@@ -240,6 +243,7 @@ ${tabla(['Módulo', 'Descripción'], [
   ['Firmas y prioridad', 'Una firma por persona; cinco niveles de prioridad según las firmas; elevación automática al área al llegar a 50.'],
   ['Seguimiento', 'Cinco etapas (recibida, en revisión, derivada, en obra, resuelta) con respuesta oficial y foto; avisos al autor y a los firmantes.'],
   ['Comunidad', 'Mapa por barrios, muro vecinal, agenda de eventos, comentarios anónimos y barrios seguidos.'],
+  ['Barrio del vecino', 'Cada cuenta elige el barrio donde vive y ve primero lo de su barrio en el inicio, el mapa, la comunidad, los eventos y los avisos.'],
   ['Reportes', 'Estadísticas públicas anónimas, panel analítico y exportación a Excel y PDF.'],
 ], ['26%'])}
 
@@ -397,6 +401,7 @@ ${tabla(['Característica', 'Descripción'], [
   ['Seguimiento', 'Etapas recibida → en revisión → derivada → en obra → resuelta, con respuesta oficial y foto.'],
   ['Participación', 'Notificaciones, comentarios anónimos con denuncias, barrios seguidos e insignias.'],
   ['Comunidad', 'Mapa por barrios, muro vecinal y agenda de eventos.'],
+  ['Barrio del vecino', 'Elección del barrio propio (a mano o con la ubicación del dispositivo, una vez cada 30 días); inicio agrupado en mi barrio, cerca y resto de la ciudad; resumen del barrio comparado con la ciudad y ranking de barrios.'],
   ['Reportes', 'Estadísticas públicas anónimas, panel analítico y exportación a Excel y PDF.'],
   ['Administración', 'Moderación, directorio de usuarios, asignación de áreas, cambio de roles y documentos privados del proyecto.'],
 ], ['24%'])}
@@ -475,7 +480,7 @@ ${tabla(['Sistema externo', 'Interfaz', 'Uso'], [
   <li>Si afecta objetivos, entregables o plazos, el director lo presenta al docente para su aprobación.</li>
   <li>Si se aprueba, se actualizan este documento, la EDT, la lista de actividades y el Gantt, y se registra en el historial de revisión.</li>
 </ol>
-<div class="nota">Ejemplos de cambios aprobados: el reemplazo del módulo de donaciones por el sistema de peticiones (versión 2.0) y la incorporación del rol moderador y de los permisos por panel (versión 3.0).</div>
+<div class="nota">Ejemplos de cambios aprobados: el reemplazo del módulo de donaciones por el sistema de peticiones (versión 2.0) y la incorporación del rol moderador y de los permisos por panel (versión 3.0) y el barrio del vecino (versión 4.0).</div>
 
 <h1>13. Aprobación</h1>
 ${firmas([['Ing. Loza', 'Docente — Patrocinador'], [DIRECTOR, 'Director del proyecto']])}
@@ -887,7 +892,7 @@ ${tabla(['Hito', 'Día hábil', 'Semana', 'Estado'], HITOS.map((h) => [`${h.id} 
 
 <h1>6. Conversión a fechas</h1>
 <p>El cronograma se expresa en días hábiles relativos porque la fecha de defensa todavía no fue fijada por la cátedra. Una vez confirmada, la fecha de inicio se obtiene contando ${DURACION_TOTAL} días hábiles hacia atrás desde la defensa, y cada día del diagrama se convierte sumando días laborables a esa fecha de inicio (sin contar fines de semana ni feriados).</p>
-<p>Como referencia del avance real, el repositorio registra estas versiones del sistema: primera versión funcional el 04/10/2026; panel vecinal, roles, anonimato e ingreso con Google el 11/10/2026; procesamiento automático, seguimiento, reportes, calidad y permisos por panel el 12/10/2026.</p>
+<p>Como referencia del avance real, el repositorio registra estas versiones del sistema: primera versión funcional el 04/10/2026; panel vecinal, roles, anonimato e ingreso con Google el 11/10/2026; procesamiento automático, seguimiento, reportes, calidad y permisos por panel el 12/10/2026; datos de demostración, inicio y moderación más compactos, barrio del vecino y limpieza del código el 18/10/2026.</p>
 `
 const gantt = documento({
   archivo: '07_diagrama_de_gantt', titulo: 'Diagrama de Gantt', encabezado: 'ENTS · Diagrama de Gantt', estiloExtra: estiloGantt,
@@ -976,9 +981,28 @@ console.log('Horas:', JSON.stringify(HORAS), 'reuniones por persona:', HORAS_REU
   if (!doc.includes('entregables/estilos.css')) {
     doc = doc.replace('</head>', `${FUENTES}\n<link rel="stylesheet" href="entregables/estilos.css">\n<style>\n  @page { @top-left { content: "ENTS · Documentación del trabajo práctico"; } }\n  h1 { break-before: page; }\n  .portada + h1 { break-before: auto; }\n</style>\n</head>`)
   }
+  // Historial, requisitos, historias y glosario salen de datos.cjs
+  const filas = (lista) => lista.map((f) => `    <tr>${f.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('\n')
+  const cuerpoDe = (thead, contenido) => {
+    const inicio = doc.indexOf(thead)
+    if (inicio < 0) throw new Error('No se encontró la tabla: ' + thead.slice(0, 60))
+    const desde = doc.indexOf('<tbody>\n', inicio) + '<tbody>\n'.length
+    const hasta = doc.indexOf('  </tbody>', desde)
+    doc = doc.slice(0, desde) + contenido + '\n' + doc.slice(hasta)
+  }
+  if (!doc.includes('<td>4.0</td>')) {
+    doc = doc.replace(/(    <tr><td>3\.0<\/td>[^\n]*\n)/, `$1${filas([['4.0', FECHA_V4, DIRECTOR, DETALLE_V4]])}\n`)
+  }
+  cuerpoDe('<th>Requerimiento</th><th style="width:11%">Prioridad</th>', filas(RF.map(([id, texto, p]) => [`<b>${id}</b>`, texto, nivel(p)])))
+  cuerpoDe('<th style="width:16%">Atributo</th>', filas(RNF.map(([id, atributo, texto]) => [`<b>${id}</b>`, atributo, texto])))
+  cuerpoDe('<th>Criterios de aceptación</th><th style="width:10%">Prioridad</th><th style="width:10%">RF</th>',
+    filas(HU.map(([id, rol, quiero, para, crit, p, rf]) => [`<b>${id}</b>`, `Como <b>${rol}</b>, quiero ${quiero} para ${para}.`, crit, nivel(p), rf.join(', ')])))
+  // El glosario se arma con lo que usa el resto del documento (sin contarse a sí mismo)
+  const sinGlosario = doc.replace(/<table class="glosario">[\s\S]*?<\/table>/, '')
+  const usados = (glosarioDe(sinGlosario).match(/<tbody>([\s\S]*)<\/tbody>/)[1])
+  cuerpoDe('<table class="glosario">', usados.replace(/<\/tr>(?=<tr>)/g, '</tr>\n    ').replace(/^/, '    '))
+
   fs.writeFileSync(ARCHIVO_DOC, chips(doc))
   console.log('documentacion.html con el diseño común')
 }
 
-// Datos para la documentación general (misma información)
-fs.writeFileSync(path.join(AQUI, '_gantt_fragmento.json'), JSON.stringify({ graficoGantt, estiloGantt, DURACION_TOTAL, SEMANAS, RUTA }))

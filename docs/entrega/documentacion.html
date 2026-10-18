@@ -123,7 +123,7 @@
   </div>
   <div class="portada-abajo">
     <div class="portada-datos">
-      <div class="portada-dato"><small>Cátedra</small><span>Práctica Profesionalizante</span></div><div class="portada-dato"><small>Docente</small><span>Ing. Loza</span></div><div class="portada-dato"><small>Director del proyecto</small><span>Andrada, Juan Pablo</span></div><div class="portada-dato"><small>Contenido</small><span>Documentación y entregables</span></div><div class="portada-dato"><small>Versión</small><span>3.0</span></div><div class="portada-dato"><small>Sitio publicado</small><span>entscordoba.netlify.app</span></div>
+      <div class="portada-dato"><small>Cátedra</small><span>Práctica Profesionalizante</span></div><div class="portada-dato"><small>Docente</small><span>Ing. Loza</span></div><div class="portada-dato"><small>Director del proyecto</small><span>Andrada, Juan Pablo</span></div><div class="portada-dato"><small>Contenido</small><span>Documentación y entregables</span></div><div class="portada-dato"><small>Versión</small><span>4.0</span></div><div class="portada-dato"><small>Sitio publicado</small><span>entscordoba.netlify.app</span></div>
     </div>
     <div class="portada-autores">
       <small>Autores</small>
@@ -140,6 +140,7 @@
     <tr><td>1.0</td><td>Sprint 0 (*)</td><td>Equipo</td><td>Propuesta original: plataforma solidaria de donaciones (Project Charter, alcance, EDT, plan de comunicación, Gantt, product backlog y arquitectura).</td></tr>
     <tr><td>2.0</td><td>12/10/2026 16:42</td><td>Andrada, Juan Pablo</td><td>Reorientación del proyecto: el módulo de pagos y donaciones se reemplaza por un sistema de peticiones con clasificación automática, firmas, score de urgencia, detección de similares y reportes. Documentación del sistema implementado.</td></tr>
     <tr><td>3.0</td><td>12/10/2026 21:32</td><td>Andrada, Juan Pablo</td><td>Revisión integral para la entrega: glosario al comienzo, responsables y horas, rol moderador y permisos por panel, requisitos e historias de usuario con trazabilidad, sprints en el Gantt y eliminación de todos los campos pendientes.</td></tr>
+    <tr><td>4.0</td><td>18/10/2026 16:10</td><td>Andrada, Juan Pablo</td><td>Barrio del vecino: cada cuenta elige dónde vive y ve primero lo de su barrio (requisitos RF21 y RF22, historia HU14 y nuevos términos del glosario). Se registran los datos de demostración y la limpieza del código.</td></tr>
   </tbody>
 </table>
 <p class="pie">(*) La versión 1.0 se elaboró durante el Sprint 0, antes de que el equipo usara control de versiones, por lo que su fecha y hora exactas no quedaron registradas. Desde la versión 2.0, cada cambio se registra con fecha, hora y autor.</p>
@@ -191,10 +192,12 @@
     <tr><td><b>Área</b></td><td>Dependencia del municipio responsable de un grupo de categorías (por ejemplo, Salud u Obras públicas).</td></tr>
     <tr><td><b>Bandeja</b></td><td>Pantalla donde cada funcionario ve las peticiones de su área ordenadas por prioridad para responderlas.</td></tr>
     <tr><td><b>Barrio (zona)</b></td><td>Cada uno de los 111 barrios de Córdoba y Villa Allende cargados en el sistema con su ubicación.</td></tr>
+    <tr><td><b>Barrio del vecino (mi barrio)</b></td><td>Barrio donde vive cada vecino, elegido por él mismo. Ordena lo que ve primero en la plataforma y solo se muestra a otros si la persona lo permite.</td></tr>
     <tr><td><b>Bootstrap</b></td><td>Biblioteca de estilos para construir interfaces adaptables a celular.</td></tr>
     <tr><td><b>CDN</b></td><td>Red de distribución de contenido: servidores repartidos que entregan el sitio desde el lugar más cercano al usuario.</td></tr>
     <tr><td><b>Criterio de aceptación</b></td><td>Condición verificable que debe cumplirse para dar por terminado un requisito, historia o actividad.</td></tr>
     <tr><td><b>CSV / Excel</b></td><td>Formatos de planilla de cálculo usados para exportar reportes.</td></tr>
+    <tr><td><b>Datos de demostración</b></td><td>Cuentas, peticiones y fotos ficticias cargadas para mostrar la plataforma con actividad; se identifican con el dominio demo.ents.invalid y se borran con un solo script.</td></tr>
     <tr><td><b>Dependencia fin-comienzo</b></td><td>Tipo de relación en la que una actividad empieza cuando terminan todas sus predecesoras.</td></tr>
     <tr><td><b>DER</b></td><td>Diagrama entidad-relación: dibujo de las tablas de la base y cómo se relacionan.</td></tr>
     <tr><td><b>Día hábil</b></td><td>Día de trabajo del equipo (lunes a viernes, sin feriados). Las duraciones del cronograma se expresan en días hábiles.</td></tr>
@@ -208,6 +211,7 @@
     <tr><td><b>Firma</b></td><td>Apoyo de un vecino a una petición publicada. Cada persona puede firmar una sola vez y retirar su firma.</td></tr>
     <tr><td><b>FK</b></td><td>Foreign key (clave foránea): columna que apunta a la clave primaria de otra tabla y crea la relación entre ambas.</td></tr>
     <tr><td><b>Funcionario</b></td><td>Rol de un empleado del municipio: responde las peticiones de su área. Lo aprueba un administrador.</td></tr>
+    <tr><td><b>Geolocalización</b></td><td>Obtención de la ubicación del dispositivo (con permiso de la persona) para completar el barrio automáticamente.</td></tr>
     <tr><td><b>GitHub</b></td><td>Plataforma donde se guarda el código con su historial de cambios (repositorio).</td></tr>
     <tr><td><b>Hito</b></td><td>Momento clave del proyecto sin duración (por ejemplo, "primera versión funcional"). Se dibuja con un rombo.</td></tr>
     <tr><td><b>Holgura</b></td><td>Días que una actividad puede atrasarse sin atrasar la fecha de fin del proyecto.</td></tr>
@@ -268,7 +272,7 @@
     <tr><td><b>Supabase</b></td><td>Servicio en la nube que provee la base de datos PostgreSQL, la autenticación y el almacenamiento de archivos.</td></tr>
     <tr><td><b>Supuesto</b></td><td>Condición que se da por cierta para planificar, aunque no esté comprobada.</td></tr>
     <tr><td><b>Vecino</b></td><td>Rol base: crea, firma y comenta peticiones. Para los demás vecinos es anónimo.</td></tr>
-    <tr><td><b>Versión del documento</b></td><td>Número que cambia con cada modificación registrada en el historial de revisión (1.0, 2.0, 3.0).</td></tr>
+    <tr><td><b>Versión del documento</b></td><td>Número que cambia con cada modificación registrada en el historial de revisión (1.0, 2.0, 3.0, 4.0).</td></tr>
     <tr><td><b>Vite</b></td><td>Herramienta que compila y sirve la aplicación durante el desarrollo.</td></tr>
     <tr><td><b>Vitest</b></td><td>Herramienta con la que se escriben y ejecutan las pruebas automáticas.</td></tr>
     <tr><td><b>WCAG</b></td><td>Web Content Accessibility Guidelines: pautas internacionales de accesibilidad web del W3C.</td></tr>
@@ -368,6 +372,7 @@
       <li>Comentarios anónimos con denuncias.</li>
       <li>Notificaciones dentro de la app y barrios seguidos.</li>
       <li>Mapa por barrios, comunidad vecinal y agenda de eventos.</li>
+      <li>Barrio del vecino: cada cuenta elige dónde vive y ve primero lo de su barrio.</li>
       <li>Estadísticas públicas, panel analítico y exportación a Excel y PDF.</li>
       <li>Roles: vecino, funcionario por área, moderador, administrador y dueño, con permisos por panel definidos por el dueño.</li>
     </ul>
@@ -717,6 +722,8 @@
     <tr><td><b>RF18</b></td><td>Publicar en el muro vecinal y consultar la agenda de eventos por barrio.</td><td><span class="nivel baja">Baja</span></td></tr>
     <tr><td><b>RF19</b></td><td>Permitir solo al dueño definir qué paneles ve y modifica cada rol (permisos por panel).</td><td><span class="nivel baja">Baja</span></td></tr>
     <tr><td><b>RF20</b></td><td>Permitir a los moderadores revisar peticiones pendientes, comentarios denunciados y publicaciones.</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td><b>RF21</b></td><td>Elegir el barrio donde vive cada vecino (a mano o con su ubicación), cambiarlo como máximo una vez cada 30 días y mostrar primero lo de ese barrio en el inicio, el mapa, la comunidad, los eventos y los avisos.</td><td><span class="nivel media">Media</span></td></tr>
+    <tr><td><b>RF22</b></td><td>Resumir la actividad del barrio del vecino comparada con el promedio de la ciudad y mostrar un ranking de los barrios más activos y de los que más resolvieron.</td><td><span class="nivel baja">Baja</span></td></tr>
   </tbody>
 </table>
 <h3>Requerimientos no funcionales (RNF)</h3>
@@ -724,7 +731,7 @@
 <table>
   <thead><tr><th style="width:9%">ID</th><th style="width:16%">Atributo</th><th>Requerimiento</th></tr></thead>
   <tbody>
-    <tr><td><b>RNF01</b></td><td>Privacidad</td><td>Anonimato entre vecinos: la identidad del autor y de los firmantes solo la ven los funcionarios del área y los administradores.</td></tr>
+    <tr><td><b>RNF01</b></td><td>Privacidad</td><td>Anonimato entre vecinos: la identidad del autor y de los firmantes solo la ven los funcionarios del área y los administradores. El barrio donde vive cada vecino no se muestra a nadie, salvo que la persona elija mostrar "Vecino/a de [barrio]" en sus comentarios.</td></tr>
     <tr><td><b>RNF02</b></td><td>Seguridad</td><td>Las reglas de acceso se aplican en la base de datos (RLS), no solo en la pantalla; toda la comunicación usa HTTPS.</td></tr>
     <tr><td><b>RNF03</b></td><td>Usabilidad</td><td>Interfaz en español, adaptable a celular, con modo claro y oscuro.</td></tr>
     <tr><td><b>RNF04</b></td><td>Accesibilidad</td><td>Navegación con teclado, foco visible, respeto del movimiento reducido y tablas alternativas a los gráficos (WCAG 2.2).</td></tr>
@@ -752,6 +759,7 @@
     <tr><td><b>HU11</b></td><td>Como <b>vecino</b>, quiero participar del muro vecinal y de la agenda de eventos para organizarme con mis vecinos.</td><td>Publicaciones y eventos filtrados por barrio.</td><td><span class="nivel baja">Baja</span></td><td>RF18</td></tr>
     <tr><td><b>HU12</b></td><td>Como <b>dueño</b>, quiero asignar el rol de cada cuenta para controlar quién modera, responde o administra.</td><td>Solo el dueño ve y usa el selector de rol; la base lo vuelve a verificar.</td><td><span class="nivel baja">Baja</span></td><td>RF17</td></tr>
     <tr><td><b>HU13</b></td><td>Como <b>dueño</b>, quiero definir qué paneles ve y modifica cada rol para adaptar los accesos sin cambiar el código.</td><td>Pantalla "Permisos" con cada rol y sus paneles; interruptores de ver y modificar que se guardan al instante.</td><td><span class="nivel baja">Baja</span></td><td>RF19</td></tr>
+    <tr><td><b>HU14</b></td><td>Como <b>vecino</b>, quiero elegir el barrio donde vivo para ver primero lo que pasa cerca de mí.</td><td>Se pregunta en el primer ingreso (se puede dejar para después); el inicio agrupa las peticiones en mi barrio, cerca y resto de la ciudad; el mapa, la comunidad, los eventos y los avisos arrancan por mi barrio; se cambia una vez cada 30 días.</td><td><span class="nivel media">Media</span></td><td>RF21, RF22</td></tr>
   </tbody>
 </table>
 <p class="pie">Todos los requerimientos funcionales están cubiertos por al menos una historia de usuario (detalle en el Entregable 2, sección 6).</p>
@@ -796,7 +804,7 @@
 <p>Base relacional en PostgreSQL con 14 tablas. Todas tienen seguridad por fila activada.</p>
 <div class="figura">
 <div class="der">
-  <div class="entidad"><div class="nom">profiles</div><div class="cols">id (PK, = usuario)<br>nombre, apellido<br>rol, rol_solicitado<br>cargo, organizacion<br>avatar_url<br>area_id (FK areas)</div></div>
+  <div class="entidad"><div class="nom">profiles</div><div class="cols">id (PK, = usuario)<br>nombre, apellido<br>rol, rol_solicitado<br>cargo, organizacion<br>avatar_url<br>area_id (FK areas)<br>zona_id (FK zonas)<br>zona_cambiada_at, mostrar_barrio</div></div>
   <div class="entidad"><div class="nom">peticiones</div><div class="cols">id (PK)<br>usuario_id (FK profiles)<br>titulo, descripcion, fotos[]<br>categoria_id (FK), zona_id (FK)<br>lat, lng<br>estado, seguimiento<br>score_urgencia, firmas_count<br>alertas[], elevada_at</div></div>
   <div class="entidad"><div class="nom">firmas</div><div class="cols">id (PK)<br>peticion_id (FK)<br>usuario_id (FK)<br>created_at<br><i>única por petición y usuario</i></div></div>
   <div class="entidad"><div class="nom">peticion_actualizaciones</div><div class="cols">id (PK)<br>peticion_id (FK)<br>autor_id (FK profiles)<br>estado, mensaje, foto</div></div>
@@ -810,7 +818,7 @@
   <div class="entidad"><div class="nom">publicaciones / eventos</div><div class="cols">muro vecinal y agenda<br>usuario o creador (FK)<br>zona_id (FK)</div></div>
   <div class="entidad"><div class="nom">permisos_panel</div><div class="cols">rol (PK)<br>panel (PK)<br>ver, modificar<br><i>solo la edita el dueño</i></div></div>
 </div>
-<figcaption>Figura 4. Diagrama entidad-relación (simplificado). Relaciones principales: una petición pertenece a un usuario, una categoría y un barrio; tiene muchas firmas, actualizaciones y comentarios; cada categoría pertenece a un área.</figcaption>
+<figcaption>Figura 4. Diagrama entidad-relación (simplificado). Relaciones principales: una petición pertenece a un usuario, una categoría y un barrio; tiene muchas firmas, actualizaciones y comentarios; cada categoría pertenece a un área; cada perfil puede indicar el barrio donde vive.</figcaption>
 </div>
 <h3>Diagrama de estados de una petición</h3>
 <div class="figura diagrama">
@@ -836,6 +844,8 @@
 <p>Cada una de las 16 categorías tiene raíces de palabras clave (por ejemplo, Salud: hospital, dispensario, pediatr…). El texto se normaliza (minúsculas, sin acentos) y se cuentan coincidencias al inicio de palabra; las del título valen el doble. Gana la categoría con más puntaje; si hay empate total, no se sugiere y elige la persona.</p>
 <h3>Detección del barrio</h3>
 <p>Con la ubicación marcada (o la del dispositivo) se elige el barrio cuyo centro está más cerca, hasta 3 km, entre 111 barrios de Córdoba y Villa Allende cuyas coordenadas se obtuvieron de OpenStreetMap.</p>
+<h3>Barrio del vecino y barrios cercanos</h3>
+<p>Cada cuenta puede elegir el barrio donde vive, de una lista o con la ubicación del dispositivo (se usa la misma detección por cercanía). Con ese dato, el inicio agrupa las peticiones en tres bloques: <b>en tu barrio</b>, <b>cerca tuyo</b> (barrios cuyo centro está a menos de 3 km) y <b>en el resto de la ciudad</b>. La función <code>resumen_mi_barrio()</code> compara el barrio con el promedio de la ciudad (peticiones activas, firmas, resueltas del mes, urgencia y la categoría que más se repite) y <code>ranking_barrios()</code> calcula los barrios más activos y los que más resolvieron en el último mes.</p>
 <h3>Score de urgencia (0 a 100)</h3>
 <table>
   <thead><tr><th>Componente</th><th style="width:30%">Puntos</th></tr></thead>
@@ -859,7 +869,7 @@
 <table>
   <thead><tr><th style="width:18%">Rol</th><th>Qué puede hacer (configuración inicial)</th></tr></thead>
   <tbody>
-    <tr><td>Vecino</td><td>Crear, firmar y comentar peticiones; seguir barrios; publicar en el muro; ver mapa, eventos y estadísticas públicas. Es anónimo para los demás vecinos.</td></tr>
+    <tr><td>Vecino</td><td>Crear, firmar y comentar peticiones; elegir su barrio y seguir otros; publicar en el muro; ver mapa, eventos y estadísticas públicas. Es anónimo para los demás vecinos.</td></tr>
     <tr><td>Funcionario</td><td>Todo lo del vecino, más la bandeja de su área: ve autor y firmantes, responde y cambia la etapa de las peticiones de su área. Lo aprueba un administrador.</td></tr>
     <tr><td>Moderador</td><td>Todo lo del vecino, más revisar peticiones pendientes, comentarios denunciados y publicaciones del muro. No administra usuarios ni ve el panel analítico.</td></tr>
     <tr><td>Administrador</td><td>Todo lo del moderador y del funcionario (en todas las áreas), más el directorio de usuarios, la asignación de áreas, la agenda de eventos y el panel analítico.</td></tr>
@@ -872,6 +882,7 @@
   <li><b>Seguridad por fila (RLS):</b> cada tabla define quién puede leer, crear, modificar o borrar cada fila.</li>
   <li><b>Anonimato por columna:</b> la columna del autor de una petición no es legible para los vecinos; las identidades solo se obtienen mediante funciones que verifican el rol.</li>
   <li><b>Funciones seguras:</b> las operaciones sensibles (responder, moderar, cambiar rol o permisos, estadísticas de administración) verifican el rol y los permisos por panel dentro de la base.</li>
+  <li><b>Barrio del vecino:</b> no se muestra a otros vecinos, salvo que la persona active "Vecino/a de [barrio]" en sus comentarios. Solo se puede cambiar una vez cada 30 días, y ese límite lo controla la base (<code>elegir_mi_barrio</code>) para que nadie se "mude" de barrio para inflar firmas o rankings.</li>
   <li><b>Validaciones del servidor:</b> el score, la etapa inicial y las alertas los fija la base, aunque el cliente intente enviar otros valores.</li>
   <li><b>Transporte:</b> toda la comunicación usa HTTPS.</li>
 </ul>
@@ -888,6 +899,7 @@
     <tr><td>Respuesta institucional</td><td>Peticiones por etapa de seguimiento y tiempo promedio de revisión.</td></tr>
     <tr><td>Resolución</td><td>Cantidad y proporción de peticiones resueltas.</td></tr>
     <tr><td>Participación</td><td>Cuentas activas en 30 días, publicaciones y comentarios.</td></tr>
+    <tr><td>Actividad por barrio</td><td>Ranking mensual de los barrios más activos y de los que más resolvieron; resumen de cada barrio frente al promedio de la ciudad.</td></tr>
   </tbody>
 </table>
 <p>Las estadísticas públicas muestran solo agregados anónimos. El panel analítico de administradores agrega datos de cuentas y moderación, y permite exportar las peticiones (con área, barrio, etapa, prioridad, firmas y urgencia) y el resumen por barrio a Excel, y la vista completa a PDF, para presentar ante organismos y ONG.</p>
@@ -898,6 +910,8 @@
   <li><b>Pruebas de permisos:</b> escenarios por rol ejecutados en la base de datos.</li>
   <li><b>Revisión de código:</b> oxlint sin errores y compilación de producción antes de cada publicación.</li>
   <li><b>Accesibilidad:</b> enlace para saltar al contenido, foco visible, etiquetas asociadas a los campos, contraste en modo claro y oscuro, versión en tabla de cada gráfico y respeto de la preferencia de movimiento reducido.</li>
+  <li><b>Datos de demostración:</b> para exponer la plataforma con actividad se cargan 300 cuentas, 200 peticiones, firmas, comentarios, publicaciones y eventos ficticios, con fotos ilustrativas (<code>supabase/demo</code>). Las cuentas usan el dominio <code>demo.ents.invalid</code>, no tienen contraseña y se eliminan con un solo script sin tocar los datos reales.</li>
+  <li><b>Limpieza del código:</b> se quitaron la dependencia <code>react-bootstrap</code> (sin uso), imágenes de la plantilla, estilos y funciones que nadie usaba y comentarios redundantes.</li>
   <li><b>Rendimiento:</b> cada página se descarga recién al visitarla; en celulares se desactivan animaciones continuas y desenfoques; las listas largas no se dibujan fuera de pantalla.</li>
 </ul>
 
@@ -950,6 +964,8 @@
     <tr><td>04/10/2026</td><td>Configuración inicial del proyecto; autenticación, peticiones, firmas y moderación.</td></tr>
     <tr><td>11/10/2026</td><td>Panel vecinal conectado a Supabase; roles y anonimato; ingreso con Google y recuperación de contraseña; política de privacidad.</td></tr>
     <tr><td>12/10/2026</td><td>Estadísticas y mapa por barrios; 111 barrios; prioridad por firmas, seguimiento, comentarios y notificaciones; bandeja por área, exportes, PWA, modo oscuro y pruebas; cambio de roles; rendimiento en celulares; score de urgencia automático; rol moderador y permisos por panel definidos por el dueño.</td></tr>
+    <tr><td>13/10/2026</td><td>Corrección: borrar un comentario ahora persiste (función de la base que verifica autor o permiso de moderación).</td></tr>
+    <tr><td>18/10/2026</td><td>Datos de demostración; inicio y panel de moderación más compactos; barrio del vecino (elección, inicio por barrio, mapa centrado, ranking e insignia); limpieza del código.</td></tr>
   </tbody>
 </table>
 <h2>B. Fórmula del score de urgencia (extracto del esquema)</h2>

@@ -128,7 +128,7 @@
     <tr><td><code>App.jsx</code></td><td>El mapa de rutas (React Router). Rutas públicas: <code>/login</code>, <code>/registro</code>, <code>/recuperar</code>, <code>/restablecer</code> y <code>/privacidad</code>. El resto exige sesión. Casi todas las páginas se cargan "perezosas" (<code>lazy</code>): se descargan recién al visitarlas.</td></tr>
     <tr><td><code>routes/ProtectedRoute.jsx</code></td><td>Si no hay sesión, manda al login y recuerda a qué página se quería ir.</td></tr>
     <tr><td><code>routes/PanelRoute.jsx</code></td><td>Si el rol no tiene permiso para ver ese panel (según la tabla de permisos), manda al inicio.</td></tr>
-    <tr><td><code>layouts/MainLayout.jsx</code></td><td>El marco de la app: barra superior (logo, campana, avatar), menú lateral fijo armado según los permisos de cada rol, fondo animado y el espacio donde aparece cada página. En el celular, el menú se abre como un cajón.</td></tr>
+    <tr><td><code>layouts/MainLayout.jsx</code></td><td>El marco de la app: barra superior (logo, campana, avatar), menú lateral fijo armado según los permisos de cada rol, fondo animado y el espacio donde aparece cada página. En el celular, el menú se abre como un cajón. En el primer ingreso muestra la ventana "¿De qué barrio sos?".</td></tr>
   </tbody>
 </table>
 
@@ -141,17 +141,17 @@
     <tr><td><code>AuthPage.jsx</code></td><td>/login, /registro, /recuperar</td><td>Una pantalla con tres modos: ingresar (correo o Google), registrarse (vecino o funcionario) y pedir el correo de recuperación. Traduce los errores al español.</td><td>Público</td></tr>
     <tr><td><code>RestablecerPassword.jsx</code></td><td>/restablecer</td><td>Elegir una contraseña nueva desde el enlace del correo.</td><td>Desde el correo</td></tr>
     <tr><td><code>Privacidad.jsx</code></td><td>/privacidad</td><td>Política de privacidad (Google la exige para el ingreso con Google).</td><td>Público</td></tr>
-    <tr><td><code>Home.jsx</code></td><td>/</td><td>Inicio: saludo, accesos rápidos, novedades, próximos eventos y todas las peticiones ordenadas por prioridad, con filtro por categoría.</td><td>Todos</td></tr>
+    <tr><td><code>Home.jsx</code></td><td>/</td><td>Inicio: saludo, accesos rápidos, tarjeta "Tu barrio", novedades y próximos eventos, y las peticiones ordenadas por prioridad, agrupadas en mi barrio, cerca y resto de la ciudad, con filtro por categoría.</td><td>Todos</td></tr>
     <tr><td><code>Dashboard.jsx</code></td><td>/dashboard</td><td>"Mis solicitudes": las peticiones propias en cualquier estado.</td><td>Según permisos</td></tr>
     <tr><td><code>CreatePetition.jsx</code></td><td>/peticiones/nueva</td><td>Formulario de petición: sugiere categoría y barrio, muestra peticiones parecidas, avisa datos personales o insultos antes de enviar, sube fotos comprimidas y lleva al detalle.</td><td>Con permiso de crear</td></tr>
     <tr><td><code>PetitionDetail.jsx</code></td><td>/peticiones/:id</td><td>Detalle: fotos, firma, prioridad y meta de 50, línea de seguimiento, comentarios y score de urgencia. Autor y firmantes solo para quien puede verlos; barra de editar o borrar para moderadores.</td><td>Todos</td></tr>
-    <tr><td><code>Mapa.jsx</code></td><td>/mapa</td><td>Mapa con dos vistas: marcadores por petición, o barrios coloreados por cantidad de peticiones, firmas o urgencia. Filtro por barrio y lista lateral.</td><td>Según permisos</td></tr>
-    <tr><td><code>Comunidad.jsx</code></td><td>/comunidad</td><td>Muro vecinal anónimo (publicaciones positivas o negativas por barrio), búsqueda y peticiones del barrio.</td><td>Según permisos</td></tr>
-    <tr><td><code>Eventos.jsx</code></td><td>/eventos</td><td>Agenda de próximos eventos; formulario para crear y borrar si se tiene permiso.</td><td>Según permisos</td></tr>
-    <tr><td><code>Estadisticas.jsx</code></td><td>/estadisticas</td><td>Números públicos y anónimos: peticiones por categoría, barrio, semana y urgencia, con gráficos y tablas.</td><td>Según permisos</td></tr>
-    <tr><td><code>Perfil.jsx</code></td><td>/perfil</td><td>Nombre, foto o avatar predefinido, barrios seguidos, insignias y "lo que podés hacer" según el rol.</td><td>Según permisos</td></tr>
+    <tr><td><code>Mapa.jsx</code></td><td>/mapa</td><td>Mapa con dos vistas: marcadores por petición, o barrios coloreados por cantidad de peticiones, firmas o urgencia. Filtro por barrio y lista lateral. Abre centrado en el barrio del vecino, con su contorno destacado.</td><td>Según permisos</td></tr>
+    <tr><td><code>Comunidad.jsx</code></td><td>/comunidad</td><td>Muro vecinal anónimo (publicaciones positivas o negativas por barrio), búsqueda y peticiones del barrio. Arranca filtrada por el barrio del vecino.</td><td>Según permisos</td></tr>
+    <tr><td><code>Eventos.jsx</code></td><td>/eventos</td><td>Agenda de próximos eventos (primero los del barrio del vecino, con filtro "Mi barrio"); formulario para crear y borrar si se tiene permiso.</td><td>Según permisos</td></tr>
+    <tr><td><code>Estadisticas.jsx</code></td><td>/estadisticas</td><td>Números públicos y anónimos: peticiones por categoría, barrio, semana y urgencia, y ranking de barrios más activos y que más resolvieron, con gráficos y tablas.</td><td>Según permisos</td></tr>
+    <tr><td><code>Perfil.jsx</code></td><td>/perfil</td><td>Nombre, foto o avatar predefinido, "Mi barrio", barrios seguidos, insignias y "lo que podés hacer" según el rol.</td><td>Según permisos</td></tr>
     <tr><td><code>Bandeja.jsx</code></td><td>/bandeja</td><td>Peticiones del área del funcionario por prioridad, filtros por etapa y resumen del área (sin resolver, urgentes, elevadas, días promedio).</td><td>Funcionario y admin</td></tr>
-    <tr><td><code>AdminPetitions.jsx</code></td><td>/admin/peticiones</td><td>Moderación: peticiones pendientes de aprobar (primero las marcadas), solicitudes de funcionario y comentarios denunciados u ocultos.</td><td>Moderador y admin</td></tr>
+    <tr><td><code>AdminPetitions.jsx</code></td><td>/admin/peticiones</td><td>Moderación: resumen de lo pendiente, peticiones por aprobar en filas compactas con miniaturas (primero las marcadas), solicitudes de funcionario y comentarios denunciados u ocultos.</td><td>Moderador y admin</td></tr>
     <tr><td><code>Usuarios.jsx</code></td><td>/admin/usuarios</td><td>Directorio con datos completos, búsqueda, filtros por rol, asignación de área y cambio de rol (este último, solo el dueño).</td><td>Admin</td></tr>
     <tr><td><code>EstadisticasAdmin.jsx</code></td><td>/admin/estadisticas</td><td>Panel analítico: cuentas, registros por semana, moderación, firmas por día y usuarios más activos; exporta a Excel y PDF.</td><td>Admin</td></tr>
     <tr><td><code>Documentos.jsx</code></td><td>/documentos</td><td>Documentos privados del trabajo práctico (PDF): abrir, subir y borrar.</td><td>Dueño (o a quien habilite)</td></tr>
@@ -168,18 +168,22 @@
     <tr><td><code>Avatar.jsx</code></td><td>Foto, avatar predefinido o iniciales, dentro del anillo del color del rol; etiqueta "CEO" para el dueño.</td></tr>
     <tr><td><code>avatares.js</code></td><td>Avatares geométricos predefinidos (se guardan como <code>preset:N</code>).</td></tr>
     <tr><td><code>MenuUsuario.jsx</code></td><td>Menú del avatar: datos de la cuenta, perfil, mis solicitudes, instalar app, modo oscuro y cerrar sesión.</td></tr>
-    <tr><td><code>NotificacionesMenu.jsx</code></td><td>Campana con contador de no leídas y panel de avisos (firmas, hitos, respuestas, comentarios, barrios seguidos).</td></tr>
+    <tr><td><code>NotificacionesMenu.jsx</code></td><td>Campana con contador de no leídas y panel de avisos (firmas, hitos, respuestas, comentarios, barrios seguidos); las novedades del barrio propio van primero.</td></tr>
     <tr><td><code>PetitionCard.jsx</code></td><td>Tarjeta de una petición: categoría, barrio, firmas, prioridad y urgencia.</td></tr>
     <tr><td><code>Seguimiento.jsx</code></td><td>Línea de tiempo de 5 etapas con respuestas oficiales; formulario para quien puede responder.</td></tr>
-    <tr><td><code>Comentarios.jsx</code></td><td>Comentarios anónimos: escribir, denunciar y borrar; los moderadores ven autor, alertas y denuncias.</td></tr>
+    <tr><td><code>Comentarios.jsx</code></td><td>Comentarios anónimos: escribir, denunciar y borrar; los moderadores ven autor, alertas y denuncias. Si el autor lo permite, muestra su barrio.</td></tr>
     <tr><td><code>EditarPeticion.jsx</code></td><td>Ventana para que un moderador corrija una petición.</td></tr>
     <tr><td><code>PeticionesSimilares.jsx</code></td><td>Mientras se escribe, busca peticiones parecidas para firmarlas en vez de repetirlas.</td></tr>
     <tr><td><code>SelectorFotos.jsx</code></td><td>Elegir o arrastrar hasta 3 fotos y comprimirlas en el navegador.</td></tr>
     <tr><td><code>SelectorUbicacion.jsx</code></td><td>Mapa chico para marcar dónde ocurre el problema.</td></tr>
-    <tr><td><code>GaleriaFotos.jsx</code></td><td>Fotos de la petición con visor a pantalla completa.</td></tr>
+    <tr><td><code>GaleriaFotos.jsx</code></td><td>Fotos de la petición con visor a pantalla completa; en la moderación se muestran como miniaturas.</td></tr>
     <tr><td><code>Graficos.jsx</code></td><td>Gráficos hechos a mano (barras, columnas, apiladas y tarjetas de números), cada uno con su versión en tabla para accesibilidad.</td></tr>
+    <tr><td><code>BienvenidaBarrio.jsx</code></td><td>Ventana del primer ingreso: "¿De qué barrio sos?", con la opción "Elegir después".</td></tr>
+    <tr><td><code>ElegirBarrio.jsx</code></td><td>Selector del barrio propio, a mano o con "Usar mi ubicación"; lo usan la bienvenida, el inicio y el perfil.</td></tr>
+    <tr><td><code>TuBarrio.jsx</code></td><td>Tarjeta del inicio con el resumen del barrio del vecino comparado con la ciudad.</td></tr>
+    <tr><td><code>MiBarrioPerfil.jsx</code></td><td>Sección "Mi barrio" del perfil: cambio una vez cada 30 días y opción de mostrar "Vecino/a de [barrio]" en los comentarios.</td></tr>
     <tr><td><code>BarriosSeguidos.jsx</code></td><td>Elegir los barrios de los que se quieren recibir avisos.</td></tr>
-    <tr><td><code>Insignias.jsx</code></td><td>Logros por participar (primera petición, firmas, etc.).</td></tr>
+    <tr><td><code>Insignias.jsx</code></td><td>Logros por participar (primera petición, firmas, actividad en el barrio propio, etc.).</td></tr>
     <tr><td><code>OpcionesBarrios.jsx</code></td><td>Opciones del selector de barrios agrupadas por localidad.</td></tr>
     <tr><td><code>Icon.jsx</code></td><td>Todos los íconos, dibujados con líneas rectas.</td></tr>
     <tr><td><code>Logo.jsx</code></td><td>El logo de anillos.</td></tr>
@@ -197,7 +201,7 @@
   <tbody>
     <tr><td><code>authService.js</code></td><td>Cuentas: registro, ingreso con correo o Google, recuperación y cambio de contraseña, cerrar sesión, editar el perfil y subir el avatar. Traduce los errores de Supabase al español.</td></tr>
     <tr><td><code>petitionService.js</code></td><td>Lo principal: peticiones (listar, ver, crear con fotos, editar, borrar, moderar), firmas, categorías y barrios (guardados en caché por sesión), notificaciones, eventos, muro, directorio de usuarios, solicitudes de funcionario, estadísticas y reportes. Pide solo las columnas visibles (no <code>*</code>) porque la columna del autor está oculta para preservar el anonimato.</td></tr>
-    <tr><td><code>participacionService.js</code></td><td>Seguimiento, comentarios, búsqueda de similares, barrios seguidos, logros, áreas, roles, documentos privados y permisos por panel. Casi todo llamando a funciones de la base (<code>rpc</code>).</td></tr>
+    <tr><td><code>participacionService.js</code></td><td>Seguimiento, comentarios, búsqueda de similares, barrios seguidos, logros, áreas, roles, documentos privados, permisos por panel y barrio del vecino (elegirlo, resumen y ranking). Casi todo llamando a funciones de la base (<code>rpc</code>).</td></tr>
   </tbody>
 </table>
 
@@ -217,6 +221,7 @@
   <tbody>
     <tr><td><code>clasificador.js</code></td><td>Sugiere la categoría contando raíces de palabras clave; el título vale doble.</td></tr>
     <tr><td><code>barrios.js</code></td><td>Detecta el barrio más cercano a la ubicación (distancia sobre la Tierra, hasta 3 km).</td></tr>
+    <tr><td><code>barrioVecino.js</code></td><td>Recuerda si la persona eligió "Elegir después" y calcula los barrios cercanos (centro a menos de 3 km) para el inicio.</td></tr>
     <tr><td><code>zonasMapa.js</code></td><td>Divide la ciudad en áreas por barrio (diagrama de Voronoi con <code>d3-delaunay</code>) y define la escala de azules del mapa.</td></tr>
     <tr><td><code>prioridad.js</code></td><td>Los 5 niveles de prioridad por firmas, la meta de 50, el orden del inicio y las etapas de seguimiento.</td></tr>
     <tr><td><code>moderacion.js</code></td><td>Detecta correos, teléfonos, DNI e insultos antes de enviar (la base repite el control).</td></tr>
@@ -249,12 +254,12 @@
 
 <!-- ============ 10 ============ -->
 <h1 class="salto"><span class="num">10</span>Base de datos (supabase/schema.sql)</h1>
-<p>Esquema completo y reproducible de PostgreSQL, organizado en 19 secciones que se agregaron en orden a medida que creció el proyecto.</p>
+<p>Esquema completo y reproducible de PostgreSQL, organizado en 20 secciones que se agregaron en orden a medida que creció el proyecto.</p>
 <h2>10.1 Tablas</h2>
 <table>
   <thead><tr><th style="width:28%">Tabla</th><th>Qué guarda</th></tr></thead>
   <tbody>
-    <tr><td><code>profiles</code></td><td>Datos de cada usuario: nombre, rol, área y avatar. Se crea sola al registrarse (disparador sobre la tabla de cuentas de Supabase).</td></tr>
+    <tr><td><code>profiles</code></td><td>Datos de cada usuario: nombre, rol, área, avatar y barrio donde vive (con la fecha del último cambio y si lo muestra en sus comentarios). Se crea sola al registrarse (disparador sobre la tabla de cuentas de Supabase).</td></tr>
     <tr><td><code>peticiones</code></td><td>Pedidos: texto, fotos, ubicación, estado, etapa de seguimiento, score, cantidad de firmas, alertas y elevación.</td></tr>
     <tr><td><code>firmas</code></td><td>Una firma por persona y petición.</td></tr>
     <tr><td><code>peticion_actualizaciones</code></td><td>Respuestas oficiales del seguimiento.</td></tr>
@@ -282,7 +287,7 @@
 <h2>10.3 Funciones</h2>
 <ul>
   <li><b>Esquema <code>privado</code></b> (la app no puede llamarlas directamente): auxiliares como <code>calcular_urgencia</code>, <code>tiene_permiso</code>, <code>es_dueno</code>, <code>barrio_mas_cercano</code> y <code>revisar_texto</code>.</li>
-  <li><b>Esquema <code>public</code></b> (las llama la app): se ejecutan con permisos elevados pero verifican adentro quién llama. Por ejemplo <code>mis_peticiones</code>, <code>identidades_peticion</code>, <code>actualizar_seguimiento</code>, <code>peticiones_similares</code> (compara textos por trigramas), <code>estadisticas_publicas</code>, <code>estadisticas_admin</code>, <code>cambiar_rol</code>, <code>guardar_permiso</code>, <code>mis_permisos</code> y <code>borrar_comentario</code>.</li>
+  <li><b>Esquema <code>public</code></b> (las llama la app): se ejecutan con permisos elevados pero verifican adentro quién llama. Por ejemplo <code>mis_peticiones</code>, <code>identidades_peticion</code>, <code>actualizar_seguimiento</code>, <code>peticiones_similares</code> (compara textos por trigramas), <code>estadisticas_publicas</code>, <code>estadisticas_admin</code>, <code>cambiar_rol</code>, <code>guardar_permiso</code>, <code>mis_permisos</code>, <code>borrar_comentario</code>, <code>elegir_mi_barrio</code> (con el límite de un cambio cada 30 días), <code>resumen_mi_barrio</code> y <code>ranking_barrios</code>.</li>
 </ul>
 <h2>10.4 Seguridad</h2>
 <ul>
@@ -296,12 +301,21 @@
 <table>
   <thead><tr><th style="width:36%">Archivo</th><th>Qué hace</th></tr></thead>
   <tbody>
-    <tr><td><code>entrega/entregables/datos.cjs</code></td><td>Fuente única de datos: equipo, 20 actividades con ruta crítica, requisitos (RF, RNF), historias de usuario y glosario.</td></tr>
-    <tr><td><code>entrega/entregables/generar.cjs</code></td><td>Arma los 7 entregables, el documento combinado y aplica el diseño a la documentación general.</td></tr>
+    <tr><td><code>entrega/entregables/datos.cjs</code></td><td>Fuente única de datos: equipo, 20 actividades con ruta crítica, requisitos (22 RF y 8 RNF), 14 historias de usuario y glosario.</td></tr>
+    <tr><td><code>entrega/entregables/generar.cjs</code></td><td>Arma los 7 entregables y el documento combinado, y actualiza la documentación general con el mismo diseño, historial, requisitos, historias de usuario y glosario.</td></tr>
     <tr><td><code>entrega/entregables/estilos.css</code></td><td>El diseño de los PDF (portada, índice, tablas, encabezados).</td></tr>
-    <tr><td><code>entrega/actualizar_documentacion.cjs</code></td><td>Rellena la documentación general con los mismos datos de los entregables.</td></tr>
     <tr><td><code>entrega/documentacion.html</code>, <code>guion_defensa.html</code></td><td>Documentación general del trabajo práctico y guion de la defensa, con sus PDF.</td></tr>
     <tr><td><code>Propuesta_mejoras_ENTS.pdf</code></td><td>Documento con propuestas de mejora.</td></tr>
+  </tbody>
+</table>
+<h2>11.1 Datos de demostración (supabase/demo)</h2>
+<table>
+  <thead><tr><th style="width:36%">Archivo</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>demo_cargar.sql</code></td><td>Carga 300 cuentas ficticias (<code>@demo.ents.invalid</code>, sin contraseña), 200 peticiones con firmas, comentarios, publicaciones y eventos, siempre con los mismos valores para que el resultado sea reproducible.</td></tr>
+    <tr><td><code>demo_borrar.sql</code></td><td>Borra todos los datos de demostración sin tocar los reales.</td></tr>
+    <tr><td><code>ilustraciones.cjs</code></td><td>Genera las 32 ilustraciones que se usan como fotos de las peticiones de demostración.</td></tr>
+    <tr><td><code>LEEME.md</code></td><td>Cómo cargar y borrar los datos de demostración.</td></tr>
   </tbody>
 </table>
 

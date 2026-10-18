@@ -71,8 +71,8 @@ const ACTIVIDADES = [
     desc: 'Programar la sugerencia de categoría, la detección del barrio, el score de urgencia y la búsqueda de peticiones similares.',
     entregable: 'Procesamiento automático', criterio: 'Los casos de prueba de cada algoritmo dan el resultado esperado.', recursos: 'PostgreSQL (pg_trgm); OpenStreetMap' },
   { id: 'A13', nombre: 'Desarrollar mapa por barrios, comunidad y eventos', edt: ['1.4.4'], dur: 5, pred: ['A11'], resp: 'JP', part: [],
-    desc: 'Programar el mapa con los 111 barrios, el muro vecinal y la agenda de eventos, con filtro por barrio.',
-    entregable: 'Mapa, muro vecinal y agenda', criterio: 'El filtro por barrio funciona en las tres pantallas.', recursos: 'Leaflet; OpenStreetMap' },
+    desc: 'Programar el mapa con los 111 barrios, el muro vecinal y la agenda de eventos, con filtro por barrio, y que cada vecino vea primero lo de su propio barrio.',
+    entregable: 'Mapa, muro vecinal, agenda y barrio del vecino', criterio: 'El filtro por barrio funciona en las tres pantallas y cada una arranca por el barrio del vecino.', recursos: 'Leaflet; OpenStreetMap' },
   { id: 'A14', nombre: 'Desarrollar seguimiento, notificaciones y comentarios', edt: ['1.4.5'], dur: 5, pred: ['A11'], resp: 'JP', part: [],
     desc: 'Programar las cinco etapas de seguimiento con respuesta oficial, los avisos dentro de la app y los comentarios anónimos con denuncias.',
     entregable: 'Seguimiento, avisos y comentarios', criterio: 'Cada cambio de etapa genera un aviso al autor y a los firmantes.', recursos: 'Supabase (disparadores y funciones)' },
@@ -152,7 +152,7 @@ const EDT = [
     ['1.4.1', 'Autenticación y roles', 'Registro, ingreso, recuperación de contraseña y roles.'],
     ['1.4.2', 'Peticiones y firmas', 'Alta con fotos y ubicación, firma única y prioridad.'],
     ['1.4.3', 'Procesamiento automático', 'Categoría, barrio, score de urgencia y similares.'],
-    ['1.4.4', 'Mapa y comunidad', 'Mapa por barrios, muro vecinal y agenda de eventos.'],
+    ['1.4.4', 'Mapa y comunidad', 'Mapa por barrios, muro vecinal, agenda de eventos y barrio del vecino.'],
     ['1.4.5', 'Seguimiento y avisos', 'Etapas, respuesta oficial, notificaciones y comentarios.'],
     ['1.4.6', 'Reportes', 'Estadísticas, panel analítico, bandeja por área y exportes.'],
     ['1.4.7', 'Moderación', 'Revisión de peticiones y comentarios antes y después de publicarse.']] },
@@ -193,9 +193,11 @@ const RF = [
   ['RF18', 'Publicar en el muro vecinal y consultar la agenda de eventos por barrio.', 'Baja'],
   ['RF19', 'Permitir solo al dueño definir qué paneles ve y modifica cada rol (permisos por panel).', 'Baja'],
   ['RF20', 'Permitir a los moderadores revisar peticiones pendientes, comentarios denunciados y publicaciones.', 'Media'],
+  ['RF21', 'Elegir el barrio donde vive cada vecino (a mano o con su ubicación), cambiarlo como máximo una vez cada 30 días y mostrar primero lo de ese barrio en el inicio, el mapa, la comunidad, los eventos y los avisos.', 'Media'],
+  ['RF22', 'Resumir la actividad del barrio del vecino comparada con el promedio de la ciudad y mostrar un ranking de los barrios más activos y de los que más resolvieron.', 'Baja'],
 ]
 const RNF = [
-  ['RNF01', 'Privacidad', 'Anonimato entre vecinos: la identidad del autor y de los firmantes solo la ven los funcionarios del área y los administradores.'],
+  ['RNF01', 'Privacidad', 'Anonimato entre vecinos: la identidad del autor y de los firmantes solo la ven los funcionarios del área y los administradores. El barrio donde vive cada vecino no se muestra a nadie, salvo que la persona elija mostrar "Vecino/a de [barrio]" en sus comentarios.'],
   ['RNF02', 'Seguridad', 'Las reglas de acceso se aplican en la base de datos (RLS), no solo en la pantalla; toda la comunicación usa HTTPS.'],
   ['RNF03', 'Usabilidad', 'Interfaz en español, adaptable a celular, con modo claro y oscuro.'],
   ['RNF04', 'Accesibilidad', 'Navegación con teclado, foco visible, respeto del movimiento reducido y tablas alternativas a los gráficos (WCAG 2.2).'],
@@ -219,6 +221,7 @@ const HU = [
   ['HU11', 'vecino', 'participar del muro vecinal y de la agenda de eventos', 'organizarme con mis vecinos', 'Publicaciones y eventos filtrados por barrio.', 'Baja', ['RF18']],
   ['HU12', 'dueño', 'asignar el rol de cada cuenta', 'controlar quién modera, responde o administra', 'Solo el dueño ve y usa el selector de rol; la base lo vuelve a verificar.', 'Baja', ['RF17']],
   ['HU13', 'dueño', 'definir qué paneles ve y modifica cada rol', 'adaptar los accesos sin cambiar el código', 'Pantalla "Permisos" con cada rol y sus paneles; interruptores de ver y modificar que se guardan al instante.', 'Baja', ['RF19']],
+  ['HU14', 'vecino', 'elegir el barrio donde vivo', 'ver primero lo que pasa cerca de mí', 'Se pregunta en el primer ingreso (se puede dejar para después); el inicio agrupa las peticiones en mi barrio, cerca y resto de la ciudad; el mapa, la comunidad, los eventos y los avisos arrancan por mi barrio; se cambia una vez cada 30 días.', 'Media', ['RF21', 'RF22']],
 ]
 
 // ---------------- Glosario ----------------
@@ -232,6 +235,9 @@ const GLOSARIO = [
   ['Score de urgencia', 'Puntaje de 0 a 100 que calcula el sistema según la gravedad de la categoría, palabras de riesgo, firmas, velocidad de apoyo y fotos.', /score/i],
   ['Seguimiento', 'Etapas por las que pasa una petición publicada: recibida, en revisión, derivada, en obra y resuelta.', /seguimiento/i],
   ['Moderación', 'Revisión de las peticiones y comentarios para que no se publique contenido ofensivo ni datos personales.', /moderaci[oó]n|moderar/i],
+  ['Barrio del vecino (mi barrio)', 'Barrio donde vive cada vecino, elegido por él mismo. Ordena lo que ve primero en la plataforma y solo se muestra a otros si la persona lo permite.', /mi barrio|barrio (del vecino|propio)/i],
+  ['Geolocalización', 'Obtención de la ubicación del dispositivo (con permiso de la persona) para completar el barrio automáticamente.', /geolocalizaci[oó]n|con (su|la) ubicaci[oó]n/i],
+  ['Datos de demostración', 'Cuentas, peticiones y fotos ficticias cargadas para mostrar la plataforma con actividad; se identifican con el dominio demo.ents.invalid y se borran con un solo script.', /datos de demostraci[oó]n|sint[eé]tic/i],
   ['Barrio (zona)', 'Cada uno de los 111 barrios de Córdoba y Villa Allende cargados en el sistema con su ubicación.', /barrio/i],
   ['Área', 'Dependencia del municipio responsable de un grupo de categorías (por ejemplo, Salud u Obras públicas).', /(?:^|[^\wáéíóú])[aá]reas?\b/i],
   ['Bandeja', 'Pantalla donde cada funcionario ve las peticiones de su área ordenadas por prioridad para responderlas.', /bandeja/i],
@@ -323,7 +329,7 @@ const GLOSARIO = [
   ['Código del documento (ENTS-GP)', 'Identificador de cada entregable: ENTS-GP-01 a ENTS-GP-07 (GP = gestión del proyecto).', /ENTS-GP/],
   ['ID', 'Identificador: código único de cada elemento de una lista (por ejemplo, RF01, HU03 o A7).', /\bID\b/],
   ['URL', 'Dirección de una página o recurso en internet (por ejemplo, https://entscordoba.netlify.app).', /\bURL\b/],
-  ['Versión del documento', 'Número que cambia con cada modificación registrada en el historial de revisión (1.0, 2.0, 3.0).', /historial de revisi[oó]n/i],
+  ['Versión del documento', 'Número que cambia con cada modificación registrada en el historial de revisión (1.0, 2.0, 3.0, 4.0).', /historial de revisi[oó]n/i],
 ]
 
 module.exports = {

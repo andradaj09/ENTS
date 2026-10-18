@@ -49,7 +49,8 @@ administrador, pedíselo a Juan (se asigna desde la base de datos).
 - Antes de pedir revisión: `npm run lint`, `npm test` y `npm run build` sin errores.
 - La base de datos es compartida (un solo proyecto de Supabase): lo que crees
   probando en local aparece en el sitio publicado. Usá datos de prueba claros y
-  borralos al terminar.
+  borralos al terminar. Los datos de demostración (cuentas `@demo.ents.invalid`)
+  se cargan y se borran con los scripts de `supabase/demo`.
 - Los cambios en la base (tablas, permisos, funciones) se coordinan con Juan y
   se agregan también a `supabase/schema.sql`.
 
@@ -60,12 +61,27 @@ src/
   pages/        Una pantalla por archivo (Inicio, Mapa, Petición, Bandeja, ...)
   components/   Piezas reutilizables (tarjetas, gráficos, comentarios, ...)
   services/     Consultas a Supabase
+  hooks/        Datos compartidos entre pantallas (dueño, permisos por panel)
   utils/        Lógica sin pantalla (prioridad, clasificador, moderación, ...)
   styles/       Tema claro (theme.css), oscuro (oscuro.css) y por página
 supabase/
   schema.sql    Esquema completo de la base (tablas, permisos y funciones)
+  demo/         Datos de demostración: cargarlos y borrarlos (ver LEEME.md)
+docs/entrega/   Documentación del trabajo práctico y entregables (HTML y PDF)
 public/         Íconos, manifiesto y service worker (app instalable)
 ```
+
+## Documentación
+
+Los entregables salen de un único archivo de datos. Después de cambiar
+`docs/entrega/entregables/datos.cjs`:
+
+```bash
+node docs/entrega/entregables/generar.cjs
+```
+
+Eso regenera los 7 entregables, el documento combinado y la documentación
+general (`docs/entrega/documentacion.html`). Los PDF se imprimen desde Chrome.
 
 ## Tecnologías
 
