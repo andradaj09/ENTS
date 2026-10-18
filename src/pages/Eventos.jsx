@@ -29,7 +29,9 @@ const formVacio = {
 }
 
 function Eventos() {
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
+  const miZona = profile?.zona_id ?? null
+  const [soloMiBarrio, setSoloMiBarrio] = useState(false)
   // Crear y borrar eventos: según el permiso que definió el dueño
   const { puede } = usePermisos(user?.id)
   const esAdmin = puede('eventos', 'modificar')
@@ -157,14 +159,34 @@ function Eventos() {
             </div>
           )}
 
-          {eventos.map((evento) => (
+          {miZona && eventos.length > 0 && (
+            <div className="chip-filter mb-3" role="group" aria-label="Qué eventos ver">
+              <button className={!soloMiBarrio ? 'active' : ''} onClick={() => setSoloMiBarrio(false)}>Todos</button>
+              <button className={soloMiBarrio ? 'active' : ''} onClick={() => setSoloMiBarrio(true)}>
+                Mi barrio ({eventos.filter((e) => e.zonas?.id === miZona).length})
+              </button>
+            </div>
+          )}
+
+          {soloMiBarrio && !eventos.some((e) => e.zonas?.id === miZona) && (
+            <p className="text-muted small">Por ahora no hay eventos en tu barrio.</p>
+          )}
+
+          {/* Los del barrio propio van primero (el resto, por fecha) */}
+          {[...eventos]
+            .filter((e) => !soloMiBarrio || e.zonas?.id === miZona)
+            .sort((a, b) => (b.zonas?.id === miZona) - (a.zonas?.id === miZona))
+            .map((evento) => (
             <div className="event-item" key={evento.id}>
               <span className="icon-chip">
                 <Icon name="calendar" />
               </span>
 
               <div className="flex-grow-1">
-                <strong>{evento.titulo}</strong>
+                <strong>
+                  {evento.titulo}
+                  {miZona && evento.zonas?.id === miZona && <span className="etiqueta-mi-barrio">Tu barrio</span>}
+                </strong>
                 <span>
                   {capitalizar(formatoFecha.format(new Date(evento.fecha)))}
                 </span>

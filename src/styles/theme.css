@@ -3587,3 +3587,207 @@ a.event-item:hover {
     display: none;
   }
 }
+
+/* ---------- Barrio del vecino ---------- */
+/* Ventana del primer ingreso */
+.bienvenida-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(18, 18, 18, 0.35);
+}
+
+.bienvenida-ventana {
+  width: min(460px, 100%);
+  padding: 28px;
+  text-align: left;
+  animation: entrada-suave 0.4s var(--ease-out) both;
+}
+
+.bienvenida-ventana h2 {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.bienvenida-omitir {
+  display: block;
+  margin: 12px auto 0;
+  padding: 6px 12px;
+  border: 0;
+  background: none;
+  color: var(--ents-muted);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Selector de barrio (ventana, inicio y perfil) */
+.elegir-barrio {
+  display: grid;
+  gap: 10px;
+}
+
+.elegir-barrio-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.elegir-barrio-fila .form-select {
+  flex: 1 1 180px;
+}
+
+/* Tarjeta "Tu barrio" del inicio */
+.tu-barrio .aside-head {
+  align-items: center;
+}
+
+.tu-barrio-nombre {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.tu-barrio-nombre small {
+  color: var(--ents-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tu-barrio-cambiar {
+  margin-left: auto;
+  color: var(--ents-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.tu-barrio-datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 4px 0 10px;
+}
+
+.tu-barrio-datos > div {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--ents-radius-sm);
+  background: var(--glass-inner);
+}
+
+.tu-barrio-datos strong {
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+
+.tu-barrio-datos span {
+  color: var(--ents-muted);
+  font-size: 0.8rem;
+}
+
+.tu-barrio-datos small {
+  color: var(--ents-muted);
+  font-size: 0.72rem;
+}
+
+.tu-barrio-dato {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 0.88rem;
+}
+
+/* Inicio: vista por barrio y grupos de peticiones */
+.vista-barrio {
+  margin-bottom: 18px;
+}
+
+.grupo-peticiones + .grupo-peticiones {
+  margin-top: 28px;
+}
+
+.grupo-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.grupo-titulo span {
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: var(--glass-inner);
+  color: var(--ents-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* Marca "Tu barrio" (eventos y avisos) */
+.etiqueta-mi-barrio {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(28, 92, 171, 0.12);
+  color: #1c5cab;
+  font-size: 0.7rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+[data-tema='oscuro'] .etiqueta-mi-barrio {
+  background: rgba(116, 172, 223, 0.18);
+  color: #9cc8f0;
+}
+
+.comentario-barrio {
+  color: var(--ents-muted);
+  font-weight: 500;
+}
+
+/* Perfil: sección "Mi barrio" */
+.mi-barrio-perfil {
+  display: grid;
+  gap: 12px;
+}
+
+.mi-barrio-actual {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.mi-barrio-actual span {
+  color: var(--ents-muted);
+}
+
+.mi-barrio-opcion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--ents-radius-sm);
+  background: var(--glass-inner);
+  color: var(--ents-ink);
+  font-weight: 600;
+  text-align: left;
+}
+
+.mi-barrio-opcion small {
+  display: block;
+  margin-top: 2px;
+  color: var(--ents-muted);
+  font-size: 0.78rem;
+  font-weight: 400;
+}

@@ -9,7 +9,7 @@
 -- anonimato_total_y_vista_admin, perfil_desde_google,
 -- estadisticas_y_categorias, mas_barrios_cordoba_y_villa_allende,
 -- seguimiento_notificaciones_comentarios_areas y sus correcciones, score_urgencia_automatico,
--- dueno_cambia_roles, documentos_privados_dueno, cinco_roles_moderador_y_area, permisos_por_panel, borrar_comentario_rpc).
+-- dueno_cambia_roles, documentos_privados_dueno, cinco_roles_moderador_y_area, permisos_por_panel, borrar_comentario_rpc, barrio_del_vecino).
 -- Este archivo es la versión final
 -- consolidada, para recrear la base en otro proyecto:
 -- Supabase → SQL Editor → New query → pegar todo → Run.
@@ -2753,3 +2753,214 @@ $$;
 
 revoke execute on function public.borrar_comentario(bigint) from public, anon;
 grant execute on function public.borrar_comentario(bigint) to authenticated;
+
+-- =====================================================================
+-- 20. Barrio del vecino
+-- =====================================================================
+-- Cada cuenta puede elegir el barrio donde vive. Sirve para personalizar
+-- (inicio, mapa, comunidad, eventos, avisos) y no se muestra a otros
+-- vecinos, salvo que la persona active "Vecino/a de X" en sus comentarios.
+-- El barrio se cambia como máximo una vez cada 30 días (evita mudarse de
+-- barrio para inflar firmas o rankings).
+
+alter table public.profiles
+  add column if not exists zona_id bigint references public.zonas (id) on delete set null,
+  add column if not exists zona_cambiada_at timestamptz,
+  add column if not exists mostrar_barrio boolean not null default false;
+
+create index if not exists profiles_zona_idx on public.profiles (zona_id);
+
+-- Elegir o cambiar el barrio propio (también lo empieza a seguir para los avisos)
+create or replace function public.elegir_mi_barrio(p_zona bigint)
+returns json
+language plpgsql security definer set search_path = ''
+as $$
+declare
+  yo public.profiles;
+  proximo timestamptz;
+begin
+  select * into yo from public.profiles where id = auth.uid();
+  if yo.id is null then
+    raise exception 'No autorizado' using errcode = '42501';
+  end if;
+
+  if not exists (select 1 from public.zonas where id = p_zona and activa) then
+    raise exception 'Barrio inválido' using errcode = '22023';
+  end if;
+
+  if yo.zona_id = p_zona then
+    return json_build_object('zona_id', p_zona, 'zona_cambiada_at', yo.zona_cambiada_at);
+  end if;
+
+  -- La primera elección es libre; los cambios, una vez cada 30 días
+  proximo := yo.zona_cambiada_at + interval '30 days';
+  if yo.zona_id is not null and proximo > now() then
+    raise exception 'Podés volver a cambiar tu barrio el %', to_char(proximo at time zone 'America/Argentina/Cordoba', 'DD/MM/YYYY')
+      using errcode = '22023', hint = 'limite_cambio';
+  end if;
+
+  update public.profiles set zona_id = p_zona, zona_cambiada_at = now() where id = auth.uid();
+
+  insert into public.barrios_seguidos (usuario_id, zona_id)
+  values (auth.uid(), p_zona)
+  on conflict do nothing;
+
+  return json_build_object('zona_id', p_zona, 'zona_cambiada_at', now());
+end;
+$$;
+
+-- Mostrar u ocultar "Vecino/a de X" en los comentarios propios
+create or replace function public.mostrar_mi_barrio(p_mostrar boolean)
+returns void
+language sql security definer set search_path = ''
+as $$
+  update public.profiles set mostrar_barrio = p_mostrar where id = auth.uid();
+$$;
+
+-- Resumen del barrio propio comparado con el promedio de la ciudad
+create or replace function public.resumen_mi_barrio()
+returns json
+language sql stable security definer set search_path = ''
+as $$
+  with yo as (select zona_id from public.profiles where id = auth.uid()),
+  pub as (select * from public.peticiones where estado = 'publicada'),
+  barrios_activos as (select count(distinct zona_id)::numeric as n from pub),
+  mias as (select * from pub where zona_id = (select zona_id from yo)),
+  -- Categoría con más peticiones en el barrio y su peso frente a la ciudad
+  cat as (
+    select c.nombre,
+           count(*) filter (where p.zona_id = (select zona_id from yo))::numeric as en_barrio,
+           count(*)::numeric as en_ciudad
+    from pub p join public.categorias c on c.id = p.categoria_id
+    group by c.nombre
+  ),
+  top as (
+    select nombre,
+           en_barrio / nullif((select count(*) from mias), 0) as parte_barrio,
+           en_ciudad / nullif((select count(*) from pub), 0) as parte_ciudad
+    from cat where en_barrio > 0
+    order by en_barrio desc, nombre limit 1
+  )
+  select case when (select zona_id from yo) is null then null else json_build_object(
+    'zona_id', (select zona_id from yo),
+    'barrio', (select nombre from public.zonas where id = (select zona_id from yo)),
+    'activas', (select count(*) from mias where seguimiento <> 'resuelta'),
+    'firmas', (select coalesce(sum(firmas_count), 0) from mias),
+    'resueltas_mes', (
+      select count(distinct a.peticion_id) from public.peticion_actualizaciones a
+      join mias m on m.id = a.peticion_id
+      where a.estado = 'resuelta' and a.created_at > now() - interval '30 days'
+    ),
+    'urgencia', (select round(avg(score_urgencia)) from mias),
+    'urgencia_ciudad', (select round(avg(score_urgencia)) from pub),
+    'activas_promedio', round((select count(*) from pub where seguimiento <> 'resuelta') / nullif((select n from barrios_activos), 0), 1),
+    'categoria', (select nombre from top),
+    'categoria_veces', (select round(parte_barrio / nullif(parte_ciudad, 0), 1) from top)
+  ) end;
+$$;
+
+-- Ranking público de barrios del último mes
+create or replace function public.ranking_barrios()
+returns json
+language sql stable security definer set search_path = ''
+as $$
+  select json_build_object(
+    'activos', coalesce((
+      select json_agg(x) from (
+        select z.nombre,
+               (select count(*) from public.peticiones p where p.zona_id = z.id and p.estado = 'publicada' and p.created_at > now() - interval '30 days')
+               + (select count(*) from public.firmas f join public.peticiones p on p.id = f.peticion_id where p.zona_id = z.id and f.created_at > now() - interval '30 days') as actividad
+        from public.zonas z
+        order by 2 desc, z.nombre limit 5
+      ) x where x.actividad > 0
+    ), '[]'::json),
+    'resolvieron', coalesce((
+      select json_agg(x) from (
+        select z.nombre, count(distinct a.peticion_id) as resueltas
+        from public.peticion_actualizaciones a
+        join public.peticiones p on p.id = a.peticion_id
+        join public.zonas z on z.id = p.zona_id
+        where a.estado = 'resuelta' and a.created_at > now() - interval '30 days'
+        group by z.nombre
+        order by 2 desc, z.nombre limit 5
+      ) x
+    ), '[]'::json)
+  );
+$$;
+
+revoke execute on function public.elegir_mi_barrio(bigint), public.mostrar_mi_barrio(boolean),
+  public.resumen_mi_barrio(), public.ranking_barrios() from public, anon;
+grant execute on function public.elegir_mi_barrio(bigint), public.mostrar_mi_barrio(boolean),
+  public.resumen_mi_barrio(), public.ranking_barrios() to authenticated;
+
+-- Comentarios: "Vecino/a de X" solo si el autor lo activó
+drop function if exists public.comentarios_peticion(bigint);
+create function public.comentarios_peticion(p_peticion bigint)
+returns table(id bigint, texto text, fecha timestamptz, propio boolean, oculto boolean,
+              denuncias bigint, autor text, alertas text[], barrio_autor text)
+language sql stable security definer set search_path = ''
+as $$
+  select c.id, c.texto, c.created_at, c.usuario_id = auth.uid(), c.oculto,
+         case when privado.es_moderador() then (select count(*) from public.denuncias d where d.comentario_id = c.id) else 0 end,
+         case when privado.es_moderador() then pr.nombre || ' ' || pr.apellido end,
+         case when privado.es_moderador() then c.alertas else '{}'::text[] end,
+         case when pr.mostrar_barrio then z.nombre end
+  from public.comentarios c
+  join public.profiles pr on pr.id = c.usuario_id
+  left join public.zonas z on z.id = pr.zona_id
+  where c.peticion_id = p_peticion
+    and privado.puede_ver_peticion(p_peticion)
+    and (not c.oculto or c.usuario_id = auth.uid() or privado.es_moderador())
+  order by c.created_at;
+$$;
+revoke execute on function public.comentarios_peticion(bigint) from public, anon;
+grant execute on function public.comentarios_peticion(bigint) to authenticated;
+
+-- Avisos: se indica si la petición es del barrio propio
+drop function if exists public.mis_notificaciones();
+create function public.mis_notificaciones()
+returns table(id bigint, tipo text, peticion_id bigint, titulo text, mensaje text,
+              leida boolean, fecha timestamptz, de_mi_barrio boolean)
+language sql stable security definer set search_path = ''
+as $$
+  select n.id, n.tipo, n.peticion_id, p.titulo, n.mensaje, n.leida, n.created_at,
+         p.zona_id is not null and p.zona_id = (select zona_id from public.profiles where id = auth.uid())
+  from public.notificaciones n
+  left join public.peticiones p on p.id = n.peticion_id
+  where n.usuario_id = auth.uid()
+  order by n.created_at desc
+  limit 60;
+$$;
+revoke execute on function public.mis_notificaciones() from public, anon;
+grant execute on function public.mis_notificaciones() to authenticated;
+
+-- Logros: participación en el barrio propio
+create or replace function public.mis_logros()
+returns json
+language sql stable security definer set search_path = ''
+as $$
+  select json_build_object(
+    'peticiones', (select count(*) from public.peticiones where usuario_id = auth.uid()),
+    'publicadas', (select count(*) from public.peticiones where usuario_id = auth.uid() and estado = 'publicada'),
+    'resueltas', (select count(*) from public.peticiones where usuario_id = auth.uid() and seguimiento = 'resuelta'),
+    'elevadas', (select count(*) from public.peticiones where usuario_id = auth.uid() and elevada_at is not null),
+    'firmas', (select count(*) from public.firmas where usuario_id = auth.uid()),
+    'firmas_resueltas', (
+      select count(*) from public.firmas f join public.peticiones p on p.id = f.peticion_id
+      where f.usuario_id = auth.uid() and p.seguimiento = 'resuelta'
+    ),
+    'publicaciones', (select count(*) from public.publicaciones where usuario_id = auth.uid()),
+    'comentarios', (select count(*) from public.comentarios where usuario_id = auth.uid() and not oculto),
+    'barrios', (
+      select count(distinct p.zona_id) from public.firmas f join public.peticiones p on p.id = f.peticion_id
+      where f.usuario_id = auth.uid()
+    ),
+    'mi_barrio', (select z.nombre from public.zonas z join public.profiles pr on pr.zona_id = z.id where pr.id = auth.uid()),
+    'en_mi_barrio', (
+      select (select count(*) from public.firmas f join public.peticiones p on p.id = f.peticion_id
+              where f.usuario_id = auth.uid() and p.zona_id = pr.zona_id)
+           + (select count(*) from public.peticiones p where p.usuario_id = auth.uid() and p.zona_id = pr.zona_id)
+      from public.profiles pr where pr.id = auth.uid()
+    )
+  );
+$$;

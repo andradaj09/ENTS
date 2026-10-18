@@ -38,17 +38,18 @@ function EtiquetaAuto({ automatico, manual, onRestablecer, sugerencia }) {
 }
 
 function CreatePetition() {
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
   const navigate = useNavigate()
 
   const [categorias, setCategorias] = useState([])
   const [zonas, setZonas] = useState([])
 
+  // El barrio arranca en el del perfil; si se marca una ubicación, manda la ubicación
   const [form, setForm] = useState({
     titulo: '',
     descripcion: '',
     categoriaId: '',
-    zonaId: '',
+    zonaId: profile?.zona_id ? String(profile.zona_id) : '',
   })
 
   const [ubicacion, setUbicacion] = useState(null)

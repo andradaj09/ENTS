@@ -387,6 +387,7 @@ export async function getNotificaciones() {
     mensaje: notificacion.mensaje,
     leida: notificacion.leida,
     fecha: notificacion.fecha,
+    deMiBarrio: notificacion.de_mi_barrio,
   }))
 }
 

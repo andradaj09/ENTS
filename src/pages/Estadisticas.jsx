@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { getEstadisticasPublicas } from '../services/petitionService'
+import { getRankingBarrios } from '../services/participacionService'
 import { usePermisos } from '../hooks/usePermisos'
 import { Barras, Columnas, Proporcion, TarjetaGrafico, Tile } from '../components/Graficos'
 import { fechaCorta, numero } from '../utils/format'
@@ -22,6 +23,12 @@ function Estadisticas() {
   const { puede } = usePermisos(user?.id)
   const [datos, setDatos] = useState(null)
   const [error, setError] = useState('')
+  const [ranking, setRanking] = useState(null)
+
+  // Ranking del último mes (opcional: si falla, la tarjeta no aparece)
+  useEffect(() => {
+    getRankingBarrios().then(setRanking).catch((err) => console.error('Error cargando el ranking:', err))
+  }, [])
 
   useEffect(() => {
     getEstadisticasPublicas()
@@ -147,6 +154,36 @@ function Estadisticas() {
             <Icon name="arrow" size={16} />
           </Link>
         </TarjetaGrafico>
+
+        {ranking && (
+          <>
+            <TarjetaGrafico
+              className="ancho-6"
+              titulo="Barrios más activos del mes"
+              subtitulo="Peticiones nuevas y firmas de los últimos 30 días"
+              columnas={['Barrio', 'Actividad']}
+              filas={ranking.activos.map((b) => [b.nombre, numero(b.actividad)])}
+            >
+              <Barras
+                vacio="Todavía no hay actividad este mes."
+                datos={ranking.activos.map((b) => ({ etiqueta: b.nombre, valor: b.actividad }))}
+              />
+            </TarjetaGrafico>
+
+            <TarjetaGrafico
+              className="ancho-6"
+              titulo="Barrios que más resolvieron"
+              subtitulo="Peticiones resueltas en los últimos 30 días"
+              columnas={['Barrio', 'Resueltas']}
+              filas={ranking.resolvieron.map((b) => [b.nombre, numero(b.resueltas)])}
+            >
+              <Barras
+                vacio="Todavía no hay peticiones resueltas este mes."
+                datos={ranking.resolvieron.map((b) => ({ etiqueta: b.nombre, valor: b.resueltas }))}
+              />
+            </TarjetaGrafico>
+          </>
+        )}
       </div>
     </div>
   )

@@ -6,7 +6,7 @@
 
 const DISTANCIA_MAXIMA_KM = 3
 
-function distanciaKm(a, b) {
+export function distanciaKm(a, b) {
   const rad = (grados) => (grados * Math.PI) / 180
   const dLat = rad(b.lat - a.lat)
   const dLng = rad(b.lng - a.lng)

@@ -132,7 +132,10 @@ function NotificacionesMenu({ usuarioId }) {
               </p>
             )}
 
-            {notificaciones.map((n) => {
+            {/* Las novedades sin leer del barrio propio van primero */}
+            {[...notificaciones]
+              .sort((a, b) => (esNueva(b) && b.deMiBarrio) - (esNueva(a) && a.deMiBarrio))
+              .map((n) => {
               const { icono, texto } = TEXTOS[n.tipo] ?? SIN_TEXTO
 
               return (
@@ -147,7 +150,10 @@ function NotificacionesMenu({ usuarioId }) {
                   </span>
 
                   <div>
-                    <p>{texto(n.mensaje)}</p>
+                    <p>
+                      {texto(n.mensaje)}
+                      {n.deMiBarrio && <span className="etiqueta-mi-barrio">Tu barrio</span>}
+                    </p>
                     <span>{n.titulo} · {tiempoRelativo(n.fecha)}</span>
                   </div>
                 </Link>

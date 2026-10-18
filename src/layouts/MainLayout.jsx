@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useCallback, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { logoutUser } from '../services/authService'
@@ -9,6 +9,8 @@ import FondoAnimado from '../components/FondoAnimado'
 import NotificacionesMenu from '../components/NotificacionesMenu'
 import { usePermisos } from '../hooks/usePermisos'
 import { PANELES, panelPorClave } from '../utils/paneles'
+import { barrioOmitido } from '../utils/barrioVecino'
+import BienvenidaBarrio from '../components/BienvenidaBarrio'
 
 const sideLinkClass = ({ isActive }) =>
   `side-link${isActive ? ' active' : ''}`
@@ -34,6 +36,11 @@ function MainLayout() {
   // así se cierra solo al navegar
   const [menuAbiertoEn, setMenuAbiertoEn] = useState(null)
   const [menuColapsado, setMenuColapsado] = useState(false)
+
+  // Primer ingreso: preguntar el barrio (se puede saltear con "Elegir después")
+  const [bienvenidaCerrada, setBienvenidaCerrada] = useState(false)
+  const cerrarBienvenida = useCallback(() => setBienvenidaCerrada(true), [])
+  const pedirBarrio = Boolean(user && profile && !profile.zona_id && !bienvenidaCerrada && !barrioOmitido(user.id))
 
   const menuAbierto = menuAbiertoEn === location.pathname
   const setMenuAbierto = (abierto) =>
@@ -65,6 +72,8 @@ function MainLayout() {
   return (
     <>
       <FondoAnimado fijo suave />
+
+      {pedirBarrio && <BienvenidaBarrio usuarioId={user.id} onCerrar={cerrarBienvenida} />}
 
       {/* Accesibilidad: con teclado, el primer Tab permite saltar el menú */}
       <a className="skip-link" href="#contenido">Saltar al contenido</a>

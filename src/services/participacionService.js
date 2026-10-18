@@ -216,3 +216,14 @@ export async function getPermisosPanel() {
 
 export const guardarPermiso = (rol, panel, ver, modificar) =>
   rpc('guardar_permiso', { p_rol: rol, p_panel: panel, p_ver: ver, p_modificar: modificar })
+
+// ---------- Barrio del vecino ----------
+// La base valida el barrio y el límite de un cambio cada 30 días
+
+export const elegirMiBarrio = (zonaId) => rpc('elegir_mi_barrio', { p_zona: Number(zonaId) })
+
+export const mostrarMiBarrio = (mostrar) => rpc('mostrar_mi_barrio', { p_mostrar: mostrar })
+
+export const getResumenMiBarrio = () => rpc('resumen_mi_barrio')
+
+export const getRankingBarrios = () => rpc('ranking_barrios')

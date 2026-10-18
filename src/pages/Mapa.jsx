@@ -54,7 +54,8 @@ function iconoMarcador(nivel, activo) {
 }
 
 // Encuadra el mapa en los marcadores visibles y vuela al seleccionado
-function ControlVista({ puntos, seleccion }) {
+// foco: centro del barrio del vecino; sin un barrio filtrado, el mapa se abre ahí
+function ControlVista({ puntos, seleccion, foco }) {
   const map = useMap()
 
   // `puntos` está memorizado: solo cambia al cargar datos o filtrar por barrio
@@ -66,6 +67,11 @@ function ControlVista({ puntos, seleccion }) {
     const encuadre = cercanos.length > 0 ? cercanos : puntos
     if (encuadre.length === 0) return
 
+    if (foco) {
+      map.flyTo([foco.lat, foco.lng], 14, { duration: 0.8 })
+      return
+    }
+
     const limites = L.latLngBounds(encuadre.map((p) => [p.lat, p.lng]))
     map.flyToBounds(limites, {
       paddingTopLeft: [60, 150], // deja libre el lugar de la leyenda
@@ -73,7 +79,7 @@ function ControlVista({ puntos, seleccion }) {
       maxZoom: 15,
       duration: 0.8,
     })
-  }, [puntos, map])
+  }, [puntos, map, foco])
 
   useEffect(() => {
     if (!seleccion) return
@@ -87,7 +93,8 @@ function ControlVista({ puntos, seleccion }) {
 }
 
 function Mapa() {
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
+  const miZona = profile?.zona_id ?? null
   const [peticiones, setPeticiones] = useState([])
   const [seguidos, setSeguidos] = useState([])
   const [zonas, setZonas] = useState([])
@@ -165,6 +172,12 @@ function Mapa() {
 
   const areas = useMemo(() => areasDeBarrios(zonas), [zonas])
 
+  // Centro del barrio del vecino: el mapa se abre ahí
+  const focoMiBarrio = useMemo(() => {
+    const zona = zonas.find((z) => z.id === miZona)
+    return zona?.lat != null ? { lat: Number(zona.lat), lng: Number(zona.lng) } : null
+  }, [zonas, miZona])
+
   const maximoMetrica = useMemo(() => Math.max(
     0,
     ...[...resumenBarrios.values()].map((r) => r[metrica])
@@ -222,7 +235,13 @@ function Mapa() {
             const datos = resumenBarrios.get(zona.id)
             const valor = datos?.[metrica] ?? 0
             const elegida = zonaFiltro === zona.id
-            const borde = { color: elegida ? '#0b0b0b' : '#ffffff', weight: elegida ? 3 : 2 }
+            const esMia = zona.id === miZona
+            // El barrio propio lleva un contorno azul para encontrarlo de un vistazo
+            const borde = elegida
+              ? { color: '#0b0b0b', weight: 3, dashArray: null }
+              : esMia
+                ? { color: '#1c5cab', weight: 4, dashArray: '8 6' }
+                : { color: '#ffffff', weight: 2, dashArray: null }
 
             return (
               <Polygon
@@ -240,7 +259,7 @@ function Mapa() {
                 }}
               >
                 <Tooltip sticky direction="top" className="mapa-tooltip">
-                  <strong>{zona.nombre}</strong>
+                  <strong>{zona.nombre}{esMia && ' · Tu barrio'}</strong>
                   <span>{datos?.peticiones ?? 0} peticiones · {datos?.firmas ?? 0} firmas</span>
                   <span>Urgencia promedio: {datos?.urgencia ?? 0}/100</span>
                 </Tooltip>
@@ -266,7 +285,7 @@ function Mapa() {
             />
           ))}
 
-          <ControlVista puntos={encuadre} seleccion={seleccion} />
+          <ControlVista puntos={encuadre} seleccion={seleccion} foco={zonaFiltro === 'todas' ? focoMiBarrio : null} />
         </MapContainer>
 
         <div className="mapa-leyenda">

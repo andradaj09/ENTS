@@ -9,6 +9,7 @@ import { usePermisos } from '../hooks/usePermisos'
 import Icon from '../components/Icon'
 import Insignias from '../components/Insignias'
 import BarriosSeguidos from '../components/BarriosSeguidos'
+import MiBarrioPerfil from '../components/MiBarrioPerfil'
 
 function Perfil() {
   const { user, profile, setProfile } = useAuth()
@@ -284,8 +285,15 @@ function Perfil() {
           </div>
         </div>
 
-        <div className="col-lg-5">
-          <div className="card h-100">
+        <div className="col-lg-5 d-flex flex-column gap-4">
+          <div className="card" id="mi-barrio">
+            <div className="card-body">
+              <p className="line-label">Mi barrio</p>
+              <MiBarrioPerfil />
+            </div>
+          </div>
+
+          <div className="card flex-grow-1">
             <div className="card-body">
               <p className="line-label">Barrios que seguís</p>
               <BarriosSeguidos usuarioId={user?.id} />

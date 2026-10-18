@@ -121,6 +121,8 @@ function Comentarios({ peticion, usuarioId, esModerador }) {
                 <strong>
                   <Icon name={c.propio ? 'user' : 'lock'} size={13} className="me-1" />
                   {c.propio ? 'Vos' : esModerador && c.autor ? c.autor : 'Vecino/a'}
+                  {/* Solo si el autor activó mostrar su barrio en el perfil */}
+                  {c.barrio_autor && <span className="comentario-barrio"> de {c.barrio_autor}</span>}
                 </strong>
                 <small>{tiempoRelativo(c.fecha)}</small>
               </div>

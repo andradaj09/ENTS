@@ -43,8 +43,9 @@ function Comunidad() {
 
   const [busqueda, setBusqueda] = useState('')
   const [filtroTipo, setFiltroTipo] = useState('todo')
-  // '' = todos los barrios; si no, el id del barrio elegido
-  const [barrioFiltro, setBarrioFiltro] = useState('')
+  // '' = todos los barrios; si no, el id del barrio elegido.
+  // Arranca en el barrio del vecino (si lo eligió); puede pasar a "todos".
+  const [barrioFiltro, setBarrioFiltro] = useState(profile?.zona_id ?? '')
 
   const [nueva, setNueva] = useState({ tipo: 'positivo', contenido: '', zonaId: '' })
   const [publicando, setPublicando] = useState(false)
