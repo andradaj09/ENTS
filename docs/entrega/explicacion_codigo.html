@@ -320,12 +320,10 @@
 
 <!-- ============ 13 ============ -->
 <h1><span class="num">13</span>Cosas sobrantes detectadas</h1>
-<p>Ninguna afecta el funcionamiento, pero conviene limpiarlas para mantener el código ordenado:</p>
+<p>Ya se quitaron la dependencia <code>react-bootstrap</code> (Bootstrap se usa solo con sus clases CSS), las imágenes sobrantes de la plantilla de Vite, estilos de una vista de barrios que ya no existe y funciones que nadie llamaba. Queda una sola cosa, que no afecta el funcionamiento:</p>
 <table>
   <thead><tr><th style="width:34%">Elemento</th><th>Situación</th></tr></thead>
   <tbody>
-    <tr><td><code>react-bootstrap</code> (en package.json)</td><td>Está instalado pero ningún archivo lo usa: Bootstrap se usa solo con sus clases CSS. Se puede quitar.</td></tr>
-    <tr><td><code>src/assets/react.svg</code> y <code>vite.svg</code></td><td>Restos de la plantilla inicial de Vite; no se usan.</td></tr>
     <tr><td><code>privado.puede_ver_identidades()</code></td><td>Función de la versión de 4 roles que dos funciones antiguas todavía usan. Funciona, pero convive con su reemplazo más nuevo por área (<code>puede_ver_identidades_de</code>).</td></tr>
   </tbody>
 </table>

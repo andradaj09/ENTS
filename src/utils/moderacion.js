@@ -16,7 +16,7 @@ export function revisarTexto(texto) {
   return REGLAS.filter(([, regla]) => regla.test(t)).map(([alerta]) => alerta)
 }
 
-export const DESCRIPCION_ALERTA = {
+const DESCRIPCION_ALERTA = {
   correo: 'un correo electrónico',
   telefono: 'un número de teléfono',
   dni: 'un número de documento',

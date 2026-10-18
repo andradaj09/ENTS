@@ -21,7 +21,7 @@ export function omitirBarrio(usuarioId) {
   }
 }
 
-export const DISTANCIA_CERCA_KM = 3
+const DISTANCIA_CERCA_KM = 3
 
 // Barrios cuyo centro está a menos de 3 km del barrio propio (sin incluirlo)
 export function barriosCercanos(zonaId, zonas, km = DISTANCIA_CERCA_KM) {

@@ -21,7 +21,7 @@ export function capitalizar(texto) {
 
 // Umbrales de urgencia compartidos por el inicio, el mapa y la comunidad
 export const UMBRAL_URGENTE = 70
-export const UMBRAL_MEDIO = 40
+const UMBRAL_MEDIO = 40
 
 // 'alta' | 'media' | 'baja': define el color de tarjetas, puntos y marcadores
 export function nivelUrgencia(score) {

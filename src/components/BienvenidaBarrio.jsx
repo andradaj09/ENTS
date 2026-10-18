@@ -13,7 +13,6 @@ function BienvenidaBarrio({ usuarioId, onCerrar }) {
     onCerrar()
   }
 
-  // Al abrir, el foco va a la lista de barrios
   useEffect(() => {
     ventana.current?.querySelector('select')?.focus()
   }, [])

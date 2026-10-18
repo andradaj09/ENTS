@@ -26,7 +26,7 @@ function HeroArt() {
         <polygon points="40,290 200,250 290,250" fill="#121212" />
       </g>
 
-      {/* Cuadrícula (en lugar del globo) */}
+      {/* Cuadrícula */}
       <g className="art-pieza">
         <rect x="18" y="372" width="92" height="92" fill="#121212" />
         <path

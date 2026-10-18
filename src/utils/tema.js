@@ -2,14 +2,6 @@
 // index.html aplica el tema antes de que cargue React (sin parpadeo).
 const CLAVE = 'ents-tema'
 
-export function temaGuardado() {
-  try {
-    return localStorage.getItem(CLAVE)
-  } catch {
-    return null
-  }
-}
-
 export function temaActual() {
   return document.documentElement.dataset.tema === 'oscuro' ? 'oscuro' : 'claro'
 }

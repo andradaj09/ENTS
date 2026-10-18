@@ -127,7 +127,6 @@ function AdminPetitions() {
         </p>
       </div>
 
-      {/* Resumen de lo que hay para revisar */}
       <div className="bandeja-resumen mb-5" aria-label="Resumen de moderación">
         <div><strong>{peticiones.length}</strong><span>Peticiones pendientes</span></div>
         <div><strong>{peticiones.filter((p) => p.alertas?.length > 0).length}</strong><span>Con alertas automáticas</span></div>
@@ -227,7 +226,6 @@ function AdminPetitions() {
         </div>
       )}
 
-      {/* Cada petición en una fila compacta: fotos chicas, datos y acciones */}
       <ul className="revision-lista">
         {peticiones.map((peticion) => (
           <li className="revision" key={peticion.id}>

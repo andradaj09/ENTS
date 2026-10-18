@@ -172,7 +172,6 @@ function Mapa() {
 
   const areas = useMemo(() => areasDeBarrios(zonas), [zonas])
 
-  // Centro del barrio del vecino: el mapa se abre ahí
   const focoMiBarrio = useMemo(() => {
     const zona = zonas.find((z) => z.id === miZona)
     return zona?.lat != null ? { lat: Number(zona.lat), lng: Number(zona.lng) } : null

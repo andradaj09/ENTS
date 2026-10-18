@@ -1191,7 +1191,6 @@ hr {
 .dot-green { background: var(--ents-green); }
 .dot-yellow { background: var(--ents-yellow); }
 .dot-red { background: var(--ents-red); animation: latido 1.6s ease-in-out infinite; }
-.dot-blue { background: var(--ents-blue); }
 
 /* Paneles del lateral derecho */
 .aside-panel {
@@ -2206,74 +2205,6 @@ a.event-item:hover {
 
 @keyframes barra-crece {
   from { transform: scaleX(0); }
-}
-
-/* Mapa vecinal: cuadrícula de barrios */
-.zone-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
-}
-
-.zone-tile {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 120px;
-  padding: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  border-radius: 16px;
-  color: var(--ents-ink);
-  text-align: left;
-  animation: revelar 0.6s var(--ease-out) both;
-  transition: transform 0.25s var(--ease-out), box-shadow 0.25s;
-}
-
-.zone-tile:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 28px rgba(40, 32, 10, 0.12);
-}
-
-.zone-tile.active {
-  outline: 2px solid var(--ents-ink);
-  outline-offset: 2px;
-}
-
-.zone-tile strong {
-  font-size: 0.92rem;
-}
-
-.zone-tile .zone-count {
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.04em;
-}
-
-.zone-level-0 { background: rgba(255, 255, 255, 0.55); }
-.zone-level-1 { background: rgba(214, 236, 222, 0.85); }
-.zone-level-2 { background: rgba(250, 229, 186, 0.85); }
-.zone-level-3 { background: rgba(244, 204, 194, 0.9); }
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  color: var(--ents-muted);
-  font-size: 0.8rem;
-}
-
-.legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.legend i {
-  width: 14px;
-  height: 14px;
-  border: 1px solid var(--ents-line-strong);
-  border-radius: 4px;
 }
 
 /* Notificaciones */

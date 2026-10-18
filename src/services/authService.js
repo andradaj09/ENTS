@@ -90,7 +90,7 @@ export async function updatePerfil(usuarioId, cambios) {
   return data
 }
 
-export const TAMANIO_MAXIMO_AVATAR = 2 * 1024 * 1024
+const TAMANIO_MAXIMO_AVATAR = 2 * 1024 * 1024
 
 // Sube la foto al bucket `avatares` (ver supabase/schema.sql)
 // y devuelve su URL pública.
@@ -121,8 +121,6 @@ export async function subirAvatar(usuarioId, archivo) {
 }
 
 // ---------- Google ----------
-// Redirige a Google y vuelve a la página ya con la sesión iniciada.
-// Requiere el proveedor Google habilitado en Supabase (Authentication → Providers).
 // ¿Está habilitado el proveedor Google en Supabase? (configuración pública de Auth)
 // La pantalla de acceso solo muestra el botón cuando lo está.
 export async function googleHabilitado() {
@@ -159,7 +157,7 @@ export async function loginConGoogle(destino = '/') {
 }
 
 // ---------- Recuperar contraseña ----------
-export const RUTA_RESTABLECER = '/restablecer'
+const RUTA_RESTABLECER = '/restablecer'
 
 // Envía un correo con un enlace que lleva a /restablecer con una sesión temporal
 export async function enviarRecuperacion(email) {

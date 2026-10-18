@@ -35,14 +35,12 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<div className="cargando-pagina" role="status">Cargando...</div>}>
       <Routes>
-        {/* Acceso: pantalla completa, fuera del dashboard */}
         <Route path="/login" element={<AuthPage />} />
         <Route path="/registro" element={<AuthPage />} />
         <Route path="/recuperar" element={<AuthPage />} />
         <Route path="/restablecer" element={<RestablecerPassword />} />
         <Route path="/privacidad" element={<Privacidad />} />
 
-        {/* Todo el dashboard requiere sesión iniciada */}
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />

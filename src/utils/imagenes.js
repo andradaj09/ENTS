@@ -1,5 +1,5 @@
 export const MAXIMO_FOTOS = 3
-export const TAMANIO_MAXIMO_ORIGINAL = 15 * 1024 * 1024
+const TAMANIO_MAXIMO_ORIGINAL = 15 * 1024 * 1024
 
 // Reduce la foto a un máximo de 1600 px por lado y la convierte a JPEG.
 // Una foto de celular de ~5 MB queda en ~300 KB: sube rápido y carga liviana.

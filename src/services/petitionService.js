@@ -112,12 +112,6 @@ export function getZonas() {
   })
 }
 
-// Precarga en segundo plano (por ejemplo, al pasar por "Nueva petición")
-export function precargarOpciones() {
-  getCategorias().catch(() => {})
-  getZonas().catch(() => {})
-}
-
 export async function getEstadisticasPublicas() {
   const { data, error } = await supabase.rpc('estadisticas_publicas')
 

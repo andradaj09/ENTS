@@ -112,7 +112,7 @@
   .feed-item:hover, .empty-state, .selector-fotos-agregar, .usuarios-buscador, .usuario-actividad,
   .avatar-anonimo, .moderador-barra, .historial li, .comentarios li, .similares a,
   .comunidad-barrio, .bar-row-boton:hover, .comunidad-buscador, .segmento, .resultado:hover,
-  .selector-ubicacion, .perfil-foto-cargando, .selector-foto-portada, .zone-level-0
+  .selector-ubicacion, .perfil-foto-cargando, .selector-foto-portada
 ) {
   background: rgba(255, 255, 255, 0.05);
 }

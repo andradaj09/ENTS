@@ -537,13 +537,6 @@
   color: #8f2f1f;
 }
 
-.auth-alert-ok {
-  border: 1px solid #c4e3cf;
-  background: rgba(228, 241, 232, 0.9);
-  color: #1f5f3f;
-  animation: revelar 0.5s both;
-}
-
 @keyframes sacudir {
   0%, 100% { transform: none; }
   20%, 60% { transform: translateX(-6px); }

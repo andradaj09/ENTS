@@ -220,7 +220,6 @@ function PetitionDetail() {
           ← Volver
         </Link>
 
-        {/* Solo visible para moderadores */}
         {esModerador && (
           <div className="moderador-barra">
             <span>
@@ -395,7 +394,6 @@ function PetitionDetail() {
           <Comentarios peticion={peticion} usuarioId={user?.id} esModerador={esModerador} />
         </div>
 
-        {/* FIRMAS */}
 
         <div className="col-lg-4">
           <div
@@ -454,7 +452,6 @@ function PetitionDetail() {
                 </>
               )}
 
-              {/* Solo se pueden firmar las peticiones publicadas */}
               {peticion.estado !== 'publicada' && (
                 <div className="alert alert-info mb-0">
                   {peticion.estado === 'pendiente'
