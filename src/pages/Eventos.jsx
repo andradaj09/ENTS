@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { usePermisos } from '../hooks/usePermisos'
 import {
   createEvento,
   deleteEvento,
@@ -10,7 +8,6 @@ import {
 } from '../services/petitionService'
 import Icon from '../components/Icon'
 import { capitalizar } from '../utils/format'
-import OpcionesBarrios from '../components/OpcionesBarrios'
 
 const formatoFecha = new Intl.DateTimeFormat('es-AR', {
   weekday: 'long',
@@ -30,11 +27,7 @@ const formVacio = {
 
 function Eventos() {
   const { user, profile } = useAuth()
-  const miZona = profile?.zona_id ?? null
-  const [soloMiBarrio, setSoloMiBarrio] = useState(false)
-  // Crear y borrar eventos: según el permiso que definió el dueño
-  const { puede } = usePermisos(user?.id)
-  const esAdmin = puede('eventos', 'modificar')
+  const esAdmin = profile?.rol === 'admin'
 
   const [eventos, setEventos] = useState([])
   const [zonas, setZonas] = useState([])
@@ -43,27 +36,6 @@ function Eventos() {
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState('')
   const [errorForm, setErrorForm] = useState('')
-  const [publicado, setPublicado] = useState('')
-
-  const location = useLocation()
-  const formularioRef = useRef(null)
-
-  // "Crear evento" del inicio lleva a /eventos#nuevo-evento: se va directo al formulario
-  useEffect(() => {
-    if (esAdmin && location.hash === '#nuevo-evento') {
-      formularioRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      formularioRef.current?.querySelector('input')?.focus({ preventScroll: true })
-    }
-  }, [esAdmin, location.hash])
-
-  // Solo fechas futuras: la agenda muestra eventos desde ahora en adelante.
-  // Formato local "AAAA-MM-DDTHH:MM" que pide el campo datetime-local.
-  const [minimoFecha] = useState(() => {
-    const ahora = new Date()
-    return new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000)
-      .toISOString()
-      .slice(0, 16)
-  })
 
   useEffect(() => {
     const cargar = async () => {
@@ -97,7 +69,6 @@ function Eventos() {
     e.preventDefault()
 
     setErrorForm('')
-    setPublicado('')
     setGuardando(true)
 
     try {
@@ -111,7 +82,6 @@ function Eventos() {
       })
 
       setEventos(await getProximosEventos())
-      setPublicado(`"${form.titulo.trim()}" ya aparece en la agenda.`)
       setForm(formVacio)
     } catch (err) {
       console.error('Error creando evento:', err)
@@ -159,34 +129,14 @@ function Eventos() {
             </div>
           )}
 
-          {miZona && eventos.length > 0 && (
-            <div className="chip-filter mb-3" role="group" aria-label="Qué eventos ver">
-              <button className={!soloMiBarrio ? 'active' : ''} onClick={() => setSoloMiBarrio(false)}>Todos</button>
-              <button className={soloMiBarrio ? 'active' : ''} onClick={() => setSoloMiBarrio(true)}>
-                Mi barrio ({eventos.filter((e) => e.zonas?.id === miZona).length})
-              </button>
-            </div>
-          )}
-
-          {soloMiBarrio && !eventos.some((e) => e.zonas?.id === miZona) && (
-            <p className="text-muted small">Por ahora no hay eventos en tu barrio.</p>
-          )}
-
-          {/* Los del barrio propio van primero (el resto, por fecha) */}
-          {[...eventos]
-            .filter((e) => !soloMiBarrio || e.zonas?.id === miZona)
-            .sort((a, b) => (b.zonas?.id === miZona) - (a.zonas?.id === miZona))
-            .map((evento) => (
+          {eventos.map((evento) => (
             <div className="event-item" key={evento.id}>
               <span className="icon-chip">
                 <Icon name="calendar" />
               </span>
 
               <div className="flex-grow-1">
-                <strong>
-                  {evento.titulo}
-                  {miZona && evento.zonas?.id === miZona && <span className="etiqueta-mi-barrio">Tu barrio</span>}
-                </strong>
+                <strong>{evento.titulo}</strong>
                 <span>
                   {capitalizar(formatoFecha.format(new Date(evento.fecha)))}
                 </span>
@@ -212,23 +162,14 @@ function Eventos() {
           ))}
         </div>
 
-        {/* En celular el formulario va primero; en pantallas grandes, a la derecha */}
         {esAdmin && (
-          <div
-            className="col-lg-5 order-first order-lg-last"
-            id="nuevo-evento"
-            ref={formularioRef}
-          >
+          <div className="col-lg-5">
             <div className="card">
               <div className="card-body">
                 <p className="line-label">Nuevo evento</p>
 
                 {errorForm && (
                   <div className="alert alert-danger">{errorForm}</div>
-                )}
-
-                {publicado && (
-                  <div className="alert alert-success">{publicado}</div>
                 )}
 
                 <form onSubmit={handleSubmit}>
@@ -252,7 +193,6 @@ function Eventos() {
                       name="fecha"
                       value={form.fecha}
                       onChange={handleChange}
-                      min={minimoFecha}
                       required
                     />
                   </div>
@@ -277,7 +217,11 @@ function Eventos() {
                       onChange={handleChange}
                     >
                       <option value="">Todos los barrios</option>
-                      <OpcionesBarrios zonas={zonas} />
+                      {zonas.map((zona) => (
+                        <option key={zona.id} value={zona.id}>
+                          {zona.nombre}
+                        </option>
+                      ))}
                     </select>
                   </div>
 

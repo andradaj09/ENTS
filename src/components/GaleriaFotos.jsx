@@ -4,9 +4,8 @@ import Icon from './Icon'
 
 const CLASE_POR_CANTIDAD = { 1: 'una', 2: 'dos' }
 
-// Fotos de una petición; al tocar una se abre el visor a pantalla completa.
-// miniaturas: fotos chicas en fila (paneles de revisión), el visor no cambia.
-function GaleriaFotos({ rutas = [], miniaturas = false }) {
+// Fotos de una petición; al tocar una se abre el visor a pantalla completa
+function GaleriaFotos({ rutas = [] }) {
   const [abierta, setAbierta] = useState(null)
 
   const total = rutas.length
@@ -28,7 +27,7 @@ function GaleriaFotos({ rutas = [], miniaturas = false }) {
 
   return (
     <>
-      <div className={miniaturas ? 'galeria-miniaturas' : `galeria ${CLASE_POR_CANTIDAD[total] ?? ''}`}>
+      <div className={`galeria ${CLASE_POR_CANTIDAD[total] ?? ''}`}>
         {rutas.map((ruta, indice) => (
           <button
             type="button"

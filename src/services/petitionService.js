@@ -18,16 +18,13 @@ const COLUMNAS_PETICION = `
   fotos,
   firmas_count,
   created_at,
-  updated_at,
-  seguimiento,
-  elevada_at
+  updated_at
 `
 
 const CATEGORIA_Y_BARRIO = `
   categorias (
     id,
-    nombre,
-    area_id
+    nombre
   ),
   zonas (
     id,
@@ -64,56 +61,12 @@ export async function getIdentidadesPeticion(peticionId) {
   return data
 }
 
-// Categorías y zonas casi nunca cambian: se piden una vez por sesión y se
-// reutilizan, así los formularios y el mapa abren sin esperar a la red.
-const cache = new Map()
-
-function cachear(clave, consulta) {
-  if (!cache.has(clave)) {
-    const promesa = consulta().catch((err) => {
-      cache.delete(clave)
-      throw err
-    })
-    cache.set(clave, promesa)
-  }
-
-  return cache.get(clave)
-}
-
-export function getCategorias() {
-  return cachear('categorias', async () => {
-    const { data, error } = await supabase
-      .from('categorias')
-      .select('id, nombre')
-      .eq('activa', true)
-      .order('nombre')
-
-    if (error) {
-      throw error
-    }
-
-    return data
-  })
-}
-
-export function getZonas() {
-  return cachear('zonas', async () => {
-    const { data, error } = await supabase
-      .from('zonas')
-      .select('*')
-      .eq('activa', true)
-      .order('nombre')
-
-    if (error) {
-      throw error
-    }
-
-    return data
-  })
-}
-
-export async function getEstadisticasPublicas() {
-  const { data, error } = await supabase.rpc('estadisticas_publicas')
+export async function getCategorias() {
+  const { data, error } = await supabase
+    .from('categorias')
+    .select('id, nombre')
+    .eq('activa', true)
+    .order('nombre')
 
   if (error) {
     throw error
@@ -122,9 +75,12 @@ export async function getEstadisticasPublicas() {
   return data
 }
 
-// Solo administradores: la base rechaza la llamada para cualquier otro rol
-export async function getEstadisticasAdmin() {
-  const { data, error } = await supabase.rpc('estadisticas_admin')
+export async function getZonas() {
+  const { data, error } = await supabase
+    .from('zonas')
+    .select('*')
+    .eq('activa', true)
+    .order('nombre')
 
   if (error) {
     throw error
@@ -258,7 +214,6 @@ export async function getPeticionesPendientes() {
     .rpc('peticiones_pendientes')
     .select(`
       ${COLUMNAS_PETICION},
-      alertas,
       ${CATEGORIA_Y_BARRIO},
       profiles (
         nombre,
@@ -363,9 +318,8 @@ export async function getPeticionesPublicadas() {
   return data
 }
 
-// Notificaciones guardadas en la base: cambios de estado, firmas, hitos,
-// respuestas oficiales, comentarios y novedades de los barrios seguidos
-// (nunca revelan quién firmó o comentó)
+// Cambios de estado y firmas recibidas en las peticiones propias
+// (la base no revela quién firmó)
 export async function getNotificaciones() {
   const { data, error } = await supabase.rpc('mis_notificaciones')
 
@@ -378,19 +332,8 @@ export async function getNotificaciones() {
     tipo: notificacion.tipo,
     peticionId: notificacion.peticion_id,
     titulo: notificacion.titulo,
-    mensaje: notificacion.mensaje,
-    leida: notificacion.leida,
     fecha: notificacion.fecha,
-    deMiBarrio: notificacion.de_mi_barrio,
   }))
-}
-
-export async function marcarNotificacionesLeidas() {
-  const { error } = await supabase.rpc('marcar_notificaciones_leidas')
-
-  if (error) {
-    throw error
-  }
 }
 
 // ---------- Eventos ----------
@@ -574,23 +517,4 @@ export async function resolverSolicitudFuncionario(usuarioId, aprobar) {
   if (error) {
     throw error
   }
-}
-
-// ---------- Reportes (solo admins: el resto no ve peticiones ajenas sin publicar) ----------
-
-export async function getPeticionesParaReporte() {
-  const { data, error } = await supabase
-    .from('peticiones')
-    .select(`
-      ${COLUMNAS_PETICION},
-      categorias ( nombre, areas ( nombre ) ),
-      zonas ( nombre, localidad )
-    `)
-    .order('firmas_count', { ascending: false })
-
-  if (error) {
-    throw error
-  }
-
-  return data
 }

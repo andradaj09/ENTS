@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useDeferredValue, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import {
@@ -11,9 +11,6 @@ import { detectarBarrio } from '../utils/barrios'
 import SelectorUbicacion from '../components/SelectorUbicacion'
 import SelectorFotos from '../components/SelectorFotos'
 import Icon from '../components/Icon'
-import OpcionesBarrios from '../components/OpcionesBarrios'
-import PeticionesSimilares from '../components/PeticionesSimilares'
-import { describirAlertas, revisarTexto, tieneDatosPersonales } from '../utils/moderacion'
 
 // Etiqueta que indica si el campo se completó solo o lo eligió la persona
 function EtiquetaAuto({ automatico, manual, onRestablecer, sugerencia }) {
@@ -38,18 +35,17 @@ function EtiquetaAuto({ automatico, manual, onRestablecer, sugerencia }) {
 }
 
 function CreatePetition() {
-  const { user, profile } = useAuth()
+  const { user } = useAuth()
   const navigate = useNavigate()
 
   const [categorias, setCategorias] = useState([])
   const [zonas, setZonas] = useState([])
 
-  // El barrio arranca en el del perfil; si se marca una ubicación, manda la ubicación
   const [form, setForm] = useState({
     titulo: '',
     descripcion: '',
     categoriaId: '',
-    zonaId: profile?.zona_id ? String(profile.zona_id) : '',
+    zonaId: '',
   })
 
   const [ubicacion, setUbicacion] = useState(null)
@@ -87,39 +83,20 @@ function CreatePetition() {
 
   // Al abrir el formulario se intenta ubicar a la persona para que el barrio
   // se complete solo. Si no da permiso, se marca la ubicación en el mapa.
-  // Primero una ubicación rápida (red o caché de los últimos 5 minutos) para
-  // completar el barrio al instante; después se afina con el GPS si responde.
   useEffect(() => {
-    if (!navigator.geolocation) return
-
-    let afinada = false
-
-    navigator.geolocation.getCurrentPosition(
+    navigator.geolocation?.getCurrentPosition(
       ({ coords }) => {
-        if (afinada) return
-        setUbicacion((actual) => actual ?? { lat: coords.latitude, lng: coords.longitude, auto: true })
+        setUbicacion((actual) => actual ?? { lat: coords.latitude, lng: coords.longitude })
       },
       () => {},
-      { enableHighAccuracy: false, maximumAge: 300000, timeout: 4000 }
-    )
-
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        afinada = true
-        // Solo reemplaza la ubicación automática, nunca la que marcó la persona
-        setUbicacion((actual) =>
-          !actual || actual.auto
-            ? { lat: coords.latitude, lng: coords.longitude, auto: true }
-            : actual
-        )
-      },
-      () => {},
-      { enableHighAccuracy: true, maximumAge: 60000, timeout: 15000 }
+      { enableHighAccuracy: true, timeout: 10000 }
     )
   }, [])
 
-  // Categoría sugerida según el texto: se recalcula en cada tecla (es instantáneo)
-  const categoriaSugerida = sugerirCategoria(form.titulo, form.descripcion, categorias)
+  // Categoría sugerida según el texto (con el valor diferido: escribir no se traba)
+  const tituloDiferido = useDeferredValue(form.titulo)
+  const descripcionDiferida = useDeferredValue(form.descripcion)
+  const categoriaSugerida = sugerirCategoria(tituloDiferido, descripcionDiferida, categorias)
 
   // Barrio detectado según la ubicación marcada
   const zonaDetectada = detectarBarrio(ubicacion, zonas)
@@ -131,9 +108,6 @@ function CreatePetition() {
   const zonaId = zonaManual
     ? form.zonaId
     : String(zonaDetectada?.id ?? form.zonaId)
-
-  // Revisión automática (la base hace la misma y se la muestra a los moderadores)
-  const alertasTexto = revisarTexto(`${form.titulo} ${form.descripcion}`)
 
   const handleChange = (e) => {
     setForm({
@@ -163,7 +137,7 @@ function CreatePetition() {
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => setUbicacion({ lat: coords.latitude, lng: coords.longitude }),
       () => setErrorUbicacion('No se pudo obtener tu ubicación. Marcala en el mapa.'),
-      { enableHighAccuracy: true, maximumAge: 60000, timeout: 8000 }
+      { enableHighAccuracy: true, timeout: 10000 }
     )
   }
 
@@ -218,12 +192,11 @@ function CreatePetition() {
           <form onSubmit={handleSubmit}>
 
             <div className="mb-3">
-              <label className="form-label" htmlFor="peticion-titulo">
+              <label className="form-label">
                 Título
               </label>
 
               <input
-                id="peticion-titulo"
                 type="text"
                 name="titulo"
                 className="form-control"
@@ -236,12 +209,11 @@ function CreatePetition() {
             </div>
 
             <div className="mb-4">
-              <label className="form-label" htmlFor="peticion-descripcion">
+              <label className="form-label">
                 Descripción
               </label>
 
               <textarea
-                id="peticion-descripcion"
                 name="descripcion"
                 className="form-control"
                 rows="5"
@@ -249,19 +221,6 @@ function CreatePetition() {
                 onChange={handleChange}
                 placeholder="Contá qué pasa, desde cuándo y a quiénes afecta."
                 required
-              />
-
-              {alertasTexto.length > 0 && (
-                <p className="small text-danger mt-2 mb-0">
-                  {tieneDatosPersonales(alertasTexto)
-                    ? `Tu petición tiene ${describirAlertas(alertasTexto)}. Es pública: mejor no incluyas datos personales.`
-                    : `Tu petición podría tener ${describirAlertas(alertasTexto)}. Un moderador la va a revisar con más atención.`}
-                </p>
-              )}
-
-              <PeticionesSimilares
-                texto={`${form.titulo} ${form.descripcion}`}
-                ubicacion={ubicacion}
               />
             </div>
 
@@ -363,7 +322,14 @@ function CreatePetition() {
                     {zonaManual ? 'Seleccionar barrio' : 'Se detecta con la ubicación...'}
                   </option>
 
-                  <OpcionesBarrios zonas={zonas} />
+                  {zonas.map((zona) => (
+                    <option
+                      key={zona.id}
+                      value={zona.id}
+                    >
+                      {zona.nombre}
+                    </option>
+                  ))}
                 </select>
 
                 {ubicacion && !zonaDetectada && !zonaManual && (

@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useState } from 'react'
+import { useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { logoutUser } from '../services/authService'
@@ -7,28 +7,12 @@ import Logo from '../components/Logo'
 import MenuUsuario from '../components/MenuUsuario'
 import FondoAnimado from '../components/FondoAnimado'
 import NotificacionesMenu from '../components/NotificacionesMenu'
-import { usePermisos } from '../hooks/usePermisos'
-import { PANELES, panelPorClave } from '../utils/paneles'
-import { barrioOmitido } from '../utils/barrioVecino'
-import BienvenidaBarrio from '../components/BienvenidaBarrio'
 
 const sideLinkClass = ({ isActive }) =>
   `side-link${isActive ? ' active' : ''}`
 
-const PANELES_VECINALES = PANELES.filter((p) =>
-  ['dashboard', 'mapa', 'comunidad', 'estadisticas', 'eventos', 'perfil'].includes(p.clave)
-)
-
-const enlace = (panel) => (
-  <NavLink key={panel.clave} className={sideLinkClass} to={panel.ruta}>
-    <Icon name={panel.icono} size={22} />
-    {panel.nombre}
-  </NavLink>
-)
-
 function MainLayout() {
   const { user, profile } = useAuth()
-  const { puede, esDueno } = usePermisos(user?.id)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -36,11 +20,6 @@ function MainLayout() {
   // así se cierra solo al navegar
   const [menuAbiertoEn, setMenuAbiertoEn] = useState(null)
   const [menuColapsado, setMenuColapsado] = useState(false)
-
-  // Primer ingreso: preguntar el barrio (se puede saltear con "Elegir después")
-  const [bienvenidaCerrada, setBienvenidaCerrada] = useState(false)
-  const cerrarBienvenida = useCallback(() => setBienvenidaCerrada(true), [])
-  const pedirBarrio = Boolean(user && profile && !profile.zona_id && !bienvenidaCerrada && !barrioOmitido(user.id))
 
   const menuAbierto = menuAbiertoEn === location.pathname
   const setMenuAbierto = (abierto) =>
@@ -73,11 +52,6 @@ function MainLayout() {
     <>
       <FondoAnimado fijo suave />
 
-      {pedirBarrio && <BienvenidaBarrio usuarioId={user.id} onCerrar={cerrarBienvenida} />}
-
-      {/* Accesibilidad: con teclado, el primer Tab permite saltar el menú */}
-      <a className="skip-link" href="#contenido">Saltar al contenido</a>
-
       <header className="topbar">
         <div className="topbar-fila">
           <div className="topbar-pill">
@@ -90,7 +64,6 @@ function MainLayout() {
               className="icon-btn"
               onClick={toggleMenu}
               aria-label="Abrir o cerrar el menú"
-              aria-expanded={menuAbierto}
             >
               <Icon name={menuAbierto ? 'close' : 'menu'} size={24} />
             </button>
@@ -118,38 +91,45 @@ function MainLayout() {
             Inicio
           </NavLink>
 
-          {/* Cada enlace aparece según los permisos que definió el dueño */}
-          {PANELES_VECINALES.filter((p) => puede(p.clave)).map(enlace)}
+          <NavLink className={sideLinkClass} to="/dashboard">
+            <Icon name="file" size={22} />
+            Mis solicitudes
+          </NavLink>
 
-          {puede('bandeja') && (
-            <>
-              <p className="side-label">Gestión</p>
-              {enlace(panelPorClave('bandeja'))}
-            </>
-          )}
+          <NavLink className={sideLinkClass} to="/mapa">
+            <Icon name="map" size={22} />
+            Mapa vecinal
+          </NavLink>
 
-          {puede('moderacion') && (
-            <>
-              <p className="side-label">Moderación</p>
-              {enlace(panelPorClave('moderacion'))}
-            </>
-          )}
+          <NavLink className={sideLinkClass} to="/comunidad">
+            <Icon name="users" size={22} />
+            Comunidad
+          </NavLink>
 
-          {(puede('usuarios') || puede('panel')) && (
+          <NavLink className={sideLinkClass} to="/eventos">
+            <Icon name="calendar" size={22} />
+            Eventos
+          </NavLink>
+
+          <NavLink className={sideLinkClass} to="/perfil">
+            <Icon name="user" size={22} />
+            Perfil
+          </NavLink>
+
+          {profile?.rol === 'admin' && (
             <>
               <p className="side-label">Administración</p>
-              {puede('usuarios') && enlace(panelPorClave('usuarios'))}
-              {puede('panel') && enlace(panelPorClave('panel'))}
+
+              <NavLink className={sideLinkClass} to="/admin/peticiones">
+                <Icon name="shield" size={22} />
+                Moderación
+              </NavLink>
+
+              <NavLink className={sideLinkClass} to="/admin/usuarios">
+                <Icon name="users" size={22} />
+                Usuarios
+              </NavLink>
             </>
-          )}
-
-          {puede('documentos') && enlace(panelPorClave('documentos'))}
-
-          {esDueno && (
-            <NavLink className={sideLinkClass} to="/permisos">
-              <Icon name="key" size={22} />
-              Permisos
-            </NavLink>
           )}
 
           <p className="side-label">Cuenta</p>
@@ -167,13 +147,10 @@ function MainLayout() {
 
         </aside>
 
-        <main className="app-main" id="contenido" tabIndex={-1}>
+        <main className="app-main">
           {/* key: cada página vuelve a animar su entrada al navegar */}
           <div className="page-enter" key={location.pathname}>
-            {/* Mientras se descarga una página, el menú y la barra siguen visibles */}
-            <Suspense fallback={<div className="cargando-pagina" role="status">Cargando...</div>}>
-              <Outlet />
-            </Suspense>
+            <Outlet />
           </div>
         </main>
       </div>

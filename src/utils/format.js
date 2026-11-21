@@ -21,7 +21,7 @@ export function capitalizar(texto) {
 
 // Umbrales de urgencia compartidos por el inicio, el mapa y la comunidad
 export const UMBRAL_URGENTE = 70
-const UMBRAL_MEDIO = 40
+export const UMBRAL_MEDIO = 40
 
 // 'alta' | 'media' | 'baja': define el color de tarjetas, puntos y marcadores
 export function nivelUrgencia(score) {
@@ -41,13 +41,3 @@ const CLASE_POR_NIVEL = {
 export function claseUrgencia(score) {
   return CLASE_POR_NIVEL[nivelUrgencia(score)]
 }
-
-const formatoNumero = new Intl.NumberFormat('es-AR')
-
-// 1234 -> "1.234"
-export const numero = (valor) => formatoNumero.format(Math.round(Number(valor) || 0))
-
-const formatoSemana = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'short' })
-
-// Fecha corta para ejes de tiempo: "5 oct"
-export const fechaCorta = (fecha) => formatoSemana.format(new Date(fecha)).replace('.', '')

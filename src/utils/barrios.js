@@ -1,12 +1,12 @@
 // Detección automática del barrio a partir de la ubicación marcada.
 // Se elige el barrio cargado cuyo centro está más cerca (hasta 3 km).
-// Los centros de los 111 barrios (Córdoba y Villa Allende) salen de
-// OpenStreetMap. Para más precisión se podrían cargar los polígonos
-// oficiales de cada barrio (datos abiertos de la Municipalidad).
+// Nota: OpenStreetMap no tiene los barrios de Córdoba cargados, así que no
+// sirve preguntarle el nombre; para mayor precisión habría que cargar los
+// polígonos oficiales de cada barrio (datos abiertos de la Municipalidad).
 
 const DISTANCIA_MAXIMA_KM = 3
 
-export function distanciaKm(a, b) {
+function distanciaKm(a, b) {
   const rad = (grados) => (grados * Math.PI) / 180
   const dLat = rad(b.lat - a.lat)
   const dLng = rad(b.lng - a.lng)

@@ -5,12 +5,9 @@ import { useAuth } from '../contexts/AuthContext'
 import { getMisPeticiones } from '../services/petitionService'
 import PetitionCard from '../components/PetitionCard'
 import { nombreRol } from '../utils/roles'
-import { usePermisos } from '../hooks/usePermisos'
 
 function Dashboard() {
   const { user, profile } = useAuth()
-  // Crear peticiones: según el permiso que definió el dueño
-  const puedeCrear = usePermisos(user?.id).puede('dashboard', 'modificar')
 
   const [peticiones, setPeticiones] = useState([])
   const [loadingPeticiones, setLoadingPeticiones] = useState(true)
@@ -84,14 +81,12 @@ function Dashboard() {
                 Creá nuevas peticiones para visibilizar problemáticas de tu barrio.
               </p>
 
-              {puedeCrear && (
-                <Link
-                  to="/peticiones/nueva"
-                  className="btn btn-dark w-100 mt-auto"
-                >
-                  Crear petición
-                </Link>
-              )}
+              <Link
+                to="/peticiones/nueva"
+                className="btn btn-dark w-100 mt-auto"
+              >
+                Crear petición
+              </Link>
             </div>
           </div>
         </div>
@@ -124,14 +119,12 @@ function Dashboard() {
                 una problemática de tu barrio.
               </p>
 
-              {puedeCrear && (
-                <Link
-                  to="/peticiones/nueva"
-                  className="btn btn-dark"
-                >
-                  Crear mi primera petición
-                </Link>
-              )}
+              <Link
+                to="/peticiones/nueva"
+                className="btn btn-dark"
+              >
+                Crear mi primera petición
+              </Link>
 
             </div>
           </div>

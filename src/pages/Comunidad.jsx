@@ -10,11 +10,8 @@ import {
 } from '../services/petitionService'
 import { claseUrgencia, tiempoRelativo } from '../utils/format'
 import { esAdmin } from '../utils/roles'
-import { usePermisos } from '../hooks/usePermisos'
-import { useEsDueno } from '../hooks/useEsDueno'
 import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
-import OpcionesBarrios from '../components/OpcionesBarrios'
 import '../styles/comunidad.css'
 
 const LARGO_MAXIMO = 500
@@ -43,9 +40,8 @@ function Comunidad() {
 
   const [busqueda, setBusqueda] = useState('')
   const [filtroTipo, setFiltroTipo] = useState('todo')
-  // '' = todos los barrios; si no, el id del barrio elegido.
-  // Arranca en el barrio del vecino (si lo eligió); puede pasar a "todos".
-  const [barrioFiltro, setBarrioFiltro] = useState(profile?.zona_id ?? '')
+  // '' = todos los barrios; si no, el id del barrio elegido
+  const [barrioFiltro, setBarrioFiltro] = useState('')
 
   const [nueva, setNueva] = useState({ tipo: 'positivo', contenido: '', zonaId: '' })
   const [publicando, setPublicando] = useState(false)
@@ -56,9 +52,6 @@ function Comunidad() {
 
   // Los autores del feed son anónimos; solo los admins los ven
   const verAutores = esAdmin(profile)
-  const { esDueno } = useEsDueno(user?.id)
-  const { puede } = usePermisos(user?.id)
-  const puedePublicar = puede('comunidad', 'modificar')
 
   useEffect(() => {
     const cargar = async () => {
@@ -188,8 +181,7 @@ function Comunidad() {
     }
   }
 
-  // Borran: el autor, y quien tiene permiso de modificar en Moderación
-  const puedeEliminar = (publicacion) => publicacion.propia || puede('moderacion', 'modificar')
+  const puedeEliminar = (publicacion) => publicacion.propia || verAutores
 
   return (
     <div className="container py-5">
@@ -222,7 +214,9 @@ function Comunidad() {
             aria-label="Filtrar por barrio"
           >
             <option value="">Todos los barrios</option>
-            <OpcionesBarrios zonas={zonas} />
+            {zonas.map((zona) => (
+              <option key={zona.id} value={zona.id}>{zona.nombre}</option>
+            ))}
           </select>
         </label>
       </div>
@@ -248,71 +242,70 @@ function Comunidad() {
         {/* ---------- Feed ---------- */}
         <section className="comunidad-feed">
 
-          {/* Publicar: según el permiso que definió el dueño */}
-          {puedePublicar && (
-            <form className="card publicar" onSubmit={handlePublicar}>
-              <div className="card-body">
-                <div className="publicar-top">
-                  <Avatar perfil={profile} size={44} dueno={esDueno} />
+          <form className="card publicar" onSubmit={handlePublicar}>
+            <div className="card-body">
+              <div className="publicar-top">
+                <Avatar perfil={profile} size={44} />
 
-                  <textarea
-                    className="publicar-texto"
-                    placeholder="¿Qué está pasando en tu barrio?"
-                    value={nueva.contenido}
-                    onChange={(e) => setNueva({ ...nueva, contenido: e.target.value })}
-                    maxLength={LARGO_MAXIMO}
-                    rows={3}
-                  />
-                </div>
-
-                {errorPublicar && <div className="alert alert-danger mt-3 mb-0">{errorPublicar}</div>}
-
-                <div className="publicar-acciones">
-                  <div
-                    className={`segmento${nueva.tipo === 'negativo' ? ' es-segundo' : ''}`}
-                    role="radiogroup"
-                    aria-label="Tipo de publicación"
-                  >
-                    <span className="segmento-indicador" />
-                    {Object.entries(TIPOS).map(([valor, { etiqueta, icono }]) => (
-                      <button
-                        key={valor}
-                        type="button"
-                        role="radio"
-                        aria-checked={nueva.tipo === valor}
-                        className={nueva.tipo === valor ? 'active' : ''}
-                        onClick={() => setNueva({ ...nueva, tipo: valor })}
-                      >
-                        <Icon name={icono} size={15} />
-                        {etiqueta}
-                      </button>
-                    ))}
-                  </div>
-
-                  <select
-                    className="form-select form-select-sm publicar-zona"
-                    value={zonaPublicacion}
-                    onChange={(e) => setNueva({ ...nueva, zonaId: e.target.value })}
-                    aria-label="Barrio"
-                  >
-                    <option value="">Sin barrio</option>
-                    <OpcionesBarrios zonas={zonas} />
-                  </select>
-
-                  <span className="publicar-contador">
-                    {nueva.contenido.length}/{LARGO_MAXIMO}
-                  </span>
-
-                  <button
-                    className="btn btn-dark"
-                    disabled={publicando || !nueva.contenido.trim()}
-                  >
-                    {publicando ? 'Publicando...' : 'Publicar'}
-                  </button>
-                </div>
+                <textarea
+                  className="publicar-texto"
+                  placeholder="¿Qué está pasando en tu barrio?"
+                  value={nueva.contenido}
+                  onChange={(e) => setNueva({ ...nueva, contenido: e.target.value })}
+                  maxLength={LARGO_MAXIMO}
+                  rows={3}
+                />
               </div>
-            </form>
-          )}
+
+              {errorPublicar && <div className="alert alert-danger mt-3 mb-0">{errorPublicar}</div>}
+
+              <div className="publicar-acciones">
+                <div
+                  className={`segmento${nueva.tipo === 'negativo' ? ' es-segundo' : ''}`}
+                  role="radiogroup"
+                  aria-label="Tipo de publicación"
+                >
+                  <span className="segmento-indicador" />
+                  {Object.entries(TIPOS).map(([valor, { etiqueta, icono }]) => (
+                    <button
+                      key={valor}
+                      type="button"
+                      role="radio"
+                      aria-checked={nueva.tipo === valor}
+                      className={nueva.tipo === valor ? 'active' : ''}
+                      onClick={() => setNueva({ ...nueva, tipo: valor })}
+                    >
+                      <Icon name={icono} size={15} />
+                      {etiqueta}
+                    </button>
+                  ))}
+                </div>
+
+                <select
+                  className="form-select form-select-sm publicar-zona"
+                  value={zonaPublicacion}
+                  onChange={(e) => setNueva({ ...nueva, zonaId: e.target.value })}
+                  aria-label="Barrio"
+                >
+                  <option value="">Sin barrio</option>
+                  {zonas.map((zona) => (
+                    <option key={zona.id} value={zona.id}>{zona.nombre}</option>
+                  ))}
+                </select>
+
+                <span className="publicar-contador">
+                  {nueva.contenido.length}/{LARGO_MAXIMO}
+                </span>
+
+                <button
+                  className="btn btn-dark"
+                  disabled={publicando || !nueva.contenido.trim()}
+                >
+                  {publicando ? 'Publicando...' : 'Publicar'}
+                </button>
+              </div>
+            </div>
+          </form>
 
           <div className="feed-filtros">
             <div className="chip-filter">
@@ -365,7 +358,7 @@ function Comunidad() {
                     {publicacion.autor ? (
                       <Avatar perfil={publicacion.autor} size={40} />
                     ) : publicacion.propia ? (
-                      <Avatar perfil={profile} size={40} dueno={esDueno} />
+                      <Avatar perfil={profile} size={40} />
                     ) : (
                       <span className="avatar avatar-anonimo" style={{ width: 40, height: 40 }}>
                         <Icon name="user" size={20} />

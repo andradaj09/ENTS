@@ -3,19 +3,11 @@ import { useAuth } from '../contexts/AuthContext'
 import { subirAvatar, updatePerfil } from '../services/authService'
 import Avatar from '../components/Avatar'
 import { AVATARES_PREDEFINIDOS } from '../components/avatares'
-import { nombreRol, PERMISOS_POR_ROL } from '../utils/roles'
-import { useEsDueno } from '../hooks/useEsDueno'
-import { usePermisos } from '../hooks/usePermisos'
+import { nombreRol } from '../utils/roles'
 import Icon from '../components/Icon'
-import Insignias from '../components/Insignias'
-import BarriosSeguidos from '../components/BarriosSeguidos'
-import MiBarrioPerfil from '../components/MiBarrioPerfil'
 
 function Perfil() {
   const { user, profile, setProfile } = useAuth()
-  const { esDueno } = useEsDueno(user?.id)
-  // Editar datos y foto: según el permiso que definió el dueño
-  const puedeEditar = usePermisos(user?.id).puede('perfil', 'modificar')
   const archivoRef = useRef(null)
 
   const [form, setForm] = useState({
@@ -100,7 +92,7 @@ function Perfil() {
           <div className="card">
             <div className="card-body perfil-foto">
               <div className="perfil-foto-actual">
-                <Avatar perfil={profile} size={112} dueno={esDueno} />
+                <Avatar perfil={profile} size={112} />
                 {guardandoAvatar && <span className="perfil-foto-cargando" />}
               </div>
 
@@ -112,7 +104,7 @@ function Perfil() {
                     type="button"
                     className="btn btn-dark"
                     onClick={() => archivoRef.current?.click()}
-                    disabled={guardandoAvatar || !puedeEditar}
+                    disabled={guardandoAvatar}
                   >
                     <Icon name="image" size={18} className="me-2" />
                     Subir foto
@@ -123,7 +115,7 @@ function Perfil() {
                       type="button"
                       className="btn btn-ghost"
                       onClick={() => cambiarAvatar(async () => null)}
-                      disabled={guardandoAvatar || !puedeEditar}
+                      disabled={guardandoAvatar}
                     >
                       Quitar
                     </button>
@@ -154,11 +146,11 @@ function Perfil() {
                         type="button"
                         className={`avatar-opcion${avatarActual === valor ? ' activa' : ''}`}
                         onClick={() => cambiarAvatar(async () => valor)}
-                        disabled={guardandoAvatar || !puedeEditar}
+                        disabled={guardandoAvatar}
                         aria-label={`Avatar predefinido ${indice + 1}`}
                         aria-pressed={avatarActual === valor}
                       >
-                        <Avatar perfil={{ avatar_url: valor }} size={56} sinAnillo />
+                        <Avatar perfil={{ avatar_url: valor }} size={56} />
                       </button>
                     )
                   })}
@@ -178,20 +170,9 @@ function Perfil() {
                 <span>{user?.email}</span>
               </div>
 
-              <div className="info-row align-items-center">
+              <div className="info-row">
                 <span>Tipo de cuenta</span>
-                <span className={`badge rol-${esDueno ? 'dueno' : profile?.rol ?? 'ciudadano'}`}>
-                  {nombreRol(profile?.rol, esDueno)}
-                </span>
-              </div>
-
-              <div className="perfil-permisos">
-                <span>Lo que podés hacer</span>
-                <ul>
-                  {PERMISOS_POR_ROL[esDueno ? 'dueno' : profile?.rol ?? 'ciudadano']?.map((p) => (
-                    <li key={p}>{p}</li>
-                  ))}
-                </ul>
+                <span>{nombreRol(profile?.rol)}</span>
               </div>
 
               {(profile?.cargo || profile?.organizacion) && (
@@ -232,15 +213,7 @@ function Perfil() {
               {mensaje && <div className="alert alert-success">{mensaje}</div>}
               {error && <div className="alert alert-danger">{error}</div>}
 
-              {!puedeEditar && (
-                <p className="text-muted small">
-                  <Icon name="lock" size={14} className="me-1" />
-                  Tu rango no puede editar el perfil por ahora.
-                </p>
-              )}
-
               <form onSubmit={handleSubmit}>
-                <fieldset disabled={!puedeEditar}>
                 <div className="row">
                   <div className="col-md-6 mb-3">
                     <label className="form-label">Nombre</label>
@@ -265,38 +238,10 @@ function Perfil() {
                   </div>
                 </div>
 
-                <button className="btn btn-dark" disabled={guardando || !puedeEditar}>
+                <button className="btn btn-dark" disabled={guardando}>
                   {guardando ? 'Guardando...' : 'Guardar cambios'}
                 </button>
-                </fieldset>
               </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="row g-4 mt-1">
-        <div className="col-lg-7">
-          <div className="card h-100">
-            <div className="card-body">
-              <p className="line-label">Insignias</p>
-              <Insignias />
-            </div>
-          </div>
-        </div>
-
-        <div className="col-lg-5 d-flex flex-column gap-4">
-          <div className="card" id="mi-barrio">
-            <div className="card-body">
-              <p className="line-label">Mi barrio</p>
-              <MiBarrioPerfil />
-            </div>
-          </div>
-
-          <div className="card flex-grow-1">
-            <div className="card-body">
-              <p className="line-label">Barrios que seguís</p>
-              <BarriosSeguidos usuarioId={user?.id} />
             </div>
           </div>
         </div>
