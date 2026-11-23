@@ -437,6 +437,65 @@ hr {
   transform: rotate(-12deg) scale(1.08);
 }
 
+/* En Inicio: solo el logo y, al lado, el buscador de peticiones */
+.topbar-brand-logo {
+  flex: none;
+}
+
+.topbar-buscador {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 0 8px 0 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: rgba(128, 128, 128, 0.1);
+  color: var(--ents-muted);
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.topbar-buscador:focus-within {
+  border-color: var(--ents-ink);
+  color: var(--ents-ink);
+  box-shadow: 0 0 0 4px rgba(128, 128, 128, 0.12);
+}
+
+.topbar-buscador input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ents-ink);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.topbar-buscador input::placeholder {
+  color: var(--ents-muted);
+  font-weight: 500;
+}
+
+.topbar-buscador input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.topbar-buscador button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(128, 128, 128, 0.18);
+  color: var(--ents-ink);
+}
+
 .topbar-burbujas {
   display: flex;
   align-items: center;

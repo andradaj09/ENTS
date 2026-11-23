@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useDeferredValue, useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import {
   getPeticionesPublicadas,
   getProximosEventos,
 } from '../services/petitionService'
 import { capitalizar, claseUrgencia, tiempoRelativo, UMBRAL_URGENTE } from '../utils/format'
+import { normalizar } from '../utils/clasificador'
 import Icon from '../components/Icon'
 import HeroArt from '../components/HeroArt'
 import PalabraRotativa from '../components/PalabraRotativa'
@@ -27,6 +28,19 @@ function Home() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [categoria, setCategoria] = useState('todas')
+
+  // Texto del buscador de la barra superior (?q=); diferido para no trabar al escribir
+  const [searchParams] = useSearchParams()
+  const textoBuscado = (searchParams.get('q') ?? '').trim()
+  const busqueda = normalizar(useDeferredValue(textoBuscado))
+  const buscando = Boolean(busqueda)
+
+  // Al empezar a buscar, baja a la lista para que se vean los resultados
+  useEffect(() => {
+    if (!buscando) return
+    const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    document.getElementById('peticiones')?.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'start' })
+  }, [buscando])
 
   useEffect(() => {
     const cargar = async () => {
@@ -62,9 +76,11 @@ function Home() {
     ...new Set(peticiones.map((p) => p.categorias?.nombre).filter(Boolean)),
   ], [peticiones])
 
-  const filtradas = categoria === 'todas'
-    ? peticiones
-    : peticiones.filter((p) => p.categorias?.nombre === categoria)
+  const filtradas = peticiones.filter((p) =>
+    (categoria === 'todas' || p.categorias?.nombre === categoria) &&
+    (!busqueda || [p.titulo, p.descripcion, p.categorias?.nombre, p.zonas?.nombre]
+      .some((campo) => normalizar(campo).includes(busqueda)))
+  )
 
   // La petición con más firmas se destaca
   const idDestacada = filtradas.length > 1
@@ -220,7 +236,12 @@ function Home() {
         <div className="section-head">
           <div>
             <span className="eyebrow">Comunidad</span>
-            <h2>Peticiones activas</h2>
+            <h2>{buscando ? 'Resultados de la búsqueda' : 'Peticiones activas'}</h2>
+            {buscando && (
+              <p className="text-muted small mb-0 mt-1">
+                {filtradas.length} {filtradas.length === 1 ? 'petición coincide' : 'peticiones coinciden'} con “{textoBuscado}”.
+              </p>
+            )}
           </div>
 
           {categorias.length > 1 && (
@@ -253,6 +274,12 @@ function Home() {
             <Link to="/peticiones/nueva" className="btn btn-dark">
               Crear petición
             </Link>
+          </div>
+        )}
+
+        {!loading && !error && buscando && peticiones.length > 0 && filtradas.length === 0 && (
+          <div className="empty-state">
+            <p className="text-muted mb-0">Ninguna petición coincide con tu búsqueda.</p>
           </div>
         )}
 

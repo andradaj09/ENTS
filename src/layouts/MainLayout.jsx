@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { logoutUser } from '../services/authService'
 import Icon from '../components/Icon'
@@ -33,6 +33,20 @@ function MainLayout() {
     }
   }
 
+  // Buscador de Inicio: el texto vive en la URL (?q=) y Home filtra con él
+  const enInicio = location.pathname === '/'
+  const [searchParams, setSearchParams] = useSearchParams()
+  const busqueda = enInicio ? searchParams.get('q') ?? '' : ''
+
+  const cambiarBusqueda = (texto) =>
+    setSearchParams(texto ? { q: texto } : {}, { replace: true })
+
+  const irAResultados = (e) => {
+    e.preventDefault()
+    const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    document.getElementById('peticiones')?.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'start' })
+  }
+
   const handleLogout = async () => {
     try {
       await logoutUser()
@@ -55,10 +69,35 @@ function MainLayout() {
       <header className="topbar">
         <div className="topbar-fila">
           <div className="topbar-pill">
-            <Link className="topbar-brand" to="/">
-              <Logo />
-              <span className="topbar-nombre">Everyone Needs To Smile</span>
-            </Link>
+            {enInicio ? (
+              <>
+                <Link className="topbar-brand topbar-brand-logo" to="/" aria-label="Inicio">
+                  <Logo />
+                </Link>
+
+                {/* En Inicio, la píldora es el buscador de peticiones */}
+                <form className="topbar-buscador" role="search" onSubmit={irAResultados}>
+                  <Icon name="search" size={18} />
+                  <input
+                    type="search"
+                    placeholder="Buscar peticiones..."
+                    aria-label="Buscar peticiones"
+                    value={busqueda}
+                    onChange={(e) => cambiarBusqueda(e.target.value)}
+                  />
+                  {busqueda && (
+                    <button type="button" onClick={() => cambiarBusqueda('')} aria-label="Limpiar búsqueda">
+                      <Icon name="close" size={16} />
+                    </button>
+                  )}
+                </form>
+              </>
+            ) : (
+              <Link className="topbar-brand" to="/">
+                <Logo />
+                <span className="topbar-nombre">Everyone Needs To Smile</span>
+              </Link>
+            )}
 
             <button
               className="icon-btn"
