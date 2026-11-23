@@ -333,6 +333,7 @@ export async function getNotificaciones() {
     peticionId: notificacion.peticion_id,
     titulo: notificacion.titulo,
     fecha: notificacion.fecha,
+    cantidad: notificacion.cantidad ?? null,
   }))
 }
 

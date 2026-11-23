@@ -588,23 +588,69 @@ as $$
   order by created_at desc;
 $$;
 
-create or replace function public.mis_notificaciones()
-returns table (id text, tipo text, peticion_id bigint, titulo text, fecha timestamptz)
+-- Notificaciones de la campana (se calculan al pedirlas, no se guardan):
+--   publicada / rechazada  -> cambios de estado de mis peticiones
+--   hito_propia            -> mi petición llegó a 10, 20, 30... firmas
+--   hito_firmada           -> una petición que firmé llegó a 10, 20, 30... firmas
+--                             (solo los hitos posteriores a mi firma)
+--   evento                 -> anuncio de un evento nuevo de la comunidad
+-- Se borra antes de crearla porque cambió la forma del resultado (columna cantidad).
+drop function if exists public.mis_notificaciones();
+
+create function public.mis_notificaciones()
+returns table (id text, tipo text, peticion_id bigint, titulo text, fecha timestamptz, cantidad integer)
 language sql
 stable
 security definer
 set search_path = ''
 as $$
-  select * from (
-    select 'estado-' || p.id, p.estado, p.id, p.titulo, coalesce(p.updated_at, p.created_at)
+  with mias as (
+    select p.id, p.titulo, p.estado, p.created_at, p.updated_at
     from public.peticiones p
-    where p.usuario_id = auth.uid() and p.estado in ('publicada', 'rechazada')
-    union all
-    select 'firma-' || f.id, 'firma', p.id, p.titulo, f.created_at
+    where p.usuario_id = auth.uid()
+  ),
+  firmadas as (
+    select p.id, p.titulo, f.created_at as firmada_en
     from public.firmas f
     join public.peticiones p on p.id = f.peticion_id
-    where p.usuario_id = auth.uid() and f.usuario_id <> auth.uid()
-  ) as n (id, tipo, peticion_id, titulo, fecha)
+    where f.usuario_id = auth.uid()
+      and p.usuario_id <> auth.uid()
+      and p.estado = 'publicada'
+  ),
+  -- Cada 10 firmas de las peticiones que me importan, con el momento en que se alcanzó
+  hitos as (
+    select numeradas.peticion_id, numeradas.created_at, numeradas.numero
+    from (
+      select f.peticion_id, f.created_at,
+        row_number() over (partition by f.peticion_id order by f.created_at, f.id) as numero
+      from public.firmas f
+      where f.peticion_id in (select id from mias union select id from firmadas)
+    ) as numeradas
+    where numeradas.numero % 10 = 0
+  )
+  select * from (
+    select 'estado-' || m.id, m.estado, m.id, m.titulo,
+      coalesce(m.updated_at, m.created_at), null::integer
+    from mias m
+    where m.estado in ('publicada', 'rechazada')
+    union all
+    select 'hito-' || h.peticion_id || '-' || h.numero, 'hito_propia', m.id, m.titulo,
+      h.created_at, h.numero::integer
+    from hitos h
+    join mias m on m.id = h.peticion_id
+    union all
+    select 'hito-' || h.peticion_id || '-' || h.numero, 'hito_firmada', fd.id, fd.titulo,
+      h.created_at, h.numero::integer
+    from hitos h
+    join firmadas fd on fd.id = h.peticion_id
+    where h.created_at > fd.firmada_en
+    union all
+    select 'evento-' || e.id, 'evento', null::bigint, e.titulo, e.created_at, null::integer
+    from public.eventos e
+    where e.fecha >= now()
+      and e.created_at >= now() - interval '30 days'
+      and e.creado_por <> auth.uid()
+  ) as n (id, tipo, peticion_id, titulo, fecha, cantidad)
   order by fecha desc
   limit 60;
 $$;
